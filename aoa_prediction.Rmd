@@ -1,0 +1,220 @@
+---
+title: Predicting word acquisition from lexical factors (Big Data in Language Acquisition
+  exercise)
+author: "Mika Braginsky"
+date: "July 17, 2015"
+output:
+  html_document:
+    highlight: tango
+    theme: spacelab
+---
+
+This is an exploratory analysis looking at using various lexical factors -- words' frequency, psycholinguistic metrics, and phonological characteristics -- as predictors of age of acquisition.
+
+Acquisition data is from the Wordbank database of CDI administrations, using production data from the English Words & Sentences form (16-30 months) and comprehension data from the English Words & Gestures form (8-18 months). Each word's age of acquisition is calculated as the youngest age (in months) at which at least 50% of children in the dataset produce/comprehend the word (following Goodman, Dale, Li, 2007).
+
+Frequency in child-directed speech is from the CHILDES database. All other lexical factors are from the MRC Psycholinguistic Database.
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(message=FALSE, warning=FALSE, cache=TRUE)
+```
+
+```{r, cache=FALSE, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(lazyeval)
+library(broom)
+library(readr)
+library(ggplot2)
+library(RCurl)
+library(langcog)
+library(wordbankr)
+theme_set(theme_bw(base_size = 14))
+```
+
+---------------
+
+First, connect to the Wordbank database and pull out the English WS and WG data.
+```{r}
+admins <- get_administration_data() %>%
+  filter(language == "English")
+
+items <- get_item_data() %>%
+  filter(language == "English", type == "word") %>%
+  select(item_id, form, category, lexical_category, item) %>%
+  mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))))
+
+get_form_data <- function(input_form, form_table) {
+  form_items <- filter(items, form == input_form)
+  get_instrument_data(form_table, form_items$item_id) %>%
+    mutate(produces = value == "produces",
+           understands = value == "understands" | value == "produces") %>%
+    select(-value) %>%
+    gather(measure, value, produces, understands) %>%
+    left_join(select(admins, data_id, age)) %>%
+    filter(!is.na(age)) %>%
+    mutate(form = input_form)
+  }
+
+ws <- get_form_data("WS", get_instrument_table("English", "WS")) %>%
+  filter(measure == "produces")
+
+wg <- get_form_data("WG", get_instrument_table("English", "WG")) %>%
+  filter(measure == "understands")
+
+wswg <- bind_rows(ws, wg)
+```
+
+Use the WS and WG data to calculate the proportion of children that produce/understand each word, and each word's age of acquisition.
+```{r}
+wswg_age <- wswg %>%
+  group_by(form, measure, num_item_id, age) %>%
+  summarise(prop = mean(value, na.rm = TRUE)) %>%
+  summarise(aoa = age[min(which(prop > 0.5))])
+
+wswg_all <- wswg %>%
+  group_by(form, measure, num_item_id) %>%
+  summarise(prop = mean(value, na.rm = TRUE))
+
+wswg_data <- left_join(wswg_age, wswg_all) %>%
+  left_join(items) %>%
+  select(-num_item_id)
+```
+
+Now pull in the CHILDES data and the MRC data, get all three to have words in the same form, and put them all together.
+```{r}
+words <- wswg_data %>%
+  mutate(word = sapply(strsplit(item, "\\."), function(strsp) strsp[1])) %>%
+  filter(!grepl("_", word)) %>%
+  ungroup() %>%
+  select(form, measure, word, aoa, prop, category, lexical_category)
+
+words$word[words$word == 'grrr'] <- 'grr'
+words$word[words$word == 'inside'] <- 'in'
+
+psycholing <- read_csv('data/psycholing.csv') %>%
+  rename(word = WORD, frequency = BFRQ, concreteness = CNC, familiarity = FAM,
+         imageability = IMG, num_phonemes = NPHN, num_syllables = NSYL) %>%
+  mutate(word = tolower(word),
+         brown_log_frequency = log(frequency)) %>%
+  select(-frequency)
+
+childes <- read_csv('data/childes_freqs.csv') %>%
+  gather(word, freq) %>%
+  group_by(word) %>%
+  summarise(cds_log_frequency = log(sum(freq))) %>%
+  mutate(word = gsub("'", "", tolower(word))) %>%
+  filter(!grepl(" ", word), cds_log_frequency > 0)
+
+word_data <- words %>%
+  left_join(psycholing) %>%
+  left_join(childes)
+
+plot_data <- word_data %>%
+  gather(predictor, value, -form, -measure, -word, -aoa, -prop,
+         -category, -lexical_category)
+```
+
+Plot the WS results.
+```{r, fig.width=12, fig.height=10}
+ggplot(filter(plot_data, form == "WS"),
+       aes(x = value, y = aoa)) +
+  facet_wrap(~ predictor, scales = "free_x") +
+  geom_point(aes(colour = lexical_category)) +
+  geom_smooth(aes(colour = lexical_category), method = "lm", se = FALSE) +
+  geom_smooth(colour = "black", method = "lm", se = FALSE) +
+  scale_colour_solarized() +
+  xlab("") +
+  ylab("Age of acquisition (months)")
+```
+
+Plot the WG results.
+```{r, fig.width=12, fig.height=10}
+ggplot(filter(plot_data, form == "WG"),
+       aes(x = value, y = aoa, colour = lexical_category)) +
+  facet_wrap(~ predictor, scales = "free_x") +
+  geom_point(aes(colour = lexical_category)) +
+  geom_smooth(aes(colour = lexical_category), method = "lm", se = FALSE) +
+  geom_smooth(colour = "black", method = "lm", se = FALSE) +
+  scale_colour_solarized() +
+  xlab("") +
+  ylab("Age of acquisition (months)")
+```
+
+Model the results by lexical category separately for each predictor.
+```{r}
+predictor_models <- function(input_form, predictor) {
+  word_data %>%
+    filter(form == input_form) %>%
+    split(.$lexical_category) %>%
+    map(~ lm(interp(quote(aoa ~ p), p = as.name(predictor)), data = .)) %>%
+   map(tidy) %>%
+   map(function(model) c(model$estimate[2], model$p.value[2]))
+  }
+
+predictor_values <- function(input_form, predictor) {
+  pm <- predictor_models(input_form, predictor)
+  data.frame(predictor = predictor,
+             lexical_category = names(pm),
+             estimate = unlist(map(pm, function(v) v[1])),
+             p_value = unlist(map(pm, function(v) v[2])),
+             row.names = NULL)
+  }
+
+predictors <- c("concreteness", "familiarity", "imageability", "num_phonemes",
+                "num_syllables", "brown_log_frequency", "cds_log_frequency")
+
+form_values <- function(input_form) {
+  map(predictors, function(p) predictor_values(input_form, p)) %>%
+    bind_rows() %>%
+    mutate(stars = unlist(map(p_value, get_stars))) %>%
+    split(.$lexical_category)
+  }
+```
+
+For WS:
+```{r}
+form_values("WS")
+```
+
+For WG:
+```{r}
+form_values("WG")
+```
+
+Model the results with all of the predictors.
+```{r}
+combined_model <- function(input_form) {
+  lm(aoa ~ cds_log_frequency + brown_log_frequency + concreteness + familiarity + imageability + num_phonemes + num_syllables,
+     data = filter(word_data, form == input_form)) %>%
+    summary()
+  }
+```
+
+For WS:
+```{r}
+combined_model("WS")
+```
+
+For WG:
+```{r}
+combined_model("WG")
+```
+
+Another way of looking at things: plot each CDI category's mean age of acquisition against its mean child-directed speech frequency.
+```{r, fig.width=12, fig.height=6}
+cat_means <- word_data %>%
+  group_by(form, measure, lexical_category, category) %>%
+  summarise(mean_aoa = mean(aoa, na.rm = TRUE),
+            mean_cds_log_frequency = mean(cds_log_frequency, na.rm = TRUE))
+
+ggplot(cat_means, aes(x = mean_cds_log_frequency, y = mean_aoa)) +
+  facet_wrap(~ form + measure) +
+  geom_text(aes(label = category, colour = lexical_category)) +
+  geom_smooth(method = "lm", colour = "black") +
+  scale_colour_solarized() +
+  xlab("Mean log frequency in child-directed speech") +
+  ylab("Mean age of acquisition (months)")
+```
