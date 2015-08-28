@@ -14,6 +14,11 @@ corpus_root = nltk.data.find('corpora/childes/data-xml/')
 languages = ["cantonese", "danish", "english", "german", "hebrew", "italian",
              "mandarin", "norwegian", "russian", "spanish", "swedish", "turkish"]
 
+def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
+    csv_reader = csv.reader(utf8_data, dialect=dialect, **kwargs)
+    for row in csv_reader:
+        yield [unicode(cell, 'utf-8') for cell in row]
+
 # Takes a language, returns a CHIDLESCorpusReader for that language
 def get_corpus_reader(language):
     return CHILDESCorpusReader(corpus_root, r'%s.*/.*\.xml' % language[:3].title())
@@ -32,7 +37,8 @@ def get_special_cases(language, stemmer):
     if not os.path.isfile(language_file):
         return special_cases
 
-    special_case_list = csv.reader(codecs.open(language_file, "r", "utf-8"))
+    special_case_list = unicode_csv_reader(open(language_file))
+    #special_case_list = csv.reader(codecs.open(language_file, "r", "utf-8"))
 
     for row in special_case_list:
         cdi_item, options = row[0], row[1:]
@@ -120,35 +126,33 @@ def get_recall(language):
 
     return float(len(cdi_item_freqs)) / len(cdi_items)
 
-# language = "spanish"
-#
-# recall = get_recall(language)
-#
-# print recall
+language = "russian"
+recall = get_recall(language)
+print recall
 
-languages = ["danish", "english", "german", "italian",
-             "norwegian", "russian", "spanish", "swedish", "turkish"]
-# "cantonese" "hebrew" "mandarin"
-for language in languages:
-    print language, get_recall(language)
+# languages = ["danish", "english", "german", "italian",
+#              "norwegian", "russian", "spanish", "swedish", "turkish"]
+# # "cantonese" "hebrew" "mandarin"
+# for language in languages:
+#     print language, get_recall(language)
 
 # lang_stemmer = get_stemmer(language)
 # cdi_item_freqs = get_lang_freqs(get_corpus_reader(language), lang_stemmer,
 #                                 get_lang_map(lang_stemmer, get_cdi_items(language),
 #                                              get_special_cases(language, lang_stemmer)))
 
-language = "russian"
-stemmer = get_stemmer(language)
-corpus_reader = get_corpus_reader(language)
-freqs = nltk.FreqDist()
-for corpus_file in corpus_reader.fileids():#[0:20]:
-    corpus_participants = corpus_reader.participants(corpus_file)[0]
-    not_child = [value['id'] for key, value in corpus_participants.iteritems() if key != 'CHI']
-    corpus_words = corpus_reader.words(corpus_file, speaker=not_child)
-    corpus_stems = [stemmer(word.lower()) for word in corpus_words]
-    freqs.update(nltk.FreqDist(corpus_words))
-words = sorted(freqs.keys())
-with codecs.open("russian_words.txt", 'w', 'utf-8') as rus:
-    for w in words:
-        rus.write(w)
-        rus.write('\n')
+# language = "russian"
+# stemmer = get_stemmer(language)
+# corpus_reader = get_corpus_reader(language)
+# freqs = nltk.FreqDist()
+# for corpus_file in corpus_reader.fileids():#[0:20]:
+#     corpus_participants = corpus_reader.participants(corpus_file)[0]
+#     not_child = [value['id'] for key, value in corpus_participants.iteritems() if key != 'CHI']
+#     corpus_words = corpus_reader.words(corpus_file, speaker=not_child)
+#     corpus_stems = [stemmer(word.lower()) for word in corpus_words]
+#     freqs.update(nltk.FreqDist(corpus_words))
+# words = sorted(freqs.keys())
+# with codecs.open("russian_words.txt", 'w', 'utf-8') as rus:
+#     for w in words:
+#         rus.write(w)
+#         rus.write('\n')

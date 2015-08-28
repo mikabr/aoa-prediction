@@ -1,8 +1,7 @@
 ---
-title: Predicting word acquisition from lexical factors (Big Data in Language Acquisition
-  exercise)
-author: "Mika Braginsky"
-date: "July 17, 2015"
+title: Predicting word acquisition from lexical factors
+author: "Mika Braginsky and Daniel Yurovsky"
+date: "`r Sys.Date()`"
 output:
   html_document:
     highlight: tango
@@ -17,18 +16,14 @@ Frequency in child-directed speech is from the CHILDES database. All other lexic
 
 ```{r setup, include=FALSE}
 library(knitr)
-opts_chunk$set(message=FALSE, warning=FALSE, cache=TRUE)
+opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 ```
 
 ```{r, cache=FALSE, include=FALSE}
 library(dplyr)
 library(tidyr)
 library(purrr)
-library(lazyeval)
-library(broom)
-library(readr)
 library(ggplot2)
-library(RCurl)
 library(langcog)
 library(wordbankr)
 theme_set(theme_bw(base_size = 14))
@@ -36,51 +31,114 @@ theme_set(theme_bw(base_size = 14))
 
 ---------------
 
-First, connect to the Wordbank database and pull out the English WS and WG data.
+First, connect to the Wordbank database and pull out the WG data.
 ```{r}
-admins <- get_administration_data() %>%
-  filter(language == "English")
+admins <- get_administration_data(mode = "local") %>%
+  #filter(form == "WG") %>%
+  select(data_id, age, language, form)
 
-items <- get_item_data() %>%
-  filter(language == "English", type == "word") %>%
-  select(item_id, form, category, lexical_category, item) %>%
+items <- get_item_data(mode = "local") %>%
+  filter(type == "word") %>%
+  select(item_id, language, form, category, lexical_category, item, uni_lemma) %>%
   mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))))
 
-get_form_data <- function(input_form, form_table) {
-  form_items <- filter(items, form == input_form)
-  get_instrument_data(form_table, form_items$item_id) %>%
-    mutate(produces = value == "produces",
-           understands = value == "understands" | value == "produces") %>%
+get_inst_data <- function(language_items, input_language, input_form) {
+  get_instrument_data(input_language, input_form, language_items$item_id,
+                      administrations = filter(admins, language == input_language, form == input_form),
+                      iteminfo = language_items,
+                      mode = "local") %>%
+    filter(!is.na(age)) %>%
+    mutate(produces = !is.na(value) & value == "produces",
+           understands = !is.na(value) & (value == "understands" | value == "produces")) %>%
     select(-value) %>%
     gather(measure, value, produces, understands) %>%
-    left_join(select(admins, data_id, age)) %>%
-    filter(!is.na(age)) %>%
-    mutate(form = input_form)
+    mutate(language = input_language,
+           form = input_form)
   }
 
-ws <- get_form_data("WS", get_instrument_table("English", "WS")) %>%
-  filter(measure == "produces")
-
-wg <- get_form_data("WG", get_instrument_table("English", "WG")) %>%
-  filter(measure == "understands")
-
-wswg <- bind_rows(ws, wg)
+items_by_inst <- split(items, paste(items$language, items$form, sep = "_"))
+languages <- unlist(map(names(items_by_inst), function(inst) strsplit(inst, "_")[[1]][1]))
+forms <- unlist(map(names(items_by_inst), function(inst) strsplit(inst, "_")[[1]][2]))
+raw_data <- map3(items_by_inst, languages, forms, get_inst_data) %>%
+  bind_rows() %>%
+  select(language, form, measure, lexical_category, category, uni_lemma, item, item_id, age, data_id, value)
 ```
 
 Use the WS and WG data to calculate the proportion of children that produce/understand each word, and each word's age of acquisition.
 ```{r}
-wswg_age <- wswg %>%
-  group_by(form, measure, num_item_id, age) %>%
-  summarise(prop = mean(value, na.rm = TRUE)) %>%
-  summarise(aoa = age[min(which(prop > 0.5))])
+group_by_not <- function(.data, ..., add = FALSE) {
+  group_by_not_(.data, .dots = lazyeval::lazy_dots(...), add = add)
+  }
 
-wswg_all <- wswg %>%
-  group_by(form, measure, num_item_id) %>%
+group_by_not_ <- function(.data, ..., .dots, add = FALSE) {
+  group_by_(.data, .dots = Filter(function(name) !(name %in% Map(function(lazy) lazy$expr, .dots)),
+                                  names(.data)))
+}
+
+by_age <- raw_data %>%
+  group_by_not(data_id, value) %>%
   summarise(prop = mean(value, na.rm = TRUE))
 
-wswg_data <- left_join(wswg_age, wswg_all) %>%
-  left_join(items) %>%
-  select(-num_item_id)
+aoa <- by_age %>%
+  summarise(aoa = age[min(which(prop > 0.5))])
+
+prop <- raw_data %>%
+  group_by_not(age, data_id, value) %>%
+  summarise(prop = mean(value, na.rm = TRUE))
+
+by_item <- inner_join(aoa, prop)
+
+lang_n <- admins %>%
+  group_by(language) %>%
+  summarise(n = n())
+
+age_n <- admins %>%
+  group_by(language, age) %>%
+  summarise(n = n())
+ages <- bind_rows(mutate(age_n, measure = "produces"),
+                  mutate(age_n, measure = "understands"))
+```
+
+```{r}
+ggplot(filter(by_item, measure == "understands"), aes(x = prop)) +
+  facet_wrap(~language) +
+  geom_bar(aes(fill = lexical_category)) +
+  scale_fill_solarized()
+
+ggplot(filter(by_item, measure == "produces"), aes(x = prop)) +
+  facet_wrap(~language) +
+  geom_bar(aes(fill = lexical_category)) +
+  scale_fill_solarized()
+
+ggplot(filter(by_item, measure == "understands"), aes(x = aoa)) +
+  facet_wrap(~language) +
+  geom_bar(aes(fill = lexical_category)) +
+  geom_point(aes(x = age, y = n), data = ages) +
+  scale_fill_solarized()
+
+ggplot(filter(by_item, measure == "produces"), aes(x = aoa)) +
+  facet_wrap(~language) +
+  geom_bar(aes(fill = lexical_category)) +
+  geom_point(aes(x = age, y = n), data = ages) +
+  scale_fill_solarized()
+```
+
+```{r}
+ggplot(by_age, aes(x = age, y = prop, group = item, colour = lexical_category)) +
+  facet_grid(language ~ measure) +
+  geom_line() +
+  scale_colour_solarized()
+```
+
+```{r}
+colors <- c("red", "orange", "yellow", "green", "blue",
+            "purple", "pink", "brown", "black", "white")
+color_data <- by_age %>%
+  filter(uni_lemma %in% colors)
+ggplot(color_data, aes(x = age, y = prop, colour = uni_lemma)) +
+  facet_grid(measure~language) +
+  geom_smooth(method = "loess", se = FALSE) +
+  scale_colour_solarized()
 ```
 
 Now pull in the CHILDES data and the MRC data, get all three to have words in the same form, and put them all together.
