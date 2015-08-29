@@ -2,3 +2,4 @@
 *_files/
 .DS_Store
 .idea/
+.Rhistory
