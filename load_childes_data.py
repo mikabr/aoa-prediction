@@ -1,6 +1,6 @@
 import nltk
 from nltk.corpus.reader import CHILDESCorpusReader
-from nltk.stem.snowball import SnowballStemmer
+#from nltk.stem.snowball import SnowballStemmer
 
 import snowballstemmer
 import csv
@@ -121,25 +121,27 @@ def get_recall(language):
     lang_stemmer = get_stemmer(language)
     cdi_items = get_cdi_items(language)
     cdi_item_freqs = get_lang_freqs(get_corpus_reader(language), lang_stemmer,
-                                get_lang_map(lang_stemmer, cdi_items,
-                                             get_special_cases(language, lang_stemmer)))
-
-    return float(len(cdi_item_freqs)) / len(cdi_items)
+                                    get_lang_map(lang_stemmer, cdi_items,
+                                                 get_special_cases(language, lang_stemmer)))
+    for miss in set(cdi_items) - set(cdi_item_freqs):
+        if len(miss.split()) == 1:
+            print miss
+    print float(len(cdi_item_freqs)) / len(cdi_items)
 
 language = "russian"
-recall = get_recall(language)
-print recall
+get_recall(language)
+# lang_stemmer = get_stemmer(language)
+# cdi_items = get_cdi_items(language)
+# special_cases = get_special_cases(language, lang_stemmer)
+# cdi_item_freqs = get_lang_freqs(get_corpus_reader(language), lang_stemmer,
+#                                 get_lang_map(lang_stemmer, cdi_items, special_cases))
+
 
 # languages = ["danish", "english", "german", "italian",
 #              "norwegian", "russian", "spanish", "swedish", "turkish"]
 # # "cantonese" "hebrew" "mandarin"
 # for language in languages:
 #     print language, get_recall(language)
-
-# lang_stemmer = get_stemmer(language)
-# cdi_item_freqs = get_lang_freqs(get_corpus_reader(language), lang_stemmer,
-#                                 get_lang_map(lang_stemmer, get_cdi_items(language),
-#                                              get_special_cases(language, lang_stemmer)))
 
 # language = "russian"
 # stemmer = get_stemmer(language)
