@@ -46,7 +46,11 @@ def get_special_cases(language, stemmer):
 
 # Takes a language, returns a Stemmer object for that language
 def get_stemmer(language):
-    return lambda word: snowballstemmer.stemmer(language).stemWord(word)
+    stemmer_languages = ["danish", "dutch", "english", "finnish", "french", "german", "hungarian", "italian",
+                         "norwegian", "portuguese", "romanian", "russian", "spanish", "swedish", "turkish"]
+    if language.lower() in stemmer_languages:
+        return lambda word: snowballstemmer.stemmer(language).stemWord(word)
+    return lambda word: word
     #return lambda word: nltk.SnowballStemmer(language, ignore_stopwords = True).stem(word)
 
 # Takes a CDI item, generates a list of alternate forms of that item
@@ -127,23 +131,23 @@ def get_freqs(language):
 
 
 
-languages = ["danish", "german", "italian", # "english",
-             "norwegian", "russian", "spanish", "swedish", "turkish"] # "cantonese" "hebrew" "mandarin"
-for language in languages:
-    get_freqs(language)
+#languages = ["danish", "german", "italian", # "english",
+#             "norwegian", "russian", "spanish", "swedish", "turkish"] # "cantonese" "hebrew" "mandarin"
+#for language in languages:
+#get_freqs("hebrew")
 
-# language = "russian"
-# stemmer = get_stemmer(language)
-# corpus_reader = get_corpus_reader(language)
-# freqs = nltk.FreqDist()
-# for corpus_file in corpus_reader.fileids():#[0:20]:
-#     corpus_participants = corpus_reader.participants(corpus_file)[0]
-#     not_child = [value['id'] for key, value in corpus_participants.iteritems() if key != 'CHI']
-#     corpus_words = corpus_reader.words(corpus_file, speaker=not_child)
-#     corpus_stems = [stemmer(word.lower()) for word in corpus_words]
-#     freqs.update(nltk.FreqDist(corpus_words))
-# words = sorted(freqs.keys())
-# with codecs.open("russian_words.txt", 'w', 'utf-8') as rus:
-#     for w in words:
-#         rus.write(w)
-#         rus.write('\n')
+language = "hebrew"
+stemmer = get_stemmer(language)
+corpus_reader = get_corpus_reader(language)
+freqs = nltk.FreqDist()
+for corpus_file in corpus_reader.fileids():#[0:20]:
+    corpus_participants = corpus_reader.participants(corpus_file)[0]
+    not_child = [value['id'] for key, value in corpus_participants.iteritems() if key != 'CHI']
+    corpus_words = corpus_reader.words(corpus_file, speaker=not_child)
+    corpus_stems = [stemmer(word.lower()) for word in corpus_words]
+    freqs.update(nltk.FreqDist(corpus_words))
+words = sorted(freqs.keys())
+with codecs.open("hebrew_words.txt", 'w', 'utf-8') as heb:
+    for w in words:
+        heb.write(w)
+        heb.write('\n')
