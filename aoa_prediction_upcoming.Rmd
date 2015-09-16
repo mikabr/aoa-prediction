@@ -1,79 +1,68 @@
----
-title: Predicting word acquisition from lexical factors
-author: "Mika Braginsky and Daniel Yurovsky"
-date: "`r Sys.Date()`"
-output:
-  html_document:
-    highlight: tango
-    theme: spacelab
----
-
-This is an exploratory analysis looking at using various lexical factors -- words' frequency, psycholinguistic metrics, and phonological characteristics -- as predictors of age of acquisition.
-
-Acquisition data is from the Wordbank database of CDI administrations, using production data from the English Words & Sentences form (16-30 months) and comprehension data from the English Words & Gestures form (8-18 months). Each word's age of acquisition is calculated as the youngest age (in months) at which at least 50% of children in the dataset produce/comprehend the word (following Goodman, Dale, Li, 2007).
-
-Frequency in child-directed speech is from the CHILDES database. All other lexical factors are from the MRC Psycholinguistic Database.
-
-```{r setup, include=FALSE}
-library(knitr)
-opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
-```
-
-```{r, cache=FALSE, include=FALSE}
-library(dplyr)
-library(tidyr)
-library(purrr)
-library(ggplot2)
-library(langcog)
-library(wordbankr)
-theme_set(theme_bw(base_size = 14))
-```
-
----------------
-
-First, connect to the Wordbank database and pull out the WG data.
 ```{r}
-admins <- get_administration_data(mode = "local") %>%
-  #filter(form == "WG") %>%
-  select(data_id, age, language, form)
+aoa_data <- bind_rows(prop_data) %>%
+  group_by(language, form, measure, lexical_category, category, uni_lemma, definition) %>%
+  summarise(aoa = age[min(which(fit_prop > 0.5))])
 
-items <- get_item_data(mode = "local") %>%
-  filter(type == "word") %>%
-  select(item_id, language, form, category, lexical_category, item, uni_lemma) %>%
-  mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))))
+uni_aoa <- aoa_data %>%
+  group_by(language, form, measure, lexical_category, category, uni_lemma) %>%
+  summarise(aoa = min(aoa, na.rm = TRUE))
+```
 
-get_inst_data <- function(language_items, input_language, input_form) {
-  get_instrument_data(input_language, input_form, language_items$item_id,
-                      administrations = filter(admins, language == input_language, form == input_form),
-                      iteminfo = language_items,
-                      mode = "local") %>%
-    filter(!is.na(age)) %>%
-    mutate(produces = !is.na(value) & value == "produces",
-           understands = !is.na(value) & (value == "understands" | value == "produces")) %>%
-    select(-value) %>%
-    gather(measure, value, produces, understands) %>%
-    mutate(language = input_language,
-           form = input_form)
-  }
-
-items_by_inst <- split(items, paste(items$language, items$form, sep = "_"))
-languages <- unlist(map(names(items_by_inst), function(inst) strsplit(inst, "_")[[1]][1]))
-forms <- unlist(map(names(items_by_inst), function(inst) strsplit(inst, "_")[[1]][2]))
-raw_data <- map3(items_by_inst, languages, forms, get_inst_data) %>%
+Get frequency data.
+```{r}
+instruments <- words %>%
+  select(language, form) %>%
+  distinct()
+freqs <- map2(instruments$language, instruments$form,
+             function(language, form) {
+               freq_file <- sprintf("freqs/freqs_%s.csv", tolower(language))
+               if (file.exists(freq_file)) {
+                 read_csv(freq_file) %>%
+                   rename(definition = item) %>%
+                   mutate(language = language, form = form)
+               }
+             }) %>%
   bind_rows() %>%
-  select(language, form, measure, lexical_category, category, uni_lemma, item, item_id, age, data_id, value)
+  right_join(words)
+
+uni_freqs <- freqs %>%
+  group_by(language, form, lexical_category, category, uni_lemma) %>%
+  summarise(uni_freq = sum(frequency))
+
+# uni_joined <- uni_props %>%
+#   left_join(uni_freqs)
+
+# progress <- freqs %>%
+#   group_by(language, form) %>%
+#   summarise(num_items = n(),
+#             num_uni_lemmas = sum(!is.na(uni_lemma)),
+#             num_freqs = sum(!is.na(frequency)))
+```
+
+```{r}
+ggplot(filter(uni_joined, !is.na(uni_freq), measure == "understands"),
+       aes(x = uni_freq, y = prop, colour = lexical_category)) +
+  facet_wrap(~language + form) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10() +
+  scale_colour_solarized() +
+  xlab("\nLog frequency in child-directed speech") +
+  ylab("Proportion of children understanding\n") +
+  theme_bw(base_size = 14) +
+  theme(text = element_text(family = font))
 ```
 
 Use the WS and WG data to calculate the proportion of children that produce/understand each word, and each word's age of acquisition.
 ```{r}
-group_by_not <- function(.data, ..., add = FALSE) {
-  group_by_not_(.data, .dots = lazyeval::lazy_dots(...), add = add)
-  }
-
-group_by_not_ <- function(.data, ..., .dots, add = FALSE) {
-  group_by_(.data, .dots = Filter(function(name) !(name %in% Map(function(lazy) lazy$expr, .dots)),
-                                  names(.data)))
-}
+# group_by_not <- function(.data, ..., add = FALSE) {
+#   group_by_not_(.data, .dots = lazyeval::lazy_dots(...), add = add)
+#   }
+# 
+# group_by_not_ <- function(.data, ..., .dots, add = FALSE) {
+#   group_by_(.data, .dots = Filter(function(name) !(name %in% Map(function(lazy) lazy$expr, .dots)),
+#                                   names(.data)))
+# }
 
 by_age <- raw_data %>%
   group_by_not(data_id, value) %>%
@@ -276,3 +265,9 @@ ggplot(cat_means, aes(x = mean_cds_log_frequency, y = mean_aoa)) +
   xlab("Mean log frequency in child-directed speech") +
   ylab("Mean age of acquisition (months)")
 ```
+
+This is an exploratory analysis looking at using various lexical factors -- words' frequency, psycholinguistic metrics, and phonological characteristics -- as predictors of age of acquisition.
+
+Acquisition data is from the Wordbank database of CDI administrations, using production data from the English Words & Sentences form (16-30 months) and comprehension data from the English Words & Gestures form (8-18 months). Each word's age of acquisition is calculated as the youngest age (in months) at which at least 50% of children in the dataset produce/comprehend the word (following Goodman, Dale, Li, 2007).
+
+Frequency in child-directed speech is from the CHILDES database. All other lexical factors are from the MRC Psycholinguistic Database.

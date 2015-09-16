@@ -1,0 +1,124 @@
+---
+title: Predicting words' age of acquisition
+author: "Mika Braginsky and Daniel Yurovsky"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    highlight: tango
+    theme: spacelab
+---
+
+```{r setup, echo = FALSE}
+library(knitr)
+opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+```
+
+```{r, cache = FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(readr)
+library(ggplot2)
+library(langcog)
+library(wordbankr)
+library(boot)
+theme_set(theme_bw(base_size = 14))
+font <- "Open Sans"
+```
+
+Connect to the Wordbank database and pull out the raw data.
+```{r, raw_data}
+admins <- get_administration_data(mode = "local") %>%
+  select(data_id, age, language, form)
+
+items <- get_item_data(mode = "local") %>%
+  mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))),
+         definition = tolower(definition))
+
+get_inst_data <- function(inst_items) {
+  inst_language <- unique(inst_items$language)
+  inst_form <- unique(inst_items$form)
+  inst_admins <- filter(admins, language == inst_language, form == inst_form)
+  get_instrument_data(instrument_language = inst_language,
+                      instrument_form = inst_form,
+                      items = inst_items$item_id,
+                      administrations = inst_admins,
+                      iteminfo = inst_items,
+                      mode = "local") %>%
+    filter(!is.na(age)) %>%
+    mutate(produces = !is.na(value) & value == "produces",
+           understands = !is.na(value) & (value == "understands" | value == "produces")) %>%
+    select(-value) %>%
+    gather(measure, value, produces, understands) %>%
+    mutate(language = inst_language,
+           form = inst_form)
+  }
+
+words <- filter(items, type == "word", !is.na(uni_lemma), form == "WG")
+items_by_inst <- split(words, paste(words$language, words$form, sep = "_"))
+raw_data <- map(items_by_inst, get_inst_data) #%>%
+#  bind_rows()
+```
+
+Fit models to predict each item's age of acquisition.
+```{r, aoa_data}
+fit_props <- function(inst_measure_data) {
+  
+  fit_item <- function(item_data) {
+    ages <- min(item_data$age):max(item_data$age)
+    #model <- lm(prop ~ age, data = item_data)
+    model <- glm(cbind(num_true, num_false) ~ age, family = "binomial", data = item_data)
+    #rsq <- summary(model)$adj.r.squared
+    fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
+    data.frame(age = ages,
+               fit_prop = inv.logit(fit$fit),
+               fit_se = fit$se.fit) %>%
+               #rsq = rsq) %>%
+    left_join(item_data)
+  }
+  
+  inst_measure_data %>%
+    group_by(language, form, measure, lexical_category, category, uni_lemma, definition, item_id, age) %>%
+    summarise(num_true = sum(value, na.rm = TRUE),
+              num_false = n() - num_true,
+              prop = mean(value, na.rm = TRUE)) %>%
+    split(.$item_id) %>%
+    map(fit_item) %>%
+    bind_rows()
+  
+}
+
+prop_data <- map(raw_data, function(inst_data) {
+  inst_data %>%
+    split(.$measure) %>%
+    map(fit_props) %>%
+    bind_rows()
+})
+
+all_prop_data <- bind_rows(prop_data)
+```
+
+```{r}
+ggplot(filter(all_prop_data, uni_lemma == "uncle"), aes(x = age, group = definition)) +
+  facet_grid(measure ~ language) +
+#   geom_ribbon(aes(ymin = fit_prop - fit_se, ymax = fit_prop + fit_se),
+#                   fill = "grey60", size = 1, weight = 1, alpha = 0.4) +
+  geom_line(aes(y = prop, colour = language)) +
+  geom_point(aes(y = prop, colour = language)) +
+  geom_line(aes(y = fit_prop, colour = language), size = 1.5) +
+  scale_colour_solarized(guide = FALSE) +
+#  coord_cartesian(ylim = c(0, 1), xlim = c(8, 18))
+  scale_y_continuous(name = "Proportion of children\n", limits = c(0, 1)) +
+  scale_x_continuous(name = "\nAge (months)", limits = c(8, 18), breaks = seq(8, 18, 2)) +
+  theme(text = element_text(family = font))
+```
+
+```{r}
+ggplot(filter(all_prop_data, uni_lemma == "uncle"), aes(x = age, group = definition)) +
+  facet_grid(measure ~ .) +
+  geom_line(aes(y = fit_prop, colour = language), size = 1.5) +
+  scale_colour_solarized(guide = FALSE) +
+  scale_y_continuous(name = "Proportion of children\n", limits = c(0, 1)) +
+  scale_x_continuous(name = "\nAge (months)", limits = c(8, 18), breaks = seq(8, 18, 2)) +
+  theme(text = element_text(family = font))
+```
