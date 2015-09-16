@@ -3,3 +3,7 @@
 .DS_Store
 .idea/
 .Rhistory
+.Rproj.user
+.Rdata
+*.Rproj
+rsconnect/
