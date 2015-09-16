@@ -1,0 +1,43 @@
+"lexical_category","category","uni_lemma","Croatian WG","English WG","English WS","Hebrew WG","Norwegian WG","Russian WG","Russian WS","Spanish WG","Swedish WG","Turkish WG"
+"other","places","bathhouse",,,,,,,"баня",,,
+"other","places","beach",,,"beach",,"strand",,,,,
+"other","places","camping",,,"camping",,,,,,,
+"other","places","church",,,,,"kirke",,"церковь",,,
+"other","places","church*",,,"church*",,,,,,,
+"other","places","circus",,,"circus",,,,,,,
+"other","places","city",,,,,,,"город",,,
+"other","places","country",,,"country",,,,,,,
+"other","places","country house",,,,,,,"дача",,,
+"other","places","downtown",,,"downtown",,,,,,,
+"other","places","farm",,,"farm",,,,,,,
+"other","places","garage",,,,,,,"гараж",,,
+"other","places","garden",,,,,"hage",,"сад/садик",,,
+"other","places","gas station",,,"gas station",,,,,,,
+"other","places","grocery",,,,,,,,,,"bakkal"
+"other","places","home",,,"home",,"hjem",,,,,"ev"
+"other","places","house",,,"house",,"hus",,"дом",,,
+"other","places","kindergarten",,,,,,,"детский сад",,,
+"other","places","lake",,,,,,,"озеро",,,
+"other","places","market",,,,,,,,,,"çarşı, market, pazar"
+"other","places","movie",,,"movie",,,,,,,
+"other","places","outing",,,,,,,"гости",,,"atta"
+"other","places","outside",,,"outside",,,,,,,"dışarı"
+"other","places","park",,,"park",,"park",,"парк",,,"park"
+"other","places","party",,,"party",,"fest",,,,,
+"other","places","picnic",,,"picnic",,,,,,,
+"other","places","playground",,,"playground",,,,"площадка (детская)",,,
+"other","places","playgroup",,,,,,,"группа",,,
+"other","places","pool",,,,,"svømmehall",,"бассейн",,,
+"other","places","river",,,,,,,"река",,,
+"other","places","sandbox",,,,,,,"песочница",,,
+"other","places","school",,,"school",,"skole",,,,,"okul"
+"other","places","sea",,,,,,,,,,"deniz"
+"other","places","slide (object)",,,,,,,"горка",,,
+"other","places","store",,,"store",,"butikk",,"магазин",,,"dükkan"
+"other","places","street",,,,,,,"улица",,,
+"other","places","swing (object)",,,,,,,"качели",,,
+"other","places","village",,,,,,,,,,"köy"
+"other","places","woods",,,"woods",,,,"лес",,,
+"other","places","work (place)",,,"work (place)",,"jobb",,"работа",,,"iş"
+"other","places","yard",,,"yard",,,,"двор",,,
+"other","places","zoo",,,"zoo",,"dyrehage",,"зоопарк",,,

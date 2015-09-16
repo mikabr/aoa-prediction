@@ -1,0 +1,16 @@
+"lexical_category","category","uni_lemma","Croatian WG","English WG","English WS","Hebrew WG","Norwegian WG","Russian WG","Russian WS","Spanish WG","Swedish WG","Turkish WG"
+"function_words","question_words","a",,,,,,,,"un, una, unas, unos",,
+"function_words","question_words","how","kako","how","how","איך","hvordan",,"как?","como","hur","nasıl"
+"function_words","question_words","how many",,,,,,,"сколько?",,,
+"function_words","question_words","how much",,,,"כמה",,,,,,
+"function_words","question_words","the",,,,,,,,"el2, la, las, los",,
+"function_words","question_words","what","što","what","what","מה, מה זה","hva","что?","что?","que","vad","ne"
+"function_words","question_words","when","kad(a)","when",,"מתי","når",,,,"när",
+"function_words","question_words","when (question)",,,"when",,,,"когда?",,,
+"function_words","question_words","where","gdje","where",,"איפה","hvor","где?, куда?","где?","dondest","var","nerede, nereye"
+"function_words","question_words","where (question)",,,"where",,,,"куда?",,,
+"function_words","question_words","which",,,,,,"какой?",,"cual",,
+"function_words","question_words","which (question)",,,"which",,,,"какой?",,,
+"function_words","question_words","who","tko","who","who","מי, מי זה ","hvem","кто?","кто?","quien","vem","kim"
+"function_words","question_words","whose",,,,,,"чей?","чей?",,,
+"function_words","question_words","why","zašto","why","why","למה","hvorfor",,"зачем?, почему?","porque","varför","neden, niye"

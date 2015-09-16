@@ -1,0 +1,83 @@
+"lexical_category","category","uni_lemma","Croatian WG","English WG","English WS","Hebrew WG","Norwegian WG","Russian WG","Russian WS","Spanish WG","Swedish WG","Turkish WG"
+"predicates","descriptive_words","all gone","gotovo","all gone","all gone",,"borte",,,,"borta",
+"predicates","descriptive_words","angry",,,,,,,,"enojado",,
+"predicates","descriptive_words","asleep","spava","asleep","asleep",,,,,"sueno","sover",
+"predicates","descriptive_words","awake",,,"awake",,,,,,,
+"predicates","descriptive_words","bad","zločest(o)","bad","bad","רע","frekk",,,"malo","dålig",
+"predicates","descriptive_words","beautiful",,,,,"skjønn",,,,,
+"predicates","descriptive_words","better",,,"better",,,,,,,
+"predicates","descriptive_words","big","velik(o)","big","big","גדול","stor",,,"grande","stor","büyük, kocaman"
+"predicates","descriptive_words","bitter",,,,,,,,,,"acı (lezzet)"
+"predicates","descriptive_words","black",,,"black",,,,,,,
+"predicates","descriptive_words","blue","plava","blue","blue",,"blå",,,"azul","blå",
+"predicates","descriptive_words","broken",,"broken","broken","מקולקל, שבור","ødelagt",,,"roto","trasig",
+"predicates","descriptive_words","brown",,,"brown",,,,,,,
+"predicates","descriptive_words","careful",,"careful","careful","זהיר","forsiktig",,,"cuidado","försiktig",
+"predicates","descriptive_words","clean (description)","čist(o)","clean (description)","clean (description)","נקי","ren",,,"limpio","ren","temiz"
+"predicates","descriptive_words","closed (description)",,,,,,,,,,"kapalı"
+"predicates","descriptive_words","cold","hladno, zima","cold","cold","קר","kald",,,"frio","kall","soğuk"
+"predicates","descriptive_words","cute",,"cute","cute","חמוד","søt",,,"guapo",,"cici"
+"predicates","descriptive_words","dark","mrak","dark","dark",,"mørkt",,,"oscuro","mörk","karanlık"
+"predicates","descriptive_words","different",,,,,,,,"difernt",,
+"predicates","descriptive_words","dirty","prljav(o)","dirty","dirty","מלוכלך","skitten",,,"sucio","smutsig","kirli, pis"
+"predicates","descriptive_words","dry (description)","suh(o)","dry (description)","dry (description)","יבש","tørr",,,,"torr",
+"predicates","descriptive_words","easy",,,,,"grei",,,,,
+"predicates","descriptive_words","empty","prazno","empty","empty","ריק","tom",,,"vacio","tom","boş"
+"predicates","descriptive_words","fast","brz(o)","fast","fast","מהר","fort",,,,"fort",
+"predicates","descriptive_words","fat",,,,"שמן",,,,,,
+"predicates","descriptive_words","fine","divno, fin(o)","fine","fine",,"fin",,,,"fin",
+"predicates","descriptive_words","first",,,"first",,,,,,,
+"predicates","descriptive_words","full",,,"full",,,,,"lleno",,
+"predicates","descriptive_words","funny",,,,,,,,,,"komik"
+"predicates","descriptive_words","gentle","nježno","gentle","gentle",,,,,,,
+"predicates","descriptive_words","good","dobro","good","good","טוב","bra",,,,"god","iyi"
+"predicates","descriptive_words","green",,,"green",,,,,"verde",,
+"predicates","descriptive_words","happy","sretan","happy","happy","שמח","glad",,,"content","glad",
+"predicates","descriptive_words","hard","teško","hard","hard","קשה","hard",,,"dificil","hård, svår",
+"predicates","descriptive_words","heavy",,,"heavy",,,,,"pesado",,
+"predicates","descriptive_words","high",,,"high",,,,,,,
+"predicates","descriptive_words","hot","vruće","hot","hot","חם","varm",,,"calient","varmt","sıcak"
+"predicates","descriptive_words","hungry","gladan","hungry","hungry","רעב","sulten",,,"hambre","hungrig",
+"predicates","descriptive_words","hurt","boli","hurt","hurt",,"vondt",,,,"skada",
+"predicates","descriptive_words","last",,,"last",,,,,,,
+"predicates","descriptive_words","little (description)","mal(o)","little (description)","little (description)","נמוך, קטן, קצר","liten",,,"chico, poco","lite","küçük"
+"predicates","descriptive_words","long",,,"long",,,,,,,
+"predicates","descriptive_words","loud",,,"loud",,,,,,,
+"predicates","descriptive_words","mad",,,"mad",,,,,,,
+"predicates","descriptive_words","many",,,,,,,,,,"çok"
+"predicates","descriptive_words","naughty",,"naughty","naughty","שובב","slem",,,,"stygg","yaramaz"
+"predicates","descriptive_words","new",,,"new",,,,,"nuevo",,"yeni"
+"predicates","descriptive_words","nice","krasno","nice","nice","נחמד",,,,,"trevlig",
+"predicates","descriptive_words","noisy",,,"noisy",,,,,,,
+"predicates","descriptive_words","old","star(o)","old","old","זקן, ישן","gammel",,,"viejo","gammal",
+"predicates","descriptive_words","open (description)",,,,,,,,,,"açık"
+"predicates","descriptive_words","orange (description)",,,"orange (description)",,,,,,,
+"predicates","descriptive_words","poor",,,"poor",,,,,,,
+"predicates","descriptive_words","pretty","lijep(o)","pretty","pretty","יפה","pen",,,"bonita",,"güzel"
+"predicates","descriptive_words","quick",,,,,,,,,"snabb",
+"predicates","descriptive_words","quiet",,,"quiet",,,,,,,
+"predicates","descriptive_words","red","crvena","red","red",,"rød",,,"rojo","röd","kırmızı"
+"predicates","descriptive_words","sad",,,"sad",,,,,"triste",,
+"predicates","descriptive_words","salty",,,,"מלוח",,,,,,
+"predicates","descriptive_words","same",,,,,,,,"igual",,
+"predicates","descriptive_words","scared","strašno","scared","scared",,"redd",,,"miedo",,
+"predicates","descriptive_words","sick","bolestan","sick","sick","חולה","syk",,,"enfermo","sjuk","hasta"
+"predicates","descriptive_words","sleepy","pospan(o)","sleepy","sleepy",,"sliten",,,,,
+"predicates","descriptive_words","slow","polako",,"slow",,,,,,,
+"predicates","descriptive_words","smart",,,,"חכם",,,,,,
+"predicates","descriptive_words","soft","mekan(o)","soft","soft","רך","myk",,,"suave","mjuk",
+"predicates","descriptive_words","sticky",,,"sticky",,,,,,,
+"predicates","descriptive_words","stuck",,,"stuck",,,,,,,
+"predicates","descriptive_words","sweet",,,,"מתוק",,,,,"söt","tatlı"
+"predicates","descriptive_words","tasty",,,,"טעים",,,,,,
+"predicates","descriptive_words","thin",,,,"רזה",,,,,,
+"predicates","descriptive_words","thirsty","žedan","thirsty","thirsty","צמא","tørst",,,"sed","törstig",
+"predicates","descriptive_words","tiny",,,"tiny",,,,,,,
+"predicates","descriptive_words","tired","umoran","tired","tired","עייף","trøtt",,,"cansado","trött, trot2",
+"predicates","descriptive_words","ugly","ružno",,,,,,,"feo",,"çirkin"
+"predicates","descriptive_words","warm","toplo",,,,,,,,,
+"predicates","descriptive_words","wet","mok(ro)","wet","wet","רטוב","våt",,,,"våt","islak"
+"predicates","descriptive_words","white",,,"white",,,,,,,
+"predicates","descriptive_words","windy",,,"windy",,,,,,,
+"predicates","descriptive_words","yellow",,,"yellow",,,,,"amarill",,
+"predicates","descriptive_words","yucky",,"yucky","yucky","מגעיל","ekkelt",,,"fuchi","äcklig",

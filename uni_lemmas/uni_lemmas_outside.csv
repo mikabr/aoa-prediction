@@ -1,0 +1,74 @@
+"lexical_category","category","uni_lemma","Croatian WG","English WG","English WS","Hebrew WG","Norwegian WG","Russian WG","Russian WS","Spanish WG","Swedish WG","Turkish WG"
+"nouns","outside","backyard","dvorište",,,,,,,,,
+"nouns","outside","barn",,,,"רפת",,,,,,
+"nouns","outside","beach","plaža","beach",,"חול",,,,"playa","stranden",
+"nouns","outside","bench",,,,,,,"скамейка",,,
+"nouns","outside","birch",,,,,,,"береза",,,
+"nouns","outside","bridge",,,,,,,,,,"köprü"
+"nouns","outside","bus station",,,,"תחנת אוטובוס",,,,,,
+"nouns","outside","bush",,,,,,,"куст",,,
+"nouns","outside","church","crkva","church*",,"בית כנסת",,"церковь",,"iglstmp","kyrkan",
+"nouns","outside","cloud",,,"cloud",,,,"облако","nube",,
+"nouns","outside","dust",,,,,,,,,,"toz"
+"nouns","outside","faucet",,,,"ברז",,,,,,
+"nouns","outside","field","livada",,,,,,,"campo","landet",
+"nouns","outside","fir",,,,,,"елка","елка",,,
+"nouns","outside","fire",,,,,,,,,,"ateş"
+"nouns","outside","firewood",,,,,,,"дрова",,,
+"nouns","outside","flag",,,"flag",,,,,,,
+"nouns","outside","flower","cvijeće","flower","flower","פרח","blomst","цветы","цветы","flor",,"çiçek"
+"nouns","outside","frost",,,,,,"мороз","мороз",,,
+"nouns","outside","garden","vrt","garden","garden","גן",,,,"jardin","trädgård","bahçe"
+"nouns","outside","grass",,,"grass",,,"трава","трава",,,
+"nouns","outside","greenhouse",,,,,,,"парник",,,
+"nouns","outside","ground",,,,"אדמה",,,,,,"toprak"
+"nouns","outside","home","dom","home",,,,,,,"hemma",
+"nouns","outside","hose",,,"hose",,,,,,,
+"nouns","outside","house","kuća","house",,"בית, מעון",,"дом",,"casa","hus",
+"nouns","outside","ice",,,,,,,"лед",,,
+"nouns","outside","icicle",,,,,,,"сосулька",,,
+"nouns","outside","kindergarten",,,,,,,,,"dagis",
+"nouns","outside","ladder",,,"ladder",,,,,,,
+"nouns","outside","lawn mower",,,"lawn mower",,,,,,,
+"nouns","outside","leaf",,,,,,,,,,"yaprak"
+"nouns","outside","moon","mjesec","moon","moon","ירח","måne","луна","луна","luna","måne","ay/aydede"
+"nouns","outside","mud",,,,,,"грязь","грязь",,,"çamur"
+"nouns","outside","outside","van(i)","outside",,,"ute",,,,"ute",
+"nouns","outside","park","park","park",,,,"парк",,"parque",,
+"nouns","outside","party","proslava","party",,"מסיבה",,,,"fiesta","kalas",
+"nouns","outside","pine",,,,,,,"сосна",,,
+"nouns","outside","plant",,,,,,,,"planta",,
+"nouns","outside","playground",,,,,,,,,"lekpark",
+"nouns","outside","pool","bazen","pool","pool","בריכה",,,,"albrpis","bassa","havuz"
+"nouns","outside","puddle",,,,,,"лужа","лужа",,,
+"nouns","outside","rain","kiša","rain","rain","גשם","regn","дождь","дождь","lluvia","regn","yağmur"
+"nouns","outside","road",,,,"כביש",,"улица",,,,"yol"
+"nouns","outside","rock","kamen","rock","rock","אבן","stein","камень","камень","piedra","sten","taş"
+"nouns","outside","rocking chair",,,,"נדנדה",,,,,,
+"nouns","outside","roof",,,"roof",,,,,"techo",,
+"nouns","outside","sand",,,,,,"песок","песок",,,"kum"
+"nouns","outside","sandbox",,,"sandbox",,,,,,,
+"nouns","outside","school","škola","school",,,,,,"escuela","skola",
+"nouns","outside","sea",,,,"ים",,,,,,
+"nouns","outside","shovel","lopata","shovel","shovel","את","spade",,,,"spade",
+"nouns","outside","sidewalk",,,"sidewalk",,,,,,,
+"nouns","outside","sky","nebo","sky","sky","שמיים","himmel","небо","небо","cielo","himmel",
+"nouns","outside","slide (object)",,"slide (object)","slide (object)","מגלשה","sklie","горка",,"resbald","rutschbana","kaydırak"
+"nouns","outside","snow","snijeg","snow","snow",,"snø","снег","снег","nieve","snö",
+"nouns","outside","snowman",,,"snowman",,,,"снеговик",,,
+"nouns","outside","sprinkler",,,"sprinkler",,,,,,,
+"nouns","outside","star","zvijezda","star","star","כוכב","stjerner","звезда","звезда","estrell","stjärna","yıldız"
+"nouns","outside","stick",,,"stick",,,"палка","палка",,,
+"nouns","outside","stone",,,"stone",,,,,,,
+"nouns","outside","store","trgovina","store",,"חנות, סופר",,"магазин",,"tienmer","affär",
+"nouns","outside","street",,,"street",,,,"дорога","calle",,"sokak"
+"nouns","outside","sun","sunce","sun","sun","שמש","sol","солнце","солнце","sol","sol","güneş"
+"nouns","outside","swing (object)","ljuljačka","swing (object)","swing (object)",,"huske","качели",,"columpi","gunga","salıncak"
+"nouns","outside","tree","drvo","tree","tree","עץ","tre","дерево","дерево","arbol","träd","ağaç"
+"nouns","outside","wall",,,,,,,,,,"duvar"
+"nouns","outside","water (not beverage)","voda","water (not beverage)","water (not beverage)",,"vann",,,,"vatten",
+"nouns","outside","well",,,,,,,"колодец",,,
+"nouns","outside","wind",,,"wind",,,"ветер","ветер",,,
+"nouns","outside","work (place)","posao","work (place)",,"עבודה",,"работа",,,"arbetet",
+"nouns","outside","yard",,"backyard","backyard","גינה, חצר",,"двор",,,"gård",
+"nouns","outside","zoo","zoološki (vrt)","zoo",,"גן חיות",,"зоопарк",,"zoologi",,
