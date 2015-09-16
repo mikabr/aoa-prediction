@@ -8,7 +8,8 @@ words <- get_item_data(mode = "local") %>%
   mutate(definition = tolower(definition))
 
 #dimension <- "category"
-dimension <- "lexical_category"
+#dimension <- "lexical_category"
+dimension <- "lexical_class"
 
 uni_lemmas <- words %>%
   mutate(instrument = paste(language, form)) %>%
@@ -24,6 +25,6 @@ by_inst %>%
   split(.[[dimension]]) %>%
   map(function(category_lemmas) {
     write_csv(category_lemmas,
-              sprintf("%s/uni_lemmas_%s.csv", unique(category_lemmas[[dimension]]),
+              sprintf("%s/uni_lemmas_%s.csv", dimension,
                       unique(category_lemmas[[dimension]])))
   })
