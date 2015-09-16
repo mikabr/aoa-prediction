@@ -7,22 +7,23 @@ words <- get_item_data(mode = "local") %>%
   filter(type == "word") %>%
   mutate(definition = tolower(definition))
 
+#dimension <- "category"
+dimension <- "lexical_category"
+
 uni_lemmas <- words %>%
   mutate(instrument = paste(language, form)) %>%
   select(-language, -form) %>%
   filter(!is.na(uni_lemma)) %>%
-  group_by(instrument, lexical_category, uni_lemma) %>%
-  summarise(#num_words = n(),
-            #num_unique = length(unique(definition)),
-            words = paste(definition, collapse = ", ")) #%>%
-  #filter(num_words > 1, num_unique < num_words)
+  group_by_("instrument", dimension, "uni_lemma") %>%
+  summarise(words = paste(definition, collapse = ", "))
 
 by_inst <- uni_lemmas %>%
   spread(instrument, words, fill = "")
 
 by_inst %>%
-  split(.$category) %>%
+  split(.[[dimension]]) %>%
   map(function(category_lemmas) {
     write_csv(category_lemmas,
-              sprintf("uni_lemmas_%s.csv", unique(category_lemmas$category)))
+              sprintf("%s/uni_lemmas_%s.csv", unique(category_lemmas[[dimension]]),
+                      unique(category_lemmas[[dimension]])))
   })

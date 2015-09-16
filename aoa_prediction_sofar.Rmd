@@ -56,8 +56,7 @@ get_inst_data <- function(inst_items) {
 
 words <- filter(items, type == "word", !is.na(uni_lemma), form == "WG")
 items_by_inst <- split(words, paste(words$language, words$form, sep = "_"))
-raw_data <- map(items_by_inst, get_inst_data) #%>%
-#  bind_rows()
+raw_data <- map(items_by_inst, get_inst_data)
 ```
 
 Fit models to predict each item's age of acquisition.
@@ -78,7 +77,8 @@ fit_props <- function(inst_measure_data) {
   }
   
   inst_measure_data %>%
-    group_by(language, form, measure, lexical_category, category, uni_lemma, definition, item_id, age) %>%
+    group_by(language, form, measure, lexical_category, category, uni_lemma,
+             definition, item_id, age) %>%
     summarise(num_true = sum(value, na.rm = TRUE),
               num_false = n() - num_true,
               prop = mean(value, na.rm = TRUE)) %>%
@@ -96,6 +96,7 @@ prop_data <- map(raw_data, function(inst_data) {
 })
 
 all_prop_data <- bind_rows(prop_data)
+#write_csv(all_prop_data, "app/all_prop_data.csv")
 ```
 
 ```{r}
