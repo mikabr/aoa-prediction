@@ -3,9 +3,9 @@ title: Predicting words' age of acquisition
 author: "Mika Braginsky and Daniel Yurovsky"
 date: "`r Sys.Date()`"
 output:
-  html_document:
-    highlight: tango
-    theme: spacelab
+html_document:
+  highlight: tango
+  theme: spacelab
 ---
 
 ```{r setup, echo = FALSE}
@@ -35,6 +35,15 @@ items <- get_item_data(mode = "local") %>%
   mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))),
          definition = tolower(definition))
 
+words <- items %>%
+  filter(type == "word", !is.na(uni_lemma), form == "WG")
+
+invalid_uni_lemmas <- words %>%
+  group_by(language, uni_lemma) %>%
+  filter(n() > 1,
+         length(unique(lexical_category)) > 1) %>%
+  arrange(language, uni_lemma)
+
 get_inst_data <- function(inst_items) {
   inst_language <- unique(inst_items$language)
   inst_form <- unique(inst_items$form)
@@ -52,74 +61,136 @@ get_inst_data <- function(inst_items) {
     gather(measure, value, produces, understands) %>%
     mutate(language = inst_language,
            form = inst_form)
-  }
+}
 
-words <- filter(items, type == "word", !is.na(uni_lemma), form == "WG")
 items_by_inst <- split(words, paste(words$language, words$form, sep = "_"))
 raw_data <- map(items_by_inst, get_inst_data)
 ```
 
 Fit models to predict each item's age of acquisition.
 ```{r, aoa_data}
-fit_props <- function(inst_measure_data) {
-  
-  fit_item <- function(item_data) {
-    ages <- min(item_data$age):max(item_data$age)
-    #model <- lm(prop ~ age, data = item_data)
-    model <- glm(cbind(num_true, num_false) ~ age, family = "binomial", data = item_data)
-    #rsq <- summary(model)$adj.r.squared
-    fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
-    data.frame(age = ages,
-               fit_prop = inv.logit(fit$fit),
-               fit_se = fit$se.fit) %>%
-               #rsq = rsq) %>%
-    left_join(item_data)
-  }
-  
-  inst_measure_data %>%
-    group_by(language, form, measure, lexical_category, category, uni_lemma,
-             definition, item_id, age) %>%
-    summarise(num_true = sum(value, na.rm = TRUE),
-              num_false = n() - num_true,
-              prop = mean(value, na.rm = TRUE)) %>%
-    split(.$item_id) %>%
-    map(fit_item) %>%
-    bind_rows()
-  
+fit_inst_measure_uni <- function(inst_measure_uni_data) {
+  ages <- min(inst_measure_uni_data$age):max(inst_measure_uni_data$age)
+  model <- glm(cbind(num_true, num_false) ~ age, family = "binomial",
+               data = inst_measure_uni_data)
+  fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
+  aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
+  constants <- inst_measure_uni_data %>%
+    select(language, form, measure, lexical_category, lexical_class, uni_lemma,
+           words) %>%
+    distinct()
+  data.frame(age = ages, fit_prop = inv.logit(fit$fit), fit_se = fit$se.fit,
+             aoa = aoa, language = constants$language, form = constants$form,
+             measure = constants$measure,
+             lexical_category = constants$lexical_category,
+             lexical_class = constants$lexical_class,
+             uni_lemma = constants$uni_lemma, words = constants$words)
 }
 
-prop_data <- map(raw_data, function(inst_data) {
+fit_inst_measure <- function(inst_measure_data) {
+  inst_measure_by_uni <- inst_measure_data %>%
+    group_by(language, form, measure,
+             lexical_category, lexical_class, uni_lemma,
+             age, data_id) %>%
+    summarise(uni_value = any(value),
+              words = paste(definition, collapse = ", ")) %>%
+    group_by(language, form, measure,
+             lexical_category, lexical_class, uni_lemma, words,
+             age) %>%
+    summarise(num_true = sum(uni_value, na.rm = TRUE),
+              num_false = n() - num_true,
+              prop = mean(uni_value, na.rm = TRUE))
+  inst_measure_by_uni %>%
+    split(paste(.$lexical_category, .$lexical_class, .$uni_lemma)) %>%
+    map(fit_inst_measure_uni) %>%
+    bind_rows()
+}
+
+fit_inst <- function(inst_data) {
   inst_data %>%
     split(.$measure) %>%
-    map(fit_props) %>%
+    map(fit_inst_measure) %>%
     bind_rows()
-})
+}
 
+prop_data <- map(raw_data, fit_inst)
 all_prop_data <- bind_rows(prop_data)
 #write_csv(all_prop_data, "app/all_prop_data.csv")
 ```
 
 ```{r}
-ggplot(filter(all_prop_data, uni_lemma == "uncle"), aes(x = age, group = definition)) +
-  facet_grid(measure ~ language) +
-#   geom_ribbon(aes(ymin = fit_prop - fit_se, ymax = fit_prop + fit_se),
-#                   fill = "grey60", size = 1, weight = 1, alpha = 0.4) +
-  geom_line(aes(y = prop, colour = language)) +
-  geom_point(aes(y = prop, colour = language)) +
-  geom_line(aes(y = fit_prop, colour = language), size = 1.5) +
-  scale_colour_solarized(guide = FALSE) +
-#  coord_cartesian(ylim = c(0, 1), xlim = c(8, 18))
-  scale_y_continuous(name = "Proportion of children\n", limits = c(0, 1)) +
-  scale_x_continuous(name = "\nAge (months)", limits = c(8, 18), breaks = seq(8, 18, 2)) +
-  theme(text = element_text(family = font))
+aoa_data <- all_prop_data %>%
+  select(language, form, measure, lexical_category, lexical_class, uni_lemma, words, aoa) %>%
+  distinct() %>%
+  filter(aoa > 5, aoa < 31)
+```
+
+
+Get frequency data.
+```{r}
+instruments <- words %>%
+  select(language, form) %>%
+  distinct()
+
+inst_freqs <- function(language, form) {
+  freq_file <- sprintf("freqs/freqs_%s.csv", tolower(language))
+  if (file.exists(freq_file)) {
+    read_csv(freq_file) %>%
+      rename(freq_item = item) %>%
+      mutate(language = language, form = form)
+  }
+}
+
+freqs <- map2(instruments$language, instruments$form, inst_freqs) %>%
+  bind_rows() %>%
+  right_join(mutate(words, freq_item = unlist(map(strsplit(words$definition, " "), ~.x[1]))))
+
+uni_freqs <- freqs %>%
+  group_by(language, form, lexical_category, category, uni_lemma) %>%
+  summarise(uni_freq = sum(frequency))
+
+uni_joined <- aoa_data %>%
+  left_join(uni_freqs) %>%
+  mutate(lexical_category = factor(lexical_category,
+                                   levels = c("nouns", "predicates", "function_words", "other"),
+                                   labels = c("Nouns", "Predicates", "Function Words", "Other")))
+
+# progress <- freqs %>%
+#   group_by(language, form) %>%
+#   summarise(num_items = n(),
+#             num_uni_lemmas = sum(!is.na(uni_lemma)),
+#             num_freqs = sum(!is.na(frequency)))
 ```
 
 ```{r}
-ggplot(filter(all_prop_data, uni_lemma == "uncle"), aes(x = age, group = definition)) +
-  facet_grid(measure ~ .) +
-  geom_line(aes(y = fit_prop, colour = language), size = 1.5) +
+correlations <- uni_joined %>%
+  filter(!is.na(uni_freq)) %>%
+  split(paste(.$language, .$form, .$measure, .$lexical_category, sep = "_")) %>%
+  map(~lm(aoa ~ uni_freq, data = .)) %>%
+  map(summary) %>%
+  map_v("r.squared")
+
+rsq <- data.frame(language = unlist(map(strsplit(names(correlations), "_"), ~.x[1])),
+                  form = unlist(map(strsplit(names(correlations), "_"), ~.x[2])),
+                  measure = unlist(map(strsplit(names(correlations), "_"), ~.x[3])),
+                  lexical_category = unlist(map(strsplit(names(correlations), "_"), ~.x[4])),
+                  rsq = sprintf("r² = %.3f", correlations),
+                  row.names = NULL)
+```
+
+```{r}
+ggplot(filter(uni_joined, !is.na(uni_freq), measure == "understands"),
+       aes(x = uni_freq, y = aoa, colour = lexical_category)) +
+  #facet_wrap(~language + form) +
+  facet_grid(lexical_category ~ language) +
+  geom_point(size = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, size = 1) +
+  geom_text(aes(label = rsq, x = 0.005, y = 28),
+            data = filter(rsq, measure == "understands"), size = 4, family = font) +
+  scale_x_log10() +
   scale_colour_solarized(guide = FALSE) +
-  scale_y_continuous(name = "Proportion of children\n", limits = c(0, 1)) +
-  scale_x_continuous(name = "\nAge (months)", limits = c(8, 18), breaks = seq(8, 18, 2)) +
+  xlab("\nLog frequency in child-directed speech") +
+  ylab("Age of acquisition (months)\n") +
+  theme_bw(base_size = 14) +
   theme(text = element_text(family = font))
 ```
