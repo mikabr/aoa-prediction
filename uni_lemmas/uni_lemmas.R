@@ -23,7 +23,7 @@ by_inst <- uni_lemmas %>%
 
 by_inst %>%
   split(.[[dimension]]) %>%
-  map(function(category_lemmas) {
+  walk(function(category_lemmas) {
     write_csv(category_lemmas,
               sprintf("%s/uni_lemmas_%s.csv", dimension,
                       unique(category_lemmas[[dimension]])))
