@@ -28,10 +28,10 @@ font <- "Open Sans"
 
 Connect to the Wordbank database and pull out the raw data.
 ```{r, raw_data}
-admins <- get_administration_data(mode = "local") %>%
+admins <- get_administration_data(mode = "remote") %>%
   select(data_id, age, language, form)
 
-items <- get_item_data(mode = "local") %>%
+items <- get_item_data(mode = "remote") %>%
   mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))),
          definition = tolower(definition))
 
@@ -39,9 +39,9 @@ words <- items %>%
   filter(type == "word", !is.na(uni_lemma), form == "WG")
 
 invalid_uni_lemmas <- words %>%
-  group_by(language, uni_lemma) %>%
+  group_by(uni_lemma) %>%
   filter(n() > 1,
-         length(unique(lexical_category)) > 1) %>%
+         length(unique(lexical_class)) > 1) %>%
   arrange(language, uni_lemma)
 
 get_inst_data <- function(inst_items) {
@@ -53,7 +53,7 @@ get_inst_data <- function(inst_items) {
                       items = inst_items$item_id,
                       administrations = inst_admins,
                       iteminfo = inst_items,
-                      mode = "local") %>%
+                      mode = "remote") %>%
     filter(!is.na(age)) %>%
     mutate(produces = !is.na(value) & value == "produces",
            understands = !is.na(value) & (value == "understands" | value == "produces")) %>%
@@ -120,14 +120,15 @@ all_prop_data <- bind_rows(prop_data)
 
 ```{r}
 aoa_data <- all_prop_data %>%
-  select(language, form, measure, lexical_category, lexical_class, uni_lemma, words, aoa) %>%
+  select(language, form, measure, lexical_category, lexical_class, uni_lemma, 
+         words, aoa) %>%
   distinct() %>%
   filter(aoa > 5, aoa < 31)
 ```
 
 
 Get frequency data.
-```{r}
+```{r load_freqs}
 instruments <- words %>%
   select(language, form) %>%
   distinct()
@@ -141,19 +142,72 @@ inst_freqs <- function(language, form) {
   }
 }
 
+freq_words <- words %>%
+  mutate(freq_item = unlist(map(strsplit(words$definition, " "), ~.x[1])))
+
 freqs <- map2(instruments$language, instruments$form, inst_freqs) %>%
   bind_rows() %>%
-  right_join(mutate(words, freq_item = unlist(map(strsplit(words$definition, " "), ~.x[1]))))
+  right_join(freq_words)
 
 uni_freqs <- freqs %>%
   group_by(language, form, lexical_category, category, uni_lemma) %>%
   summarise(uni_freq = sum(frequency))
+```
 
+```{r load_valence}
+uni_valences <- read_csv("predictors/uni_lemma_valence.csv") 
+uni_babiness <- read_csv("predictors/iconicity_and_babiness.csv") 
+```
+
+
+```{r}
 uni_joined <- aoa_data %>%
   left_join(uni_freqs) %>%
+  left_join(uni_valences) %>%
+  left_join(uni_babiness) %>%
   mutate(lexical_category = factor(lexical_category,
-                                   levels = c("nouns", "predicates", "function_words", "other"),
-                                   labels = c("Nouns", "Predicates", "Function Words", "Other")))
+                                   levels = c("nouns", "predicates", 
+                                              "function_words", "other"),
+                                   labels = c("Nouns", "Predicates", 
+                                              "Function Words", "Other"))) %>%
+    gather(predictor, value, c(valence, arousal, dominance, babiness, iconicity))
+
+class_means <- uni_joined %>%
+  group_by(language, form, measure, predictor, lexical_class) %>%
+  summarise(class_value = mean(value, na.rm = T))
+
+lang_means <- class_means %>%
+   summarise(lang_value = mean(class_value, na.rm = T))
+
+get_predictor_value <- function(lemma_predictors) {
+  lemma_class_means <- class_means %>%
+    filter(language == unique(lemma_predictors$language),
+           form  == unique(lemma_predictors$form), 
+           measure == unique(lemma_predictors$measure),
+           lexical_class == unique(lemma_predictors$lexical_class))
+  
+  lemma_lang_means <- lang_means %>%
+    filter(language == unique(lemma_predictors$language),
+           form  == unique(lemma_predictors$form), 
+           measure == unique(lemma_predictors$measure))
+  
+  lemma_predictors %>%
+    left_join(lemma_class_means) %>%
+    left_join(lemma_lang_means) %>%
+    rowwise() %>%
+    mutate(value = if(!is.na(value)) value
+           else if(!is.na(class_value)) class_value
+           else lang_value)
+}
+
+uni_filled <- uni_joined %>%
+  split(paste(.$language, .$form, .$measure, .$lexical_class, .$uni_lemma, sep = "_")) %>%
+  map(get_predictor_value) %>%
+  bind_rows() %>%
+
+uni_spread <- uni_filled %>%
+  select(-class_value, -lang_value) %>%
+  spread(predictor, value)
 
 # progress <- freqs %>%
 #   group_by(language, form) %>%
@@ -163,31 +217,84 @@ uni_joined <- aoa_data %>%
 ```
 
 ```{r}
-correlations <- uni_joined %>%
-  filter(!is.na(uni_freq)) %>%
-  split(paste(.$language, .$form, .$measure, .$lexical_category, sep = "_")) %>%
-  map(~lm(aoa ~ uni_freq, data = .)) %>%
-  map(summary) %>%
-  map_v("r.squared")
+# correlations <- uni_joined %>%
+#   filter(!is.na(uni_freq)) %>%
+#   split(paste(.$language, .$form, .$measure, .$lexical_category, sep = "_")) %>%
+#   map(~lm(aoa ~ uni_freq, data = .)) %>%
+#   map(summary) %>%
+#   map_dbl("r.squared")
 
-rsq <- data.frame(language = unlist(map(strsplit(names(correlations), "_"), ~.x[1])),
-                  form = unlist(map(strsplit(names(correlations), "_"), ~.x[2])),
-                  measure = unlist(map(strsplit(names(correlations), "_"), ~.x[3])),
-                  lexical_category = unlist(map(strsplit(names(correlations), "_"), ~.x[4])),
-                  rsq = sprintf("r² = %.3f", correlations),
-                  row.names = NULL)
+aoa_predictions <- uni_spread %>%
+  filter(!is.na(babiness), !is.na(uni_freq), !is.na(valence), !is.na(arousal)) %>%
+  split(paste(.$language, .$form, .$measure, .$lexical_category, sep = "_")) %>%
+  map(function(model_data) {
+    model <- lm(aoa ~ valence + arousal + babiness + log(uni_freq), data = model_data)
+    model_data$predicted_aoa <- predict(model)
+    model_data
+  }) %>%
+  bind_rows()
+
+aoa_correlations <- aoa_predictions %>%
+  group_by(language, form, measure, lexical_category) %>%
+  summarise(correlation = cor(aoa, predicted_aoa)) %>%
+  mutate(r = sprintf("r = %.3f", correlation))
+#   
+# rsq <- data.frame(language = unlist(map(strsplit(names(correlations), "_"), ~.x[1])),
+#                   form = unlist(map(strsplit(names(correlations), "_"), ~.x[2])),
+#                   measure = unlist(map(strsplit(names(correlations), "_"), ~.x[3])),
+#                   lexical_category = unlist(map(strsplit(names(correlations), "_"), ~.x[4])),
+# #                   rsq = sprintf("r² = %.3f", correlations),
+#                   row.names = NULL)
 ```
 
 ```{r}
-ggplot(filter(uni_joined, !is.na(uni_freq), measure == "understands"),
-       aes(x = uni_freq, y = aoa, colour = lexical_category)) +
+ggplot(filter(aoa_predictions, measure == "understands"),
+       aes(x = predicted_aoa, y = aoa, colour = lexical_category)) +
+  #facet_wrap(~language + form) +
+  facet_grid(lexical_category ~ language) +
+  geom_point(size = 0.8) +
+  geom_abline(aes(slope = correlation, intercept = 0),
+              data = filter(aoa_correlations, measure == "understands")) +
+  geom_smooth(method = "lm", se = FALSE, size = 1) +
+  scale_colour_solarized(guide = FALSE) +
+   geom_text(aes(label = r, x = 20, y = 28),
+            data = filter(aoa_correlations, measure == "understands"),
+            size = 4, family = font) +
+  scale_x_continuous(limits = c(0, 30)) +
+  scale_y_continuous(limits = c(0, 30)) +
+  xlab("\nModel Predicted Age of Acquisition") +
+  ylab("Age of acquisition (months)\n") +
+  theme_bw(base_size = 14) +
+  theme(text = element_text(family = font))
+```
+
+```{r}
+ggplot(filter(uni_joined, !is.na(arousal), measure == "understands"),
+       aes(x = arousal, y = aoa, colour = lexical_category)) +
   #facet_wrap(~language + form) +
   facet_grid(lexical_category ~ language) +
   geom_point(size = 0.8) +
   geom_smooth(method = "lm", se = FALSE, size = 1) +
   geom_text(aes(label = rsq, x = 0.005, y = 28),
             data = filter(rsq, measure == "understands"), size = 4, family = font) +
-  scale_x_log10() +
+  #scale_x_log10() +
+  scale_colour_solarized(guide = FALSE) +
+  xlab("\nLog frequency in child-directed speech") +
+  ylab("Age of acquisition (months)\n") +
+  theme_bw(base_size = 14) +
+  theme(text = element_text(family = font))
+```
+
+```{r}
+ggplot(filter(uni_joined, !is.na(babiness), measure == "understands"),
+       aes(x = babiness, y = aoa, colour = lexical_category)) +
+  #facet_wrap(~language + form) +
+  facet_grid(lexical_category ~ language) +
+  geom_point(size = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, size = 1) +
+  geom_text(aes(label = rsq, x = 0.005, y = 28),
+            data = filter(rsq, measure == "understands"), size = 4, family = font) +
+  #scale_x_log10() +
   scale_colour_solarized(guide = FALSE) +
   xlab("\nLog frequency in child-directed speech") +
   ylab("Age of acquisition (months)\n") +

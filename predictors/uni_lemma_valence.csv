@@ -1,951 +1,1210 @@
-"uni_lemma","valence","arousal","dominance"
-"all gone",6.5,2.57,7.17
-"angry",2.53,6.2,4.11
-"asleep",6.5,2,4.33
-"bad",3.24,4.86,3.56
-"beautiful",7.61,5.71,6.17
-"big",5.64,4.33,5.61
-"bitter",3.63,4.64,4.58
-"black",5.4,3.58,5.48
-"blue",6.53,3.69,5.79
-"broken",2.75,4.86,3.76
-"careful",6.32,2.95,5.83
-"clean",7.09,3.57,6.11
-"clean (description)",7.09,3.57,6.11
-"closed (description)",5.23,3.81,5.94
-"cold",4.32,3.55,5.17
-"cute",7.56,5.05,6.02
-"dark",5.08,4.09,4.61
-"different",5.91,3.95,6.47
-"dirty",3.17,5.05,5.05
-"dry",4.86,3.8,6.21
-"dry (description)",4.86,3.8,6.21
-"easy",7.47,3.82,6.79
-"empty",3.78,2.25,3.61
-"fast",6.08,5.16,6.18
-"fat",2.74,3.89,4
-"fine",6.5,3.86,5.78
-"finished",6.41,3.81,6.44
-"full",6,3.48,6.06
-"funny",7.59,5.38,6.33
-"gentle",7.42,3.17,6.95
-"good",7.89,3.66,6.41
-"green",6.29,4.07,5.64
-"happy",8.47,6.05,7.21
-"hard",4.35,4.5,4.96
-"heavy",4.78,3.65,3.61
-"high",5.77,4.1,5.76
-"hot",5.73,4.76,5
-"hungry",3.54,5.6,4.59
-"hurt",2.45,4.72,3.73
-"little",5.91,4.2,5.18
-"little (description)",5.91,4.2,5.18
-"loud",5.65,6.6,5.57
-"many",5.64,4.33,5.61
-"naked",6.21,5.58,5.6
-"naughty",6.04,6.95,5.76
-"new",7.68,5.14,5.22
-"nice",6.95,3.53,6.47
-"old",3.19,4.48,4.22
-"open (description)",6.14,4.43,6.17
-"orange (description)",6.81,4.04,5.58
-"pretty",7.7,5.5,6.7
-"quick",6.08,5.16,6.18
-"red",5.67,5.02,5.2
-"sad",2.1,3.49,3.84
-"salty",5.1,3.94,5.14
-"same",5.86,3.43,5.8
-"scared",2.8,6.1,4.2
-"sick",2.29,4.67,2.84
-"sleepy",4.36,3.04,4.56
-"slow",4,2.89,5.39
-"smart",7.73,3.81,6.81
-"soft",7.13,3.04,6.1
-"sweet",7.77,4.14,6.12
-"tasty",6.89,5.28,6.18
-"thin",5.47,4.5,5.33
-"thirsty",4.48,4.08,6.2
-"tired",4.29,3.67,5.06
-"toy (description)",7.29,4.29,5.61
-"ugly",2.47,4.43,3.86
-"warm",7.5,3.35,6.33
-"wet",5.64,5,6.11
-"white",6.18,3.35,5.71
-"yellow",6.09,3.83,6.35
-"yucky",3.36,4.35,4.36
-"badly",3.24,4.86,3.56
-"beautifully",7.61,5.71,6.17
-"carefully",6.32,2.95,5.83
-"cleanly",7.09,3.57,6.11
-"coldly",4.32,3.55,5.17
-"darkly",5.08,4.09,4.61
-"dirtily",3.17,5.05,5.05
-"heavily",4.78,3.65,3.61
-"hotly",5.73,4.76,5
-"loudly",NA,NA,NA
-"painfully",2.58,5.52,3.83
-"quickly",6.08,5.16,6.18
-"quietly",6.47,1.95,5.8
-"sweetly",7.77,4.14,6.12
-"tastily",6.89,5.28,6.18
-"warmly",7.5,3.35,6.33
-"well",7.89,3.66,6.41
-"wetly",5.64,5,6.11
-"a",NA,NA,NA
-"a little",5.76,3.43,4.53
-"a lot",5.64,4.33,5.61
-"above",NA,NA,NA
-"again",NA,NA,NA
-"all",NA,NA,NA
-"already",NA,NA,NA
-"also",NA,NA,NA
-"another",NA,NA,NA
-"at",NA,NA,NA
-"away",NA,NA,NA
-"back",4.76,2.59,5.22
-"be",6.18,3.43,5.5
-"between",NA,NA,NA
-"by",NA,NA,NA
-"down",NA,NA,NA
-"down (stairs)",NA,NA,NA
-"enough",6.1,3.17,6
-"everyone",NA,NA,NA
-"far",NA,NA,NA
-"for",NA,NA,NA
-"front",NA,NA,NA
-"he",NA,NA,NA
-"her",NA,NA,NA
-"here",NA,NA,NA
-"him",NA,NA,NA
-"himself/herself",NA,NA,NA
-"his",NA,NA,NA
-"home",7.48,3.78,6.77
-"how",NA,NA,NA
-"how much",4.11,4.9,3.67
-"i",NA,NA,NA
-"in",NA,NA,NA
-"in front",NA,NA,NA
-"inside",NA,NA,NA
-"it",NA,NA,NA
-"little (amount)",5.91,4.2,5.18
-"many",NA,NA,NA
-"me",NA,NA,NA
-"mine",NA,NA,NA
-"more",NA,NA,NA
-"much",5.64,4.33,5.61
-"my",NA,NA,NA
-"no one",NA,NA,NA
-"none",NA,NA,NA
-"not",NA,NA,NA
-"nothing",NA,NA,NA
-"of",NA,NA,NA
-"off",NA,NA,NA
-"on",NA,NA,NA
-"other",5.41,3.48,6
-"our",NA,NA,NA
-"out",NA,NA,NA
-"same",NA,NA,NA
-"self",6.86,4.78,7.74
-"she",NA,NA,NA
-"some",NA,NA,NA
-"someone",NA,NA,NA
-"that",NA,NA,NA
-"the",NA,NA,NA
-"them",NA,NA,NA
-"there",NA,NA,NA
-"these",NA,NA,NA
-"they",NA,NA,NA
-"this",NA,NA,NA
-"those",NA,NA,NA
-"to you",NA,NA,NA
-"under",NA,NA,NA
-"up",NA,NA,NA
-"up (stairs)",NA,NA,NA
-"us",NA,NA,NA
-"we",NA,NA,NA
-"what",NA,NA,NA
-"when",NA,NA,NA
-"when (question)",NA,NA,NA
-"where",NA,NA,NA
-"where (question)",NA,NA,NA
-"which (question)",NA,NA,NA
-"who",NA,NA,NA
-"whose",NA,NA,NA
-"why",NA,NA,NA
-"with",NA,NA,NA
-"you",NA,NA,NA
-"your",NA,NA,NA
-"airplane",5.25,5.62,4.12
-"ambulance",3.71,5.33,3.29
-"animal",7.06,4.3,5.72
-"ant",3.9,3.27,5.3
-"apple",6.62,3.52,6.44
-"arm",5.44,3.44,6.02
-"armchair",5.67,2.75,5.79
-"backyard",6.1,3.88,6.79
-"bag",5.05,3.43,5.62
-"ball",6.14,3.48,5.47
-"balloon",6.84,3.9,5.45
-"banana",6.71,3.21,6.05
-"barn",6.16,3.57,5.65
-"bathroom",5.26,2.86,5.25
-"bathtub",6.26,3.63,5.91
-"battery",4.26,3.95,4.35
-"beach",7.21,5.1,5.7
-"beads",6.05,3.4,3.91
-"beans",6,2.95,5.6
-"bear",5.33,4.5,3.59
-"bed",7.16,3,6.73
-"bedroom",7,4.9,6.84
-"bee",3.68,5.65,5.32
-"bell",5.67,4.7,6.16
-"belly button",5.73,4.95,5.19
-"berry",7.11,3.23,5.7
-"bib",5.78,3.57,5.16
-"bicycle",6.71,3.95,6.2
-"bidet",4.29,2.83,5.39
-"bird",6.75,3.83,5.88
-"biscuit",6.45,2.91,6.26
-"blanket",7.05,2.23,6.75
-"block",4.48,4.25,6.21
-"boat",6.36,4.05,5.59
-"book",7.05,3.13,6.41
-"boots",5.89,3.52,5.08
-"bottle",5.47,3.32,5.88
-"bowl",5.67,3.21,5.58
-"box",5.33,2.67,4.67
-"bread",6.52,3.85,6.05
-"breast",6.64,5.39,5
-"bridge",5.44,3.48,4.78
-"broom",5.5,3.33,5.76
-"brush",5.47,3.18,6.18
-"bubbles",6.43,4.19,6.12
-"bucket",4.55,2.96,5.52
-"bug",3.45,6.06,4.08
-"bun",5.47,3.05,5.29
-"bunny",7.3,3.86,5.78
-"bus",5.12,3.83,4.88
-"bus station",5.5,3,4.61
-"butt",5.36,5.2,5.68
-"butter",6.36,3.37,5.67
-"butterfly",7.23,3.2,5.51
-"buttocks",6.85,5.35,6.29
-"button",5.48,4.1,6.53
-"cabbage",4.6,2.91,5.93
-"cacao",7.33,5,6.32
-"cake",7.58,5.33,5.88
-"calf",5.44,3.7,5.16
-"camera",6.61,3.05,6.39
-"candle",6.14,3.81,6.08
-"candy",7.27,5.03,6.46
-"cap",5,3.27,5.57
-"car",6.63,4.04,6.41
-"carpet",5.95,2.77,5.1
-"carrots",5.79,3.91,6.37
-"cat",6.95,4.5,5.48
-"cereal",6.45,3.05,5.77
-"chair",5.89,2.86,5.28
-"cheek",5.9,3.47,5.38
-"cheerios",6.45,3.05,5.77
-"cheese",6.81,3.8,7.11
-"chick",5.86,4.04,5.32
-"chicken",6.17,3.2,5.22
-"chicken (animal)",6.17,3.2,5.22
-"chicken (food)",6.17,3.2,5.22
-"chilli",NA,NA,NA
-"chin",5.07,3.84,5.48
-"chocolate",7.63,5.14,5.88
-"church",5.21,3.63,5.04
-"cigarette",3,4,5.05
-"clementine",6.15,3.91,5.56
-"clock",5.65,3.35,5.24
-"closet",5.1,3.55,6.63
-"cloth",6.2,2.58,5.4
-"cloud",6.2,2.81,4.79
-"clouds",6.76,2.27,5.09
-"clown",5.36,4.94,4.38
-"coat",5.29,3.1,6.68
-"coffee",7,5.1,6.12
-"comb",5.65,2.33,6.68
-"comb (object)",5.65,2.33,6.68
-"compote",6.9,4.6,5.74
-"computer",6.84,4.92,6.58
-"cookie",7.32,4.7,6.1
-"corridor",4.76,3.53,5.35
-"cottage cheese",5.19,4.37,4.72
-"couch",6.52,3.4,6.19
-"country",6.14,3.71,6.35
-"cover",5.59,3.76,5.78
-"cow",5.42,2.95,5.24
-"cracker",5.11,3.64,5.26
-"cradle",6.1,3.67,4.86
-"crayon",5.76,2.91,5.93
-"crib",6.43,4.26,4.77
-"crocodile",3.15,6.48,3.47
-"crow",4.32,3.55,5.4
-"cucumber",6.47,3.17,5.86
-"cup",5.94,2.6,5.28
-"cupboard",4.81,3.52,5.65
-"curtain",5.36,3.62,6.29
-"deer",6.89,3.95,4.89
-"diaper",3.71,3.41,4.14
-"dish",5.7,3.57,5.5
-"dog",7,5.43,5.73
-"doll",5.88,3.51,5.66
-"donkey",6.29,2.9,5.12
-"door",5.43,3.19,6.1
-"drawer",4.67,3,5.71
-"dress",6.42,4.73,6.64
-"dress (object)",6.42,4.73,6.64
-"drink (beverage)",6.67,5.19,5.87
-"drum",6.05,4.67,5.65
-"duck",6.11,4,5.3
-"dust",3.72,3.45,4.56
-"dustpan",4.67,2.86,5.36
-"ear",5.86,3.5,6.74
-"earth",6.83,5.04,5.69
-"egg",5.95,3.28,5.74
-"elephant",6.17,4.23,4.23
-"elevator",5.95,3.65,4.92
-"elk",5.81,3.48,4.67
-"eye",6.18,3.95,5.72
-"face",6.36,4.59,5.96
-"faucet",5.55,3.53,6.31
-"fawn",6.15,3.92,5.73
-"feet",4.68,2.77,5.97
-"field",5.73,3.84,5.74
-"finger",5.8,4.15,5.32
-"fir",5,3,5.5
-"fire",4.32,6.05,4.57
-"fireplace",5.95,5.2,5.56
-"firetruck",6.47,4.52,5
-"fish",6.42,3.33,6.08
-"fish (animal)",6.42,3.33,6.08
-"fish (food)",6.42,3.33,6.08
-"floor",5.14,3.33,6.39
-"flower",7.3,3.67,6.43
-"flowerpot",5.81,4,6
-"fly",6.06,4.9,5.28
-"food",7.52,4.69,6.08
-"foot",4.68,2.77,5.97
-"forehead",5.04,3.14,6.5
-"fork",5.47,3.35,6.02
-"fox",5.52,4.36,5.5
-"frog",5.84,4.07,5.5
-"frost",6.15,4.61,5
-"fruit",7,4.09,6.12
-"garage",5.5,4.1,6.11
-"garden",7.25,3.71,6.13
-"giraffe",6.52,2.91,5.27
-"glass",5.48,3.14,5.42
-"glasses",5.09,3.39,5.68
-"gloves",5.2,3.17,5.75
-"goat",5.3,2.94,5.17
-"goose",5.68,3.29,4.76
-"grapes",6.7,3.5,5.88
-"grass",6.47,3.39,5.67
-"ground",5.28,2.35,5.5
-"hair",6.18,3.71,6.69
-"ham",4.65,4.2,5.85
-"hammer",5.17,4.56,5.59
-"hand",5.9,3.98,5.88
-"hat",5.69,2.88,6.21
-"head",5.86,4.45,5.56
-"hedgehog",5.88,4,5.72
-"hen",6.14,3.39,5.39
-"high chair",5.89,2.86,5.28
-"highchair",NA,NA,NA
-"hippopotamus",6.38,4.17,5.22
-"home",7.48,3.78,6.77
-"honey",7.27,4.38,6.39
-"horse",6.05,4.16,5.71
-"hot dog",6.21,3.85,5.58
-"house",7.19,3.95,6.41
-"ice cream",6.85,3.95,6.12
-"jacket",5.86,3.35,6.89
-"jam",5.81,3.95,5.89
-"jar",5.71,2.77,5.26
-"jeans",5.47,3.95,6.26
-"jeep",5.53,4.05,5
-"juice",6.9,4.6,5.74
-"kangaroo",6.45,4.27,5.37
-"kefir",NA,NA,NA
-"keys",6.22,3.9,6.75
-"kid (goat)",5.3,2.94,5.17
-"kindergarten",6.62,3.09,6.17
-"kitchen",6.17,3.52,5.89
-"kitty",7.58,3.19,6.67
-"knee",4.7,4.25,5.38
-"knife",4.33,4.86,5.29
-"ladder",5.32,4.09,5.56
-"ladybug",6.9,3.45,5.33
-"lamb",6.3,3.32,5.72
-"lamp",5.74,2.71,6.04
-"lawn",6.05,2.62,6.04
-"leaf",6.16,3.05,5.54
-"leg",6.22,2.75,5.5
-"lemon",6.37,4.52,5.43
-"light",6.55,3.52,5.89
-"lion",5.84,5.29,4.86
-"living room",5.55,3.1,5.71
-"locomotive",5.95,5.5,5.23
-"lollipop",7.29,3.88,6.1
-"meat",6.62,4.3,5.58
-"meatball",6.68,4.79,5.38
-"meatballs",6.68,4.79,5.38
-"medicine",5.9,4,5.35
-"milk",6.74,2.33,6.31
-"mirror",5.9,4.55,5.5
-"mittens",5.6,2.33,5.91
-"money",7.1,6.86,6.32
-"monkey",5.82,5.15,5.74
-"moon",7,3.43,6.11
-"mosquito",3.12,5.17,3.88
-"motorcycle",5.8,5.8,5.55
-"mouse",4.8,3.38,4.29
-"moustache",5.35,3.23,5.32
-"mouth",5.59,4.14,6
-"mud",5.06,3.19,4.27
-"music",7.67,5.57,6.5
-"nail",4.6,3.05,5.17
-"nails",5.57,3.5,4.73
-"neck",5.44,3.65,5.17
-"necklace",6.85,3.52,5.64
-"nightgown",5.85,3.35,5.67
-"noodles",6.48,3.09,5.48
-"nose",5.5,3.1,4.61
-"olive",6.05,3.92,5.18
-"orange",6.81,4.04,5.58
-"orange (food)",6.81,4.04,5.58
-"outside",6.91,3.94,6.2
-"oven",6.16,2.95,6.04
-"overalls",5.62,3.8,6.29
-"owie",2.45,4.72,3.73
-"owl",6.3,3.57,5.02
-"pacifier",5.52,3.2,5.11
-"pajamas",6.86,4.37,6.54
-"pancake",7.71,4,5.53
-"pants",5.62,3.8,6.29
-"pap",4.71,3.52,4.11
-"paper",5.42,3.52,5.64
-"park",7,2.7,5.56
-"parrot",6.79,4.65,4.25
-"party",7.18,6.08,5.92
-"pasta",7.08,3.97,5.98
-"pastry",6.9,4.95,5.61
-"peach",6.83,4.7,5.74
-"peacock",6.75,3.83,5.88
-"peanut",6.38,3.48,5.74
-"pear",6.7,3.76,5.71
-"peas",6.1,2.95,5.72
-"pen",5.63,2.75,6.17
-"penguin",6.65,4,4.86
-"penis",5.3,5.9,6.21
-"penny",6.29,5.55,5.4
-"pepper",5.63,4.3,5.75
-"phone",6.09,3.43,4.44
-"photos",6.58,4.6,6.05
-"picture",6.73,3.29,6.12
-"pig",4.83,3.68,5.04
-"pillow",7,2.9,6.34
-"pipe",4.75,4.11,5.92
-"pita",5.95,4,6.05
-"pizza",7.89,4.58,5.47
-"plant",7.05,3.94,6.45
-"plate",4.8,3.18,5.79
-"play pen",5.95,2.65,4.5
-"playground",7.14,4.67,6.32
-"pony",6.71,4.29,5.9
-"pool",6.78,3.65,6.39
-"porch",6.4,3.36,6.11
-"porridge",5,3.33,4.52
-"pot",5.81,4,6
-"potato",6.4,2.38,5.46
-"potty",4.29,2.83,5.39
-"pretzel",6.81,5.7,5.69
-"pudding",6.72,3.8,5.46
-"puddle",4.3,4.33,4.73
-"puppy",7.85,5.84,6.24
-"purse",5.95,3.21,5.68
-"quesadilla",7.18,4.94,5.57
-"radio",6,3.84,6.27
-"rag",4.21,2.65,4.45
-"rain",6.58,3.29,4.25
-"raisin",6.05,3.65,5.73
-"rattle",4.47,4.48,4.81
-"refrigerator",5.76,3.25,5.82
-"remote control",5.42,3.5,5.54
-"rice",5.7,3,5.5
-"road",5.59,3.81,6
-"rock",5.72,3.14,5.26
-"rocking chair",5.89,2.86,5.28
-"roof",4.48,3.4,7.05
-"room",5.55,3.1,5.71
-"rooster",5.53,4.57,5.09
-"rope",5.05,4.58,5.62
-"sand",6.16,3.43,4.82
-"sandals",5.78,2.4,5.44
-"sandwich",7.18,4.94,5.57
-"sauce",6.58,3.95,5.85
-"scarf",6,2.39,6.39
-"schnitzel",5.55,4.46,5.33
-"school",5.41,4.57,5.88
-"scissors",5.03,4.02,6.89
-"sea",6.56,2.8,5.22
-"semolina",5.83,1.6,5.12
-"sheep",5.32,2.95,4.42
-"ship",6.14,3.94,5.84
-"shirt",5.56,2.3,5.67
-"shoe",5.78,2.4,5.44
-"shorts",5.95,4.23,6.57
-"shovel",4.8,3.5,6.42
-"shower",7.19,4.15,7.47
-"shutter",4.7,3.38,5.28
-"sink",4.62,3.7,4.1
-"skirt",6.14,4.88,5.86
-"sky",7.32,2.74,5.61
-"slide",5.71,3.3,5.5
-"slide (object)",5.71,3.3,5.5
-"slipper",5.8,3.83,5.93
-"snake",4.03,7.24,3.65
-"snow",6.78,4.57,5.62
-"snowsuit",5.29,3.1,6.68
-"soap",7.1,2.62,5.32
-"sock",4.43,3.09,5.14
-"soda",5.47,4.77,6.04
-"soup",7.05,4.24,6.64
-"spade",5.48,3.74,4.88
-"spaghetti",6.91,4.04,5.92
-"sparrow",6.58,3.78,4.68
-"spider",3.35,6.91,3.74
-"spinach",5.81,3.43,5.46
-"spoon",5.9,3.79,5.18
-"squirrel",5.71,4.48,5.62
-"stairs",5.48,3.59,5.57
-"star",7.47,5.5,5.82
-"stick",5.27,3.81,5.82
-"stone",4.81,3.25,7.26
-"store",5.94,3.43,5.44
-"stove",5.63,3.82,6.08
-"street",5.07,3.45,5.41
-"stroller",5.75,3.22,5.68
-"sugar",6.56,5.29,6.32
-"sun",6.92,4.64,4.98
-"sweater",6.19,2.8,5.95
-"swimsuit",6.05,5.8,5.08
-"swing",6.95,4.1,6.16
-"swing (object)",6.95,4.1,6.16
-"table",5.49,3,5.84
-"tablecloth",5.33,2.81,6.28
-"tahini",6.58,3.95,5.85
-"tank top",6.25,5.14,5.32
-"tea",6.56,2.05,6
-"teapot",6,3.39,5.67
-"teddybear",7.38,3.74,6.35
-"telephone",5.71,4.3,6.74
-"thumb",5.62,3.84,5.79
-"tiger",6,5.55,4.4
-"tights",5.95,3.45,4.56
-"tissue",5.3,3.1,5.32
-"toast",6.73,3.65,6.39
-"toe",5.24,3.1,5.1
-"tomato",5.8,2.68,5.46
-"tongue",6.29,4.25,6.32
-"tooth",5.06,3.52,4.89
-"toothbrush",5.58,3.38,6.21
-"top",6,4.33,6.25
-"tortilla",6.52,3.85,6.05
-"towel",6.14,2.9,5.86
-"tower",5.24,3.86,5.45
-"toy",7.29,4.29,5.61
-"toy (object)",7.29,4.29,5.61
-"tracksuit",5.1,3.62,5.7
-"tractor",5.05,3.73,5.75
-"train",6.36,4.05,5.72
-"tram",4.7,2.42,4.05
-"trash",2.74,3.66,4.24
-"tree",7.59,2.67,5.62
-"truck",5.16,3.76,5.43
-"tummy",6.05,3.78,5.04
-"turkey",5.9,3.45,5.59
-"turtle",6.16,2.52,5.82
-"tv",6.05,4.24,5.24
-"umbrella",5.84,3.5,5.75
-"underpants",5.18,5.08,5.75
-"underwear",5.35,4.46,5.7
-"vacuum",5.38,4.63,6.52
-"vagina",6,5.83,5.07
-"vest",5.74,4.1,6.25
-"voice recorder",5.53,3.32,6.27
-"wafer",7.32,4.7,6.1
-"wall",5.06,2.9,4.22
-"wardrobe",6.09,5.16,6.24
-"washing machine",NA,NA,NA
-"watch (object)",5.45,3.37,6.55
-"water",7,3.71,6.12
-"water (beverage)",7,3.71,6.12
-"water (not beverage)",7,3.71,6.12
-"watermelon",6.75,4.64,6.48
-"wind",5.67,3.7,4.5
-"window",6.47,3.27,5.39
-"wolf",6.26,5.25,4.59
-"work (place)",5.05,4.33,6.12
-"worm",4.86,3.5,5.22
-"yard",5.7,3.68,5.84
-"yogurt",7,4.52,6
-"yogurt drink",7,4.52,6
-"zipper",5.11,3.73,5.18
-"zoo",7,5.63,6.33
-"a lot",NA,NA,NA
-"after",NA,NA,NA
-"all",NA,NA,NA
-"all gone",6.5,2.57,7.17
-"angry",2.53,6.2,4.11
-"any",NA,NA,NA
-"aunt",6.56,2.71,4.28
-"awoo",NA,NA,NA
-"baa baa",6.3,3.32,5.72
-"baby",6.67,4.97,4.94
-"babysitter",6.55,3.48,5.68
-"babysitter's name",NA,NA,NA
-"badness",3.55,4.38,4.08
-"bang",5.1,6.09,4.89
-"barber",4.89,3.18,5.91
-"bath",7,3.25,6.64
-"bathroom",5.26,2.86,5.25
-"beach",7.21,5.1,5.7
-"beep beep",5.11,3.82,4.74
-"bless you",7,4.57,6.26
-"boogeyman",3.55,5.09,3
-"boom",4.74,5.57,5.14
-"boy",5.84,4.11,5.5
-"bravo",7.1,5.33,6.37
-"breakfast",7.39,5,6.83
-"brother",6.18,4.48,5.46
-"bye",6.25,3.86,6.54
-"bzzz",3.68,5.65,5.32
-"can (auxiliary)",NA,NA,NA
-"caw",4.32,3.55,5.4
-"child",7.2,5.33,5.2
-"child's own name",NA,NA,NA
-"children",6.36,5.09,5.95
-"choo choo",6.36,4.05,5.72
-"church",5.21,3.63,5.04
-"clap",6.05,5.15,6.19
-"click",5.7,2.81,5.52
-"clop clop",6.05,4.16,5.71
-"clown",5.36,4.94,4.38
-"cluck",4.75,3.9,4.81
-"cockadoodledoo",5.53,4.57,5.09
-"come on",5.64,3.57,5.94
-"cousin",6.11,2.6,5.28
-"croak",3.29,4.52,3.58
-"cut it out",4.73,4.14,5.06
-"daddy",7.27,4.24,5.78
-"day",6.36,3.62,5.59
-"dinner",6.4,3.85,6.05
-"doctor",5.93,4.05,4.69
-"don't",3.42,4.32,4.5
-"drip drop",5.52,3.7,4.11
-"early",NA,NA,NA
-"eat",7.1,4.38,7.26
-"evening",7.09,3.1,5.22
-"family",7.25,4.35,5.98
-"father's name",NA,NA,NA
-"food",7.52,4.69,6.08
-"friend",6.79,4.29,6.31
-"friends' names",NA,NA,NA
-"garden",7.25,3.71,6.13
-"girl",7.15,5.23,5.27
-"go",6.32,4.86,5.33
-"go potty",4.29,2.83,5.39
-"goal",6.79,4.67,6.57
-"gobble gobble",5.9,3.45,5.59
-"godfather",6.24,2.83,4.78
-"godmother",6.52,4.95,5.56
-"good boy/girl",7.89,3.66,6.41
-"good morning",6.25,3.86,6.54
-"good night",6.25,3.86,6.54
-"grandma",7.5,3.2,5.39
-"grandpa",7.43,3.7,5.05
-"great grandma",6.33,2.62,6.04
-"great grandpa",7.1,3.67,5.36
-"grocery",6.62,3.48,6.33
-"grr",4.43,3.95,5.11
-"grrr",4.43,3.95,5.11
-"hairdresser",5.71,3.91,4.71
-"hands up",NA,NA,NA
-"have",5.86,3.52,5.72
-"have hands",NA,NA,NA
-"hee haw",6.29,2.9,5.12
-"hello",6.25,3.86,6.54
-"here (take)",NA,NA,NA
-"hi",6.25,3.86,6.54
-"hide and seek",6.79,5.05,5.84
-"home",7.48,3.78,6.77
-"honk honk",4.95,3.96,5.47
-"hop",5.89,3.71,5.04
-"house",7.19,3.95,6.41
-"kiss",7.78,6.05,6.52
-"knock knock",5.44,3.95,5.11
-"lady",6.91,4.05,5.87
-"lah lah",NA,NA,NA
-"late",3.32,5.57,4.22
-"later",NA,NA,NA
-"like this",5.86,3.43,5.8
-"little (amount)",5.91,4.2,5.18
-"look at me",5.95,3.76,5.88
-"lullaby",7.57,3.79,6.05
-"lunch",6.64,3.57,6.44
-"lunchtime",7.26,4.95,6.7
-"man",5.42,4.36,5.44
-"market",6.21,3.55,5.77
-"meow",6.14,3.42,5.75
-"moment",6.1,4.05,6
-"mommy",7.39,3.7,4.89
-"moo",5.48,3.95,5.18
-"more",6.39,2.9,5.72
-"morning",6.41,3.95,6.35
-"mother's name",NA,NA,NA
-"much",5.64,4.33,5.61
-"music",7.67,5.57,6.5
-"nap",6.53,4.14,5.91
-"need",5.45,3.67,5.06
-"neigh",6.05,4.16,5.71
-"neighbor",5.6,3.72,5.12
-"night",6.68,3.57,5.22
-"no",2.84,4.9,5.45
-"no more",6.5,2.57,7.17
-"none",NA,NA,NA
-"not",NA,NA,NA
-"now",NA,NA,NA
-"oh",NA,NA,NA
-"oink",5.21,3.73,4.62
-"ok",NA,NA,NA
-"one two three",5.89,2.3,5.17
-"opa",NA,NA,NA
-"ouch",2.45,4.72,3.73
-"outing",6.09,5.52,6.16
-"outside",6.91,3.94,6.2
-"owie",2.45,4.72,3.73
-"park",7,2.7,5.56
-"party",7.18,6.08,5.92
-"pattycake",6.79,5.05,5.84
-"peekaboo",6.28,3.84,5.24
-"peep peep",4.42,4.3,4.96
-"people",5.7,3.77,5.4
-"person",6.1,3.71,6
-"pet's name",NA,NA,NA
-"please",6.57,2.95,7.4
-"policeman",4.21,4.06,5.76
-"pool",6.78,3.65,6.39
-"potty",4.29,2.83,5.39
-"present",6.85,4.82,6.65
-"pretend",4.62,4.3,5.58
-"quack quack",6.11,4,5.3
-"ring ring",7.09,4.43,5.44
-"row row your boat",5.4,2.56,6.05
-"sabbath",6.06,3.37,4.78
-"school",5.41,4.57,5.88
-"sea",6.56,2.8,5.22
-"shame",2.62,5.4,5.21
-"shh",6.47,1.95,5.8
-"should",NA,NA,NA
-"sibling",7.27,5.16,4.81
-"sing",7.5,4.1,6.67
-"sir",5.45,4.33,5.11
-"sister",7,3.86,5.59
-"sleep",7.22,3.6,5.3
-"somersault",6.37,4.73,6.32
-"squeak",4.95,4.79,4.62
-"sss",4.03,7.24,3.65
-"stomp stomp",3.9,4.82,6.44
-"store",5.94,3.43,5.44
-"surprise",7.44,6.57,5.17
-"take in (arms)",6.05,4.86,5.67
-"teacher",7.37,2.9,5.95
-"ten fingers",5.8,4.15,5.32
-"thank you",7.73,4.05,6.72
-"thump",4.42,4,5.5
-"tick tock",5.65,3.35,5.24
-"tickle",6.14,5.86,5.28
-"time",5.6,3.41,4.36
-"to slap",2.95,4.59,4.78
-"today",NA,NA,NA
-"tomorrow",NA,NA,NA
-"tonight",NA,NA,NA
-"tweet tweet",5.37,3.39,5.37
-"uh oh",2.55,4.93,3
-"uncle",6.5,4.05,5.24
-"up",NA,NA,NA
-"village",5.95,3.4,5.6
-"vroom",6.63,4.04,6.41
-"wait",4.55,3.62,5.31
-"walk",6.77,3.24,5.83
-"wanna",6,5.29,5.39
-"watch out",5.45,3.37,6.55
-"weee",NA,NA,NA
-"who's there",NA,NA,NA
-"woman",7.09,3.8,5.93
-"woof woof",6.76,5.15,5.22
-"work (place)",5.05,4.33,6.12
-"yes",7.17,3.62,6.94
-"yesterday",NA,NA,NA
-"yucky",3.36,4.35,4.36
-"yum yum",7.52,4.48,6.84
-"zoo",7,5.63,6.33
-"bathe",7.5,3.15,6.5
-"begin",6.44,2.85,5.72
-"bite",3.52,5.1,6.58
-"bless",7,4.57,6.26
-"blow",6.1,4.48,5
-"break",5.1,4.71,4.5
-"bring",5.68,4.29,5.72
-"bump",5.05,4.75,5.33
-"buy",6.82,4.29,6.78
-"can",6.41,3.14,6.44
-"carry",5.67,3.47,4.94
-"catch",5.64,4,5.47
-"clap",6.05,5.15,6.19
-"clean",7.09,3.57,6.11
-"clean (action)",7.09,3.57,6.11
-"climb",5.62,3.95,5.61
-"close",5.23,3.81,5.94
-"collect",5.9,3.14,5.48
-"comb (action)",5.65,2.33,6.68
-"come",5.64,3.57,5.94
-"cough",3.57,4.5,4.25
-"count",5.89,2.3,5.17
-"cover",5.59,3.76,5.78
-"cry",3.22,5.45,2.56
-"dance",7.27,5.48,6.28
-"descend",4.67,3.17,5.4
-"die",1.67,6.9,3.28
-"dig",5.28,3.67,4.67
-"do",5.41,3.67,6.35
-"draw",6.18,3.6,6.37
-"dress",6.42,4.73,6.64
-"dress (action)",6.42,4.73,6.64
-"drink",6.67,5.19,5.87
-"drink (action)",6.67,5.19,5.87
-"drink (beverage)",NA,NA,NA
-"drive",6.5,4.19,5.67
-"drop",4.23,4.67,4.82
-"dry (action)",4.86,3.8,6.21
-"dump",3.73,3.67,4.5
-"eat",7.1,4.38,7.26
-"eat breakfast",7.39,5,6.83
-"eat dinner",6.4,3.85,6.05
-"enter",6.09,4.3,6.79
-"fall",3.89,4.24,3.83
-"feed",6.95,4.55,6.79
-"fight",3.54,6.33,4.68
-"find",6.45,3.52,6.24
-"finish",6.41,3.81,6.44
-"flee",3.84,4.95,5
-"flip",5.6,4.62,5.32
-"fly",6.06,4.9,5.28
-"fly (action)",6.06,4.9,5.28
-"get",6.09,3.67,5.65
-"get off",NA,NA,NA
-"get up",6.57,3.8,5.71
-"give",7.73,4.57,5.72
-"go",6.32,4.86,5.33
-"go out",NA,NA,NA
-"greet",6.25,3.86,6.54
-"have",5.86,3.52,5.72
-"hear",6.68,3.62,6.71
-"help",6.95,4.29,6.89
-"hide",4.9,3.52,4.85
-"hit",3.95,5.48,5.15
-"hold",6.05,4.86,5.67
-"hug",8.23,4.85,6.8
-"hungry",3.54,5.6,4.59
-"hurry",4.32,5.62,4.56
-"hurt",2.45,4.72,3.73
-"jump",6.44,5.14,5.72
-"kick",4.55,5.1,5.1
-"kiss",7.78,6.05,6.52
-"laugh",7.56,6.62,7.39
-"leave",4.68,4.48,5.47
-"lick",6.38,6.2,5.97
-"lie",2.39,4.81,4.72
-"lift",5.32,4.9,6.84
-"light (action)",6.55,3.52,5.89
-"lock",4.56,3,4.11
-"look",5.95,3.76,5.88
-"look for",5.56,3.85,5
-"love",8,5.36,5.92
-"lower",NA,NA,NA
-"make",6.09,3.67,6.22
-"open",6.14,4.43,6.17
-"opened",6.14,4.43,6.17
-"paint",5.74,4.5,6.56
-"pass",5.73,4.38,4.78
-"pee",4.5,3.32,5.91
-"play",7.55,3.81,6.29
-"poop",2.6,5.14,4.48
-"press",5.39,2.8,4.78
-"pull",5.59,4.1,6
-"push",5.39,4.4,4.06
-"put",5.09,3.86,5.94
-"put in",NA,NA,NA
-"put on",NA,NA,NA
-"put out",NA,NA,NA
-"read",6.73,3.7,6.11
-"ride",6.27,5.1,5.28
-"rock",5.72,3.14,5.26
-"run",6.41,5.24,5.44
-"save",7.26,4.62,6.34
-"say",5.91,4.43,6.88
-"scared",2.8,6.1,4.2
-"see",6.27,3.9,6
-"seek",6.25,3.9,6.16
-"shake",4.59,5.2,6.37
-"shh",6.47,1.95,5.8
-"shout",5,6.29,5.85
-"show",5.91,4.1,5.83
-"sing",7.5,4.1,6.67
-"sit",5.82,3.19,6.06
-"sleep",7.22,3.6,5.3
-"smell",6.39,5.24,5.44
-"smile",7.89,4.62,7.72
-"spill",3.63,3.74,4.5
-"spit",3,3.57,4.36
-"splash",6.53,4.8,5.96
-"stand",5.27,3.1,5.89
-"stop",4.73,4.14,5.06
-"strike",3.06,5.52,3.28
-"swallow",5.57,3.78,5.72
-"sweep",5.27,3.89,5.76
-"swim",6.71,6.05,6.47
-"swing",6.95,4.1,6.16
-"swing (action)",6.95,4.1,6.16
-"take",4.82,4.52,4.83
-"take away",4.82,4.52,4.83
-"take off",4.21,3.11,4.56
-"take out",4.21,3.11,4.56
-"talk",6.64,3.38,6.44
-"tear",3.14,4.8,5.68
-"tell",5.27,3.86,4.94
-"throw",5.55,4.52,6.12
-"tickle",6.14,5.86,5.28
-"touch",6.64,4.9,6.24
-"travel",7.89,5.55,6.82
-"turn",5.45,3.48,5.88
-"turn around",5.45,3.48,5.88
-"turn off",NA,NA,NA
-"turn on",NA,NA,NA
-"understand",6.68,3.52,6.71
-"wait",4.55,3.62,5.31
-"wake",6.57,3.8,5.71
-"walk",6.77,3.24,5.83
-"wanna",6,5.29,5.39
-"wash",6,3.7,6.53
-"watch (action)",5.45,3.37,6.55
-"wave",6.32,4.19,5.48
-"wear",6.36,3.33,5.72
-"wet",5.64,5,6.11
-"wipe",4.58,3.54,5.43
-"work (action)",5.05,4.33,6.12
-"write",6.45,3.81,5.28
+"lexical_class","uni_lemma","valence","arousal","dominance"
+"function_words","(possessive)",NA,NA,NA
+"function_words","a",NA,NA,NA
+"function_words","a little",5.76,3.43,4.53
+"function_words","a lot",5.64,4.33,5.61
+"other","a lot",NA,NA,NA
+"function_words","about",NA,NA,NA
+"function_words","above",NA,NA,NA
+"other","after",NA,NA,NA
+"adverbs","again",NA,NA,NA
+"function_words","again",NA,NA,NA
+"other","again",NA,NA,NA
+"nouns","airplane",5.25,5.62,4.12
+"nouns","album",6.19,5.63,5.86
+"function_words","all",NA,NA,NA
+"other","all",NA,NA,NA
+"adjectives","all gone",6.5,2.57,7.17
+"function_words","all gone",NA,NA,NA
+"other","all gone",6.5,2.57,7.17
+"nouns","alligator",4.23,5.36,4.1
+"function_words","along",NA,NA,NA
+"function_words","already",NA,NA,NA
+"function_words","also",NA,NA,NA
+"function_words","am",NA,NA,NA
+"nouns","ambulance",3.71,5.33,3.29
+"function_words","and",NA,NA,NA
+"adjectives","angry",2.53,6.2,4.11
+"other","angry",2.53,6.2,4.11
+"nouns","animal",7.06,4.3,5.72
+"nouns","ankle",5.4,3.11,5.58
+"function_words","another",NA,NA,NA
+"nouns","ant",3.9,3.27,5.3
+"function_words","any",NA,NA,NA
+"other","any",NA,NA,NA
+"nouns","apple",6.62,3.52,6.44
+"nouns","applesauce",6.9,2.78,6.39
+"function_words","are",NA,NA,NA
+"nouns","arm",5.44,3.44,6.02
+"nouns","armchair",5.67,2.75,5.79
+"function_words","around",NA,NA,NA
+"function_words","as",NA,NA,NA
+"adjectives","asleep",6.5,2,4.33
+"function_words","at",NA,NA,NA
+"other","aunt",6.56,2.71,4.28
+"adjectives","awake",6.76,5.5,6.68
+"function_words","away",NA,NA,NA
+"other","awoo",NA,NA,NA
+"other","baa baa",6.3,3.32,5.72
+"other","baby",6.67,4.97,4.94
+"other","baby food",NA,NA,NA
+"other","babysitter",6.55,3.48,5.68
+"other","babysitter's name",NA,NA,NA
+"function_words","back",4.76,2.59,5.22
+"nouns","back",4.76,2.59,5.22
+"function_words","backward",NA,NA,NA
+"nouns","backyard",6.1,3.88,6.79
+"adjectives","bad",3.24,4.86,3.56
+"adverbs","badly",3.24,4.86,3.56
+"other","badness",3.55,4.38,4.08
+"nouns","bag",5.05,3.43,5.62
+"nouns","balcony",6.11,4,5.09
+"nouns","ball",6.14,3.48,5.47
+"nouns","balloon",6.84,3.9,5.45
+"nouns","banana",6.71,3.21,6.05
+"other","bang",5.1,6.09,4.89
+"other","barber",4.89,3.18,5.91
+"nouns","barn",6.16,3.57,5.65
+"nouns","basement",4.81,3.33,5.26
+"nouns","basket",5.66,2.48,5.3
+"nouns","bat",4.81,4.57,4.29
+"other","bath",7,3.25,6.64
+"verbs","bathe",7.5,3.15,6.5
+"other","bathhouse",5.32,4,5.68
+"nouns","bathroom",5.26,2.86,5.25
+"nouns","bathtub",6.26,3.63,5.91
+"nouns","battery",4.26,3.95,4.35
+"function_words","be",6.18,3.43,5.5
+"nouns","beach",7.21,5.1,5.7
+"other","beach",7.21,5.1,5.7
+"nouns","beads",6.05,3.4,3.91
+"nouns","beans",6,2.95,5.6
+"nouns","bear",5.33,4.5,3.59
+"adjectives","beautiful",7.61,5.71,6.17
+"adverbs","beautifully",7.61,5.71,6.17
+"function_words","because",NA,NA,NA
+"nouns","bed",7.16,3,6.73
+"nouns","bedroom",7,4.9,6.84
+"nouns","bee",3.68,5.65,5.32
+"other","beep beep",5.11,3.82,4.74
+"nouns","beet",NA,NA,NA
+"function_words","before",NA,NA,NA
+"other","before",NA,NA,NA
+"verbs","begin",6.44,2.85,5.72
+"function_words","behind",NA,NA,NA
+"nouns","bell",5.67,4.7,6.16
+"nouns","belly button",5.73,4.95,5.19
+"nouns","belt",4.44,3.45,5.75
+"nouns","bench",5.5,3.46,5.81
+"nouns","berry",7.11,3.23,5.7
+"function_words","beside",NA,NA,NA
+"adjectives","better",NA,NA,NA
+"function_words","between",NA,NA,NA
+"nouns","bib",5.78,3.57,5.16
+"nouns","bicycle",6.71,3.95,6.2
+"nouns","bidet",4.29,2.83,5.39
+"adjectives","big",5.64,4.33,5.61
+"nouns","birch",6.53,2.85,5
+"nouns","bird",6.75,3.83,5.88
+"nouns","biscuit",6.45,2.91,6.26
+"verbs","bite",3.52,5.1,6.58
+"adjectives","bitter",3.63,4.64,4.58
+"adverbs","bitterly",NA,NA,NA
+"adjectives","black",5.4,3.58,5.48
+"nouns","blanket",7.05,2.23,6.75
+"verbs","bless",7,4.57,6.26
+"other","bless you",7,4.57,6.26
+"nouns","block",4.48,4.25,6.21
+"verbs","blow",6.1,4.48,5
+"adjectives","blue",6.53,3.69,5.79
+"nouns","blueberry",7.11,3.23,5.7
+"nouns","boat",6.36,4.05,5.59
+"other","boogeyman",3.55,5.09,3
+"nouns","book",7.05,3.13,6.41
+"other","boom",4.74,5.57,5.14
+"nouns","boots",5.89,3.52,5.08
+"nouns","bottle",5.47,3.32,5.88
+"nouns","bowl",5.67,3.21,5.58
+"nouns","box",5.33,2.67,4.67
+"other","boy",5.84,4.11,5.5
+"other","bravo",7.1,5.33,6.37
+"nouns","bread",6.52,3.85,6.05
+"verbs","break",5.1,4.71,4.5
+"other","breakfast",7.39,5,6.83
+"nouns","breast",6.64,5.39,5
+"nouns","bridge",5.44,3.48,4.78
+"verbs","bring",5.68,4.29,5.72
+"adjectives","broken",2.75,4.86,3.76
+"nouns","broom",5.5,3.33,5.76
+"other","brother",6.18,4.48,5.46
+"other","brother's name",NA,NA,NA
+"adjectives","brown",5.52,3.32,4.65
+"nouns","brush",5.47,3.18,6.18
+"nouns","bubbles",6.43,4.19,6.12
+"nouns","bucket",4.55,2.96,5.52
+"nouns","bug",3.45,6.06,4.08
+"verbs","build",6.33,3.38,6.5
+"verbs","bump",5.05,4.75,5.33
+"nouns","bun",5.47,3.05,5.29
+"nouns","bunny",7.3,3.86,5.78
+"nouns","bus",5.12,3.83,4.88
+"nouns","bus station",5.5,3,4.61
+"nouns","bush",4.75,2.67,5
+"function_words","but",NA,NA,NA
+"nouns","butt",5.36,5.2,5.68
+"nouns","butter",6.36,3.37,5.67
+"nouns","butterfly",7.23,3.2,5.51
+"nouns","button",5.48,4.1,6.53
+"verbs","buy",6.82,4.29,6.78
+"function_words","by",NA,NA,NA
+"other","bye",6.25,3.86,6.54
+"other","bzzz",3.68,5.65,5.32
+"nouns","cabbage",4.6,2.91,5.93
+"nouns","cacao",7.33,5,6.32
+"nouns","cake",7.58,5.33,5.88
+"nouns","calf",5.44,3.7,5.16
+"other","call (on phone)",NA,NA,NA
+"verbs","call (on phone)",NA,NA,NA
+"nouns","camera",6.61,3.05,6.39
+"other","camping",6.09,5.5,6.32
+"verbs","can",6.41,3.14,6.44
+"function_words","can (auxiliary)",NA,NA,NA
+"other","can (auxiliary)",NA,NA,NA
+"nouns","can (object)",NA,NA,NA
+"nouns","candle",6.14,3.81,6.08
+"nouns","candy",7.27,5.03,6.46
+"nouns","cap",5,3.27,5.57
+"nouns","car",6.63,4.04,6.41
+"adjectives","careful",6.32,2.95,5.83
+"adverbs","carefully",6.32,2.95,5.83
+"nouns","carpet",5.95,2.77,5.1
+"nouns","carrots",5.79,3.91,6.37
+"verbs","carry",5.67,3.47,4.94
+"nouns","cat",6.95,4.5,5.48
+"verbs","catch",5.64,4,5.47
+"other","caw",4.32,3.55,5.4
+"nouns","cereal",6.45,3.05,5.77
+"nouns","chair",5.89,2.86,5.28
+"nouns","chalk",5,2.9,5.48
+"verbs","chase",3.77,6.6,4.68
+"nouns","cheek",5.9,3.47,5.38
+"adverbs","cheerfully",NA,NA,NA
+"nouns","cheerios",6.45,3.05,5.77
+"nouns","cheese",6.81,3.8,7.11
+"nouns","chick",5.86,4.04,5.32
+"nouns","chicken (animal)",6.17,3.2,5.22
+"nouns","chicken (food)",6.17,3.2,5.22
+"other","child",7.2,5.33,5.2
+"other","child's own name",NA,NA,NA
+"other","children",6.36,5.09,5.95
+"nouns","chili",4.45,4.62,6.3
+"nouns","chin",5.07,3.84,5.48
+"nouns","chips",NA,NA,NA
+"nouns","chocolate",7.63,5.14,5.88
+"other","choo choo",6.36,4.05,5.72
+"nouns","church",5.21,3.63,5.04
+"other","church",5.21,3.63,5.04
+"nouns","cigarette",3,4,5.05
+"other","circus",5.85,5.45,4.94
+"other","city",6.12,5.08,5.04
+"other","clap",6.05,5.15,6.19
+"verbs","clap",6.05,5.15,6.19
+"verbs","clean (action)",7.09,3.57,6.11
+"adjectives","clean (description)",7.09,3.57,6.11
+"adverbs","cleanly",7.09,3.57,6.11
+"nouns","clementine",6.15,3.91,5.56
+"other","click",5.7,2.81,5.52
+"verbs","climb",5.62,3.95,5.61
+"nouns","clock",5.65,3.35,5.24
+"other","clop clop",6.05,4.16,5.71
+"verbs","close",5.23,3.81,5.94
+"adjectives","closed (description)",5.23,3.81,5.94
+"nouns","closet",5.1,3.55,6.63
+"nouns","cloth",6.2,2.58,5.4
+"nouns","clothes",6.77,3.14,5.47
+"nouns","cloud",6.2,2.81,4.79
+"nouns","clouds",6.76,2.27,5.09
+"nouns","clown",5.36,4.94,4.38
+"other","clown",5.36,4.94,4.38
+"other","cluck",4.75,3.9,4.81
+"nouns","coat",5.29,3.1,6.68
+"other","cockadoodledoo",5.53,4.57,5.09
+"nouns","coffee",7,5.1,6.12
+"nouns","coke",6.55,4.3,5.53
+"adjectives","cold",4.32,3.55,5.17
+"adverbs","coldly",4.32,3.55,5.17
+"verbs","collect",5.9,3.14,5.48
+"verbs","comb (action)",5.65,2.33,6.68
+"nouns","comb (object)",5.65,2.33,6.68
+"verbs","come",5.64,3.57,5.94
+"other","come on",5.64,3.57,5.94
+"nouns","compote",6.9,4.6,5.74
+"nouns","computer",6.84,4.92,6.58
+"verbs","cook",7.12,4.33,6.25
+"nouns","cookie",7.32,4.7,6.1
+"nouns","corn",5.95,3.43,5.65
+"nouns","corridor",4.76,3.53,5.35
+"nouns","cottage cheese",5.19,4.37,4.72
+"nouns","couch",6.52,3.4,6.19
+"verbs","cough",3.57,4.5,4.25
+"function_words","could",NA,NA,NA
+"verbs","count",5.89,2.3,5.17
+"nouns","country",6.14,3.71,6.35
+"other","country",6.14,3.71,6.35
+"other","country house",NA,NA,NA
+"other","cousin",6.11,2.6,5.28
+"nouns","cover",5.59,3.76,5.78
+"verbs","cover",5.59,3.76,5.78
+"nouns","cow",5.42,2.95,5.24
+"other","cowboy",5.43,4.43,5.67
+"nouns","cracker",5.11,3.64,5.26
+"nouns","cradle",6.1,3.67,4.86
+"verbs","crawl",3.95,3.62,4.95
+"nouns","crayon",5.76,2.91,5.93
+"nouns","crib",6.43,4.26,4.77
+"other","croak",3.29,4.52,3.58
+"nouns","crocodile",3.15,6.48,3.47
+"nouns","crow",4.32,3.55,5.4
+"verbs","cry",3.22,5.45,2.56
+"nouns","cucumber",6.47,3.17,5.86
+"nouns","cup",5.94,2.6,5.28
+"nouns","cupboard",4.81,3.52,5.65
+"nouns","curtain",5.36,3.62,6.29
+"verbs","cut",3.9,5.07,4.55
+"other","cut it out",4.73,4.14,5.06
+"adjectives","cute",7.56,5.05,6.02
+"nouns","cutlet",NA,NA,NA
+"other","daddy",7.27,4.24,5.78
+"verbs","dance",7.27,5.48,6.28
+"adjectives","dark",5.08,4.09,4.61
+"adverbs","darkly",5.08,4.09,4.61
+"other","daughter",6.73,5,5.06
+"other","day",6.36,3.62,5.59
+"nouns","deer",6.89,3.95,4.89
+"verbs","descend",4.67,3.17,5.4
+"nouns","diaper",3.71,3.41,4.14
+"function_words","did/did ya",NA,NA,NA
+"verbs","die",1.67,6.9,3.28
+"adjectives","different",5.91,3.95,6.47
+"verbs","dig",5.28,3.67,4.67
+"other","dinner",6.4,3.85,6.05
+"adverbs","dirtily",3.17,5.05,5.05
+"adjectives","dirty",3.17,5.05,5.05
+"nouns","dish",5.7,3.57,5.5
+"function_words","do",5.41,3.67,6.35
+"verbs","do",5.41,3.67,6.35
+"other","doctor",5.93,4.05,4.69
+"function_words","does",NA,NA,NA
+"nouns","dog",7,5.43,5.73
+"nouns","doll",5.88,3.51,5.66
+"function_words","don't",NA,NA,NA
+"other","don't",3.42,4.32,4.5
+"nouns","donkey",6.29,2.9,5.12
+"nouns","donut",NA,NA,NA
+"nouns","door",5.43,3.19,6.1
+"function_words","down",NA,NA,NA
+"function_words","down (stairs)",NA,NA,NA
+"other","downtown",NA,NA,NA
+"verbs","draw",6.18,3.6,6.37
+"nouns","drawer",4.67,3,5.71
+"nouns","dress",6.42,4.73,6.64
+"verbs","dress (action)",6.42,4.73,6.64
+"nouns","dress (object)",6.42,4.73,6.64
+"verbs","drink (action)",6.67,5.19,5.87
+"nouns","drink (beverage)",6.67,5.19,5.87
+"verbs","drip",5.52,3.7,4.11
+"other","drip drop",5.52,3.7,4.11
+"verbs","drive",6.5,4.19,5.67
+"verbs","drop",4.23,4.67,4.82
+"nouns","drum",6.05,4.67,5.65
+"verbs","dry (action)",4.86,3.8,6.21
+"adjectives","dry (description)",4.86,3.8,6.21
+"nouns","dryer",5.21,2.43,4.57
+"adverbs","dryly",NA,NA,NA
+"nouns","duck",6.11,4,5.3
+"verbs","dump",3.73,3.67,4.5
+"nouns","dust",3.72,3.45,4.56
+"nouns","dustpan",4.67,2.86,5.36
+"function_words","each",NA,NA,NA
+"nouns","ear",5.86,3.5,6.74
+"other","early",NA,NA,NA
+"nouns","earth",6.83,5.04,5.69
+"adjectives","easy",7.47,3.82,6.79
+"verbs","eat",7.1,4.38,7.26
+"verbs","eat breakfast",7.39,5,6.83
+"verbs","eat dinner",6.4,3.85,6.05
+"nouns","egg",5.95,3.28,5.74
+"nouns","elephant",6.17,4.23,4.23
+"nouns","elevator",5.95,3.65,4.92
+"nouns","elk",5.81,3.48,4.67
+"adjectives","empty",3.78,2.25,3.61
+"function_words","enough",6.1,3.17,6
+"verbs","enter",6.09,4.3,6.79
+"other","evening",7.09,3.1,5.22
+"function_words","every",NA,NA,NA
+"function_words","everyone",NA,NA,NA
+"nouns","eye",6.18,3.95,5.72
+"nouns","eyebrows",NA,NA,NA
+"nouns","eyelashes",NA,NA,NA
+"nouns","face",6.36,4.59,5.96
+"verbs","fall",3.89,4.24,3.83
+"other","family",7.25,4.35,5.98
+"function_words","far",NA,NA,NA
+"other","farm",6.22,3.05,6.08
+"adjectives","fast",6.08,5.16,6.18
+"adjectives","fat",2.74,3.89,4
+"other","father's name",NA,NA,NA
+"nouns","faucet",5.55,3.53,6.31
+"nouns","fawn",6.15,3.92,5.73
+"verbs","feed",6.95,4.55,6.79
+"nouns","feet",4.68,2.77,5.97
+"nouns","field",5.73,3.84,5.74
+"verbs","fight",3.54,6.33,4.68
+"verbs","find",6.45,3.52,6.24
+"adjectives","fine",6.5,3.86,5.78
+"nouns","finger",5.8,4.15,5.32
+"verbs","finish",6.41,3.81,6.44
+"adjectives","finished",6.41,3.81,6.44
+"nouns","fir",5,3,5.5
+"nouns","fire",4.32,6.05,4.57
+"other","fireman",6.47,4.52,5
+"nouns","fireplace",5.95,5.2,5.56
+"nouns","firetruck",6.47,4.52,5
+"nouns","firewood",6.09,4.58,5.95
+"adjectives","first",7.33,4.9,6.38
+"nouns","fish (animal)",6.42,3.33,6.08
+"nouns","fish (food)",6.42,3.33,6.08
+"verbs","fit",6.28,4.35,6.11
+"function_words","five",5.4,3.55,5.65
+"verbs","fix",6.11,3.6,6.72
+"nouns","flag",6.1,3.74,5.56
+"verbs","flee",3.84,4.95,5
+"verbs","flip",5.6,4.62,5.32
+"nouns","floor",5.14,3.33,6.39
+"nouns","flower",7.3,3.67,6.43
+"nouns","flowerpot",5.81,4,6
+"nouns","fly",6.06,4.9,5.28
+"verbs","fly",6.06,4.9,5.28
+"verbs","fly (action)",6.06,4.9,5.28
+"nouns","food",7.52,4.69,6.08
+"nouns","foot",4.68,2.77,5.97
+"function_words","for",NA,NA,NA
+"nouns","forehead",5.04,3.14,6.5
+"nouns","fork",5.47,3.35,6.02
+"function_words","forward",NA,NA,NA
+"function_words","four",5.26,3.39,5.65
+"nouns","fox",5.52,4.36,5.5
+"nouns","french fries",NA,NA,NA
+"other","friend",6.79,4.29,6.31
+"other","friends' names",NA,NA,NA
+"nouns","frog",5.84,4.07,5.5
+"function_words","from here",NA,NA,NA
+"function_words","from there",NA,NA,NA
+"function_words","front",NA,NA,NA
+"nouns","frost",6.15,4.61,5
+"nouns","fruit",7,4.09,6.12
+"adjectives","full",6,3.48,6.06
+"adjectives","funny",7.59,5.38,6.33
+"nouns","furniture",5.79,3.05,5.43
+"nouns","game",6.79,5.05,5.84
+"nouns","garage",5.5,4.1,6.11
+"other","garage",5.5,4.1,6.11
+"nouns","garbage",2.88,3.84,5.15
+"nouns","garden",7.25,3.71,6.13
+"other","garden",7.25,3.71,6.13
+"other","gas station",NA,NA,NA
+"adjectives","gentle",7.42,3.17,6.95
+"verbs","get",6.09,3.67,5.65
+"verbs","get off",NA,NA,NA
+"verbs","get up",6.57,3.8,5.71
+"verbs","get wet",NA,NA,NA
+"nouns","giraffe",6.52,2.91,5.27
+"other","girl",7.15,5.23,5.27
+"verbs","give",7.73,4.57,5.72
+"other","give me five",NA,NA,NA
+"nouns","glass",5.48,3.14,5.42
+"nouns","glasses",5.09,3.39,5.68
+"nouns","gloves",5.2,3.17,5.75
+"nouns","glue",4.85,3.75,5.43
+"verbs","go",6.32,4.86,5.33
+"other","go eat",NA,NA,NA
+"other","go for a walk",NA,NA,NA
+"verbs","go out",NA,NA,NA
+"other","go potty",4.29,2.83,5.39
+"other","go to bed",NA,NA,NA
+"other","go-ahead",NA,NA,NA
+"other","goal",6.79,4.67,6.57
+"nouns","goat",5.3,2.94,5.17
+"other","gobble gobble",5.9,3.45,5.59
+"other","godfather",6.24,2.83,4.78
+"other","godmother",6.52,4.95,5.56
+"other","gonna get you",NA,NA,NA
+"function_words","gonna/going to",NA,NA,NA
+"adjectives","good",7.89,3.66,6.41
+"other","good boy/girl",7.89,3.66,6.41
+"other","good morning",6.25,3.86,6.54
+"other","good night",6.25,3.86,6.54
+"nouns","goose",5.68,3.29,4.76
+"function_words","gotta/got to",NA,NA,NA
+"verbs","grab",5.44,4.5,5.28
+"other","grandma",7.5,3.2,5.39
+"other","grandpa",7.43,3.7,5.05
+"nouns","grapes",6.7,3.5,5.88
+"nouns","grass",6.47,3.39,5.67
+"other","great grandma",6.33,2.62,6.04
+"other","great grandpa",7.1,3.67,5.36
+"adjectives","green",6.29,4.07,5.64
+"nouns","green beans",NA,NA,NA
+"nouns","greenhouse",6.4,3.6,5.84
+"verbs","greet",6.25,3.86,6.54
+"other","grocery",6.62,3.48,6.33
+"nouns","ground",5.28,2.35,5.5
+"other","grrr",4.43,3.95,5.11
+"other","guest",6.14,4.15,6.95
+"nouns","gum",5.89,3.2,4.92
+"function_words","hafta/have to",NA,NA,NA
+"nouns","hair",6.18,3.71,6.69
+"other","hairdresser",5.71,3.91,4.71
+"nouns","ham",4.65,4.2,5.85
+"nouns","hamburger",6.93,4.2,5.35
+"nouns","hammer",5.17,4.56,5.59
+"nouns","hand",5.9,3.98,5.88
+"other","hands up",NA,NA,NA
+"adjectives","happy",8.47,6.05,7.21
+"adjectives","hard",4.35,4.5,4.96
+"nouns","hat",5.69,2.88,6.21
+"verbs","hate",1.96,6.26,4.47
+"other","have",5.86,3.52,5.72
+"verbs","have",5.86,3.52,5.72
+"other","have hands",NA,NA,NA
+"function_words","he",NA,NA,NA
+"nouns","head",5.86,4.45,5.56
+"verbs","hear",6.68,3.62,6.71
+"adverbs","heavily",4.78,3.65,3.61
+"adjectives","heavy",4.78,3.65,3.61
+"nouns","hedgehog",5.88,4,5.72
+"other","hee haw",6.29,2.9,5.12
+"nouns","helicopter",5.55,6.11,6.17
+"other","hello",6.25,3.86,6.54
+"verbs","help",6.95,4.29,6.89
+"nouns","hen",6.14,3.39,5.39
+"function_words","her",NA,NA,NA
+"function_words","here",NA,NA,NA
+"other","here (take)",NA,NA,NA
+"function_words","hers",NA,NA,NA
+"other","hi",6.25,3.86,6.54
+"verbs","hide",4.9,3.52,4.85
+"other","hide and seek",6.79,5.05,5.84
+"adjectives","high",5.77,4.1,5.76
+"function_words","high",5.77,4.1,5.76
+"nouns","high chair",5.89,2.86,5.28
+"function_words","him",NA,NA,NA
+"function_words","himself/herself",NA,NA,NA
+"nouns","hippopotamus",6.38,4.17,5.22
+"function_words","his",NA,NA,NA
+"verbs","hit",3.95,5.48,5.15
+"verbs","hold",6.05,4.86,5.67
+"function_words","home",7.48,3.78,6.77
+"nouns","home",7.48,3.78,6.77
+"other","home",7.48,3.78,6.77
+"nouns","honey",7.27,4.38,6.39
+"other","honk honk",4.95,3.96,5.47
+"other","hop",5.89,3.71,5.04
+"nouns","horse",6.05,4.16,5.71
+"nouns","hose",5,4.54,5.67
+"adjectives","hot",5.73,4.76,5
+"nouns","hot dog",6.21,3.85,5.58
+"adverbs","hotly",5.73,4.76,5
+"nouns","house",7.19,3.95,6.41
+"other","house",7.19,3.95,6.41
+"function_words","how",NA,NA,NA
+"function_words","how much",4.11,4.9,3.67
+"verbs","hug",8.23,4.85,6.8
+"adjectives","hungry",3.54,5.6,4.59
+"verbs","hungry",3.54,5.6,4.59
+"verbs","hurry",4.32,5.62,4.56
+"adjectives","hurt",2.45,4.72,3.73
+"verbs","hurt",2.45,4.72,3.73
+"function_words","i",NA,NA,NA
+"nouns","ice",6.06,3.3,4.89
+"nouns","ice cream",6.85,3.95,6.12
+"nouns","icicle",NA,NA,NA
+"function_words","if",NA,NA,NA
+"function_words","in",NA,NA,NA
+"function_words","in front",NA,NA,NA
+"adverbs","in no way",NA,NA,NA
+"function_words","in order to",NA,NA,NA
+"function_words","inside",NA,NA,NA
+"function_words","into",NA,NA,NA
+"verbs","invite",5.68,5.1,6.95
+"nouns","iron",5.03,3.24,5.51
+"function_words","is",NA,NA,NA
+"function_words","it",NA,NA,NA
+"nouns","jacket",5.86,3.35,6.89
+"nouns","jam",5.81,3.95,5.89
+"nouns","jar",5.71,2.77,5.26
+"nouns","jeans",5.47,3.95,6.26
+"nouns","jeep",5.53,4.05,5
+"nouns","jello",NA,NA,NA
+"nouns","jelly",5.9,3.63,5.68
+"nouns","juice",6.9,4.6,5.74
+"verbs","jump",6.44,5.14,5.72
+"nouns","kangaroo",6.45,4.27,5.37
+"nouns","keys",6.22,3.9,6.75
+"verbs","kick",4.55,5.1,5.1
+"nouns","kid (goat)",5.3,2.94,5.17
+"nouns","kindergarten",6.62,3.09,6.17
+"other","kindergarten",6.62,3.09,6.17
+"other","kiss",7.78,6.05,6.52
+"verbs","kiss",7.78,6.05,6.52
+"nouns","kitchen",6.17,3.52,5.89
+"nouns","kitty",7.58,3.19,6.67
+"nouns","kiwi",6.11,3.65,5.5
+"nouns","knee",4.7,4.25,5.38
+"nouns","knife",4.33,4.86,5.29
+"verbs","knock",5.44,3.95,5.11
+"other","knock knock",5.44,3.95,5.11
+"nouns","ladder",5.32,4.09,5.56
+"other","lady",6.91,4.05,5.87
+"nouns","ladybug",6.9,3.45,5.33
+"other","lah lah",NA,NA,NA
+"other","lake",7.13,2.64,5.36
+"nouns","lamb",6.3,3.32,5.72
+"nouns","lamp",5.74,2.71,6.04
+"adjectives","last",NA,NA,NA
+"other","late",3.32,5.57,4.22
+"other","later",NA,NA,NA
+"verbs","laugh",7.56,6.62,7.39
+"nouns","lawn",6.05,2.62,6.04
+"nouns","lawn mower",NA,NA,NA
+"nouns","leaf",6.16,3.05,5.54
+"verbs","leave",4.68,4.48,5.47
+"nouns","leg",6.22,2.75,5.5
+"function_words","lemme/let me",NA,NA,NA
+"nouns","lemon",6.37,4.52,5.43
+"other","let",5.95,2.71,6.06
+"other","let's",NA,NA,NA
+"verbs","lick",6.38,6.2,5.97
+"verbs","lie",2.39,4.81,4.72
+"verbs","lift",5.32,4.9,6.84
+"nouns","light",6.55,3.52,5.89
+"verbs","light (action)",6.55,3.52,5.89
+"verbs","like",7.44,4.4,6.28
+"other","like this",5.86,3.43,5.8
+"nouns","lion",5.84,5.29,4.86
+"nouns","lips",NA,NA,NA
+"verbs","listen",6.91,3.76,5.56
+"function_words","little (amount)",5.91,4.2,5.18
+"other","little (amount)",5.91,4.2,5.18
+"adjectives","little (description)",5.91,4.2,5.18
+"nouns","living room",5.55,3.1,5.71
+"verbs","lock",4.56,3,4.11
+"nouns","locomotive",5.95,5.5,5.23
+"nouns","lollipop",7.29,3.88,6.1
+"adjectives","long",NA,NA,NA
+"verbs","look",5.95,3.76,5.88
+"other","look at me",5.95,3.76,5.88
+"verbs","look for",5.56,3.85,5
+"adjectives","loud",5.65,6.6,5.57
+"adverbs","loudly",NA,NA,NA
+"verbs","love",8,5.36,5.92
+"function_words","low",4.39,2.21,3.11
+"verbs","lower",NA,NA,NA
+"other","lullaby",7.57,3.79,6.05
+"other","lunch",6.64,3.57,6.44
+"other","lunchtime",7.26,4.95,6.7
+"adjectives","mad",2.47,5.59,4.9
+"other","mailman",5.32,3.32,4.82
+"verbs","make",6.09,3.67,6.22
+"other","man",5.42,4.36,5.44
+"adjectives","many",5.64,4.33,5.61
+"function_words","many",NA,NA,NA
+"nouns","marker",5.8,4.05,5.48
+"other","market",6.21,3.55,5.77
+"function_words","me",NA,NA,NA
+"nouns","meat",6.62,4.3,5.58
+"nouns","meatball",6.68,4.79,5.38
+"nouns","medicine",5.9,4,5.35
+"nouns","melon",6.32,3.68,5.79
+"other","meow",6.14,3.42,5.75
+"nouns","milk",6.74,2.33,6.31
+"function_words","mine",NA,NA,NA
+"nouns","mirror",5.9,4.55,5.5
+"nouns","mittens",5.6,2.33,5.91
+"nouns","mold",2.71,3.77,4.5
+"other","moment",6.1,4.05,6
+"other","mommy",7.39,3.7,4.89
+"nouns","money",7.1,6.86,6.32
+"nouns","monkey",5.82,5.15,5.74
+"other","moo",5.48,3.95,5.18
+"nouns","moon",7,3.43,6.11
+"nouns","moose",6.71,4.85,4.97
+"nouns","mop",4.53,3.14,5.32
+"function_words","more",NA,NA,NA
+"other","morning",6.41,3.95,6.35
+"nouns","mosquito",3.12,5.17,3.88
+"other","mother's name",NA,NA,NA
+"nouns","motorcycle",5.8,5.8,5.55
+"nouns","mouse",4.8,3.38,4.29
+"nouns","moustache",5.35,3.23,5.32
+"nouns","mouth",5.59,4.14,6
+"other","movie",7.24,4.39,5.68
+"function_words","much",5.64,4.33,5.61
+"other","much",5.64,4.33,5.61
+"nouns","mud",5.06,3.19,4.27
+"nouns","muffin",7.1,4.05,6.29
+"nouns","mushrooms",NA,NA,NA
+"nouns","music",7.67,5.57,6.5
+"other","music",7.67,5.57,6.5
+"function_words","my",NA,NA,NA
+"function_words","myself",NA,NA,NA
+"nouns","nail",4.6,3.05,5.17
+"nouns","nails",5.57,3.5,4.73
+"adjectives","naked",6.21,5.58,5.6
+"verbs","name",5.62,3.04,5.14
+"other","nap",6.53,4.14,5.91
+"nouns","napkin",5.63,3.09,5.21
+"adjectives","naughty",6.04,6.95,5.76
+"function_words","near",NA,NA,NA
+"nouns","neck",5.44,3.65,5.17
+"nouns","necklace",6.85,3.52,5.64
+"other","need",5.45,3.67,5.06
+"function_words","need/need to",NA,NA,NA
+"other","neigh",6.05,4.16,5.71
+"other","neighbor",5.6,3.72,5.12
+"adjectives","new",7.68,5.14,5.22
+"function_words","next to",NA,NA,NA
+"adjectives","nice",6.95,3.53,6.47
+"other","night",6.68,3.57,5.22
+"nouns","nightgown",5.85,3.35,5.67
+"other","no",2.84,4.9,5.45
+"other","no more",6.5,2.57,7.17
+"function_words","no one",NA,NA,NA
+"adjectives","noisy",3.21,5.15,4.42
+"function_words","none",NA,NA,NA
+"other","none",NA,NA,NA
+"nouns","noodles",6.48,3.09,5.48
+"nouns","nose",5.5,3.1,4.61
+"function_words","not",NA,NA,NA
+"other","not/none",NA,NA,NA
+"function_words","nothing",NA,NA,NA
+"other","now",NA,NA,NA
+"other","nurse",5.41,4.64,5.58
+"nouns","nuts",NA,NA,NA
+"function_words","of",NA,NA,NA
+"function_words","off",NA,NA,NA
+"other","oh",NA,NA,NA
+"other","oink",5.21,3.73,4.62
+"other","ok",NA,NA,NA
+"adjectives","old",3.19,4.48,4.22
+"nouns","olive",6.05,3.92,5.18
+"function_words","on",NA,NA,NA
+"function_words","on top of",NA,NA,NA
+"function_words","one",6.09,2.67,5.56
+"other","one two three",5.89,2.3,5.17
+"nouns","onion",5.37,4.95,4.78
+"other","opa",NA,NA,NA
+"verbs","open",6.14,4.43,6.17
+"adjectives","open (description)",6.14,4.43,6.17
+"verbs","opened",6.14,4.43,6.17
+"function_words","or",NA,NA,NA
+"function_words","or else",NA,NA,NA
+"adjectives","orange (description)",6.81,4.04,5.58
+"nouns","orange (food)",6.81,4.04,5.58
+"function_words","other",5.41,3.48,6
+"other","ouch",2.45,4.72,3.73
+"function_words","our",NA,NA,NA
+"function_words","ours",NA,NA,NA
+"function_words","out",NA,NA,NA
+"other","outing",6.09,5.52,6.16
+"nouns","outside",6.91,3.94,6.2
+"other","outside",6.91,3.94,6.2
+"nouns","oven",6.16,2.95,6.04
+"function_words","over",NA,NA,NA
+"nouns","overalls",5.62,3.8,6.29
+"nouns","owie",2.45,4.72,3.73
+"other","owie",2.45,4.72,3.73
+"nouns","owl",6.3,3.57,5.02
+"nouns","pacifier",5.52,3.2,5.11
+"adverbs","painfully",2.58,5.52,3.83
+"nouns","paint",5.74,4.5,6.56
+"verbs","paint",5.74,4.5,6.56
+"nouns","pajamas",6.86,4.37,6.54
+"nouns","palm",6.05,2.67,5.83
+"nouns","pancake",7.71,4,5.53
+"nouns","pants",5.62,3.8,6.29
+"nouns","pap",4.71,3.52,4.11
+"nouns","paper",5.42,3.52,5.64
+"nouns","park",7,2.7,5.56
+"other","park",7,2.7,5.56
+"nouns","parrot",6.79,4.65,4.25
+"nouns","party",7.18,6.08,5.92
+"other","party",7.18,6.08,5.92
+"verbs","pass",5.73,4.38,4.78
+"nouns","pasta",7.08,3.97,5.98
+"nouns","pastry",6.9,4.95,5.61
+"other","pattycake",6.79,5.05,5.84
+"nouns","peach",6.83,4.7,5.74
+"nouns","peacock",6.75,3.83,5.88
+"nouns","peanut",6.38,3.48,5.74
+"nouns","peanut butter",NA,NA,NA
+"nouns","pear",6.7,3.76,5.71
+"nouns","peas",6.1,2.95,5.72
+"verbs","pee",4.5,3.32,5.91
+"other","peekaboo",6.28,3.84,5.24
+"other","peep peep",4.42,4.3,4.96
+"nouns","pen",5.63,2.75,6.17
+"nouns","pencil",5.65,3.11,6.03
+"nouns","penguin",6.65,4,4.86
+"nouns","penis",5.3,5.9,6.21
+"nouns","penny",6.29,5.55,5.4
+"other","people",5.7,3.77,5.4
+"nouns","pepper",5.63,4.3,5.75
+"other","person",6.1,3.71,6
+"other","pet's name",NA,NA,NA
+"nouns","phone",6.09,3.43,4.44
+"nouns","photos",6.58,4.6,6.05
+"verbs","pick",5.91,3.62,5.94
+"nouns","pickle",6.52,3.48,5.84
+"other","picnic",7.11,3.65,6.1
+"nouns","picture",6.73,3.29,6.12
+"nouns","pig",4.83,3.68,5.04
+"nouns","pigeon",5.58,2.95,5.04
+"nouns","piglet",6.13,3.95,5.75
+"nouns","pill",4.16,3.73,4.88
+"nouns","pillow",7,2.9,6.34
+"nouns","pine",6.58,3.25,4.95
+"nouns","pipe",4.75,4.11,5.92
+"nouns","pita",5.95,4,6.05
+"nouns","pizza",7.89,4.58,5.47
+"nouns","plant",7.05,3.94,6.45
+"nouns","plate",4.8,3.18,5.79
+"verbs","play",7.55,3.81,6.29
+"nouns","play dough",NA,NA,NA
+"nouns","play pen",5.95,2.65,4.5
+"nouns","playground",7.14,4.67,6.32
+"other","playground",7.14,4.67,6.32
+"other","playgroup",NA,NA,NA
+"other","please",6.57,2.95,7.4
+"nouns","plum",6.15,2.76,5.26
+"other","police",4.59,5.95,3.44
+"other","policeman",4.21,4.06,5.76
+"nouns","pony",6.71,4.29,5.9
+"nouns","pool",6.78,3.65,6.39
+"other","pool",6.78,3.65,6.39
+"verbs","poop",2.6,5.14,4.48
+"adjectives","poor",3.67,4.67,4
+"nouns","popcorn",7.26,5.23,5.39
+"nouns","popsicle",6.85,3.95,6.12
+"nouns","porch",6.4,3.36,6.11
+"nouns","porridge",5,3.33,4.52
+"nouns","pot",5.81,4,6
+"nouns","potato",6.4,2.38,5.46
+"nouns","potato chip",NA,NA,NA
+"nouns","potty",4.29,2.83,5.39
+"verbs","pour",5.16,3.28,5.35
+"nouns","present",6.85,4.82,6.65
+"other","present",6.85,4.82,6.65
+"verbs","press",5.39,2.8,4.78
+"other","pretend",4.62,4.3,5.58
+"verbs","pretend",4.62,4.3,5.58
+"adjectives","pretty",7.7,5.5,6.7
+"nouns","pretzel",6.81,5.7,5.69
+"nouns","pudding",6.72,3.8,5.46
+"nouns","puddle",4.3,4.33,4.73
+"verbs","pull",5.59,4.1,6
+"nouns","pumpkin",7,3.43,5.35
+"nouns","puppy",7.85,5.84,6.24
+"nouns","purse",5.95,3.21,5.68
+"verbs","push",5.39,4.4,4.06
+"verbs","put",5.09,3.86,5.94
+"verbs","put in",NA,NA,NA
+"verbs","put on",NA,NA,NA
+"verbs","put out",NA,NA,NA
+"nouns","puzzle",6.53,4.42,5.86
+"other","quack quack",6.11,4,5.3
+"nouns","quesadilla",7.18,4.94,5.57
+"adjectives","quick",6.08,5.16,6.18
+"adverbs","quickly",6.08,5.16,6.18
+"adjectives","quiet",6.47,1.95,5.8
+"adverbs","quietly",6.47,1.95,5.8
+"nouns","radio",6,3.84,6.27
+"nouns","rag",4.21,2.65,4.45
+"nouns","rain",6.58,3.29,4.25
+"nouns","raisin",6.05,3.65,5.73
+"nouns","rake",4.75,4.22,5.24
+"nouns","raspberry",7.3,3.71,6.33
+"nouns","rattle",4.47,4.48,4.81
+"verbs","read",6.73,3.7,6.11
+"adjectives","real",7.09,4.05,5.89
+"adjectives","red",5.67,5.02,5.2
+"nouns","refrigerator",5.76,3.25,5.82
+"verbs","remember",6.5,3.14,6.31
+"nouns","remote control",5.42,3.5,5.54
+"nouns","rice",5.7,3,5.5
+"verbs","ride",6.27,5.1,5.28
+"other","ring ring",7.09,4.43,5.44
+"verbs","rip",3.28,5.26,4.12
+"other","river",6.72,4.22,4.89
+"nouns","road",5.59,3.81,6
+"nouns","rock",5.72,3.14,5.26
+"verbs","rock (action)",NA,NA,NA
+"nouns","rocking chair",5.89,2.86,5.28
+"nouns","roof",4.48,3.4,7.05
+"nouns","room",5.55,3.1,5.71
+"nouns","rooster",5.53,4.57,5.09
+"nouns","rope",5.05,4.58,5.62
+"other","row row your boat",5.4,2.56,6.05
+"verbs","run",6.41,5.24,5.44
+"other","sabbath",6.06,3.37,4.78
+"adjectives","sad",2.1,3.49,3.84
+"nouns","salt",6.05,4.53,6.04
+"adjectives","salty",5.1,3.94,5.14
+"adjectives","same",5.86,3.43,5.8
+"function_words","same",NA,NA,NA
+"nouns","sand",6.16,3.43,4.82
+"nouns","sandals",5.78,2.4,5.44
+"nouns","sandbox",5.75,3.4,6.1
+"other","sandbox",5.75,3.4,6.1
+"nouns","sandwich",7.18,4.94,5.57
+"nouns","sauce",6.58,3.95,5.85
+"nouns","sausage",6.32,4.8,6.27
+"verbs","save",7.26,4.62,6.34
+"verbs","say",5.91,4.43,6.88
+"adjectives","scared",2.8,6.1,4.2
+"verbs","scared",2.8,6.1,4.2
+"nouns","scarf",6,2.39,6.39
+"nouns","schnitzel",5.55,4.46,5.33
+"nouns","school",5.41,4.57,5.88
+"other","school",5.41,4.57,5.88
+"nouns","scissors",5.03,4.02,6.89
+"nouns","sea",6.56,2.8,5.22
+"other","sea",6.56,2.8,5.22
+"verbs","see",6.27,3.9,6
+"verbs","seek",6.25,3.9,6.16
+"function_words","self",6.86,4.78,7.74
+"nouns","semolina",5.83,1.6,5.12
+"verbs","shake",4.59,5.2,6.37
+"other","shame",2.62,5.4,5.21
+"nouns","shampoo",5.75,3.18,6.32
+"verbs","share",6.22,3.2,6.44
+"function_words","she",NA,NA,NA
+"nouns","sheep",5.32,2.95,4.42
+"other","shh",6.47,1.95,5.8
+"nouns","ship",6.14,3.94,5.84
+"nouns","shirt",5.56,2.3,5.67
+"nouns","shoe",5.78,2.4,5.44
+"other","shopping",NA,NA,NA
+"adjectives","short",5.67,2.62,4.39
+"nouns","shorts",5.95,4.23,6.57
+"other","should",NA,NA,NA
+"nouns","shoulder",5.1,2.96,4.81
+"verbs","shout",5,6.29,5.85
+"nouns","shovel",4.8,3.5,6.42
+"verbs","show",5.91,4.1,5.83
+"nouns","shower",7.19,4.15,7.47
+"verbs","shut up",NA,NA,NA
+"nouns","shutter",4.7,3.38,5.28
+"other","sibling",7.27,5.16,4.81
+"adjectives","sick",2.29,4.67,2.84
+"nouns","sidewalk",5.67,3.65,6.19
+"adjectives","similar",5.86,3.43,5.8
+"other","sing",7.5,4.1,6.67
+"verbs","sing",7.5,4.1,6.67
+"nouns","sink",4.62,3.7,4.1
+"other","sir",5.45,4.33,5.11
+"other","sister",7,3.86,5.59
+"other","sister's name",NA,NA,NA
+"verbs","sit",5.82,3.19,6.06
+"verbs","skate",6.74,4.48,4.84
+"nouns","skirt",6.14,4.88,5.86
+"nouns","sky",7.32,2.74,5.61
+"nouns","sled",6.35,3.25,5.6
+"other","sleep",7.22,3.6,5.3
+"verbs","sleep",7.22,3.6,5.3
+"adjectives","sleepy",4.36,3.04,4.56
+"verbs","slide (action)",NA,NA,NA
+"nouns","slide (object)",5.71,3.3,5.5
+"other","slide (object)",NA,NA,NA
+"nouns","slipper",5.8,3.83,5.93
+"adjectives","slow",4,2.89,5.39
+"adjectives","smart",7.73,3.81,6.81
+"verbs","smear",3.84,4.04,4.89
+"verbs","smell",6.39,5.24,5.44
+"verbs","smile",7.89,4.62,7.72
+"other","snack",6.53,4.11,5.88
+"nouns","snake",4.03,7.24,3.65
+"nouns","sneaker",5.85,3.45,6.31
+"verbs","sneeze",4,4.81,3.2
+"nouns","snow",6.78,4.57,5.62
+"nouns","snowman",7,3.76,5
+"nouns","snowsuit",5.29,3.1,6.68
+"function_words","so",NA,NA,NA
+"other","so big",NA,NA,NA
+"nouns","soap",7.1,2.62,5.32
+"nouns","sock",4.43,3.09,5.14
+"nouns","soda",5.47,4.77,6.04
+"nouns","sofa",6.26,2.9,5.84
+"adjectives","soft",7.13,3.04,6.1
+"adverbs","softly",NA,NA,NA
+"function_words","some",NA,NA,NA
+"other","some more",NA,NA,NA
+"function_words","someone",NA,NA,NA
+"other","somersault",6.37,4.73,6.32
+"other","son",6.91,4.43,5
+"nouns","song",7.59,4.6,6.95
+"other","soon",NA,NA,NA
+"nouns","soup",7.05,4.24,6.64
+"adjectives","sour",3.95,4.95,4.34
+"nouns","sour cream",NA,NA,NA
+"adverbs","sourly",NA,NA,NA
+"nouns","spade",5.48,3.74,4.88
+"nouns","spaghetti",6.91,4.04,5.92
+"nouns","sparrow",6.58,3.78,4.68
+"nouns","spider",3.35,6.91,3.74
+"verbs","spill",3.63,3.74,4.5
+"nouns","spinach",5.81,3.43,5.46
+"verbs","spit",3,3.57,4.36
+"verbs","splash",6.53,4.8,5.96
+"nouns","spoon",5.9,3.79,5.18
+"nouns","sprinkler",5.86,3.29,6.38
+"other","squeak",4.95,4.79,4.62
+"nouns","squirrel",5.71,4.48,5.62
+"other","sss",4.03,7.24,3.65
+"nouns","stairs",5.48,3.59,5.57
+"nouns","stallion",6.35,4.77,6.56
+"verbs","stand",5.27,3.1,5.89
+"nouns","star",7.47,5.5,5.82
+"verbs","stay",6.14,3.14,5.71
+"nouns","stick",5.27,3.81,5.82
+"adjectives","sticky",4.65,4.75,5.19
+"other","stomp stomp",3.9,4.82,6.44
+"nouns","stone",4.81,3.25,7.26
+"verbs","stop",4.73,4.14,5.06
+"nouns","store",5.94,3.43,5.44
+"other","store",5.94,3.43,5.44
+"nouns","story",7.27,3.52,5.33
+"nouns","stove",5.63,3.82,6.08
+"nouns","strawberry",7.25,4.05,5.54
+"nouns","street",5.07,3.45,5.41
+"other","street",5.07,3.45,5.41
+"verbs","strike",3.06,5.52,3.28
+"nouns","stroller",5.75,3.22,5.68
+"adjectives","strong",6.81,5.14,6.54
+"adverbs","strongly",NA,NA,NA
+"adjectives","stuck",NA,NA,NA
+"nouns","sugar",6.56,5.29,6.32
+"nouns","sun",6.92,4.64,4.98
+"other","surprise",7.44,6.57,5.17
+"verbs","swallow",5.57,3.78,5.72
+"nouns","sweater",6.19,2.8,5.95
+"verbs","sweep",5.27,3.89,5.76
+"adjectives","sweet",7.77,4.14,6.12
+"adverbs","sweetly",7.77,4.14,6.12
+"verbs","swim",6.71,6.05,6.47
+"nouns","swimsuit",6.05,5.8,5.08
+"verbs","swing (action)",6.95,4.1,6.16
+"nouns","swing (object)",6.95,4.1,6.16
+"other","swing (object)",NA,NA,NA
+"nouns","table",5.49,3,5.84
+"nouns","tablecloth",5.33,2.81,6.28
+"nouns","tahini",6.58,3.95,5.85
+"verbs","take",4.82,4.52,4.83
+"verbs","take away",4.82,4.52,4.83
+"other","take in (arms)",6.05,4.86,5.67
+"verbs","take off",4.21,3.11,4.56
+"verbs","take out",4.21,3.11,4.56
+"verbs","talk",6.64,3.38,6.44
+"nouns","tangerine",6.81,3.9,6
+"nouns","tank top",6.25,5.14,5.32
+"nouns","tape",5.5,3.4,5.11
+"verbs","taste",6.63,4.56,7.33
+"adverbs","tastily",6.89,5.28,6.18
+"adjectives","tasty",6.89,5.28,6.18
+"nouns","tea",6.56,2.05,6
+"other","teacher",7.37,2.9,5.95
+"nouns","teapot",6,3.39,5.67
+"verbs","tear",3.14,4.8,5.68
+"nouns","teddybear",7.38,3.74,6.35
+"nouns","telephone",5.71,4.3,6.74
+"verbs","tell",5.27,3.86,4.94
+"other","ten fingers",5.8,4.15,5.32
+"other","thank you",7.73,4.05,6.72
+"function_words","that",NA,NA,NA
+"function_words","the",NA,NA,NA
+"function_words","their",NA,NA,NA
+"function_words","theirs",NA,NA,NA
+"function_words","them",NA,NA,NA
+"function_words","then",NA,NA,NA
+"function_words","there",NA,NA,NA
+"function_words","these",NA,NA,NA
+"function_words","they",NA,NA,NA
+"adjectives","thin",5.47,4.5,5.33
+"verbs","think",6.68,3.75,6.5
+"adjectives","thirsty",4.48,4.08,6.2
+"function_words","this",NA,NA,NA
+"other","this little piggy",NA,NA,NA
+"function_words","those",NA,NA,NA
+"function_words","three",5.43,3.38,5.45
+"verbs","throw",5.55,4.52,6.12
+"nouns","thumb",5.62,3.84,5.79
+"other","thump",4.42,4,5.5
+"other","tick tock",5.65,3.35,5.24
+"other","tickle",6.14,5.86,5.28
+"verbs","tickle",6.14,5.86,5.28
+"nouns","tiger",6,5.55,4.4
+"nouns","tights",5.95,3.45,4.56
+"other","time",5.6,3.41,4.36
+"adjectives","tiny",5.1,4.6,6.16
+"verbs","tire",4.55,3.09,5.52
+"adjectives","tired",4.29,3.67,5.06
+"nouns","tissue",5.3,3.1,5.32
+"function_words","to",NA,NA,NA
+"function_words","to here",NA,NA,NA
+"other","to slap",2.95,4.59,4.78
+"function_words","to there",NA,NA,NA
+"function_words","to you",NA,NA,NA
+"nouns","toast",6.73,3.65,6.39
+"other","today",NA,NA,NA
+"nouns","toe",5.24,3.1,5.1
+"adverbs","together",NA,NA,NA
+"nouns","tomato",5.8,2.68,5.46
+"other","tomorrow",NA,NA,NA
+"nouns","tongue",6.29,4.25,6.32
+"other","tonight",NA,NA,NA
+"function_words","too",NA,NA,NA
+"nouns","tooth",5.06,3.52,4.89
+"nouns","toothbrush",5.58,3.38,6.21
+"nouns","top",6,4.33,6.25
+"nouns","tortilla",6.52,3.85,6.05
+"adverbs","totally",NA,NA,NA
+"verbs","touch",6.64,4.9,6.24
+"nouns","towel",6.14,2.9,5.86
+"nouns","tower",5.24,3.86,5.45
+"adjectives","toy (description)",7.29,4.29,5.61
+"nouns","toy (object)",7.29,4.29,5.61
+"nouns","tracksuit",5.1,3.62,5.7
+"nouns","tractor",5.05,3.73,5.75
+"nouns","train",6.36,4.05,5.72
+"nouns","tram",4.7,2.42,4.05
+"nouns","trash",2.74,3.66,4.24
+"verbs","travel",7.89,5.55,6.82
+"nouns","tray",5.14,3.57,6.05
+"nouns","tree",7.59,2.67,5.62
+"nouns","tricycle",6.14,3.62,6.2
+"nouns","truck",5.16,3.76,5.43
+"function_words","try/try to",NA,NA,NA
+"nouns","tummy",6.05,3.78,5.04
+"nouns","tuna",5.26,4.14,5.7
+"nouns","turkey",5.9,3.45,5.59
+"verbs","turn",5.45,3.48,5.88
+"other","turn around",NA,NA,NA
+"verbs","turn around",5.45,3.48,5.88
+"verbs","turn off",NA,NA,NA
+"verbs","turn on",NA,NA,NA
+"nouns","turtle",6.16,2.52,5.82
+"nouns","tv",6.05,4.24,5.24
+"other","tweet tweet",5.37,3.39,5.37
+"function_words","two",6.3,3.33,5.05
+"adjectives","ugly",2.47,4.43,3.86
+"other","uh oh",2.55,4.93,3
+"nouns","umbrella",5.84,3.5,5.75
+"other","uncle",6.5,4.05,5.24
+"function_words","under",NA,NA,NA
+"nouns","underpants",5.18,5.08,5.75
+"verbs","understand",6.68,3.52,6.71
+"nouns","underwear",5.35,4.46,5.7
+"function_words","up",NA,NA,NA
+"other","up",NA,NA,NA
+"function_words","up (stairs)",NA,NA,NA
+"function_words","us",NA,NA,NA
+"nouns","vacuum",5.38,4.63,6.52
+"nouns","vagina",6,5.83,5.07
+"nouns","vanilla",7.42,3.62,5.74
+"nouns","vest",5.74,4.1,6.25
+"other","village",5.95,3.4,5.6
+"nouns","vitamins",NA,NA,NA
+"nouns","voice recorder",5.53,3.32,6.27
+"other","vroom",6.63,4.04,6.41
+"nouns","wafer",7.32,4.7,6.1
+"other","wait",4.55,3.62,5.31
+"verbs","wait",4.55,3.62,5.31
+"verbs","wake",6.57,3.8,5.71
+"verbs","walk",6.77,3.24,5.83
+"nouns","walker",NA,NA,NA
+"nouns","wall",5.06,2.9,4.22
+"nouns","wallet",6,4.25,6.08
+"other","wanna",6,5.29,5.39
+"verbs","wanna",6,5.29,5.39
+"function_words","wanna/want to",NA,NA,NA
+"nouns","wardrobe",6.09,5.16,6.24
+"adjectives","warm",7.5,3.35,6.33
+"adverbs","warmly",7.5,3.35,6.33
+"function_words","was",NA,NA,NA
+"verbs","wash",6,3.7,6.53
+"nouns","washing machine",NA,NA,NA
+"verbs","watch (action)",5.45,3.37,6.55
+"nouns","watch (object)",5.45,3.37,6.55
+"other","watch out",5.45,3.37,6.55
+"nouns","water (beverage)",7,3.71,6.12
+"nouns","water (not beverage)",7,3.71,6.12
+"nouns","watermelon",6.75,4.64,6.48
+"verbs","wave",6.32,4.19,5.48
+"function_words","we",NA,NA,NA
+"verbs","wear",6.36,3.33,5.72
+"other","weee",NA,NA,NA
+"adverbs","well",7.89,3.66,6.41
+"nouns","well",NA,NA,NA
+"function_words","were",NA,NA,NA
+"adjectives","wet",5.64,5,6.11
+"verbs","wet",5.64,5,6.11
+"adverbs","wetly",5.64,5,6.11
+"function_words","what",NA,NA,NA
+"function_words","when (conjunction)",NA,NA,NA
+"function_words","when (question)",NA,NA,NA
+"function_words","where",NA,NA,NA
+"function_words","where (conjunction)",NA,NA,NA
+"function_words","where (question)",NA,NA,NA
+"function_words","which (conjunction)",NA,NA,NA
+"function_words","which (question)",NA,NA,NA
+"adjectives","white",6.18,3.35,5.71
+"function_words","who",NA,NA,NA
+"other","who's there",NA,NA,NA
+"function_words","whose",NA,NA,NA
+"function_words","why",NA,NA,NA
+"function_words","will",5.32,2.9,6.61
+"nouns","wind",5.67,3.7,4.5
+"nouns","window",6.47,3.27,5.39
+"adjectives","windy",6,4.23,4.19
+"verbs","wipe",4.58,3.54,5.43
+"verbs","wish",7.14,3.38,6.5
+"function_words","with",NA,NA,NA
+"nouns","wolf",6.26,5.25,4.59
+"other","woman",7.09,3.8,5.93
+"other","woods",NA,NA,NA
+"other","woof woof",6.76,5.15,5.22
+"verbs","work (action)",5.05,4.33,6.12
+"nouns","work (place)",5.05,4.33,6.12
+"other","work (place)",5.05,4.33,6.12
+"nouns","worm",4.86,3.5,5.22
+"function_words","would",5.91,3.81,5.94
+"verbs","write",6.45,3.81,5.28
+"nouns","yard",5.7,3.68,5.84
+"other","yard",5.7,3.68,5.84
+"adjectives","yellow",6.09,3.83,6.35
+"other","yes",7.17,3.62,6.94
+"other","yesterday",NA,NA,NA
+"nouns","yogurt",7,4.52,6
+"nouns","yogurt drink",7,4.52,6
+"function_words","you",NA,NA,NA
+"function_words","you (plural)",NA,NA,NA
+"function_words","your",NA,NA,NA
+"function_words","yours",NA,NA,NA
+"function_words","yourself",NA,NA,NA
+"adjectives","yucky",3.36,4.35,4.36
+"other","yucky",3.36,4.35,4.36
+"other","yum yum",7.52,4.48,6.84
+"nouns","zebra",6.47,3.9,5.26
+"nouns","zipper",5.11,3.73,5.18
+"nouns","zoo",7,5.63,6.33
+"other","zoo",7,5.63,6.33
