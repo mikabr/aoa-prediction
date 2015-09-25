@@ -1,0 +1,400 @@
+---
+title: <center>Predicting words' age of acquisition</center>
+author: <center>Mika Braginsky, Daniel Yurovsky, Virginia Marchman, and Michael C. Frank</center>
+date: <center>`r Sys.Date()`</center>
+output:
+  html_document:
+    highlight: tango
+    theme: spacelab
+---
+
+```{r setup, echo = FALSE}
+library(knitr)
+opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE, echo = FALSE, fig.align = "center")
+```
+
+```{r, cache = FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(readr)
+library(ggplot2)
+library(langcog)
+library(wordbankr)
+library(boot)
+library(lazyeval)
+library(broom)
+library(directlabels)
+theme_set(theme_bw(base_size = 14))
+font <- "Open Sans"
+```
+
+```{r}
+# get uni_lemmas
+uni_lemmas <- get_item_data(mode = "local") %>%
+  filter(type == "word", !is.na(uni_lemma), language == "English", form == "WG") %>%
+  select(uni_lemma)
+```
+
+```{r}
+# get AoA estimates
+aoa_data <- read_csv("aoa_data.csv")
+```
+
+```{r}
+# get frequency estimates
+
+instruments <- aoa_data %>%
+  select(language, form) %>%
+  distinct()
+
+inst_freqs <- function(language, form) {
+  freq_file <- sprintf("predictors/frequency/freqs/freqs_%s.csv", tolower(language))
+  if (file.exists(freq_file)) {
+    read_csv(freq_file) %>%
+      rename(uni_lemma = item) %>%
+      mutate(language = language, form = form)
+  }
+}
+
+freqs <- map2(instruments$language, instruments$form, inst_freqs) %>%
+  bind_rows() #%>%
+#  right_join(words)
+#  right_join(freq_words)
+
+uni_freqs <- freqs
+#   group_by(language, form, lexical_category, uni_lemma) %>%
+#   summarise(frequency = sum(frequency))
+```
+
+```{r}
+# get estimates of valence, arousal, and dominance
+
+valence <- read_csv("predictors/valence/valence.csv") %>%
+  select(Word, V.Mean.Sum, A.Mean.Sum, D.Mean.Sum) %>%
+  rename(word = Word, valence = V.Mean.Sum, arousal = A.Mean.Sum,
+         dominance = D.Mean.Sum)
+
+#missing_valence <- setdiff(uni_lemmas$uni_lemma, valence$word)
+# write_csv(data.frame(uni_lemma = missing_babiness),
+#           "predictors/valence/valence_replace.csv")
+
+replacements_valence <- read_csv("predictors/valence/valence_replace.csv") %>%
+  select(-lexical_class)
+uni_valences <- uni_lemmas %>%
+  left_join(replacements_valence) %>%
+  rowwise() %>%
+  mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  left_join(valence)
+
+#uni_valences <- read_csv("predictors/valence/uni_lemma_valence.csv")
+```
+
+```{r}
+# get estimates of iconicity and babiness
+
+babiness <- read_csv("predictors/babiness_iconicity/english_iconicity.csv") %>%
+  group_by(word) %>%
+  summarise(iconicity = mean(rating),
+            babiness = mean(babyAVG))
+
+#missing_babiness <- setdiff(uni_lemmas$uni_lemma, babiness$word)
+# write_csv(data.frame(uni_lemma = missing_babiness),
+#           "predictors/babiness_iconicity/babiness_iconicity_replace.csv")
+
+replacements_babiness <- read_csv("predictors/babiness_iconicity/babiness_iconicity_replace.csv")
+uni_babiness <- uni_lemmas %>%
+  left_join(replacements_babiness) %>%
+  rowwise() %>%
+  mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  left_join(babiness)
+
+#uni_babiness <- read_csv("predictors/babiness_iconicity/babiness_iconicity.csv") 
+```
+
+```{r}
+# get estimates of concreteness
+
+concreteness <- read_csv("predictors/concreteness/concreteness.csv")
+
+#missing_concreteness <- setdiff(uni_lemmas$uni_lemma, concreteness$Word)
+# write_csv(data.frame(uni_lemma = missing_concreteness),
+#           "predictors/concreteness/concreteness_replace.csv")
+
+replacements_concreteness <- read_csv("predictors/concreteness/concreteness_replace.csv")
+uni_concreteness <- uni_lemmas %>%
+  left_join(replacements_concreteness) %>%
+  rowwise() %>%
+  mutate(Word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  left_join(concreteness) %>%
+  rename(concreteness = Conc.M) %>%
+  select(uni_lemma, concreteness)
+```
+
+```{r}
+# get (English) phoneme and syllable counts
+phonemes <- read_csv("predictors/phonemes/english_phonemes.csv") %>%
+  mutate(num_syllables = unlist(map(strsplit(syllables, " "), length)),
+         num_phones = as.integer(phones)) %>%
+  select(-phones, -syllables)
+```
+
+```{r}
+# put together data and predictors
+
+predictors = c("frequency", "num_syllables", "num_phones", "concreteness",
+               "valence", "arousal", "dominance", "babiness", "iconicity")
+uni_joined <- aoa_data %>%
+  left_join(uni_freqs) %>%
+  left_join(uni_valences) %>%
+  left_join(uni_babiness) %>%
+  left_join(uni_concreteness) %>%
+  left_join(phonemes) %>%
+  mutate(frequency = log(frequency)) %>%
+  mutate_each_(funs(as.numeric(scale(.))), predictors)
+```
+
+*  *  *  *
+
+Analysis 1: English
+-------------------
+
+```{r}
+english_data <- uni_joined %>%
+  filter(language == "English", measure == "understands")
+
+na_lemmas <- english_data %>%
+  select_(.dots = c("uni_lemma", predictors)) %>%
+  gather(predictor, value, -uni_lemma) %>%
+  filter(is.na(value)) %>%
+  group_by(uni_lemma) %>%
+  summarise(num_na = n(), na_preds = paste(predictor, collapse = ", "))
+```
+
+```{r}
+english_predictions_open <- english_data %>%
+  filter(lexical_category != "function_words", complete.cases(.)) %>%
+  mutate(lexical_class = factor(lexical_class,
+                                levels = c("nouns", "adjectives", "verbs", "other"),
+                                labels = c("Nouns", "Adjectives", "Verbs", "Other")))
+
+all_predictor_formula <- as.formula(sprintf("aoa ~ %s", paste(predictors, collapse = " + ")))
+english_model_open <- lm(all_predictor_formula, data = english_predictions_open)
+english_predictions_open$predicted_aoa <- english_model_open$fitted.values
+
+#cor(english_predictions_open$aoa, english_predictions_open$predicted_aoa)
+
+english_coef_open <- tidy(english_model_open) %>%
+  filter(term != "(Intercept)")
+
+predictors_ordered <- predictors %>%
+  factor(levels = english_coef_open$term[order(abs(english_coef_open$estimate))])
+
+predictor_levels <- english_coef_open$term[order(abs(english_coef_open$estimate), decreasing = TRUE)]
+english_coef_open <- english_coef_open %>%
+  mutate(term = factor(term, levels = predictor_levels))
+
+english_class_coef_open <- english_predictions_open %>%
+  split(.$lexical_class) %>%
+  map(function(split_data) {
+    model <- lm(all_predictor_formula, data = split_data)
+    tidy(model) %>%
+      mutate(lexical_class = unique(split_data$lexical_class))
+  }) %>%
+  bind_rows %>%
+  filter(term != "(Intercept)") %>%
+  mutate(term = factor(term, levels = predictor_levels))
+```
+
+```{r, fig.width = 12, fig.height = 7}
+english_plot_data <- english_data %>%
+  filter(lexical_category != "function_words") %>%
+  gather_("predictor", "value", predictors) %>%
+  mutate(predictor = factor(predictor, levels = predictor_levels),
+         lexical_class = factor(lexical_class,
+                                levels = c("nouns", "adjectives", "verbs", "other"),
+                                labels = c("Nouns", "Adjectives", "Verbs", "Other")))
+
+ggplot(english_plot_data, aes(x = value, y = aoa, colour = lexical_class)) +
+  facet_grid(lexical_class ~ predictor) +
+  geom_point(cex = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, cex = 1) +
+  scale_colour_solarized(name = "") +
+  xlab("\nPredictor Z-Score") +
+  ylab("Age of Acquisition (months)\n") +
+  theme(text = element_text(family = font),
+        legend.position = "bottom",
+        legend.direction = "horizontal")
+```
+
+```{r, fig.width = 6, fig.height = 6}
+ggplot(english_predictions_open, aes(x = predicted_aoa, y = aoa)) +
+  geom_text(aes(label = uni_lemma, colour = lexical_class), cex = 4, show_guide = FALSE) +
+  geom_smooth(aes(colour = lexical_class), weight = 1, method = "lm", se = FALSE) +
+  geom_smooth(colour = "black", weight = 2, method = "lm") +
+  scale_colour_solarized(name = "") +
+  scale_x_continuous(name = "\nModel Predicted Age of Acquisition (months)",
+                     limits = c(6, 27), breaks = seq(6, 26, by = 2)) +
+  scale_y_continuous(name = "Age of Acquisition (months)\n",
+                     limits = c(6, 27), breaks = seq(6, 26, by = 2)) +
+  coord_fixed() +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank(),
+        legend.position = c(0.12, 0.9),
+        legend.background = element_rect(fill = "transparent"))
+```
+
+```{r, fig.width = 5, fig.height = 4}
+ggplot(english_coef_open, aes(x = term, y = abs(estimate), fill = term)) +
+  geom_bar(stat = "identity") +
+  geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
+                     ymax = abs(estimate) + 1.96 * std.error)) +
+  scale_fill_solarized(guide = FALSE) +
+  #  coord_cartesian(ylim = c(0, 2.5)) +
+  xlab("") +
+  ylab("Coefficient Magnitude\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r, fig.width = 9, fig.height = 4}
+sample_sizes <- english_predictions_open %>%
+  group_by(lexical_class) %>%
+  summarise(n = n()) %>%
+  mutate(category_size = sprintf("%s (%d)", lexical_class, n))
+
+ggplot(english_class_coef_open, aes(x = term, y = abs(estimate), fill = term)) +
+  facet_grid(~lexical_class, labeller = function(variable, value) {
+    sample_sizes$category_size[sample_sizes$lexical_class == value]
+  }) +
+  geom_bar(stat = "identity") +
+  geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
+                     ymax = abs(estimate) + 1.96 * std.error)) +
+  geom_errorbar(aes(ymin = abs(estimate), ymax = abs(estimate)),
+                linetype = "dotted", colour = "gray30",
+                data = english_coef_open) +
+  scale_fill_solarized(guide = FALSE) +
+  #  coord_cartesian(ylim = c(0, 6)) +
+  xlab("") +
+  ylab("Coefficient Magnitude\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+english_age_coef_2 <- english_predictions_open %>%
+  mutate(age_group = cut(aoa, 2)) %>%
+  split(paste(.$age_group)) %>%
+  map(function(split_data) {
+    model <- lm(all_predictor_formula, data = split_data)
+    tidy(model) %>%
+      mutate(age_group = unique(split_data$age_group))
+  }) %>%
+  bind_rows %>%
+  filter(term != "(Intercept)")
+
+english_age_coef_3 <- english_predictions_open %>%
+  mutate(age_group = cut(aoa, 3)) %>%
+  split(paste(.$age_group)) %>%
+  map(function(split_data) {
+    model <- lm(all_predictor_formula, data = split_data)
+    tidy(model) %>%
+      mutate(age_group = unique(split_data$age_group))
+  }) %>%
+  bind_rows %>%
+  filter(term != "(Intercept)")
+```
+
+```{r, fig.width = 6, fig.height = 4}
+ggplot(english_age_coef_2, aes(x = age_group, y = abs(estimate), colour = term)) +
+  geom_point() +
+  geom_line(aes(group = term)) +
+  geom_dl(aes(label = term), method = list("first.qp", dl.trans(x = x - 0.2), cex = 0.8)) +
+  geom_dl(aes(label = term), method = list("last.qp", dl.trans(x = x + 0.2), cex = 0.8)) +
+  scale_colour_solarized(guide = FALSE) +
+  xlab("\nAge Group (months)") +
+  ylab("Coefficient Magnitude\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank())
+```
+
+```{r, fig.width = 6, fig.height = 4}
+ggplot(english_age_coef_3, aes(x = age_group, y = abs(estimate), colour = term)) +
+  geom_point() +
+  geom_line(aes(group = term)) +
+  geom_dl(aes(label = term), method = list("first.qp", dl.trans(x = x - 0.2), cex = 0.8)) +
+  geom_dl(aes(label = term), method = list("last.qp", dl.trans(x = x + 0.2), cex = 0.8)) +
+  scale_colour_solarized(guide = FALSE) +
+  xlab("\nAge Group (months)") +
+  ylab("Coefficient Magnitude\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank())
+```
+```{r}
+# english_predictions_all <- english_data %>%
+#   filter(!is.na(frequency), !is.na(concreteness), !is.na(num_characters),
+#          !is.na(babiness), !is.na(iconicity))
+# 
+# english_model_all <- lm(aoa ~ frequency + num_phones + num_syllables + concreteness + 
+#                           babiness + iconicity,
+#                         data = english_predictions_all)
+# 
+# english_predictions_all$predicted_aoa <- english_model_all$fitted.values
+# 
+# english_coef_all <- coef(english_model_all)
+# 
+# cor(english_predictions_all$aoa, english_predictions_all$predicted_aoa)
+```
+
+```{r}
+# english_predictions_closed <- english_data %>%
+#   filter(lexical_category == "function_words",
+#          !is.na(frequency), !is.na(concreteness),
+#          !is.na(babiness), !is.na(iconicity))
+# 
+# english_model_closed <- lm(aoa ~ frequency + num_phones + num_syllables + concreteness + 
+#                              babiness + iconicity,
+#                            data = english_predictions_closed)
+# 
+# english_predictions_closed$predicted_aoa <- english_model_closed$fitted.values
+# 
+# english_coef_closed <- coef(english_model_closed)
+# 
+# cor(english_predictions_closed$aoa, english_predictions_closed$predicted_aoa)
+```
+
+```{r}
+# ggplot(english_predictions_closed, aes(x = predicted_aoa, y = aoa)) +
+#   #geom_point(aes(colour = lexical_class)) +
+#   geom_text(aes(label = uni_lemma, colour = lexical_class), cex = 4) +
+#   geom_smooth(aes(colour = lexical_class), weight = 1, method = "lm", se = FALSE) +
+#   geom_smooth(colour = "black", weight = 2, method = "lm") +
+#   scale_colour_solarized() +
+#   scale_x_continuous(name = "\nModel Predicted Age of Acquisition (months)",
+#                      limits = c(6, 27), breaks = seq(6, 26, by = 2)) +
+#   scale_y_continuous(name = "Empirical Age of Acquisition (months)\n",
+#                      limits = c(6, 27), breaks = seq(6, 26, by = 2)) +
+#   theme(text = element_text(family = font))
+```
+
+```{r}
+# english_model_all %>%
+#   tidy() %>%
+#   filter(term != '(Intercept)') %>%
+#   ggplot(aes(x = term, y = abs(estimate), colour = term)) +
+#   coord_flip() +
+#   geom_point() +
+#   geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
+#                      ymax = abs(estimate) + 1.96 * std.error)) +
+#   scale_colour_solarized(guide = FALSE)
+```
+
+*  *  *  *
+
+Analysis 2: Cross-Linguistic
+----------------------------
