@@ -84,7 +84,7 @@ play dough
 present
 puzzle
 story
-toy
+toy (object)
 apple
 applesauce
 banana
@@ -143,7 +143,7 @@ raisin
 salt
 sandwich
 sauce
-soda/pop
+soda
 soup
 spaghetti
 strawberry
@@ -184,7 +184,7 @@ zipper
 ankle
 arm
 belly button
-buttocks/bottom*
+butt
 cheek
 chin
 ear
@@ -200,14 +200,14 @@ leg
 lips
 mouth
 nose
-owie/boo boo
-penis*
+owie
+penis
 shoulder
 toe
 tongue
 tooth
 tummy
-vagina*
+vagina
 basket
 blanket
 bottle
@@ -219,7 +219,7 @@ bucket
 camera
 can (object)
 clock
-comb
+comb (object)
 cup
 dish
 fork
@@ -250,7 +250,7 @@ soap
 spoon
 tape
 telephone
-tissue/kleenex
+tissue
 toothbrush
 towel
 trash
@@ -324,7 +324,7 @@ water (not beverage)
 wind
 beach
 camping
-church*
+church
 circus
 country
 downtown
@@ -353,17 +353,17 @@ brother
 child
 clown
 cowboy
-daddy*
+daddy
 doctor
 fireman
 friend
 girl
-grandma*
-grandpa*
+grandma
+grandpa
 lady
 mailman
 man
-mommy*
+mommy
 nurse
 child's own name
 people
@@ -390,7 +390,7 @@ no
 pattycake
 peekaboo
 please
-shh/shush/hush
+shh
 shopping
 snack
 so big!
@@ -603,8 +603,8 @@ your
 yourself
 how
 what
-when
-where
+when (question)
+where (question)
 which
 who
 why
@@ -620,7 +620,8 @@ by
 down
 for
 here
-inside/in
+inside
+in
 into
 next to
 of
@@ -656,18 +657,18 @@ are
 be
 can (auxiliary)
 could
-did/did ya
+did
 do
 does
 don't
-gonna/going to
-gotta/got to
-hafta/have to
+gonna
+gotta
+hafta
 is
-lemme/let me
-need/need to
-try/try to
-wanna/want to
+lemme
+need
+try
+wanna
 was
 were
 will
