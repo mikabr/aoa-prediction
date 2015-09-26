@@ -85,10 +85,14 @@ def get_lang_map(stemmer, cdi_items, special_cases):
             pattern_map[option].add(item)
     #lang_map.update(pattern_map)
 
-    stem_map = {stemmer(item): {item} for item in cdi_items}
+    prestem_map = reduce(dict_union, [{item: {item} for item in cdi_items}, special_cases, pattern_map])
+
+    #stem_map = {stemmer(item): {item} for item in cdi_items}
+    stem_map = {stemmer(key): value for key, value in prestem_map.iteritems()}
     #lang_map.update(stem_map)
 
-    lang_map = reduce(dict_union, [{item: {item} for item in cdi_items}, special_cases, pattern_map, stem_map])
+    lang_map = dict_union(prestem_map, stem_map)
+    #lang_map = reduce(dict_union, [{item: {item} for item in cdi_items}, special_cases, pattern_map, stem_map])
 
     return lang_map
 
@@ -159,13 +163,13 @@ def write_lang_counts(language, lang_counts):
         for item, count in lang_counts.iteritems():
             count_writer.writerow([item, str(count)])
 
-#languages = ["english", "italian", "norwegian", "russian", "spanish", "swedish", "turkish"]
-            # "danish", "german", "cantonese" "hebrew" "mandarin" "croatian"
-#for language in languages:
-#    lang_freqs = get_freqs(language)
-#    write_freqs(language, lang_freqs)
+languages = ["italian", "norwegian", "russian", "spanish", "swedish", "turkish"] #"english",
+             #"danish", "german", "cantonese" "hebrew" "mandarin" "croatian"
+for language in languages:
+   lang_freqs = get_freqs(language)
+   write_freqs(language, lang_freqs)
 
-eng = get_freqs("English")
+#eng = get_freqs("English")
 
 #get_freqs("hebrew")
 #get_freqs("english")
