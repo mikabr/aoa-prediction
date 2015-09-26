@@ -1,6 +1,3 @@
-Analysis 2: Cross-Linguistic Data
----------------------------------
-
 ```{r}
 # predictors <- c("frequency", "num_characters", "concreteness",
 #                 "valence", "arousal", "babiness")

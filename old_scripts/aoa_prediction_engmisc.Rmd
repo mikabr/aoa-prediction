@@ -1,0 +1,94 @@
+```{r}
+english_class_coef_open <- english_model_data %>%
+  split(.$lexical_class) %>%
+  map(function(split_data) {
+    model <- lm(all_predictor_formula, data = split_data)
+    tidy(model) %>%
+      mutate(lexical_class = unique(split_data$lexical_class))
+  }) %>%
+  bind_rows %>%
+  filter(term != "(Intercept)") %>%
+  mutate(term = factor(term, levels = predictor_levels))
+```
+  
+```{r, fig.width = 9, fig.height = 4}
+sample_sizes <- english_model_data %>%
+group_by(lexical_class) %>%
+  summarise(n = n()) %>%
+  mutate(category_size = sprintf("%s (%d)", lexical_class, n))
+
+ggplot(english_class_coef_open, aes(x = term, y = abs(estimate), fill = term)) +
+  facet_grid(~lexical_class, labeller = function(variable, value) {
+    sample_sizes$category_size[sample_sizes$lexical_class == value]
+  }) +
+  geom_bar(stat = "identity") +
+ geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
+                    ymax = abs(estimate) + 1.96 * std.error)) +
+  geom_errorbar(aes(ymin = abs(estimate), ymax = abs(estimate)),
+                linetype = "dotted", colour = "gray30",
+                data = english_coef_open) +
+  scale_fill_solarized(guide = FALSE) +
+  xlab("") +
+  ylab("Coefficient Magnitude\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+english_age_coef_2 <- english_predictions_open %>%
+  mutate(age_group = as.numeric(cut(aoa, 2))-1)
+
+
+  lm(age_group ~ frequency + num_syllables + num_phonemes + concreteness + 
+    valence + arousal + babiness + iconicity, data = english_age_coef_2) %>%
+  summary()
+  
+  split(paste(.$age_group)) %>%
+  map(function(split_data) {
+#    model <- lm(all_predictor_formula, data = split_data)
+    model <- lm(aoa ~ frequency + num_syllables + num_phonemes + concreteness + 
+    valence + arousal + babiness + iconicity, data = split_data)
+    tidy(model) %>%
+      mutate(age_group = unique(split_data$age_group))
+  }) %>%
+  bind_rows %>%
+  filter(term != "(Intercept)")
+
+english_age_coef_3 <- english_predictions_open %>%
+  mutate(age_group = cut(aoa, 3)) %>%
+  split(paste(.$age_group)) %>%
+  map(function(split_data) {
+    model <- lm(class_formula, data = split_data)
+    tidy(model) %>%
+      mutate(age_group = unique(split_data$age_group))
+  }) %>%
+  bind_rows %>%
+  filter(term != "(Intercept)")
+```
+
+```{r, fig.width = 6, fig.height = 4}
+ggplot(english_age_coef_2, aes(x = age_group, y = abs(estimate), colour = term)) +
+  geom_point() +
+  geom_line(aes(group = term)) +
+  geom_dl(aes(label = term), method = list("first.qp", dl.trans(x = x - 0.2), cex = 0.8)) +
+  geom_dl(aes(label = term), method = list("last.qp", dl.trans(x = x + 0.2), cex = 0.8)) +
+  scale_colour_solarized(guide = FALSE) +
+  xlab("\nAge Group (months)") +
+  ylab("Coefficient Magnitude\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank())
+```
+
+```{r, fig.width = 6, fig.height = 4}
+ggplot(english_age_coef_3, aes(x = age_group, y = abs(estimate), colour = term)) +
+  geom_point() +
+  geom_line(aes(group = term)) +
+  geom_dl(aes(label = term), method = list("first.qp", dl.trans(x = x - 0.2), cex = 0.8)) +
+  geom_dl(aes(label = term), method = list("last.qp", dl.trans(x = x + 0.2), cex = 0.8)) +
+  scale_colour_solarized(guide = FALSE) +
+  xlab("\nAge Group (months)") +
+  ylab("Coefficient Magnitude\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank())
+```
