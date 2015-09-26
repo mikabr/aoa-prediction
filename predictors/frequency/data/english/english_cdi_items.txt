@@ -10,9 +10,7 @@ uh oh
 vroom
 woof woof
 yum yum
-alligator
 animal
-ant
 bear
 bee
 bird
@@ -31,64 +29,42 @@ fish (animal)
 frog
 giraffe
 goose
-hen
 horse
 kitty
 lamb
 lion
 monkey
-moose
 mouse
 owl
 penguin
 pig
 pony
 puppy
-rooster
 sheep
 squirrel
 teddybear
 tiger
 turkey
 turtle
-wolf
-zebra
 airplane
 bicycle
-boat
 bus
 car
 firetruck
-helicopter
 motorcycle
-sled
 stroller
-tractor
 train
-tricycle
 truck
 ball
 balloon
-bat
 block
 book
 bubbles
-chalk
-crayon
 doll
-game
-glue
 pen
-pencil
-play dough
-present
-puzzle
-story
 toy (object)
 apple
-applesauce
 banana
-beans
 bread
 butter
 cake
@@ -98,145 +74,107 @@ cereal
 cheerios
 cheese
 chicken (food)
-chocolate
 coffee
-coke
 cookie
-corn
 cracker
-donut
 drink (beverage)
 egg
 fish (food)
 food
-french fries
-grapes
-green beans
-gum
-hamburger
-ice
 ice cream
-jello
-jelly
 juice
-lollipop
 meat
-melon
 milk
-muffin
 noodles
-nuts
 orange (food)
-pancake
 peas
-peanut butter
-pickle
 pizza
-popcorn
-popsicle
-potato chip
-potato
-pretzel
-pudding
-pumpkin
 raisin
-salt
-sandwich
-sauce
-soda
-soup
 spaghetti
-strawberry
 toast
-tuna
-vanilla
-vitamins
 water (beverage)
-yogurt
 beads
-belt
 bib
 boots
 button
 coat
 diaper
-dress
-gloves
+dress (object)
 hat
 jacket
 jeans
-mittens
 necklace
 pajamas
 pants
-scarf
 shirt
 shoe
 shorts
-slipper
-sneaker
-snowsuit
 sock
 sweater
-tights
-underpants
 zipper
-ankle
 arm
 belly button
-butt
 cheek
-chin
 ear
 eye
 face
-finger
 foot
+finger
 hair
 hand
 head
 knee
 leg
-lips
 mouth
 nose
-owie
-penis
-shoulder
+owie/boo boo
+tooth
 toe
 tongue
-tooth
 tummy
-vagina
-basket
+bathroom
+bathtub
+bed
+bedroom
+chair
+couch
+crib
+door
+drawer
+garage
+high chair
+kitchen
+living room
+oven
+play pen
+potty
+refrigerator
+rocking chair
+sink
+stairs
+stove
+table
+TV
+window
 blanket
 bottle
 bowl
 box
 broom
 brush
-bucket
-camera
-can (object)
 clock
-comb (object)
+comb
 cup
 dish
 fork
-garbage
 glass
 glasses
 hammer
-jar
 keys
-knife
 lamp
 light
 medicine
 money
-mop
-nail
-napkin
 paper
 penny
 picture
@@ -248,101 +186,38 @@ radio
 scissors
 soap
 spoon
-tape
 telephone
-tissue
 toothbrush
 towel
 trash
-tray
 vacuum
-walker
 watch (object)
-basement
-bathroom
-bathtub
-bed
-bedroom
-bench
-chair
-closet
-couch
-crib
-door
-drawer
-dryer
-garage
-high chair
-kitchen
-living room
-oven
-play pen
-porch
-potty
-rocking chair
-refrigerator
-room
-shower
-sink
-sofa
-stairs
-stove
-table
-TV
-window
-washing machine
 backyard
-cloud
-flag
+beach
+church*
 flower
 garden
-grass
-hose
-ladder
-lawn mower
+home
+house
 moon
+outside
+park
+party
 pool
 rain
 rock
-roof
-sandbox
+school
 shovel
-sidewalk
 sky
 slide (object)
 snow
-snowman
-sprinkler
 star
-stick
-stone
-street
+store
 sun
 swing (object)
 tree
 water (not beverage)
-wind
-beach
-camping
-church
-circus
-country
-downtown
-farm
-gas station
-home
-house
-movie
-outside
-park
-party
-picnic
-playground
-school
-store
-woods
 work (place)
-yard
 zoo
 aunt
 baby
@@ -351,36 +226,24 @@ babysitter's name
 boy
 brother
 child
-clown
-cowboy
-daddy
-doctor
-fireman
-friend
+daddy*
 girl
-grandma
-grandpa
+grandma*
+grandpa*
 lady
-mailman
 man
-mommy
-nurse
+mommy*
 child's own name
 people
 person
-pet's name
-police
 sister
 teacher
 uncle
 bath
 breakfast
 bye
-call (on phone)
 dinner
-give me five!
-gonna get you!
-go potty
+don't
 hello
 hi
 lunch
@@ -390,127 +253,80 @@ no
 pattycake
 peekaboo
 please
-shh
-shopping
-snack
-so big!
+shh/shush/hush
 thank you
-this little piggy
-turn around
+wait
+wanna/want to
 yes
 bite
 blow
 break
 bring
-build
 bump
-buy
-carry
-catch
-chase
-clap
 clean (action)
-climb
 close
-cook
-cover
 cry
-cut
 dance
 draw
 drink (action)
 drive
-drop
-dry (action)
-dump
 eat
 fall
 feed
-find
 finish
-fit
-fix
 get
 give
 go
-hate
-have
-hear
 help
-hide
 hit
-hold
 hug
 hurry
 jump
 kick
 kiss
-knock
-lick
-like
-listen
 look
 love
-make
 open
-paint
-pick
 play
-pour
-pretend
 pull
 push
 put
 read
 ride
-rip
 run
 say
 see
-shake
-share
 show
 sing
-sit
-skate
 sleep
-slide (action)
 smile
-spill
 splash
-stand
-stay
 stop
-sweep
 swim
 swing (action)
 take
-talk
-taste
-tear
-think
 throw
 tickle
 touch
-wait
-wake
+watch (action)
 walk
 wash
-watch (action)
 wipe
-wish
-work (action)
 write
+day
+later
+morning
+night
+now
+today
+tomorrow
+tonight
 all gone
 asleep
-awake
 bad
-better
 big
-black
 blue
 broken
-brown
 careful
 clean (description)
 cold
@@ -521,161 +337,60 @@ dry (description)
 empty
 fast
 fine
-first
-full
 gentle
 good
-green
 happy
 hard
-heavy
-high
 hot
 hungry
 hurt
-last
 little (description)
-long
-loud
-mad
 naughty
-new
 nice
-noisy
 old
-orange (description)
-poor
 pretty
-quiet
 red
-sad
 scared
 sick
 sleepy
-slow
 soft
-sticky
-stuck
 thirsty
-tiny
 tired
 wet
-white
-windy
-yellow
 yucky
-after
-before
-day
-later
-morning
-night
-now
-time
-today
-tomorrow
-tonight
-yesterday
-he
-her
-hers
-him
 his
+her
 I
 it
 me
 mine
 my
-myself
-our
-she
 that
-their
-them
-these
-they
 this
-those
-us
-we
 you
 your
-yourself
 how
 what
-when (question)
-where (question)
-which
+when
+where
 who
 why
-about
-above
-around
-at
 away
 back
-behind
-beside
-by
 down
-for
-here
-inside
 in
-into
-next to
-of
+inside
 off
 on
-on top of
 out
-over
 there
-to
 under
 up
-with
-a
 all
-a lot
-an
 another
-any
-each
-every
 more
-much
 none
 not
 other
 same
 some
-the
-too
-am
-are
-be
-can (auxiliary)
-could
-did
-do
-does
-don't
-gonna
-gotta
-hafta
-is
-lemme
-need
-try
-wanna
-was
-were
-will
-would
-and
-because
-but
-if
-so
-then
