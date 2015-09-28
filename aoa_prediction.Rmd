@@ -1,5 +1,5 @@
 ---
-title: <center>Predicting words' age of acquisition</center>
+title: <center>Predicting Age of Acquisition for Early Words Across Languages</center>
 author: <center>Mika Braginsky, Daniel Yurovsky, Virginia Marchman, and Michael C. Frank</center>
 date: <center>`r Sys.Date()`</center>
 output:
@@ -10,7 +10,8 @@ output:
 
 ```{r setup, echo = FALSE}
 library(knitr)
-opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE, echo = FALSE, fig.align = "center")
+opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE,
+               echo = FALSE, fig.align = "center")
 ```
 
 ```{r, cache = FALSE}
@@ -42,7 +43,7 @@ words <- items %>%
 
 uni_lemmas <- words %>%
   filter(language == "English") %>%
-  select(uni_lemma)
+  select(lexical_class, uni_lemma)
 
 ```
 
@@ -90,8 +91,7 @@ valence <- read_csv("predictors/valence/valence.csv") %>%
 # write_csv(data.frame(uni_lemma = missing_babiness),
 #           "predictors/valence/valence_replace.csv")
 
-replacements_valence <- read_csv("predictors/valence/valence_replace.csv") %>%
-  select(-lexical_class)
+replacements_valence <- read_csv("predictors/valence/valence_replace.csv")
 uni_valences <- uni_lemmas %>%
   left_join(replacements_valence) %>%
   rowwise() %>%
@@ -164,24 +164,42 @@ uni_joined <- aoa_data %>%
   mutate(frequency = log(frequency))
 ```
 
+```{r}
+num_characters <- function(words) {
+  strsplit(words, ", ") %>%
+    map(function(word_set) {
+      word_set %>%
+        unlist() %>%
+        strsplit(" [(].*[)]") %>%
+        unlist() %>%
+        strsplit("/") %>%
+        unlist() %>%
+        nchar() %>%
+        mean()
+    }) %>%
+    unlist()
+}
+```
+
 *  *  *  *
 
 Analysis 1: English
 -------------------
 
 ```{r}
-english_predictors <- c("frequency", "num_syllables", "num_phonemes", "concreteness",
-                        "valence", "arousal", "babiness", "iconicity") #"dominance",
+english_predictors <- c("frequency",  "concreteness", "num_characters",
+                        "valence", "arousal", "babiness")
+# "iconicity" "dominance" "num_syllables" "num_phonemes"
 
 woof_concreteness <- unique(uni_joined$concreteness[uni_joined$uni_lemma == "woof woof"])
 mean_babiness <- mean(filter(uni_joined, language == "English")$babiness, na.rm = TRUE)
 mean_iconicity <- mean(filter(uni_joined, language == "English")$iconicity, na.rm = TRUE)
 
 english_data <- uni_joined %>%
-  filter(language == "English", measure == "understands",
-         !(uni_lemma %in% c("don't", "babysitter's name", "child's own name"))) %>%
+  filter(language == "English", measure == "understands") %>%
   rowwise() %>%
-  mutate(valence = if (is.na(valence)) 5 else valence,
+  mutate(num_characters = num_characters(words),
+         valence = if (is.na(valence)) 5 else valence,
          arousal = if (is.na(arousal)) 1 else arousal,
          concreteness = if (is.na(concreteness)) woof_concreteness else concreteness,
          babiness = if (is.na(babiness)) mean_babiness else babiness,
@@ -201,7 +219,9 @@ english_na_lemmas <- english_data %>%
 
 ```{r}
 english_model_data <- english_data %>%
-  filter(!is.na(frequency)) %>% # complete.cases(.))
+  ungroup() %>%
+  select_(.dots = c("language", "lexical_class", "uni_lemma", "aoa", english_predictors)) %>%
+  filter(complete.cases(.)) %>%
   mutate(lexical_class = factor(lexical_class,
                                 levels = c("nouns", "adjectives", "verbs",
                                            "function_words", "other"),
@@ -230,7 +250,7 @@ english_coef <- english_coef %>%
   mutate(term = factor(term, levels = english_predictor_levels))
 ```
 
-```{r, fig.width = 12, fig.height = 7}
+```{r, fig.width = 12, fig.height = 8}
 english_plot_data <- english_data %>%
   gather_("predictor", "value", english_predictors) %>%
   mutate(predictor = factor(predictor, levels = english_predictor_levels),
@@ -284,8 +304,8 @@ ggplot(english_coef, aes(x = term, y = abs(estimate), fill = term)) +
 
 ```{r}
 english_predictor_means <- english_data %>%
-  filter(aoa <= 25) %>%
-  mutate(aoa = cut(floor(aoa), breaks = c(4, 8, 12, 16, 20, 24))) %>%
+  filter(aoa >= 6, aoa <= 25) %>%
+  mutate(aoa = cut(floor(aoa), 4)) %>% #breaks = c(4, 8, 12, 16, 20, 24))) %>%
   gather_("predictor", "value", english_predictors) %>%
   group_by(predictor, aoa) %>%
   filter(!is.na(value)) %>%
@@ -318,46 +338,31 @@ woof_concreteness <- unique(uni_joined$concreteness[uni_joined$uni_lemma == "woo
 mean_babiness <- mean(filter(uni_joined, language == "English")$babiness, na.rm = TRUE)
 mean_iconicity <- mean(filter(uni_joined, language == "English")$iconicity, na.rm = TRUE)
 
-num_characters <- function(words) {
-  strsplit(words, ", ") %>%
-    map(function(word_set) {
-      word_set %>%
-        unlist() %>%
-        strsplit(" [(].*[)]") %>%
-        unlist() %>%
-        strsplit("/") %>%
-        unlist() %>%
-        nchar() %>%
-        mean()
-    }) %>%
-    unlist()
-}
-
 crossling_data <- uni_joined %>%
-  filter(measure == "understands",
-         !(uni_lemma %in% c("don't", "babysitter's name", "child's own name"))) %>%
+  filter(measure == "understands") %>%
   rowwise() %>%
-  mutate(valence = if (is.na(valence)) 5 else valence,
+  mutate(num_characters = num_characters(words),
+         valence = if (is.na(valence)) 5 else valence,
          arousal = if (is.na(arousal)) 1 else arousal,
          concreteness = if (is.na(concreteness)) woof_concreteness else concreteness,
          babiness = if (is.na(babiness)) mean_babiness else babiness,
-         iconicity = if (is.na(iconicity)) mean_iconicity else iconicity,
-         num_characters = num_characters(words)) %>%
-  ungroup() %>%
+         iconicity = if (is.na(iconicity)) mean_iconicity else iconicity) %>%
   group_by(language, measure) %>%
   mutate_each_(funs(as.numeric(scale(.))), crossling_predictors)
 
 crossling_na_lemmas <- crossling_data %>%
-  select_(.dots = c("uni_lemma", crossling_predictors)) %>%
+  select_(.dots = c("language", "uni_lemma", crossling_predictors)) %>%
   gather_("predictor", "value", crossling_predictors) %>%
   filter(is.na(value)) %>%
-  group_by(uni_lemma) %>%
+  group_by(language, uni_lemma) %>%
   summarise(num_na = n(), na_preds = paste(predictor, collapse = ", "))
 ```
 
 ```{r}
 crossling_model_data <- crossling_data %>%
-  filter(!is.na(frequency)) %>%
+  ungroup() %>%
+  select_("language", "lexical_class", "uni_lemma", "aoa", crossling_predictors) %>%
+  filter(complete.cases(.)) %>%
   mutate(lexical_class = factor(lexical_class,
                                 levels = c("nouns", "adjectives", "verbs",
                                            "function_words", "other"),
@@ -365,9 +370,9 @@ crossling_model_data <- crossling_data %>%
                                            "Function Words", "Other")))
 
 crossling_model <- lmer(aoa ~ frequency + num_characters + concreteness + valence + 
-                          arousal + babiness + (frequency | language) +
-                          (num_characters | language) + (concreteness | language) +
-                          (valence | language) + (arousal | language) + (babiness | language),
+                          arousal + babiness + (1 + frequency + num_characters + 
+                                                  concreteness + valence + arousal + 
+                                                  babiness | language),
                         data = crossling_data)
 
 crossling_coef <- data.frame(term = row.names(summary(crossling_model)$coefficients),
@@ -387,27 +392,6 @@ crossling_coef <- crossling_coef %>%
 
 ```{r, fig.width = 5, fig.height = 4}
 ggplot(crossling_coef, aes(x = term, y = abs(estimate), fill = term)) +
-  geom_bar(stat = "identity") +
-  geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
-                     ymax = abs(estimate) + 1.96 * std.error)) +
-  scale_fill_solarized(guide = FALSE) +
-  xlab("") +
-  ylab("Coefficient Magnitude\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
-joined_coef <- bind_rows(mutate(english_coef, type = "English"),
-                         mutate(crossling_coef, type = "Cross-Linguistic")) %>%
-  mutate(type = factor(type, levels = c("English", "Cross-Linguistic")),
-         term = factor(term, levels = c(english_predictor_levels, "num_characters")))
-```
-
-```{r, fig.width = 7, fig.height = 4}
-ggplot(joined_coef, aes(x = term, y = abs(estimate), fill = term)) +
-  facet_wrap("type", scales = "free_x") +
   geom_bar(stat = "identity") +
   geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
                      ymax = abs(estimate) + 1.96 * std.error)) +
@@ -450,7 +434,7 @@ crossling_predictor_means_by_lang %>%
 
 ```{r}
 crossling_predictor_means <- crossling_data %>%
-  filter(aoa <= 25) %>%
+  filter(aoa < 25) %>%
   mutate(aoa = cut(floor(aoa), breaks = c(4, 8, 12, 16, 20, 24))) %>%
   gather_("predictor", "value", crossling_predictors) %>%
   group_by(predictor, aoa) %>%
@@ -473,4 +457,95 @@ crossling_predictor_means %>%
   theme(text = element_text(family = font),
         panel.grid.minor = element_blank(),
         axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+*  *  *  *
+
+Summary Plots
+-------------
+
+```{r}
+joined_coef <- bind_rows(mutate(english_coef, type = "English"),
+                         mutate(crossling_coef, type = "Cross-Linguistic")) %>%
+  mutate(type = factor(type, levels = c("English", "Cross-Linguistic")),
+         term = factor(term, levels = english_predictor_levels))
+```
+
+```{r, fig.width = 7, fig.height = 4}
+ggplot(joined_coef, aes(x = term, y = abs(estimate), fill = term)) +
+  facet_wrap("type", scales = "free_x") +
+  geom_bar(stat = "identity") +
+  geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
+                     ymax = abs(estimate) + 1.96 * std.error)) +
+  scale_fill_solarized(guide = FALSE) +
+  xlab("") +
+  ylab("Coefficient Magnitude\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+english_predictor_means_2 <- english_data %>%
+  filter(floor(aoa) > 4, floor(aoa) <= 24) %>%
+  mutate(aoa = cut(floor(aoa), breaks = c(4, 14, 24))) %>%
+  gather_("predictor", "value", english_predictors) %>%
+  group_by(predictor, aoa) %>%
+  filter(!is.na(value)) %>%
+  multi_boot_standard(column = "value")
+
+crossling_predictor_means_2 <- crossling_data %>%
+  filter(floor(aoa) > 4, floor(aoa) <= 24) %>%
+  mutate(aoa = cut(floor(aoa), breaks = c(4, 14, 24))) %>%
+  gather_("predictor", "value", crossling_predictors) %>%
+  group_by(predictor, aoa) %>%
+  filter(!is.na(value)) %>%
+  multi_boot_standard(column = "value")
+
+level_base <- english_predictor_means_2 %>% filter(aoa == "(4,14]")
+predictor_mean_levels <- level_base$predictor[order(level_base$mean, decreasing = TRUE)]
+
+joined_predictor_means <- bind_rows(
+  mutate(english_predictor_means_2, type = "English"),
+  mutate(crossling_predictor_means_2, type = "Cross-Linguistic")) %>%
+  mutate(type = factor(type, levels = c("English", "Cross-Linguistic")))
+```
+
+```{r, fig.width = 8, fig.height = 4}
+joined_predictor_means %>%
+  mutate(predictor = factor(predictor, levels = predictor_mean_levels)) %>%
+  ggplot(aes(x = aoa, y = mean, color = predictor)) +
+  facet_wrap(~type) +
+  geom_point(position = position_dodge(width = 0.1)) +
+  geom_linerange(aes(ymin = ci_lower, ymax = ci_upper, group = predictor),
+                  alpha = 0.4,
+                  position = position_dodge(width = 0.1)) +
+  geom_line(aes(group = predictor), position = position_dodge(width = 0.1)) +
+  geom_dl(aes(label = predictor),
+          method = list("first.qp", dl.trans(x = x - 0.3), cex = 0.6, fontfamily = font)) +
+  geom_dl(aes(label = predictor),
+          method = list("last.qp", dl.trans(x = x + 0.3), cex = 0.6, fontfamily = font)) +
+  scale_colour_solarized(guide = FALSE) +
+  xlab("\nAge of Acquisition (months)") +
+  ylab("Mean Predictor Z-Score\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank())
+```
+
+```{r, fig.width = 8, fig.height = 4}
+joined_predictor_means %>%
+  mutate(predictor = factor(predictor, levels = english_predictor_levels)) %>%
+  ggplot(aes(x = aoa, y = mean, color = predictor)) +
+  facet_wrap(~type) +
+  geom_point() +
+  geom_line(aes(group = predictor)) +
+  geom_dl(aes(label = predictor),
+          method = list("first.qp", dl.trans(x = x - 0.2), cex = 0.6, fontfamily = font)) +
+  geom_dl(aes(label = predictor),
+          method = list("last.qp", dl.trans(x = x + 0.2), cex = 0.6, fontfamily = font)) +
+  scale_colour_solarized(guide = FALSE) +
+  xlab("\nAge of Acquisition (months)") +
+  ylab("Mean Predictor Z-Score\n") +
+  theme(text = element_text(family = font),
+        panel.grid.minor = element_blank())
 ```
