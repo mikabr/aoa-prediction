@@ -1,7 +1,7 @@
 ---
-title: <center>Predicting Age of Acquisition for Early Words Across Languages</center>
-author: <center>Mika Braginsky, Daniel Yurovsky, Virginia Marchman, and Michael C. Frank</center>
-date: <center>`r Sys.Date()`</center>
+title: Predicting Age of Acquisition for Early Words Across Languages
+author: Mika Braginsky, Daniel Yurovsky, Virginia Marchman, and Michael C. Frank
+date: "`r Sys.Date()`"
 output:
   html_document:
     highlight: tango
@@ -10,11 +10,10 @@ output:
 
 ```{r setup, echo = FALSE}
 library(knitr)
-opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE,
-               echo = FALSE, fig.align = "center")
+opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE, fig.align = "center")
 ```
 
-```{r, cache = FALSE}
+```{r, cache = FALSE, echo = FALSE}
 library(dplyr)
 library(tidyr)
 library(purrr)
@@ -27,13 +26,11 @@ library(lazyeval)
 library(broom)
 library(directlabels)
 library(lme4)
-theme_set(theme_bw(base_size = 14))
-font <- "Open Sans"
+theme_set(theme_mikabr())
 ```
 
+Get items, words, and uni_lemmas.
 ```{r}
-# get items, words, and uni_lemmas
-
 items <- get_item_data(mode = "local") %>%
   mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))),
          definition = tolower(definition))
@@ -47,14 +44,13 @@ uni_lemmas <- words %>%
 
 ```
 
+Get AoA estimates.
 ```{r}
-# get AoA estimates
 aoa_data <- read_csv("aoa_data.csv")
 ```
 
+Get frequency estimates.
 ```{r}
-# get frequency estimates
-
 instruments <- aoa_data %>%
   select(language, form) %>%
   distinct()
@@ -79,9 +75,8 @@ uni_freqs <- freqs %>%
   summarise(frequency = sum(frequency))
 ```
 
+Get estimates of valence, arousal, and dominance
 ```{r}
-# get estimates of valence, arousal, and dominance
-
 valence <- read_csv("predictors/valence/valence.csv") %>%
   select(Word, V.Mean.Sum, A.Mean.Sum, D.Mean.Sum) %>%
   rename(word = Word, valence = V.Mean.Sum, arousal = A.Mean.Sum,
@@ -102,9 +97,8 @@ uni_valences <- uni_lemmas %>%
 #uni_valences <- read_csv("predictors/valence/uni_lemma_valence.csv")
 ```
 
+Get estimates of iconicity and babiness.
 ```{r}
-# get estimates of iconicity and babiness
-
 babiness <- read_csv("predictors/babiness_iconicity/english_iconicity.csv") %>%
   group_by(word) %>%
   summarise(iconicity = mean(rating),
@@ -125,9 +119,8 @@ uni_babiness <- uni_lemmas %>%
 #uni_babiness <- read_csv("predictors/babiness_iconicity/babiness_iconicity.csv") 
 ```
 
+Get estimates of concreteness.
 ```{r}
-# get estimates of concreteness
-
 concreteness <- read_csv("predictors/concreteness/concreteness.csv")
 
 #missing_concreteness <- setdiff(uni_lemmas$uni_lemma, concreteness$Word)
@@ -145,16 +138,16 @@ uni_concreteness <- uni_lemmas %>%
   select(uni_lemma, concreteness)
 ```
 
+Get (English) phoneme and syllable counts.
 ```{r}
-# get (English) phoneme and syllable counts
 phonemes <- read_csv("predictors/phonemes/english_phonemes.csv") %>%
   mutate(num_syllables = unlist(map(strsplit(syllables, " "), length)),
          num_phonemes = nchar(gsub("[', ]", "", syllables))) %>%
   select(-phones, -syllables)
 ```
 
+Put together data and predictors.
 ```{r}
-# put together data and predictors
 uni_joined <- aoa_data %>%
   left_join(uni_freqs) %>%
   left_join(uni_valences) %>%
@@ -164,6 +157,7 @@ uni_joined <- aoa_data %>%
   mutate(frequency = log(frequency))
 ```
 
+Function to get number of characters from item definitions.
 ```{r}
 num_characters <- function(words) {
   strsplit(words, ", ") %>%
@@ -267,8 +261,7 @@ ggplot(english_plot_data, aes(x = value, y = aoa, colour = lexical_class)) +
   scale_colour_solarized(name = "") +
   xlab("\nPredictor Z-Score") +
   ylab("Age of Acquisition (months)\n") +
-  theme(text = element_text(family = font),
-        legend.position = "bottom",
+  theme(legend.position = "bottom",
         legend.direction = "horizontal")
 ```
 
@@ -283,8 +276,7 @@ ggplot(english_predictions, aes(x = predicted_aoa, y = aoa)) +
   scale_y_continuous(name = "Age of Acquisition (months)\n",
                      limits = c(6, 27), breaks = seq(6, 26, by = 2)) +
   coord_fixed() +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank(),
+  theme(panel.grid.minor = element_blank(),
         legend.position = c(0.12, 0.9),
         legend.background = element_rect(fill = "transparent"))
 ```
@@ -297,9 +289,7 @@ ggplot(english_coef, aes(x = term, y = abs(estimate), fill = term)) +
   scale_fill_solarized(guide = FALSE) +
   xlab("") +
   ylab("Coefficient Magnitude\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
@@ -320,9 +310,7 @@ ggplot(english_predictor_means, aes(x = aoa, y = mean, color = predictor)) +
   scale_colour_solarized(guide = FALSE) +
   xlab("\nAge of Acquisition (months)") +
   ylab("Mean Predictor Z-Score\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 30, hjust = 1))
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 
 *  *  *  *
@@ -398,9 +386,7 @@ ggplot(crossling_coef, aes(x = term, y = abs(estimate), fill = term)) +
   scale_fill_solarized(guide = FALSE) +
   xlab("") +
   ylab("Coefficient Magnitude\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
@@ -425,9 +411,7 @@ crossling_predictor_means_by_lang %>%
   scale_colour_solarized(name = "") +
   xlab("\nAge of Acquisition (months)") +
   ylab("Mean Predictor Z-Score\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 30, hjust = 1),
+  theme(axis.text.x = element_text(angle = 30, hjust = 1),
         legend.position = "bottom",
         legend.direction = "horizontal")
 ```
@@ -454,9 +438,7 @@ crossling_predictor_means %>%
   scale_colour_solarized(guide = FALSE) +
   xlab("\nAge of Acquisition (months)") +
   ylab("Mean Predictor Z-Score\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 30, hjust = 1))
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 
 *  *  *  *
@@ -480,9 +462,7 @@ ggplot(joined_coef, aes(x = term, y = abs(estimate), fill = term)) +
   scale_fill_solarized(guide = FALSE) +
   xlab("") +
   ylab("Coefficient Magnitude\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank(),
-        axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
@@ -522,30 +502,10 @@ joined_predictor_means %>%
                   position = position_dodge(width = 0.1)) +
   geom_line(aes(group = predictor), position = position_dodge(width = 0.1)) +
   geom_dl(aes(label = predictor),
-          method = list("first.qp", dl.trans(x = x - 0.3), cex = 0.6, fontfamily = font)) +
+          method = list("first.qp", dl.trans(x = x - 0.3), cex = 0.6)) +
   geom_dl(aes(label = predictor),
-          method = list("last.qp", dl.trans(x = x + 0.3), cex = 0.6, fontfamily = font)) +
+          method = list("last.qp", dl.trans(x = x + 0.3), cex = 0.6)) +
   scale_colour_solarized(guide = FALSE) +
   xlab("\nAge of Acquisition (months)") +
-  ylab("Mean Predictor Z-Score\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank())
-```
-
-```{r, fig.width = 8, fig.height = 4}
-joined_predictor_means %>%
-  mutate(predictor = factor(predictor, levels = english_predictor_levels)) %>%
-  ggplot(aes(x = aoa, y = mean, color = predictor)) +
-  facet_wrap(~type) +
-  geom_point() +
-  geom_line(aes(group = predictor)) +
-  geom_dl(aes(label = predictor),
-          method = list("first.qp", dl.trans(x = x - 0.2), cex = 0.6, fontfamily = font)) +
-  geom_dl(aes(label = predictor),
-          method = list("last.qp", dl.trans(x = x + 0.2), cex = 0.6, fontfamily = font)) +
-  scale_colour_solarized(guide = FALSE) +
-  xlab("\nAge of Acquisition (months)") +
-  ylab("Mean Predictor Z-Score\n") +
-  theme(text = element_text(family = font),
-        panel.grid.minor = element_blank())
+  ylab("Mean Predictor Z-Score\n")
 ```

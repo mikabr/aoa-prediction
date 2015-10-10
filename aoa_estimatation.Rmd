@@ -3,9 +3,9 @@ title: Estimating words' age of acquisition
 author: "Mika Braginsky and Daniel Yurovsky"
 date: "`r Sys.Date()`"
 output:
-html_document:
-  highlight: tango
-  theme: spacelab
+  html_document:
+    highlight: tango
+    theme: spacelab
 ---
 
 ```{r setup, echo = FALSE}
@@ -23,8 +23,7 @@ library(langcog)
 library(wordbankr)
 library(boot)
 library(lazyeval)
-theme_set(theme_bw(base_size = 14))
-font <- "Open Sans"
+theme_set(theme_mikabr())
 ```
 
 Connect to the Wordbank database and pull out the raw data.
@@ -131,6 +130,14 @@ aoa_data <- all_prop_data %>%
          words, aoa) %>%
   distinct() %>%
   filter(aoa > 5 & aoa < 31)
-  #mutate(aoa = if (aoa > 5 & aoa < 31) aoa else NA)
 #write_csv(aoa_data, "aoa_data.csv")
+```
+
+```{r, fig.width=10, fig.height=8}
+ggplot(aoa_data, aes(x = aoa, fill = language)) +
+  facet_wrap(~language) +
+  geom_bar() +
+  xlab("Age of Acquisition (months)") +
+  ylab("Count") +
+  scale_fill_solarized(guide = FALSE)
 ```
