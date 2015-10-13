@@ -1,6 +1,7 @@
 "language","form","measure","lexical_category","lexical_class","uni_lemma","words","aoa"
 "Croatian","WG","produces","function_words","function_words","all","sve",20.0845
 "Croatian","WG","produces","function_words","function_words","another","drugi",22.1613
+"Croatian","WG","produces","function_words","function_words","back","iza",-776.404
 "Croatian","WG","produces","function_words","function_words","down","dolje",20.1351
 "Croatian","WG","produces","function_words","function_words","her","njezin",16.1287
 "Croatian","WG","produces","function_words","function_words","here","tu",17.707
@@ -23,6 +24,7 @@
 "Croatian","WG","produces","function_words","function_words","that","ono",18.8737
 "Croatian","WG","produces","function_words","function_words","there","tamo",20.6681
 "Croatian","WG","produces","function_words","function_words","this","ovo",19.0652
+"Croatian","WG","produces","function_words","function_words","under","ispod",-776.404
 "Croatian","WG","produces","function_words","function_words","up","gore",19.113
 "Croatian","WG","produces","function_words","function_words","what","što",23.3162
 "Croatian","WG","produces","function_words","function_words","when (question)","kad(a)",16.1673
@@ -36,11 +38,13 @@
 "Croatian","WG","produces","nouns","nouns","apple","jabuka",16.5713
 "Croatian","WG","produces","nouns","nouns","arm","ruka",16.7846
 "Croatian","WG","produces","nouns","nouns","armchair","fotelja",16.1287
+"Croatian","WG","produces","nouns","nouns","backyard","dvorište",-776.404
 "Croatian","WG","produces","nouns","nouns","ball","lopta",16.3287
 "Croatian","WG","produces","nouns","nouns","balloon","balon",18.6395
 "Croatian","WG","produces","nouns","nouns","banana","banana",16.2324
 "Croatian","WG","produces","nouns","nouns","bathroom","kupaonica",16.0787
 "Croatian","WG","produces","nouns","nouns","bathtub","kada",16.0787
+"Croatian","WG","produces","nouns","nouns","beach","plaža",-776.404
 "Croatian","WG","produces","nouns","nouns","bear","medo",16.2397
 "Croatian","WG","produces","nouns","nouns","bed","krevet",16.4582
 "Croatian","WG","produces","nouns","nouns","bee","pčela",21.1536
@@ -53,6 +57,7 @@
 "Croatian","WG","produces","nouns","nouns","book","knjiga",16.0321
 "Croatian","WG","produces","nouns","nouns","boots","čizme",16.1287
 "Croatian","WG","produces","nouns","nouns","bottle","boca",17.1407
+"Croatian","WG","produces","nouns","nouns","bowl","zdjelica",-776.404
 "Croatian","WG","produces","nouns","nouns","box","kutija",18.8342
 "Croatian","WG","produces","nouns","nouns","bread","kruh",16.7329
 "Croatian","WG","produces","nouns","nouns","broom","metla",16.9277
@@ -78,6 +83,7 @@
 "Croatian","WG","produces","nouns","nouns","chicken (animal)","pile",16.7562
 "Croatian","WG","produces","nouns","nouns","chicken (food)","piletina",22.417
 "Croatian","WG","produces","nouns","nouns","chocolate","čokolada",16.1654
+"Croatian","WG","produces","nouns","nouns","church","crkva",-776.404
 "Croatian","WG","produces","nouns","nouns","coat","kaput",17.4882
 "Croatian","WG","produces","nouns","nouns","coffee","čaj",16.9539
 "Croatian","WG","produces","nouns","nouns","comb (object)","češalj",17.1265
@@ -101,6 +107,7 @@
 "Croatian","WG","produces","nouns","nouns","elephant","slon",19.0019
 "Croatian","WG","produces","nouns","nouns","eye","oko",16.6438
 "Croatian","WG","produces","nouns","nouns","face","lice",16.0597
+"Croatian","WG","produces","nouns","nouns","field","livada",-776.404
 "Croatian","WG","produces","nouns","nouns","finger","palac",16.1287
 "Croatian","WG","produces","nouns","nouns","fish (animal)","riba",17.0143
 "Croatian","WG","produces","nouns","nouns","fish (food)","riba",16.5713
@@ -159,6 +166,7 @@
 "Croatian","WG","produces","nouns","nouns","pants","hlače",16.5829
 "Croatian","WG","produces","nouns","nouns","paper","papir",16.0787
 "Croatian","WG","produces","nouns","nouns","park","park",16.1673
+"Croatian","WG","produces","nouns","nouns","party","proslava",-776.404
 "Croatian","WG","produces","nouns","nouns","peas","grašak",16.1673
 "Croatian","WG","produces","nouns","nouns","pen","olovka",17.2451
 "Croatian","WG","produces","nouns","nouns","picture","slika",17.0179
@@ -232,6 +240,7 @@
 "Croatian","WG","produces","nouns","nouns","work (place)","posao",16.1067
 "Croatian","WG","produces","nouns","nouns","yogurt","jogurt",20.0845
 "Croatian","WG","produces","nouns","nouns","zipper","zatvarač",16.1287
+"Croatian","WG","produces","nouns","nouns","zoo","zoološki (vrt)",-776.404
 "Croatian","WG","produces","other","other","aunt","teta",14.8702
 "Croatian","WG","produces","other","other","baa baa","ga-ga",19.6165
 "Croatian","WG","produces","other","other","baby","beba",14.457
@@ -293,6 +302,7 @@
 "Croatian","WG","produces","predicates","adjectives","asleep","spava",16.4247
 "Croatian","WG","produces","predicates","adjectives","bad","zločest(o)",17.4882
 "Croatian","WG","produces","predicates","adjectives","big","velik(o)",18.6651
+"Croatian","WG","produces","predicates","adjectives","blue","plava",-776.404
 "Croatian","WG","produces","predicates","adjectives","clean (description)","čist(o)",16.1067
 "Croatian","WG","produces","predicates","adjectives","cold","hladno, zima",17.7592
 "Croatian","WG","produces","predicates","adjectives","dark","mrak",16.6222
@@ -301,7 +311,9 @@
 "Croatian","WG","produces","predicates","adjectives","empty","prazno",16.0787
 "Croatian","WG","produces","predicates","adjectives","fast","brz(o)",16.9277
 "Croatian","WG","produces","predicates","adjectives","fine","divno, fin(o)",21.3797
+"Croatian","WG","produces","predicates","adjectives","gentle","nježno",-776.404
 "Croatian","WG","produces","predicates","adjectives","good","dobro",17.7592
+"Croatian","WG","produces","predicates","adjectives","happy","sretan",-776.404
 "Croatian","WG","produces","predicates","adjectives","hard","teško",16.1287
 "Croatian","WG","produces","predicates","adjectives","hot","vruće",18.7555
 "Croatian","WG","produces","predicates","adjectives","hungry","gladan",19.1514
@@ -310,10 +322,14 @@
 "Croatian","WG","produces","predicates","adjectives","nice","krasno",16.1673
 "Croatian","WG","produces","predicates","adjectives","old","star(o)",22.3538
 "Croatian","WG","produces","predicates","adjectives","pretty","lijep(o)",16.9228
+"Croatian","WG","produces","predicates","adjectives","red","crvena",-776.404
+"Croatian","WG","produces","predicates","adjectives","scared","strašno",-776.404
 "Croatian","WG","produces","predicates","adjectives","sick","bolestan",16.1287
 "Croatian","WG","produces","predicates","adjectives","sleepy","pospan(o)",19.2316
 "Croatian","WG","produces","predicates","adjectives","slow","polako",18.3264
+"Croatian","WG","produces","predicates","adjectives","soft","mekan(o)",-776.404
 "Croatian","WG","produces","predicates","adjectives","thirsty","žedan",17.8595
+"Croatian","WG","produces","predicates","adjectives","tired","umoran",-776.404
 "Croatian","WG","produces","predicates","adjectives","ugly","ružno",16.1673
 "Croatian","WG","produces","predicates","adjectives","warm","toplo",16.1067
 "Croatian","WG","produces","predicates","adjectives","wet","mok(ro)",16.091
@@ -1014,6 +1030,7 @@
 "English","WG","produces","other","other","bath","bath",17.1602
 "English","WG","produces","other","other","boy","boy",21.6942
 "English","WG","produces","other","other","breakfast","breakfast",20.4033
+"English","WG","produces","other","other","brother","brother",34.6306
 "English","WG","produces","other","other","bye","bye",13.124
 "English","WG","produces","other","other","child","child",29.7303
 "English","WG","produces","other","other","child's own name","child's own name",18.8334
@@ -1043,12 +1060,15 @@
 "English","WG","produces","other","other","no","no",14.7406
 "English","WG","produces","other","other","now","now",21.7857
 "English","WG","produces","other","other","ouch","ouch",16.6563
+"English","WG","produces","other","other","pattycake","pattycake",34.0944
 "English","WG","produces","other","other","peekaboo","peekaboo",17.6172
 "English","WG","produces","other","other","people","people",22.4586
+"English","WG","produces","other","other","person","person",32.8426
 "English","WG","produces","other","other","please","please",17.5243
 "English","WG","produces","other","other","quack quack","quack quack",16.5422
 "English","WG","produces","other","other","shh","shh/shush/hush",17.8927
 "English","WG","produces","other","other","sister","sister",24.634
+"English","WG","produces","other","other","teacher","teacher",50.8825
 "English","WG","produces","other","other","thank you","thank you",17.042
 "English","WG","produces","other","other","today","today",22.061
 "English","WG","produces","other","other","tomorrow","tomorrow",23.7003
@@ -1085,7 +1105,9 @@
 "English","WG","produces","predicates","adjectives","hungry","hungry",21.9933
 "English","WG","produces","predicates","adjectives","hurt","hurt",21.5203
 "English","WG","produces","predicates","adjectives","little (description)","little (description)",25.1469
+"English","WG","produces","predicates","adjectives","naughty","naughty",36.0471
 "English","WG","produces","predicates","adjectives","nice","nice",21.5879
+"English","WG","produces","predicates","adjectives","old","old",33.1803
 "English","WG","produces","predicates","adjectives","pretty","pretty",20.537
 "English","WG","produces","predicates","adjectives","red","red",23.1072
 "English","WG","produces","predicates","adjectives","scared","scared",23.6054
@@ -1332,6 +1354,7 @@
 "English","WG","understands","nouns","nouns","pizza","pizza",16.9612
 "English","WG","understands","nouns","nouns","plant","plant",17.7513
 "English","WG","understands","nouns","nouns","plate","plate",16.3596
+"English","WG","understands","nouns","nouns","play pen","play pen",33.0967
 "English","WG","understands","nouns","nouns","pony","pony",20.2347
 "English","WG","understands","nouns","nouns","pool","pool",18.7646
 "English","WG","understands","nouns","nouns","potty","potty",16.5919
@@ -1403,15 +1426,18 @@
 "English","WG","understands","other","other","bath","bath",8.87009
 "English","WG","understands","other","other","boy","boy",18.2278
 "English","WG","understands","other","other","breakfast","breakfast",13.1554
+"English","WG","understands","other","other","brother","brother",-46.3184
 "English","WG","understands","other","other","bye","bye",7.01071
 "English","WG","understands","other","other","child","child",25.316
 "English","WG","understands","other","other","child's own name","child's own name",5.45979
 "English","WG","understands","other","other","choo choo","choo choo",15.3952
 "English","WG","understands","other","other","cockadoodledoo","cockadoodledoo",16.7073
+"English","WG","understands","other","other","daddy","daddy*",-0.239533
 "English","WG","understands","other","other","day","day",21.8053
 "English","WG","understands","other","other","dinner","dinner",14.2175
 "English","WG","understands","other","other","don't","don't",11.3127
 "English","WG","understands","other","other","girl","girl",19.0778
+"English","WG","understands","other","other","good night","night night",3.13176
 "English","WG","understands","other","other","grandma","grandma*",9.69175
 "English","WG","understands","other","other","grandpa","grandpa*",12.3677
 "English","WG","understands","other","other","grrr","grrr",13.3972
@@ -1422,6 +1448,7 @@
 "English","WG","understands","other","other","lunch","lunch",14.1477
 "English","WG","understands","other","other","man","man",20.0811
 "English","WG","understands","other","other","meow","meow",12.0587
+"English","WG","understands","other","other","mommy","mommy*",1.35593
 "English","WG","understands","other","other","moo","moo",13.4971
 "English","WG","understands","other","other","morning","morning",22.7274
 "English","WG","understands","other","other","nap","nap",12.3861
@@ -1436,6 +1463,7 @@
 "English","WG","understands","other","other","please","please",15.2084
 "English","WG","understands","other","other","quack quack","quack quack",13.1281
 "English","WG","understands","other","other","shh","shh/shush/hush",13.1934
+"English","WG","understands","other","other","sister","sister",-189.361
 "English","WG","understands","other","other","teacher","teacher",26.4909
 "English","WG","understands","other","other","thank you","thank you",12.7343
 "English","WG","understands","other","other","today","today",24.249
@@ -1543,11 +1571,14 @@
 "English","WG","understands","predicates","verbs","write","write",18.6493
 "Hebrew","WG","produces","function_words","function_words","a little","מעט ",26.3789
 "Hebrew","WG","produces","function_words","function_words","also","גם ",24.3385
+"Hebrew","WG","produces","function_words","function_words","back","מאחורי",33.2522
 "Hebrew","WG","produces","function_words","function_words","between","בין",28.9411
 "Hebrew","WG","produces","function_words","function_words","down","למטה",23.0489
 "Hebrew","WG","produces","function_words","function_words","everyone","כולם",24.7665
+"Hebrew","WG","produces","function_words","function_words","far","רחוק",32.8177
 "Hebrew","WG","produces","function_words","function_words","her","הינה",20.815
 "Hebrew","WG","produces","function_words","function_words","his","הוא",26.0981
+"Hebrew","WG","produces","function_words","function_words","how","איך",70.0735
 "Hebrew","WG","produces","function_words","function_words","how much","כמה",25.3264
 "Hebrew","WG","produces","function_words","function_words","i","אני",18.5609
 "Hebrew","WG","produces","function_words","function_words","inside","בפנים",25.777
@@ -1561,8 +1592,10 @@
 "Hebrew","WG","produces","function_words","function_words","on","על ",25.2655
 "Hebrew","WG","produces","function_words","function_words","there","שם",22.8376
 "Hebrew","WG","produces","function_words","function_words","this","זה",16.5884
+"Hebrew","WG","produces","function_words","function_words","under","מתחת",33.2522
 "Hebrew","WG","produces","function_words","function_words","up","למעלה",21.4077
 "Hebrew","WG","produces","function_words","function_words","what","מה, מה זה",18.7737
+"Hebrew","WG","produces","function_words","function_words","when (question)","מתי",-390.048
 "Hebrew","WG","produces","function_words","function_words","where (question)","איפה",21.7139
 "Hebrew","WG","produces","function_words","function_words","who","מי, מי זה ",21.9953
 "Hebrew","WG","produces","function_words","function_words","why","למה",24.2615
@@ -1577,6 +1610,7 @@
 "Hebrew","WG","produces","nouns","nouns","ball","כדור",16.49
 "Hebrew","WG","produces","nouns","nouns","balloon","בלון",17.9167
 "Hebrew","WG","produces","nouns","nouns","banana","בננה",14.727
+"Hebrew","WG","produces","nouns","nouns","barn","רפת",42.541
 "Hebrew","WG","produces","nouns","nouns","bathroom","שירותים",22.4419
 "Hebrew","WG","produces","nouns","nouns","bathtub","אמבטיה",20.1968
 "Hebrew","WG","produces","nouns","nouns","beach","חול",21.8403
@@ -1604,6 +1638,7 @@
 "Hebrew","WG","produces","nouns","nouns","bun","לחמניה",27.9991
 "Hebrew","WG","produces","nouns","nouns","bunny","שפן",22.4179
 "Hebrew","WG","produces","nouns","nouns","bus","אוטובוס",21.4416
+"Hebrew","WG","produces","nouns","nouns","bus station","תחנת אוטובוס",34.7409
 "Hebrew","WG","produces","nouns","nouns","butter","מרגרינה",28.7155
 "Hebrew","WG","produces","nouns","nouns","butterfly","פרפר",17.5527
 "Hebrew","WG","produces","nouns","nouns","button","כפתור",24.6964
@@ -1730,6 +1765,7 @@
 "Hebrew","WG","produces","nouns","nouns","pool","בריכה",23.726
 "Hebrew","WG","produces","nouns","nouns","pot","סיר",26.8183
 "Hebrew","WG","produces","nouns","nouns","potty","סיר",23.6141
+"Hebrew","WG","produces","nouns","nouns","puppy","גור",34.7409
 "Hebrew","WG","produces","nouns","nouns","purse","ארנק",23.2106
 "Hebrew","WG","produces","nouns","nouns","radio","רדיו",24.1966
 "Hebrew","WG","produces","nouns","nouns","rain","גשם",21.4077
@@ -1792,9 +1828,11 @@
 "Hebrew","WG","produces","nouns","nouns","tree","עץ",21.3957
 "Hebrew","WG","produces","nouns","nouns","truck","משאית",22.1956
 "Hebrew","WG","produces","nouns","nouns","tummy","בטן",19.0366
+"Hebrew","WG","produces","nouns","nouns","turkey","תרנגול הודו",47.7025
 "Hebrew","WG","produces","nouns","nouns","turtle","צב ",23.071
 "Hebrew","WG","produces","nouns","nouns","tv","טלויזיה",20.4558
 "Hebrew","WG","produces","nouns","nouns","vacuum","שואב אבק",25.605
+"Hebrew","WG","produces","nouns","nouns","vest","אפודה",70.0735
 "Hebrew","WG","produces","nouns","nouns","wafer","ופלה",22.267
 "Hebrew","WG","produces","nouns","nouns","water (beverage)","מים ",17.2298
 "Hebrew","WG","produces","nouns","nouns","watermelon","אבטיח",22.2181
@@ -1830,6 +1868,7 @@
 "Hebrew","WG","produces","other","other","have","יש לי",19.7122
 "Hebrew","WG","produces","other","other","hee haw","אי אה",19.3111
 "Hebrew","WG","produces","other","other","hi","היי",18.2956
+"Hebrew","WG","produces","other","other","lunchtime","צהריים",4183.08
 "Hebrew","WG","produces","other","other","meow","מיאו",17.0032
 "Hebrew","WG","produces","other","other","moment","רגע",24.8397
 "Hebrew","WG","produces","other","other","mommy","אמא",6.57765
@@ -1846,6 +1885,7 @@
 "Hebrew","WG","produces","other","other","peep peep","ציף ציף",21.2731
 "Hebrew","WG","produces","other","other","person","איש",24.1275
 "Hebrew","WG","produces","other","other","please","בבקשה",22.1589
+"Hebrew","WG","produces","other","other","pretend","לעשות כאילו",37.3897
 "Hebrew","WG","produces","other","other","quack quack","געגע",17.3657
 "Hebrew","WG","produces","other","other","sabbath","שבת",26.7562
 "Hebrew","WG","produces","other","other","shh","ששש",17.4132
@@ -1861,7 +1901,9 @@
 "Hebrew","WG","produces","other","other","wanna","אני רוצה",20.4603
 "Hebrew","WG","produces","other","other","woof woof","הב הב",15.4419
 "Hebrew","WG","produces","other","other","yes","כן",16.8765
+"Hebrew","WG","produces","other","other","yesterday","אתמול",4183.08
 "Hebrew","WG","produces","other","other","yum yum","הם ",10.1248
+"Hebrew","WG","produces","predicates","adjectives","bad","רע",32.4663
 "Hebrew","WG","produces","predicates","adjectives","big","גדול",21.7193
 "Hebrew","WG","produces","predicates","adjectives","broken","מקולקל, שבור",22.1589
 "Hebrew","WG","produces","predicates","adjectives","careful","זהיר",29.8761
@@ -1869,6 +1911,7 @@
 "Hebrew","WG","produces","predicates","adjectives","cold","קר",21.7758
 "Hebrew","WG","produces","predicates","adjectives","cute","חמוד",24.1999
 "Hebrew","WG","produces","predicates","adjectives","dirty","מלוכלך",21.9457
+"Hebrew","WG","produces","predicates","adjectives","dry (description)","יבש",39.4068
 "Hebrew","WG","produces","predicates","adjectives","empty","ריק",27.5117
 "Hebrew","WG","produces","predicates","adjectives","fast","מהר",24.2162
 "Hebrew","WG","produces","predicates","adjectives","fat","שמן",25.9755
@@ -1879,17 +1922,23 @@
 "Hebrew","WG","produces","predicates","adjectives","hungry","רעב",23.8375
 "Hebrew","WG","produces","predicates","adjectives","little (description)","נמוך, קטן, קצר",22.3566
 "Hebrew","WG","produces","predicates","adjectives","naughty","שובב",24.2162
+"Hebrew","WG","produces","predicates","adjectives","nice","נחמד",37.1162
 "Hebrew","WG","produces","predicates","adjectives","old","זקן, ישן",22.5266
 "Hebrew","WG","produces","predicates","adjectives","pretty","יפה",22.6483
 "Hebrew","WG","produces","predicates","adjectives","salty","מלוח",25.2655
 "Hebrew","WG","produces","predicates","adjectives","sick","חולה",25.5552
+"Hebrew","WG","produces","predicates","adjectives","smart","חכם",44.131
+"Hebrew","WG","produces","predicates","adjectives","soft","רך",-390.048
 "Hebrew","WG","produces","predicates","adjectives","sweet","מתוק",25.7568
 "Hebrew","WG","produces","predicates","adjectives","tasty","טעים",19.9334
+"Hebrew","WG","produces","predicates","adjectives","thin","רזה",-390.048
 "Hebrew","WG","produces","predicates","adjectives","thirsty","צמא",27.8234
 "Hebrew","WG","produces","predicates","adjectives","tired","עייף",23.726
 "Hebrew","WG","produces","predicates","adjectives","wet","רטוב",21.7193
 "Hebrew","WG","produces","predicates","adjectives","yucky","מגעיל",28.0252
 "Hebrew","WG","produces","predicates","verbs","bite","לנשוך",24.2162
+"Hebrew","WG","produces","predicates","verbs","bless","לברך",3403.73
+"Hebrew","WG","produces","predicates","verbs","blow","לנשוף",51.8521
 "Hebrew","WG","produces","predicates","verbs","break","לשבור",23.2905
 "Hebrew","WG","produces","predicates","verbs","bring","להביא",22.1719
 "Hebrew","WG","produces","predicates","verbs","clean (action)","לנקות",22.0635
@@ -1912,6 +1961,7 @@
 "Hebrew","WG","produces","predicates","verbs","hide","להחביא",27.5117
 "Hebrew","WG","produces","predicates","verbs","hit","להכות",23.1221
 "Hebrew","WG","produces","predicates","verbs","hug","לחבק",21.5552
+"Hebrew","WG","produces","predicates","verbs","hurry","למהר",33.6423
 "Hebrew","WG","produces","predicates","verbs","jump","לקפוץ",22.3566
 "Hebrew","WG","produces","predicates","verbs","kick","לבעוט",30.5009
 "Hebrew","WG","produces","predicates","verbs","kiss","לנשק",21.5667
@@ -2101,6 +2151,7 @@
 "Hebrew","WG","understands","nouns","nouns","lamb","טלה ",25.6379
 "Hebrew","WG","understands","nouns","nouns","lamp","מנורה",19.3023
 "Hebrew","WG","understands","nouns","nouns","leg","רגליים",13.2495
+"Hebrew","WG","understands","nouns","nouns","light","אור",4.04989
 "Hebrew","WG","understands","nouns","nouns","lion","אריה",18.2513
 "Hebrew","WG","understands","nouns","nouns","living room","סלון",18.6921
 "Hebrew","WG","understands","nouns","nouns","locomotive","קטר",23.2326
@@ -2232,6 +2283,7 @@
 "Hebrew","WG","understands","other","other","bzzz","בזז",20.1961
 "Hebrew","WG","understands","other","other","can (auxiliary)","אפשר",21.1281
 "Hebrew","WG","understands","other","other","choo choo","ציק ציק צאק",19.6345
+"Hebrew","WG","understands","other","other","clap","מחא כפיים",-21.2045
 "Hebrew","WG","understands","other","other","cockadoodledoo","קוקוריקו",13.8835
 "Hebrew","WG","understands","other","other","daddy","אבא",9.72853
 "Hebrew","WG","understands","other","other","don't","די",13.9142
@@ -2249,6 +2301,7 @@
 "Hebrew","WG","understands","other","other","lunchtime","צהריים",24.8035
 "Hebrew","WG","understands","other","other","meow","מיאו",12.802
 "Hebrew","WG","understands","other","other","moment","רגע",20.0596
+"Hebrew","WG","understands","other","other","mommy","אמא",-390.05
 "Hebrew","WG","understands","other","other","moo"," מו",14.5981
 "Hebrew","WG","understands","other","other","morning","בוקר",20.5607
 "Hebrew","WG","understands","other","other","neighbor","שכן",24.4432
@@ -2258,6 +2311,7 @@
 "Hebrew","WG","understands","other","other","oh","אוי ",15.7419
 "Hebrew","WG","understands","other","other","opa","הופה",14.7857
 "Hebrew","WG","understands","other","other","owie","כואב לי",18.3344
+"Hebrew","WG","understands","other","other","peekaboo","לשחק בקוקו",2.68108
 "Hebrew","WG","understands","other","other","peep peep","ציף ציף",15.0728
 "Hebrew","WG","understands","other","other","person","איש",20.5607
 "Hebrew","WG","understands","other","other","please","בבקשה",15.7419
@@ -2268,6 +2322,7 @@
 "Hebrew","WG","understands","other","other","should","צריך",21.9263
 "Hebrew","WG","understands","other","other","some more","עוד",13.9345
 "Hebrew","WG","understands","other","other","teacher","גננת",18.5363
+"Hebrew","WG","understands","other","other","ten fingers","עשר אצבעות",-2.29317
 "Hebrew","WG","understands","other","other","time","פעם",25.8576
 "Hebrew","WG","understands","other","other","today","היום",22.3208
 "Hebrew","WG","understands","other","other","tomorrow","מחר",23.1496
@@ -2303,8 +2358,10 @@
 "Hebrew","WG","understands","predicates","adjectives","salty","מלוח",24.1275
 "Hebrew","WG","understands","predicates","adjectives","sick","חולה",21.4416
 "Hebrew","WG","understands","predicates","adjectives","smart","חכם",24.8397
+"Hebrew","WG","understands","predicates","adjectives","soft","רך",31.0244
 "Hebrew","WG","understands","predicates","adjectives","sweet","מתוק",21.5621
 "Hebrew","WG","understands","predicates","adjectives","tasty","טעים",12.694
+"Hebrew","WG","understands","predicates","adjectives","thin","רזה",31.3163
 "Hebrew","WG","understands","predicates","adjectives","thirsty","צמא",19.3395
 "Hebrew","WG","understands","predicates","adjectives","tired","עייף",18.2173
 "Hebrew","WG","understands","predicates","adjectives","wet","רטוב",18.1371
@@ -2377,12 +2434,14 @@
 "Italian","WG","produces","function_words","function_words","another","altro/un altro",25.3699
 "Italian","WG","produces","function_words","function_words","at","a",27.9619
 "Italian","WG","produces","function_words","function_words","away","lontano",25.4861
+"Italian","WG","produces","function_words","function_words","by","da",32.365
 "Italian","WG","produces","function_words","function_words","down","giù",22.3239
 "Italian","WG","produces","function_words","function_words","for","per",29.6199
 "Italian","WG","produces","function_words","function_words","he","lui",28.9908
 "Italian","WG","produces","function_words","function_words","his","suo/a",26.2291
 "Italian","WG","produces","function_words","function_words","how","come?",30.7392
 "Italian","WG","produces","function_words","function_words","i","io",21.8707
+"Italian","WG","produces","function_words","function_words","in","in",33.1238
 "Italian","WG","produces","function_words","function_words","inside","dentro",24.8738
 "Italian","WG","produces","function_words","function_words","me","me/mi",29.0163
 "Italian","WG","produces","function_words","function_words","my","mio/a",20.9502
@@ -2390,6 +2449,7 @@
 "Italian","WG","produces","function_words","function_words","she","lei",25.6678
 "Italian","WG","produces","function_words","function_words","that","quello/a",24.207
 "Italian","WG","produces","function_words","function_words","the","il, lo, la, i, gli, le",26.6998
+"Italian","WG","produces","function_words","function_words","they","loro",46.3166
 "Italian","WG","produces","function_words","function_words","this","questo/a",24.6923
 "Italian","WG","produces","function_words","function_words","under","sotto",24.644
 "Italian","WG","produces","function_words","function_words","up","su",25.6419
@@ -2399,6 +2459,7 @@
 "Italian","WG","produces","function_words","function_words","where (question)","dove?",27.7732
 "Italian","WG","produces","function_words","function_words","who","chi?",29.2127
 "Italian","WG","produces","function_words","function_words","why","perché?",26.0718
+"Italian","WG","produces","function_words","function_words","with","con",32.2291
 "Italian","WG","produces","function_words","function_words","you","tu, voi",23.5901
 "Italian","WG","produces","function_words","function_words","your","tuo/a",24.1829
 "Italian","WG","produces","nouns","nouns","airplane","aereo",22.561
@@ -2615,6 +2676,7 @@
 "Italian","WG","produces","other","other","any","niente, un po'",24.9391
 "Italian","WG","produces","other","other","aunt","zia",20.038
 "Italian","WG","produces","other","other","baa baa","beh beh",18.5228
+"Italian","WG","produces","other","other","babysitter","babysitter/tata",34.6263
 "Italian","WG","produces","other","other","badness","bua",19.8715
 "Italian","WG","produces","other","other","barber","barbiere",28.8606
 "Italian","WG","produces","other","other","bath","fare il bagno",23.4203
@@ -2659,6 +2721,7 @@
 "Italian","WG","produces","other","other","quack quack","qua qua",19.7955
 "Italian","WG","produces","other","other","shh","zitto/sch",20.1985
 "Italian","WG","produces","other","other","sir","signore/a",24.4708
+"Italian","WG","produces","other","other","sister","sorella",37.9704
 "Italian","WG","produces","other","other","teacher","maestro/a",24.726
 "Italian","WG","produces","other","other","thank you","grazie/prego",17.8207
 "Italian","WG","produces","other","other","to slap","dare le tottò",26.4441
@@ -2669,6 +2732,7 @@
 "Italian","WG","produces","other","other","uncle","zio",20.3856
 "Italian","WG","produces","other","other","vroom","brum brum",17.2175
 "Italian","WG","produces","other","other","yes","sì",18.6111
+"Italian","WG","produces","other","other","yesterday","ieri",35.2628
 "Italian","WG","produces","predicates","adjectives","angry","arrabbiato",24.3515
 "Italian","WG","produces","predicates","adjectives","bad","cattivo",23.7365
 "Italian","WG","produces","predicates","adjectives","big","grande/grosso",23.1781
@@ -2692,6 +2756,7 @@
 "Italian","WG","produces","predicates","adjectives","hot","caldo",22.4205
 "Italian","WG","produces","predicates","adjectives","little (description)","piccolo",23.6997
 "Italian","WG","produces","predicates","adjectives","loud","forte",26.0119
+"Italian","WG","produces","predicates","adjectives","naughty","disubbidiente",32.0538
 "Italian","WG","produces","predicates","adjectives","new","nuovo",25.9862
 "Italian","WG","produces","predicates","adjectives","nice","bello",22.1114
 "Italian","WG","produces","predicates","adjectives","red","rosso",23.9464
@@ -3012,6 +3077,7 @@
 "Italian","WG","understands","other","other","bath","fare il bagno",10.1992
 "Italian","WG","understands","other","other","boom","bum (cade)",14.1091
 "Italian","WG","understands","other","other","boy","ragazzo/a",26.8609
+"Italian","WG","understands","other","other","brother","fratello",33.128
 "Italian","WG","understands","other","other","child","bimbo/a",10.3794
 "Italian","WG","understands","other","other","child's own name","il suo nome",7.11031
 "Italian","WG","understands","other","other","choo choo","tuttù",19.4938
@@ -3019,6 +3085,7 @@
 "Italian","WG","understands","other","other","cockadoodledoo","coccodè",15.5689
 "Italian","WG","understands","other","other","cousin","cugino/a",25.2466
 "Italian","WG","understands","other","other","cut it out","basta",9.89964
+"Italian","WG","understands","other","other","daddy","papà",3.3453
 "Italian","WG","understands","other","other","doctor","dottore",19.2231
 "Italian","WG","understands","other","other","go potty","fare la popò/pipì",15.537
 "Italian","WG","understands","other","other","go-ahead","via",16.3679
@@ -3043,11 +3110,13 @@
 "Italian","WG","understands","other","other","none","nessuno",23.4641
 "Italian","WG","understands","other","other","now","adesso/ora",19.0499
 "Italian","WG","understands","other","other","one two three","un due tre",16.7554
+"Italian","WG","understands","other","other","peekaboo","cuccù-settete",-1.5231
 "Italian","WG","understands","other","other","people","persone",25.4916
 "Italian","WG","understands","other","other","policeman","vigile",25.0159
 "Italian","WG","understands","other","other","quack quack","qua qua",15.9285
 "Italian","WG","understands","other","other","shh","zitto/sch",13.1163
 "Italian","WG","understands","other","other","sir","signore/a",20.872
+"Italian","WG","understands","other","other","sister","sorella",38.7751
 "Italian","WG","understands","other","other","teacher","maestro/a",20.5474
 "Italian","WG","understands","other","other","thank you","grazie/prego",12.6749
 "Italian","WG","understands","other","other","to slap","dare le tottò",17.4012
@@ -3067,6 +3136,7 @@
 "Italian","WG","understands","predicates","adjectives","careful","attento",18.0189
 "Italian","WG","understands","predicates","adjectives","clean (description)","pulito",18.9333
 "Italian","WG","understands","predicates","adjectives","cold","freddo",16.3465
+"Italian","WG","understands","predicates","adjectives","cute","carino",34.0882
 "Italian","WG","understands","predicates","adjectives","dark","buio",17.3191
 "Italian","WG","understands","predicates","adjectives","dirty","sporco",15.6171
 "Italian","WG","understands","predicates","adjectives","dry (description)","asciutto",22.6936
@@ -3155,6 +3225,9 @@
 "Norwegian","WG","produces","function_words","function_words","back","bak",25.5484
 "Norwegian","WG","produces","function_words","function_words","down","ned",21.6686
 "Norwegian","WG","produces","function_words","function_words","down (stairs)","nede",24.3193
+"Norwegian","WG","produces","function_words","function_words","her","hennes",35.8293
+"Norwegian","WG","produces","function_words","function_words","his","hans",34.2159
+"Norwegian","WG","produces","function_words","function_words","how","hvordan",54.3633
 "Norwegian","WG","produces","function_words","function_words","i","jeg",24.2468
 "Norwegian","WG","produces","function_words","function_words","in","i",26.819
 "Norwegian","WG","produces","function_words","function_words","inside","inn, inne, inni",21.2322
@@ -3168,6 +3241,9 @@
 "Norwegian","WG","produces","function_words","function_words","off","av",24.9985
 "Norwegian","WG","produces","function_words","function_words","on","på",24.0189
 "Norwegian","WG","produces","function_words","function_words","out","ut, ute",19.6754
+"Norwegian","WG","produces","function_words","function_words","same","samme",31.0306
+"Norwegian","WG","produces","function_words","function_words","some","noe",42.6156
+"Norwegian","WG","produces","function_words","function_words","someone","noen",42.4453
 "Norwegian","WG","produces","function_words","function_words","the","den",19.5769
 "Norwegian","WG","produces","function_words","function_words","there","der",19.2465
 "Norwegian","WG","produces","function_words","function_words","this","denne, dette",22.7912
@@ -3175,7 +3251,10 @@
 "Norwegian","WG","produces","function_words","function_words","up","opp",20.5008
 "Norwegian","WG","produces","function_words","function_words","up (stairs)","oppe",24.0441
 "Norwegian","WG","produces","function_words","function_words","what","hva",27.8294
+"Norwegian","WG","produces","function_words","function_words","when (question)","når",48.2748
 "Norwegian","WG","produces","function_words","function_words","where (question)","hvor",27.7293
+"Norwegian","WG","produces","function_words","function_words","who","hvem",35.0548
+"Norwegian","WG","produces","function_words","function_words","why","hvorfor",43.2638
 "Norwegian","WG","produces","function_words","function_words","you","du",26.5816
 "Norwegian","WG","produces","function_words","function_words","your","din",23.0256
 "Norwegian","WG","produces","nouns","nouns","airplane","fly",19.1489
@@ -3216,6 +3295,7 @@
 "Norwegian","WG","produces","nouns","nouns","car","bil",17.1835
 "Norwegian","WG","produces","nouns","nouns","carrots","gulrot",22.1442
 "Norwegian","WG","produces","nouns","nouns","cat","katt",18.4438
+"Norwegian","WG","produces","nouns","nouns","cereal","frokostblanding",31.0306
 "Norwegian","WG","produces","nouns","nouns","chair","stol",20.4985
 "Norwegian","WG","produces","nouns","nouns","cheek","kinn",22.2614
 "Norwegian","WG","produces","nouns","nouns","cheerios","corn flakes",30.567
@@ -3313,6 +3393,7 @@
 "Norwegian","WG","produces","nouns","nouns","pizza","pizza",20.925
 "Norwegian","WG","produces","nouns","nouns","plant","plante",25.7063
 "Norwegian","WG","produces","nouns","nouns","plate","tallerken",22.7589
+"Norwegian","WG","produces","nouns","nouns","play pen","lekegrind",36.6647
 "Norwegian","WG","produces","nouns","nouns","potty","potte",22.7313
 "Norwegian","WG","produces","nouns","nouns","puppy","valp",29.7424
 "Norwegian","WG","produces","nouns","nouns","purse","lommebok",30.0101
@@ -3321,6 +3402,7 @@
 "Norwegian","WG","produces","nouns","nouns","raisin","rosiner",21.3592
 "Norwegian","WG","produces","nouns","nouns","refrigerator","kjøleskap",25.6133
 "Norwegian","WG","produces","nouns","nouns","rock","stein",21.1049
+"Norwegian","WG","produces","nouns","nouns","rocking chair","gyngestol",35.5904
 "Norwegian","WG","produces","nouns","nouns","scissors","saks",24.2915
 "Norwegian","WG","produces","nouns","nouns","sheep","sau",20.6112
 "Norwegian","WG","produces","nouns","nouns","shirt","t-skjorte",26.2872
@@ -3371,6 +3453,7 @@
 "Norwegian","WG","produces","other","other","baa baa","bææ",14.5051
 "Norwegian","WG","produces","other","other","baby","baby",17.6604
 "Norwegian","WG","produces","other","other","bath","bade",17.1836
+"Norwegian","WG","produces","other","other","beach","strand",32.7361
 "Norwegian","WG","produces","other","other","boy","gutt",21.2713
 "Norwegian","WG","produces","other","other","breakfast","frokost",23.3741
 "Norwegian","WG","produces","other","other","brother","bror",25.7354
@@ -3378,6 +3461,7 @@
 "Norwegian","WG","produces","other","other","child","barn",23.9257
 "Norwegian","WG","produces","other","other","child's own name","barnets navn",19.7539
 "Norwegian","WG","produces","other","other","choo choo","tøff-tøff",20.6296
+"Norwegian","WG","produces","other","other","church","kirke",35.4763
 "Norwegian","WG","produces","other","other","cockadoodledoo","kykeliky",20.4678
 "Norwegian","WG","produces","other","other","daddy","pappa",12.9023
 "Norwegian","WG","produces","other","other","day","dag",28.3746
@@ -3401,6 +3485,7 @@
 "Norwegian","WG","produces","other","other","meow","mjau",16.7389
 "Norwegian","WG","produces","other","other","mommy","mamma",12.1417
 "Norwegian","WG","produces","other","other","moo","møø",15.581
+"Norwegian","WG","produces","other","other","morning","morgen",32.1394
 "Norwegian","WG","produces","other","other","nap","sovetid",23.8561
 "Norwegian","WG","produces","other","other","night","natt",22.9681
 "Norwegian","WG","produces","other","other","no","nei",13.7624
@@ -3410,13 +3495,18 @@
 "Norwegian","WG","produces","other","other","party","fest",30.4383
 "Norwegian","WG","produces","other","other","pattycake","klappe kake",21.3688
 "Norwegian","WG","produces","other","other","peekaboo","borte! (lek hvor ansikt gjemmes og plutselig vises)",15.2606
+"Norwegian","WG","produces","other","other","person","menneske",41.9119
 "Norwegian","WG","produces","other","other","please","vær så snill",28.961
+"Norwegian","WG","produces","other","other","pool","svømmehall",38.3301
 "Norwegian","WG","produces","other","other","quack quack","gakk gakk",16.6253
 "Norwegian","WG","produces","other","other","school","skole",27.0882
 "Norwegian","WG","produces","other","other","shh","hysj",18.0366
 "Norwegian","WG","produces","other","other","sister","søster",26.3091
 "Norwegian","WG","produces","other","other","store","butikk",22.751
 "Norwegian","WG","produces","other","other","thank you","takk",14.334
+"Norwegian","WG","produces","other","other","today","i dag",32.1556
+"Norwegian","WG","produces","other","other","tomorrow","i morgen",37.5038
+"Norwegian","WG","produces","other","other","tonight","i kveld",40.857
 "Norwegian","WG","produces","other","other","uncle","onkel",21.5109
 "Norwegian","WG","produces","other","other","vroom","brrr (bil-lyd)",12.8769
 "Norwegian","WG","produces","other","other","wait","vent",24.3926
@@ -3425,7 +3515,10 @@
 "Norwegian","WG","produces","other","other","work (place)","jobb",22.4568
 "Norwegian","WG","produces","other","other","yes","ja",15.3839
 "Norwegian","WG","produces","other","other","yum yum","nam - nam",13.0272
+"Norwegian","WG","produces","other","other","zoo","dyrehage",31.664
 "Norwegian","WG","produces","predicates","adjectives","all gone","borte",19.2331
+"Norwegian","WG","produces","predicates","adjectives","bad","frekk",44.4229
+"Norwegian","WG","produces","predicates","adjectives","beautiful","skjønn",35.4446
 "Norwegian","WG","produces","predicates","adjectives","big","stor",22.0814
 "Norwegian","WG","produces","predicates","adjectives","blue","blå",23.8364
 "Norwegian","WG","produces","predicates","adjectives","broken","ødelagt",23.1635
@@ -3436,6 +3529,7 @@
 "Norwegian","WG","produces","predicates","adjectives","dark","mørkt",21.8821
 "Norwegian","WG","produces","predicates","adjectives","dirty","skitten",23.7015
 "Norwegian","WG","produces","predicates","adjectives","dry (description)","tørr",27.9117
+"Norwegian","WG","produces","predicates","adjectives","easy","grei",31.0255
 "Norwegian","WG","produces","predicates","adjectives","empty","tom",20.7514
 "Norwegian","WG","produces","predicates","adjectives","fast","fort",24.3595
 "Norwegian","WG","produces","predicates","adjectives","fine","fin",22.518
@@ -3508,6 +3602,7 @@
 "Norwegian","WG","produces","predicates","verbs","touch","ta på",24.3695
 "Norwegian","WG","produces","predicates","verbs","walk","gå",20.7028
 "Norwegian","WG","produces","predicates","verbs","wash","vaske",21.4889
+"Norwegian","WG","produces","predicates","verbs","watch (action)","holde øye med",36.0136
 "Norwegian","WG","produces","predicates","verbs","write","skrive",26.4983
 "Norwegian","WG","understands","function_words","function_words","all","alle",21.061
 "Norwegian","WG","understands","function_words","function_words","another","en annen",23.6219
@@ -3683,6 +3778,7 @@
 "Norwegian","WG","understands","nouns","nouns","pizza","pizza",18.9042
 "Norwegian","WG","understands","nouns","nouns","plant","plante",21.4534
 "Norwegian","WG","understands","nouns","nouns","plate","tallerken",16.5625
+"Norwegian","WG","understands","nouns","nouns","play pen","lekegrind",31.2089
 "Norwegian","WG","understands","nouns","nouns","potty","potte",20.4648
 "Norwegian","WG","understands","nouns","nouns","puppy","valp",23.0629
 "Norwegian","WG","understands","nouns","nouns","purse","lommebok",22.3133
@@ -3752,6 +3848,7 @@
 "Norwegian","WG","understands","other","other","choo choo","tøff-tøff",16.4555
 "Norwegian","WG","understands","other","other","church","kirke",26.2023
 "Norwegian","WG","understands","other","other","cockadoodledoo","kykeliky",15.5563
+"Norwegian","WG","understands","other","other","daddy","pappa",2.68785
 "Norwegian","WG","understands","other","other","day","dag",24.0574
 "Norwegian","WG","understands","other","other","dinner","middag",14.2308
 "Norwegian","WG","understands","other","other","don't","ikke",10.5173
@@ -3771,6 +3868,7 @@
 "Norwegian","WG","understands","other","other","lunch","lunsj",20.9092
 "Norwegian","WG","understands","other","other","man","mann",18.2697
 "Norwegian","WG","understands","other","other","meow","mjau",11.4767
+"Norwegian","WG","understands","other","other","mommy","mamma",4.36297
 "Norwegian","WG","understands","other","other","moo","møø",12.4421
 "Norwegian","WG","understands","other","other","morning","morgen",27.7995
 "Norwegian","WG","understands","other","other","nap","sovetid",14.9167
@@ -3781,12 +3879,14 @@
 "Norwegian","WG","understands","other","other","park","park",25.5109
 "Norwegian","WG","understands","other","other","party","fest",25.1343
 "Norwegian","WG","understands","other","other","pattycake","klappe kake",8.8064
+"Norwegian","WG","understands","other","other","peekaboo","borte! (lek hvor ansikt gjemmes og plutselig vises)",2.64451
 "Norwegian","WG","understands","other","other","person","menneske",27.8562
 "Norwegian","WG","understands","other","other","please","vær så snill",20.2732
 "Norwegian","WG","understands","other","other","pool","svømmehall",26.8966
 "Norwegian","WG","understands","other","other","quack quack","gakk gakk",13.1172
 "Norwegian","WG","understands","other","other","school","skole",23.9129
 "Norwegian","WG","understands","other","other","shh","hysj",13.9024
+"Norwegian","WG","understands","other","other","sister","søster",31.7673
 "Norwegian","WG","understands","other","other","store","butikk",17.0622
 "Norwegian","WG","understands","other","other","thank you","takk",10.3576
 "Norwegian","WG","understands","other","other","today","i dag",23.5228
@@ -3890,6 +3990,7 @@
 "Norwegian","WG","understands","predicates","verbs","watch (action)","holde øye med",25.2141
 "Norwegian","WG","understands","predicates","verbs","write","skrive",21.8851
 "Russian","WG","produces","function_words","function_words","all","все",23.7154
+"Russian","WG","produces","function_words","function_words","all gone","всё (=нет кончилось)",20.5457
 "Russian","WG","produces","function_words","function_words","another","другой",21.3163
 "Russian","WG","produces","function_words","function_words","down","вниз/внизу",23.0408
 "Russian","WG","produces","function_words","function_words","enough","хватит",22.7831
@@ -3899,12 +4000,17 @@
 "Russian","WG","produces","function_words","function_words","his","он",24.017
 "Russian","WG","produces","function_words","function_words","home","домой",20.7623
 "Russian","WG","produces","function_words","function_words","i","я",20.8616
+"Russian","WG","produces","function_words","function_words","in","в (напр. в ведро)",23.6663
 "Russian","WG","produces","function_words","function_words","me","мне/меня",21.054
 "Russian","WG","produces","function_words","function_words","more","еще",21.0421
 "Russian","WG","produces","function_words","function_words","my","мой/моя",22.3244
 "Russian","WG","produces","function_words","function_words","not","нет",20.0495
+"Russian","WG","produces","function_words","function_words","on","на (напр. на столе)",26.4629
 "Russian","WG","produces","function_words","function_words","our","наш",28.3149
 "Russian","WG","produces","function_words","function_words","there","там, туда",19.9834
+"Russian","WG","produces","function_words","function_words","this","это/этот/эти",31.4465
+"Russian","WG","produces","function_words","function_words","to","к (напр. к маме)",22.5741
+"Russian","WG","produces","function_words","function_words","under","под (напр. под стулом)",25.2253
 "Russian","WG","produces","function_words","function_words","up","вверх/вверху/наверх/наверху",26.7231
 "Russian","WG","produces","function_words","function_words","us","мы",26.8153
 "Russian","WG","produces","function_words","function_words","what","что?",22.7863
@@ -4009,6 +4115,7 @@
 "Russian","WG","produces","nouns","nouns","house","дом",21.1848
 "Russian","WG","produces","nouns","nouns","jar","банка",21.2696
 "Russian","WG","produces","nouns","nouns","juice","сок",19.5569
+"Russian","WG","produces","nouns","nouns","kangaroo","кенгуру",46.3998
 "Russian","WG","produces","nouns","nouns","keys","ключи",22.2901
 "Russian","WG","produces","nouns","nouns","kitchen","кухня",23.5565
 "Russian","WG","produces","nouns","nouns","knife","нож",20.9231
@@ -4029,10 +4136,12 @@
 "Russian","WG","produces","nouns","nouns","mouse","мышка",23.5407
 "Russian","WG","produces","nouns","nouns","mouth","рот",20.6726
 "Russian","WG","produces","nouns","nouns","mud","грязь",21.0737
+"Russian","WG","produces","nouns","nouns","nail","гвоздь",39.5532
 "Russian","WG","produces","nouns","nouns","neck","шея",25.2253
 "Russian","WG","produces","nouns","nouns","noodles","макароны",21.0378
 "Russian","WG","produces","nouns","nouns","nose","нос",20.5423
 "Russian","WG","produces","nouns","nouns","orange (food)","апельсин",20.2057
+"Russian","WG","produces","nouns","nouns","owl","сова",35.4542
 "Russian","WG","produces","nouns","nouns","pacifier","соска",20.68
 "Russian","WG","produces","nouns","nouns","pants","штаны",24.4271
 "Russian","WG","produces","nouns","nouns","paper","бумага",25.2751
@@ -4069,6 +4178,7 @@
 "Russian","WG","produces","nouns","nouns","sky","небо",20.3269
 "Russian","WG","produces","nouns","nouns","slide (object)","горка",21.3007
 "Russian","WG","produces","nouns","nouns","slipper","тапки",20.9558
+"Russian","WG","produces","nouns","nouns","snake","змея",32.9926
 "Russian","WG","produces","nouns","nouns","snow","снег",22.8295
 "Russian","WG","produces","nouns","nouns","snowsuit","комбинезон",28.1476
 "Russian","WG","produces","nouns","nouns","soap","мыло",21.8262
@@ -4114,6 +4224,7 @@
 "Russian","WG","produces","nouns","nouns","yard","двор",30.3204
 "Russian","WG","produces","nouns","nouns","yogurt","йогурт",26.1202
 "Russian","WG","produces","nouns","nouns","yogurt drink","кефир",21.3163
+"Russian","WG","produces","nouns","nouns","zoo","зоопарк",35.2153
 "Russian","WG","produces","other","other","after","потом",24.9891
 "Russian","WG","produces","other","other","aunt","тетя",17.275
 "Russian","WG","produces","other","other","awoo","уу",19.3065
@@ -4135,6 +4246,7 @@
 "Russian","WG","produces","other","other","cockadoodledoo","кукареку",21.6709
 "Russian","WG","produces","other","other","croak","ква",19.293
 "Russian","WG","produces","other","other","daddy","папа",10.5883
+"Russian","WG","produces","other","other","day","днем",39.5532
 "Russian","WG","produces","other","other","doctor","доктор/врач",23.7504
 "Russian","WG","produces","other","other","don't","брысь/кыш, нельзя",19.5251
 "Russian","WG","produces","other","other","drip drop","кап-кап",18.2492
@@ -4142,6 +4254,7 @@
 "Russian","WG","produces","other","other","father's name","имя папы",22.5623
 "Russian","WG","produces","other","other","friends' names","имена знакомых детей",20.6903
 "Russian","WG","produces","other","other","girl","девочка",22.4949
+"Russian","WG","produces","other","other","gobble gobble","бл-бл",32.893
 "Russian","WG","produces","other","other","grandma","бабушка",11.1667
 "Russian","WG","produces","other","other","grandpa","дедушка",16.4026
 "Russian","WG","produces","other","other","grrr","ррр",18.459
@@ -4154,6 +4267,7 @@
 "Russian","WG","produces","other","other","hop","прыг",20.9934
 "Russian","WG","produces","other","other","knock knock","тук-тук",19.489
 "Russian","WG","produces","other","other","lah lah","ля-ля-ля",15.5595
+"Russian","WG","produces","other","other","late","поздно/позже",-810.338
 "Russian","WG","produces","other","other","like this","вот так!",25.7714
 "Russian","WG","produces","other","other","meow","мяу",14.2922
 "Russian","WG","produces","other","other","mommy","мама",9.7063
@@ -4167,6 +4281,8 @@
 "Russian","WG","produces","other","other","now","сейчас",21.3242
 "Russian","WG","produces","other","other","oink","хрр/хрю",20.1932
 "Russian","WG","produces","other","other","peekaboo","ку-ку",17.8946
+"Russian","WG","produces","other","other","people","люди",53.8506
+"Russian","WG","produces","other","other","person","человек",-810.338
 "Russian","WG","produces","other","other","pet's name","клички домашних животных",22.8671
 "Russian","WG","produces","other","other","quack quack","кря",18.8888
 "Russian","WG","produces","other","other","ring ring","динь-динь",21.6034
@@ -4186,6 +4302,7 @@
 "Russian","WG","produces","other","other","who's there","кто там?",23.0411
 "Russian","WG","produces","other","other","woof woof","ав",12.5131
 "Russian","WG","produces","other","other","yes","да",15.4688
+"Russian","WG","produces","other","other","yesterday","вчера",-810.338
 "Russian","WG","produces","other","other","yucky","фу",17.8066
 "Russian","WG","produces","other","other","yum yum","ам-ам/ням-ням",13.3916
 "Russian","WG","produces","predicates","adjectives","bad","плохой",23.8826
@@ -4203,15 +4320,18 @@
 "Russian","WG","produces","predicates","adjectives","little (description)","маленький",21.4073
 "Russian","WG","produces","predicates","adjectives","loud","громкий",23.0408
 "Russian","WG","produces","predicates","adjectives","naked","голый",29.1279
+"Russian","WG","produces","predicates","adjectives","orange (description)","оранжевый",-173.977
 "Russian","WG","produces","predicates","adjectives","pretty","красивый",24.8799
 "Russian","WG","produces","predicates","adjectives","red","красный",21.9169
-"Russian","WG","produces","predicates","adjectives","scared","страшный",18.1592
+"Russian","WG","produces","predicates","adjectives","scary","страшный",18.1592
 "Russian","WG","produces","predicates","adjectives","sweet","сладкий",30.2873
 "Russian","WG","produces","predicates","adjectives","tasty","вкусный",24.7348
+"Russian","WG","produces","predicates","adjectives","toy (description)","игрушечный",100.462
 "Russian","WG","produces","predicates","adjectives","warm","теплый",22.4111
 "Russian","WG","produces","predicates","adjectives","wet","мокрый",21.0909
 "Russian","WG","produces","predicates","adjectives","white","белый",27.775
 "Russian","WG","produces","predicates","adjectives","yellow","желтый",30.9523
+"Russian","WG","produces","predicates","adverbs","badly","плохо",31.4183
 "Russian","WG","produces","predicates","adverbs","beautifully","красиво",24.7135
 "Russian","WG","produces","predicates","adverbs","carefully","осторожно",18.198
 "Russian","WG","produces","predicates","adverbs","cleanly","чисто",22.7604
@@ -4224,6 +4344,7 @@
 "Russian","WG","produces","predicates","adverbs","painfully","больно",19.751
 "Russian","WG","produces","predicates","adverbs","quickly","быстро",24.7485
 "Russian","WG","produces","predicates","adverbs","quietly","тихо/тише",27.5189
+"Russian","WG","produces","predicates","adverbs","sweetly","сладко",32.9299
 "Russian","WG","produces","predicates","adverbs","tastily","вкусно",23.0494
 "Russian","WG","produces","predicates","adverbs","warmly","тепло",24.1691
 "Russian","WG","produces","predicates","adverbs","well","хорошо",25.5574
@@ -4283,6 +4404,7 @@
 "Russian","WG","produces","predicates","verbs","wash","мыть/мыться",21.4639
 "Russian","WG","produces","predicates","verbs","wipe","вытирать",22.3216
 "Russian","WG","understands","function_words","function_words","all","все",19.6113
+"Russian","WG","understands","function_words","function_words","all gone","всё (=нет кончилось)",13.6311
 "Russian","WG","understands","function_words","function_words","another","другой",17.5868
 "Russian","WG","understands","function_words","function_words","down","вниз/внизу",16.7503
 "Russian","WG","understands","function_words","function_words","enough","хватит",16.3641
@@ -4292,13 +4414,17 @@
 "Russian","WG","understands","function_words","function_words","his","он",19.1499
 "Russian","WG","understands","function_words","function_words","home","домой",12.6985
 "Russian","WG","understands","function_words","function_words","i","я",16.663
+"Russian","WG","understands","function_words","function_words","in","в (напр. в ведро)",13.9221
 "Russian","WG","understands","function_words","function_words","me","мне/меня",15.7108
 "Russian","WG","understands","function_words","function_words","more","еще",14.0138
 "Russian","WG","understands","function_words","function_words","my","мой/моя",15.9927
 "Russian","WG","understands","function_words","function_words","not","нет",12.3241
+"Russian","WG","understands","function_words","function_words","on","на (напр. на столе)",13.7569
 "Russian","WG","understands","function_words","function_words","our","наш",20.8012
 "Russian","WG","understands","function_words","function_words","there","там, туда",13.8304
 "Russian","WG","understands","function_words","function_words","this","это/этот/эти",19.2113
+"Russian","WG","understands","function_words","function_words","to","к (напр. к маме)",9.68599
+"Russian","WG","understands","function_words","function_words","under","под (напр. под стулом)",15.3618
 "Russian","WG","understands","function_words","function_words","up","вверх/вверху/наверх/наверху",16.2162
 "Russian","WG","understands","function_words","function_words","us","мы",18.6703
 "Russian","WG","understands","function_words","function_words","what","что?",15.9121
@@ -4518,8 +4644,10 @@
 "Russian","WG","understands","other","other","awoo","уу",17.0514
 "Russian","WG","understands","other","other","baa baa","бе, ме",14.3547
 "Russian","WG","understands","other","other","baby","малыш",14.449
+"Russian","WG","understands","other","other","babysitter","няня",32.1453
 "Russian","WG","understands","other","other","beep beep","биби",9.75996
 "Russian","WG","understands","other","other","boy","мальчик",14.0106
+"Russian","WG","understands","other","other","brother","брат/имя брата",36.4382
 "Russian","WG","understands","other","other","bye","пока",7.23667
 "Russian","WG","understands","other","other","bzzz","жж",15.4137
 "Russian","WG","understands","other","other","can (auxiliary)","можно",13.6214
@@ -4531,6 +4659,7 @@
 "Russian","WG","understands","other","other","cluck","ко-ко",12.5994
 "Russian","WG","understands","other","other","cockadoodledoo","кукареку",13.3344
 "Russian","WG","understands","other","other","croak","ква",13.9083
+"Russian","WG","understands","other","other","daddy","папа",-20.2467
 "Russian","WG","understands","other","other","day","днем",21.4793
 "Russian","WG","understands","other","other","doctor","доктор/врач",16.3808
 "Russian","WG","understands","other","other","don't","брысь/кыш, нельзя",6.31098
@@ -4555,6 +4684,7 @@
 "Russian","WG","understands","other","other","late","поздно/позже",21.1914
 "Russian","WG","understands","other","other","like this","вот так!",20.0266
 "Russian","WG","understands","other","other","meow","мяу",7.15984
+"Russian","WG","understands","other","other","mommy","мама",-3.18174
 "Russian","WG","understands","other","other","moo","му",11.4364
 "Russian","WG","understands","other","other","morning","утром",20.9383
 "Russian","WG","understands","other","other","mother's name","имя мамы",17.5536
@@ -4571,6 +4701,7 @@
 "Russian","WG","understands","other","other","quack quack","кря",13.0163
 "Russian","WG","understands","other","other","ring ring","динь-динь",16.1949
 "Russian","WG","understands","other","other","shh","тсс",13.4999
+"Russian","WG","understands","other","other","sister","сестра/имя сестры",32.5621
 "Russian","WG","understands","other","other","squeak","пи-пи",13.1749
 "Russian","WG","understands","other","other","sss","шш",19.8769
 "Russian","WG","understands","other","other","stomp stomp","топ-топ",9.24382
@@ -4606,7 +4737,7 @@
 "Russian","WG","understands","predicates","adjectives","orange (description)","оранжевый",24.7933
 "Russian","WG","understands","predicates","adjectives","pretty","красивый",15.3996
 "Russian","WG","understands","predicates","adjectives","red","красный",20.3511
-"Russian","WG","understands","predicates","adjectives","scared","страшный",19.2918
+"Russian","WG","understands","predicates","adjectives","scary","страшный",19.2918
 "Russian","WG","understands","predicates","adjectives","sweet","сладкий",17.6629
 "Russian","WG","understands","predicates","adjectives","tasty","вкусный",15.0685
 "Russian","WG","understands","predicates","adjectives","toy (description)","игрушечный",21.1379
@@ -4699,19 +4830,28 @@
 "Spanish","WG","produces","function_words","function_words","he","el1",22.3162
 "Spanish","WG","produces","function_words","function_words","her","ella",27.3205
 "Spanish","WG","produces","function_words","function_words","here","aqui",24.6225
+"Spanish","WG","produces","function_words","function_words","him","lo",34.5374
+"Spanish","WG","produces","function_words","function_words","his","su",32.9774
 "Spanish","WG","produces","function_words","function_words","how","como",25.3017
 "Spanish","WG","produces","function_words","function_words","i","yo",22.3788
+"Spanish","WG","produces","function_words","function_words","in","en",32.1117
 "Spanish","WG","produces","function_words","function_words","inside","adentro",23.3475
+"Spanish","WG","produces","function_words","function_words","it","le",79.147
 "Spanish","WG","produces","function_words","function_words","me","me",25.367
 "Spanish","WG","produces","function_words","function_words","mine","mia, mias, mio, mios",20.8239
 "Spanish","WG","produces","function_words","function_words","more","mas",18.7668
 "Spanish","WG","produces","function_words","function_words","none","nohay",23.7869
 "Spanish","WG","produces","function_words","function_words","nothing","nada",28.3621
+"Spanish","WG","produces","function_words","function_words","of","de",41.2693
+"Spanish","WG","produces","function_words","function_words","on","encima",38.748
 "Spanish","WG","produces","function_words","function_words","out","afuera",22.5247
+"Spanish","WG","produces","function_words","function_words","self","se",79.7179
 "Spanish","WG","produces","function_words","function_words","that","aquel, aquela, esa, ese, eso",24.1092
 "Spanish","WG","produces","function_words","function_words","the","el2, la, las, los",23.2418
+"Spanish","WG","produces","function_words","function_words","them","les",533.414
 "Spanish","WG","produces","function_words","function_words","there","ahi, allaall",20.0865
 "Spanish","WG","produces","function_words","function_words","these","estas, estos",21.4825
+"Spanish","WG","produces","function_words","function_words","they","ellas, ellos",48.5085
 "Spanish","WG","produces","function_words","function_words","this","esta, este, esto",26.0551
 "Spanish","WG","produces","function_words","function_words","those","esas, esos",27.7093
 "Spanish","WG","produces","function_words","function_words","up","arriba",24.1471
@@ -4719,6 +4859,7 @@
 "Spanish","WG","produces","function_words","function_words","where (question)","dondest",21.9119
 "Spanish","WG","produces","function_words","function_words","which (question)","cual",26.9218
 "Spanish","WG","produces","function_words","function_words","who","quien",24.7444
+"Spanish","WG","produces","function_words","function_words","why","porque",75.7967
 "Spanish","WG","produces","function_words","function_words","you","te, tu",22.7973
 "Spanish","WG","produces","function_words","function_words","your","tuya, tuyas, tuyo, tuyos",23.8794
 "Spanish","WG","produces","nouns","nouns","airplane","avion",21.9987
@@ -4778,6 +4919,7 @@
 "Spanish","WG","produces","nouns","nouns","cow","vaca",21.3907
 "Spanish","WG","produces","nouns","nouns","crib","cuna",22.1962
 "Spanish","WG","produces","nouns","nouns","cup","taza",24.3351
+"Spanish","WG","produces","nouns","nouns","deer","venado",48.1033
 "Spanish","WG","produces","nouns","nouns","diaper","panal",20.7035
 "Spanish","WG","produces","nouns","nouns","dog","perro",17.5152
 "Spanish","WG","produces","nouns","nouns","doll","muneca",25.5586
@@ -4804,6 +4946,7 @@
 "Spanish","WG","produces","nouns","nouns","frog","rana",28.2664
 "Spanish","WG","produces","nouns","nouns","garage","cochera",23.089
 "Spanish","WG","produces","nouns","nouns","garden","jardin",21.2334
+"Spanish","WG","produces","nouns","nouns","giraffe","jirafa",34.5374
 "Spanish","WG","produces","nouns","nouns","glass","vaso",20.838
 "Spanish","WG","produces","nouns","nouns","glasses","lentes",22.3028
 "Spanish","WG","produces","nouns","nouns","goat","cabra",29.824
@@ -4815,6 +4958,7 @@
 "Spanish","WG","produces","nouns","nouns","hat","sombrer",24.6027
 "Spanish","WG","produces","nouns","nouns","head","cabeza",21.2572
 "Spanish","WG","produces","nouns","nouns","hen","gallina",22.9711
+"Spanish","WG","produces","nouns","nouns","hippopotamus","hippotm",497.274
 "Spanish","WG","produces","nouns","nouns","horse","caballo",22.0818
 "Spanish","WG","produces","nouns","nouns","hot dog","salchch",21.1009
 "Spanish","WG","produces","nouns","nouns","house","casa",20.3525
@@ -4846,6 +4990,7 @@
 "Spanish","WG","produces","nouns","nouns","nose","nariz",23.9601
 "Spanish","WG","produces","nouns","nouns","orange (food)","naranja",23.2461
 "Spanish","WG","produces","nouns","nouns","oven","horno",18.1985
+"Spanish","WG","produces","nouns","nouns","owl","buho",31.0856
 "Spanish","WG","produces","nouns","nouns","pacifier","chupete",22.7973
 "Spanish","WG","produces","nouns","nouns","pajamas","pijama",23.8367
 "Spanish","WG","produces","nouns","nouns","pants","pantalo",22.5247
@@ -4853,10 +4998,15 @@
 "Spanish","WG","produces","nouns","nouns","park","parque",22.0751
 "Spanish","WG","produces","nouns","nouns","party","fiesta",21.1152
 "Spanish","WG","produces","nouns","nouns","pen","lapiz",26.4544
+"Spanish","WG","produces","nouns","nouns","penguin","pinguin",38.748
+"Spanish","WG","produces","nouns","nouns","photos","fotos",33.6092
+"Spanish","WG","produces","nouns","nouns","picture","cuadro",33.1384
 "Spanish","WG","produces","nouns","nouns","pig","puerco",23.2152
 "Spanish","WG","produces","nouns","nouns","pillow","almohad",26.0523
 "Spanish","WG","produces","nouns","nouns","plant","planta",24.2792
 "Spanish","WG","produces","nouns","nouns","plate","plato",20.9119
+"Spanish","WG","produces","nouns","nouns","pool","albrpis",33.1384
+"Spanish","WG","produces","nouns","nouns","porridge","atole",31.3194
 "Spanish","WG","produces","nouns","nouns","potty","bacinic",25.7756
 "Spanish","WG","produces","nouns","nouns","purse","bolsa",22.7259
 "Spanish","WG","produces","nouns","nouns","quesadilla","quesdil",25.3773
@@ -4884,6 +5034,7 @@
 "Spanish","WG","produces","nouns","nouns","soda","soda",18.9596
 "Spanish","WG","produces","nouns","nouns","spider","arana",21.5473
 "Spanish","WG","produces","nouns","nouns","spoon","cuchara",23.6162
+"Spanish","WG","produces","nouns","nouns","squirrel","ardilla",33.1329
 "Spanish","WG","produces","nouns","nouns","stairs","escaler",23.9408
 "Spanish","WG","produces","nouns","nouns","star","estrell",21.1017
 "Spanish","WG","produces","nouns","nouns","store","tienmer",20.3906
@@ -4908,6 +5059,7 @@
 "Spanish","WG","produces","nouns","nouns","tree","arbol",26.0421
 "Spanish","WG","produces","nouns","nouns","truck","camion",27.1443
 "Spanish","WG","produces","nouns","nouns","tummy","panza",23.0465
+"Spanish","WG","produces","nouns","nouns","turkey","guajolo",-736.507
 "Spanish","WG","produces","nouns","nouns","turtle","tortuga",27.1126
 "Spanish","WG","produces","nouns","nouns","tv","televis",21.5281
 "Spanish","WG","produces","nouns","nouns","underwear","calzon",23.0702
@@ -4917,6 +5069,7 @@
 "Spanish","WG","produces","nouns","nouns","window","ventana",22.2592
 "Spanish","WG","produces","nouns","nouns","wolf","lobo",22.5247
 "Spanish","WG","produces","nouns","nouns","zipper","cierre",18.1594
+"Spanish","WG","produces","nouns","nouns","zoo","zoologi",2865.12
 "Spanish","WG","produces","other","other","after","despues",26.2224
 "Spanish","WG","produces","other","other","aunt","tia",19.5993
 "Spanish","WG","produces","other","other","baa baa","beemee",23.7173
@@ -4942,6 +5095,7 @@
 "Spanish","WG","produces","other","other","grandma","abuela",18.7938
 "Spanish","WG","produces","other","other","grandpa","abuelo",20.9782
 "Spanish","WG","produces","other","other","hands up","manos2",20.9392
+"Spanish","WG","produces","other","other","have hands","tengman",35.1815
 "Spanish","WG","produces","other","other","hi","hola",18.5464
 "Spanish","WG","produces","other","other","honk honk","pipi",18.5844
 "Spanish","WG","produces","other","other","kiss","besitos",20.1385
@@ -4966,15 +5120,19 @@
 "Spanish","WG","produces","other","other","teacher","maestra",28.5621
 "Spanish","WG","produces","other","other","thank you","gracias",18.614
 "Spanish","WG","produces","other","other","tickle","cosqlit",22.2656
+"Spanish","WG","produces","other","other","today","hoy",39.1887
+"Spanish","WG","produces","other","other","tomorrow","manana",35.6702
 "Spanish","WG","produces","other","other","tweet tweet","piopio",18.4539
 "Spanish","WG","produces","other","other","uncle","tio",20.6088
 "Spanish","WG","produces","other","other","woman","senora",23.1592
 "Spanish","WG","produces","other","other","woof woof","guagua",14.4208
 "Spanish","WG","produces","other","other","yes","si",16.6015
+"Spanish","WG","produces","other","other","yesterday","ayer",35.486
 "Spanish","WG","produces","other","other","yum yum","am",13.9019
 "Spanish","WG","produces","predicates","adjectives","angry","enojado",27.1008
 "Spanish","WG","produces","predicates","adjectives","asleep","sueno",22.8103
 "Spanish","WG","produces","predicates","adjectives","bad","malo",23.8367
+"Spanish","WG","produces","predicates","adjectives","big","grande",36.4572
 "Spanish","WG","produces","predicates","adjectives","blue","azul",26.0273
 "Spanish","WG","produces","predicates","adjectives","broken","roto",22.6719
 "Spanish","WG","produces","predicates","adjectives","careful","cuidado",21.8448
@@ -4986,6 +5144,7 @@
 "Spanish","WG","produces","predicates","adjectives","dirty","sucio",23.5135
 "Spanish","WG","produces","predicates","adjectives","empty","vacio",22.5021
 "Spanish","WG","produces","predicates","adjectives","full","lleno",24.0091
+"Spanish","WG","produces","predicates","adjectives","green","verde",32.8804
 "Spanish","WG","produces","predicates","adjectives","happy","content",26.169
 "Spanish","WG","produces","predicates","adjectives","hard","dificil",18.1985
 "Spanish","WG","produces","predicates","adjectives","heavy","pesado",22.9844
@@ -4997,6 +5156,7 @@
 "Spanish","WG","produces","predicates","adjectives","pretty","bonita",23.2263
 "Spanish","WG","produces","predicates","adjectives","red","rojo",27.5257
 "Spanish","WG","produces","predicates","adjectives","sad","triste",28.114
+"Spanish","WG","produces","predicates","adjectives","same","igual",2865.12
 "Spanish","WG","produces","predicates","adjectives","scared","miedo",20.9585
 "Spanish","WG","produces","predicates","adjectives","sick","enfermo",30.7393
 "Spanish","WG","produces","predicates","adjectives","soft","suave",30.7393
@@ -5023,6 +5183,7 @@
 "Spanish","WG","produces","predicates","verbs","finish","acabars",21.7776
 "Spanish","WG","produces","predicates","verbs","give","dar",23.8278
 "Spanish","WG","produces","predicates","verbs","go","ir",22.6446
+"Spanish","WG","produces","predicates","verbs","have","tener",31.9358
 "Spanish","WG","produces","predicates","verbs","help","ayudar",22.6839
 "Spanish","WG","produces","predicates","verbs","hit","pegar",24.7629
 "Spanish","WG","produces","predicates","verbs","hurry","apurar",22.0751
@@ -5215,6 +5376,7 @@
 "Spanish","WG","understands","nouns","nouns","lollipop","paleta",12.8622
 "Spanish","WG","understands","nouns","nouns","meat","carne",16.8612
 "Spanish","WG","understands","nouns","nouns","medicine","medicin",16.1034
+"Spanish","WG","understands","nouns","nouns","milk","leche",3.97525
 "Spanish","WG","understands","nouns","nouns","mirror","espejo",15.4963
 "Spanish","WG","understands","nouns","nouns","money","dinero",15.7437
 "Spanish","WG","understands","nouns","nouns","monkey","mono",21.5642
@@ -5301,6 +5463,7 @@
 "Spanish","WG","understands","nouns","nouns","turtle","tortuga",20.6588
 "Spanish","WG","understands","nouns","nouns","tv","televis",11.0552
 "Spanish","WG","understands","nouns","nouns","underwear","calzon",17.2336
+"Spanish","WG","understands","nouns","nouns","vacuum","aspirdo",34.0594
 "Spanish","WG","understands","nouns","nouns","watch (object)","reloj",18.7986
 "Spanish","WG","understands","nouns","nouns","water (beverage)","agua",6.07952
 "Spanish","WG","understands","nouns","nouns","window","ventana",14.1148
@@ -5316,6 +5479,7 @@
 "Spanish","WG","understands","other","other","bless you","salud",19.2771
 "Spanish","WG","understands","other","other","boy","nino",16.9685
 "Spanish","WG","understands","other","other","brother","hermano",18.7208
+"Spanish","WG","understands","other","other","bye","adiosby",4.43217
 "Spanish","WG","understands","other","other","child's own name","nomnin",11.3462
 "Spanish","WG","understands","other","other","choo choo","tutu",20.0027
 "Spanish","WG","understands","other","other","cockadoodledoo","qiqiriq",18.9373
@@ -5350,6 +5514,7 @@
 "Spanish","WG","understands","other","other","person","persona",24.4082
 "Spanish","WG","understands","other","other","please","porfavo",18.7071
 "Spanish","WG","understands","other","other","quack quack","cuacua",17.0838
+"Spanish","WG","understands","other","other","row row your boat","acerrin",104.435
 "Spanish","WG","understands","other","other","shh","shhh",13.9469
 "Spanish","WG","understands","other","other","sister","hermana",18.5124
 "Spanish","WG","understands","other","other","teacher","maestra",21.8521
@@ -5362,6 +5527,7 @@
 "Spanish","WG","understands","other","other","woman","senora",20.5316
 "Spanish","WG","understands","other","other","woof woof","guagua",9.02336
 "Spanish","WG","understands","other","other","yes","si",9.92352
+"Spanish","WG","understands","other","other","yesterday","ayer",31.812
 "Spanish","WG","understands","other","other","yum yum","am",5.46486
 "Spanish","WG","understands","predicates","adjectives","angry","enojado",17.6093
 "Spanish","WG","understands","predicates","adjectives","asleep","sueno",15.8731
@@ -5388,6 +5554,7 @@
 "Spanish","WG","understands","predicates","adjectives","new","nuevo",22.0879
 "Spanish","WG","understands","predicates","adjectives","old","viejo",24.6499
 "Spanish","WG","understands","predicates","adjectives","pretty","bonita",18.315
+"Spanish","WG","understands","predicates","adjectives","red","rojo",33.177
 "Spanish","WG","understands","predicates","adjectives","sad","triste",23.8996
 "Spanish","WG","understands","predicates","adjectives","same","igual",23.8021
 "Spanish","WG","understands","predicates","adjectives","scared","miedo",20.4542
@@ -5450,14 +5617,18 @@
 "Spanish","WG","understands","predicates","verbs","wet","mojarse",16.0248
 "Spanish","WG","understands","predicates","verbs","work (action)","trabaja",20.9519
 "Spanish","WG","understands","predicates","verbs","write","escribi",17.3338
+"Swedish","WG","produces","function_words","function_words","all","alla",-129.718
 "Swedish","WG","produces","function_words","function_words","another","en till",19.911
 "Swedish","WG","produces","function_words","function_words","away","bort",16.203
 "Swedish","WG","produces","function_words","function_words","back","bakom",16.2747
+"Swedish","WG","produces","function_words","function_words","by","av",-129.718
 "Swedish","WG","produces","function_words","function_words","down","ner",16.1722
 "Swedish","WG","produces","function_words","function_words","her","henne",16.2747
 "Swedish","WG","produces","function_words","function_words","his","hans",16.2747
+"Swedish","WG","produces","function_words","function_words","how","hur",-129.718
 "Swedish","WG","produces","function_words","function_words","i","jag",21.7758
 "Swedish","WG","produces","function_words","function_words","in","i",19.1346
+"Swedish","WG","produces","function_words","function_words","inside","inuti",-129.718
 "Swedish","WG","produces","function_words","function_words","it","det",26.9223
 "Swedish","WG","produces","function_words","function_words","mine","min",18.9717
 "Swedish","WG","produces","function_words","function_words","more","mer",19.6536
@@ -5465,14 +5636,20 @@
 "Swedish","WG","produces","function_words","function_words","none","ingen",16.2747
 "Swedish","WG","produces","function_words","function_words","not","inte",20.8847
 "Swedish","WG","produces","function_words","function_words","on","på",20.7512
+"Swedish","WG","produces","function_words","function_words","other","andra",-129.718
 "Swedish","WG","produces","function_words","function_words","out","ut",19.0681
 "Swedish","WG","produces","function_words","function_words","same","samma",16.2747
+"Swedish","WG","produces","function_words","function_words","some","några",-129.718
 "Swedish","WG","produces","function_words","function_words","that","den, den där",19.2829
 "Swedish","WG","produces","function_words","function_words","there","där",18.36
+"Swedish","WG","produces","function_words","function_words","this","den här",63.9734
 "Swedish","WG","produces","function_words","function_words","under","under",16.2747
 "Swedish","WG","produces","function_words","function_words","up","upp",21.0604
 "Swedish","WG","produces","function_words","function_words","what","vad",22.8398
+"Swedish","WG","produces","function_words","function_words","when (question)","när",-129.718
+"Swedish","WG","produces","function_words","function_words","where (question)","var",-14.3815
 "Swedish","WG","produces","function_words","function_words","who","vem",16.2747
+"Swedish","WG","produces","function_words","function_words","why","varför",82.4795
 "Swedish","WG","produces","function_words","function_words","you","du/din",16.2285
 "Swedish","WG","produces","nouns","nouns","airplane","flygplan",18.6837
 "Swedish","WG","produces","nouns","nouns","animal","djur",29.0177
@@ -5483,9 +5660,11 @@
 "Swedish","WG","produces","nouns","nouns","banana","banan",17.6349
 "Swedish","WG","produces","nouns","nouns","bathroom","badrum",16.2747
 "Swedish","WG","produces","nouns","nouns","bathtub","badkar",16.1855
+"Swedish","WG","produces","nouns","nouns","beach","stranden",-129.718
 "Swedish","WG","produces","nouns","nouns","beads","pärlor",16.2747
 "Swedish","WG","produces","nouns","nouns","bear","björn",17.853
 "Swedish","WG","produces","nouns","nouns","bed","säng",16.1171
+"Swedish","WG","produces","nouns","nouns","bedroom","sovrum",-129.718
 "Swedish","WG","produces","nouns","nouns","bee","bi",16.2285
 "Swedish","WG","produces","nouns","nouns","belly button","navel",16.1266
 "Swedish","WG","produces","nouns","nouns","bicycle","cykel",17.0206
@@ -5531,6 +5710,7 @@
 "Swedish","WG","produces","nouns","nouns","dish","fat",16.1615
 "Swedish","WG","produces","nouns","nouns","dog","hund",16.7757
 "Swedish","WG","produces","nouns","nouns","doll","docka",18.2887
+"Swedish","WG","produces","nouns","nouns","donkey","åsna",-60.8061
 "Swedish","WG","produces","nouns","nouns","door","dörr",16.1381
 "Swedish","WG","produces","nouns","nouns","drawer","låda, låda",16.1381
 "Swedish","WG","produces","nouns","nouns","duck","anka",18.4429
@@ -5538,6 +5718,8 @@
 "Swedish","WG","produces","nouns","nouns","egg","ägg",16.1321
 "Swedish","WG","produces","nouns","nouns","elephant","elefant",16.1381
 "Swedish","WG","produces","nouns","nouns","eye","öga",17.5731
+"Swedish","WG","produces","nouns","nouns","face","ansikte",-129.718
+"Swedish","WG","produces","nouns","nouns","field","landet",-129.718
 "Swedish","WG","produces","nouns","nouns","finger","finger",18.7122
 "Swedish","WG","produces","nouns","nouns","fireplace","öppen spis",16.2747
 "Swedish","WG","produces","nouns","nouns","firetruck","brandbil",20.6404
@@ -5549,6 +5731,7 @@
 "Swedish","WG","produces","nouns","nouns","fork","gaffel",16.1615
 "Swedish","WG","produces","nouns","nouns","frog","groda",19.5527
 "Swedish","WG","produces","nouns","nouns","garage","garage",16.2747
+"Swedish","WG","produces","nouns","nouns","garden","trädgård",-129.718
 "Swedish","WG","produces","nouns","nouns","giraffe","giraff",16.2285
 "Swedish","WG","produces","nouns","nouns","glass","glas",16.1525
 "Swedish","WG","produces","nouns","nouns","glasses","glasögon",16.1615
@@ -5576,6 +5759,7 @@
 "Swedish","WG","produces","nouns","nouns","lamp","lampa",15.8958
 "Swedish","WG","produces","nouns","nouns","leg","ben",19.3326
 "Swedish","WG","produces","nouns","nouns","lion","lejon",16.2285
+"Swedish","WG","produces","nouns","nouns","living room","vardagsrum",-129.718
 "Swedish","WG","produces","nouns","nouns","meat","kött",16.203
 "Swedish","WG","produces","nouns","nouns","meatball","köttbullar",16.2285
 "Swedish","WG","produces","nouns","nouns","medicine","medicin",29.0177
@@ -5592,23 +5776,33 @@
 "Swedish","WG","produces","nouns","nouns","nose","näsa",18.1332
 "Swedish","WG","produces","nouns","nouns","orange (food)","apelsin",18.7446
 "Swedish","WG","produces","nouns","nouns","outside","ute",18.4353
+"Swedish","WG","produces","nouns","nouns","oven","ugn",-129.718
 "Swedish","WG","produces","nouns","nouns","overalls","overall",17.6957
 "Swedish","WG","produces","nouns","nouns","owl","uggla",19.7755
 "Swedish","WG","produces","nouns","nouns","pajamas","pyjamas",20.686
 "Swedish","WG","produces","nouns","nouns","pancake","pannkaka",19.911
 "Swedish","WG","produces","nouns","nouns","pants","byxa",17.9849
 "Swedish","WG","produces","nouns","nouns","paper","papper",17.9849
+"Swedish","WG","produces","nouns","nouns","party","kalas",-129.718
 "Swedish","WG","produces","nouns","nouns","peas","ärtor",16.1448
 "Swedish","WG","produces","nouns","nouns","pen","penna",17.442
+"Swedish","WG","produces","nouns","nouns","penguin","pingvin",-129.718
+"Swedish","WG","produces","nouns","nouns","penny","mynt",-129.718
+"Swedish","WG","produces","nouns","nouns","picture","bild",-129.718
 "Swedish","WG","produces","nouns","nouns","pig","gris",18.4742
 "Swedish","WG","produces","nouns","nouns","pillow","kudde",17.9813
 "Swedish","WG","produces","nouns","nouns","pizza","pizza",16.203
+"Swedish","WG","produces","nouns","nouns","play pen","lekrum",-129.718
+"Swedish","WG","produces","nouns","nouns","playground","lekpark",-129.718
 "Swedish","WG","produces","nouns","nouns","pony","ponny",16.2747
+"Swedish","WG","produces","nouns","nouns","pool","bassa",-129.718
 "Swedish","WG","produces","nouns","nouns","potty","potta",19.4331
 "Swedish","WG","produces","nouns","nouns","puppy","valp",16.2285
+"Swedish","WG","produces","nouns","nouns","purse","börs",0.429518
 "Swedish","WG","produces","nouns","nouns","radio","radio",16.1855
 "Swedish","WG","produces","nouns","nouns","rain","regn",16.1855
 "Swedish","WG","produces","nouns","nouns","raisin","russin",18.1101
+"Swedish","WG","produces","nouns","nouns","refrigerator","kylskåp",-129.718
 "Swedish","WG","produces","nouns","nouns","rice","ris",16.1855
 "Swedish","WG","produces","nouns","nouns","rock","sten",18.4694
 "Swedish","WG","produces","nouns","nouns","rocking chair","gungstol",16.1855
@@ -5620,6 +5814,7 @@
 "Swedish","WG","produces","nouns","nouns","shoe","sko",17.3911
 "Swedish","WG","produces","nouns","nouns","shovel","spade",16.1266
 "Swedish","WG","produces","nouns","nouns","sink","diskbänk",16.2747
+"Swedish","WG","produces","nouns","nouns","sky","himmel",-129.718
 "Swedish","WG","produces","nouns","nouns","slide (object)","rutschbana",16.203
 "Swedish","WG","produces","nouns","nouns","snow","snö",17.7126
 "Swedish","WG","produces","nouns","nouns","soap","tvål",16.1615
@@ -5637,6 +5832,7 @@
 "Swedish","WG","produces","nouns","nouns","table","bord",16.1381
 "Swedish","WG","produces","nouns","nouns","teddybear","nalle",17.8313
 "Swedish","WG","produces","nouns","nouns","telephone","telefon",19.4552
+"Swedish","WG","produces","nouns","nouns","tiger","tiger",-52.2699
 "Swedish","WG","produces","nouns","nouns","toe","tå",17.316
 "Swedish","WG","produces","nouns","nouns","tongue","tunga",27.0897
 "Swedish","WG","produces","nouns","nouns","tooth","tand",16.1381
@@ -5655,10 +5851,13 @@
 "Swedish","WG","produces","nouns","nouns","water (beverage)","vatten",18.0145
 "Swedish","WG","produces","nouns","nouns","water (not beverage)","vatten",18.4737
 "Swedish","WG","produces","nouns","nouns","window","fönster",16.1855
+"Swedish","WG","produces","nouns","nouns","work (place)","arbetet",37.0201
+"Swedish","WG","produces","nouns","nouns","yard","gård",-129.718
 "Swedish","WG","produces","nouns","nouns","zipper","blixtlås",16.2747
 "Swedish","WG","produces","other","other","aunt","faster, moster",29.3992
 "Swedish","WG","produces","other","other","baa baa","bä bä",16.6017
 "Swedish","WG","produces","other","other","baby","baby",18.207
+"Swedish","WG","produces","other","other","babysitter","barnvakt",-129.718
 "Swedish","WG","produces","other","other","babysitter's name","barnvaktens namn",21.4392
 "Swedish","WG","produces","other","other","bath","bada",17.7625
 "Swedish","WG","produces","other","other","boy","pojke",16.1321
@@ -5681,9 +5880,11 @@
 "Swedish","WG","produces","other","other","lady","tant",21.7549
 "Swedish","WG","produces","other","other","later","senare",16.2285
 "Swedish","WG","produces","other","other","lunch","lunch",16.2285
+"Swedish","WG","produces","other","other","man","man",-129.718
 "Swedish","WG","produces","other","other","meow","mjau",15.4476
 "Swedish","WG","produces","other","other","mommy","mamma",12.1083
 "Swedish","WG","produces","other","other","moo","mu",15.9328
+"Swedish","WG","produces","other","other","morning","morgon",-129.718
 "Swedish","WG","produces","other","other","nap","sova middag",16.203
 "Swedish","WG","produces","other","other","night","natt",16.2747
 "Swedish","WG","produces","other","other","no","nej",15.7143
@@ -5697,8 +5898,11 @@
 "Swedish","WG","produces","other","other","quack quack","kvack kvack",17.0896
 "Swedish","WG","produces","other","other","shh","sch /hysch",17.9331
 "Swedish","WG","produces","other","other","sister","syster",23.0785
+"Swedish","WG","produces","other","other","teacher","lärare",-129.718
 "Swedish","WG","produces","other","other","thank you","tack",13.9467
+"Swedish","WG","produces","other","other","today","idag",-129.718
 "Swedish","WG","produces","other","other","tomorrow","imorgon",16.2747
+"Swedish","WG","produces","other","other","tonight","ikväll",-129.718
 "Swedish","WG","produces","other","other","uncle","farbror, morbror",18.5718
 "Swedish","WG","produces","other","other","vroom","brrr",16.1895
 "Swedish","WG","produces","other","other","wait","vänta",16.2285
@@ -5708,26 +5912,41 @@
 "Swedish","WG","produces","other","other","yum yum","nam nam",19.5929
 "Swedish","WG","produces","predicates","adjectives","all gone","borta",18.8305
 "Swedish","WG","produces","predicates","adjectives","asleep","sover",16.1448
+"Swedish","WG","produces","predicates","adjectives","bad","dålig",-129.718
 "Swedish","WG","produces","predicates","adjectives","big","stor",19.0128
+"Swedish","WG","produces","predicates","adjectives","blue","blå",-129.718
 "Swedish","WG","produces","predicates","adjectives","broken","trasig",16.1615
 "Swedish","WG","produces","predicates","adjectives","careful","försiktig",16.203
+"Swedish","WG","produces","predicates","adjectives","clean (description)","ren",-129.718
 "Swedish","WG","produces","predicates","adjectives","cold","kall",17.9857
+"Swedish","WG","produces","predicates","adjectives","dark","mörk",-129.718
 "Swedish","WG","produces","predicates","adjectives","dirty","smutsig",16.1855
+"Swedish","WG","produces","predicates","adjectives","dry (description)","torr",-129.718
 "Swedish","WG","produces","predicates","adjectives","empty","tom",19.7755
 "Swedish","WG","produces","predicates","adjectives","fast","fort",16.2285
 "Swedish","WG","produces","predicates","adjectives","fine","fin",22.5071
 "Swedish","WG","produces","predicates","adjectives","good","god",22.5071
+"Swedish","WG","produces","predicates","adjectives","happy","glad",33.9813
 "Swedish","WG","produces","predicates","adjectives","hard","hård, svår",16.2747
 "Swedish","WG","produces","predicates","adjectives","hot","varmt",19.0643
 "Swedish","WG","produces","predicates","adjectives","hungry","hungrig",20.6404
+"Swedish","WG","produces","predicates","adjectives","hurt","skada",-129.718
 "Swedish","WG","produces","predicates","adjectives","little (description)","lite",23.8387
+"Swedish","WG","produces","predicates","adjectives","naughty","stygg",-129.718
+"Swedish","WG","produces","predicates","adjectives","nice","trevlig",-129.718
+"Swedish","WG","produces","predicates","adjectives","old","gammal",-129.718
+"Swedish","WG","produces","predicates","adjectives","quick","snabb",-129.718
+"Swedish","WG","produces","predicates","adjectives","red","röd",-129.718
 "Swedish","WG","produces","predicates","adjectives","sick","sjuk",16.2285
 "Swedish","WG","produces","predicates","adjectives","soft","mjuk",16.1722
+"Swedish","WG","produces","predicates","adjectives","sweet","söt",-129.718
 "Swedish","WG","produces","predicates","adjectives","thirsty","törstig",19.5527
 "Swedish","WG","produces","predicates","adjectives","tired","trött, trot2",19.0128
 "Swedish","WG","produces","predicates","adjectives","wet","våt",16.203
 "Swedish","WG","produces","predicates","adjectives","yucky","äcklig",27.8939
+"Swedish","WG","produces","predicates","verbs","bite","bita",102.791
 "Swedish","WG","produces","predicates","verbs","blow","blåsa",20.5027
+"Swedish","WG","produces","predicates","verbs","break","bryta",-129.718
 "Swedish","WG","produces","predicates","verbs","clean (action)","städa",19.0128
 "Swedish","WG","produces","predicates","verbs","close","stänga",19.3326
 "Swedish","WG","produces","predicates","verbs","cry","gråta",19.3973
@@ -5744,6 +5963,7 @@
 "Swedish","WG","produces","predicates","verbs","help","hjälpa",19.4073
 "Swedish","WG","produces","predicates","verbs","hit","slå",20.6404
 "Swedish","WG","produces","predicates","verbs","hug","krama",19.1064
+"Swedish","WG","produces","predicates","verbs","hurry","skynda",82.4795
 "Swedish","WG","produces","predicates","verbs","jump","hoppa",17.6933
 "Swedish","WG","produces","predicates","verbs","kick","sparka",23.8387
 "Swedish","WG","produces","predicates","verbs","kiss","pussa",19.6919
@@ -5760,6 +5980,7 @@
 "Swedish","WG","produces","predicates","verbs","show","visa",29.0177
 "Swedish","WG","produces","predicates","verbs","sing","sjunga",18.2683
 "Swedish","WG","produces","predicates","verbs","sleep","sova",18.7847
+"Swedish","WG","produces","predicates","verbs","smile","le",82.4795
 "Swedish","WG","produces","predicates","verbs","splash","plaska",20.6404
 "Swedish","WG","produces","predicates","verbs","stop","sluta, stanna",22.619
 "Swedish","WG","produces","predicates","verbs","swim","simma",16.203
@@ -5814,6 +6035,7 @@
 "Swedish","WG","understands","nouns","nouns","banana","banan",11.9521
 "Swedish","WG","understands","nouns","nouns","bathroom","badrum",15.5199
 "Swedish","WG","understands","nouns","nouns","bathtub","badkar",15.2035
+"Swedish","WG","understands","nouns","nouns","beach","stranden",36.1362
 "Swedish","WG","understands","nouns","nouns","beads","pärlor",22.8247
 "Swedish","WG","understands","nouns","nouns","bear","björn",16.3234
 "Swedish","WG","understands","nouns","nouns","bed","säng",13.4103
@@ -5872,6 +6094,7 @@
 "Swedish","WG","understands","nouns","nouns","elephant","elefant",17.8013
 "Swedish","WG","understands","nouns","nouns","eye","öga",13.886
 "Swedish","WG","understands","nouns","nouns","face","ansikte",16.9109
+"Swedish","WG","understands","nouns","nouns","field","landet",48.1539
 "Swedish","WG","understands","nouns","nouns","finger","finger",15.2513
 "Swedish","WG","understands","nouns","nouns","fireplace","öppen spis",20.1847
 "Swedish","WG","understands","nouns","nouns","firetruck","brandbil",17.2346
@@ -5945,6 +6168,7 @@
 "Swedish","WG","understands","nouns","nouns","pillow","kudde",15.0692
 "Swedish","WG","understands","nouns","nouns","pizza","pizza",20.2563
 "Swedish","WG","understands","nouns","nouns","play pen","lekrum",17.9546
+"Swedish","WG","understands","nouns","nouns","playground","lekpark",32.8776
 "Swedish","WG","understands","nouns","nouns","pony","ponny",23.52
 "Swedish","WG","understands","nouns","nouns","pool","bassa",24.63
 "Swedish","WG","understands","nouns","nouns","potty","potta",15.5279
@@ -6044,9 +6268,12 @@
 "Swedish","WG","understands","other","other","pattycake","baka kaka",17.3208
 "Swedish","WG","understands","other","other","peekaboo","tittut",7.86254
 "Swedish","WG","understands","other","other","people","människor",25.6645
+"Swedish","WG","understands","other","other","person","person",62.567
 "Swedish","WG","understands","other","other","please","varsågod",13.6273
 "Swedish","WG","understands","other","other","quack quack","kvack kvack",15.2831
 "Swedish","WG","understands","other","other","shh","sch /hysch",15.2706
+"Swedish","WG","understands","other","other","sister","syster",59.8963
+"Swedish","WG","understands","other","other","teacher","lärare",36.1362
 "Swedish","WG","understands","other","other","thank you","tack",11.2499
 "Swedish","WG","understands","other","other","today","idag",19.9204
 "Swedish","WG","understands","other","other","tomorrow","imorgon",22.1221
@@ -6146,16 +6373,20 @@
 "Turkish","WG","produces","function_words","function_words","front","önünde",20.9954
 "Turkish","WG","produces","function_words","function_words","here","burada, işte",22.307
 "Turkish","WG","produces","function_words","function_words","his","onun",27.4759
+"Turkish","WG","produces","function_words","function_words","how","nasıl",35.2779
 "Turkish","WG","produces","function_words","function_words","i","ben",21.8875
 "Turkish","WG","produces","function_words","function_words","in","içinde",23.1709
+"Turkish","WG","produces","function_words","function_words","inside","içeride",41.7393
 "Turkish","WG","produces","function_words","function_words","it","ona",27.3869
 "Turkish","WG","produces","function_words","function_words","me","bana",27.9704
+"Turkish","WG","produces","function_words","function_words","more","daha/bir daha",38.8086
 "Turkish","WG","produces","function_words","function_words","much","çok",26.4897
 "Turkish","WG","produces","function_words","function_words","my","benim",20.203
 "Turkish","WG","produces","function_words","function_words","none","hiç",26.781
 "Turkish","WG","produces","function_words","function_words","on","üstünde/üzerinde",24.229
 "Turkish","WG","produces","function_words","function_words","other","öbürü",30.5965
 "Turkish","WG","produces","function_words","function_words","out","dışarıda",25.3042
+"Turkish","WG","produces","function_words","function_words","some","biraz",42.4138
 "Turkish","WG","produces","function_words","function_words","someone","biri",20.8179
 "Turkish","WG","produces","function_words","function_words","that","o, şu",24.4851
 "Turkish","WG","produces","function_words","function_words","there","orada, şurada",23.2416
@@ -6181,14 +6412,20 @@
 "Turkish","WG","produces","nouns","nouns","bed","yatak",24.2387
 "Turkish","WG","produces","nouns","nouns","bee","arı",19.8824
 "Turkish","WG","produces","nouns","nouns","bell","zil",26.2335
+"Turkish","WG","produces","nouns","nouns","bib","önlük",49.0397
 "Turkish","WG","produces","nouns","nouns","bicycle","bisiklet",30.4966
 "Turkish","WG","produces","nouns","nouns","bird","kuş",19.3161
+"Turkish","WG","produces","nouns","nouns","blanket","battaniye",1467.99
 "Turkish","WG","produces","nouns","nouns","book","kitap",28.0567
 "Turkish","WG","produces","nouns","nouns","bottle","şişe",20.1845
 "Turkish","WG","produces","nouns","nouns","box","kutu",27.5089
 "Turkish","WG","produces","nouns","nouns","bread","ekmek",20.49
 "Turkish","WG","produces","nouns","nouns","breast","meme",20.7108
+"Turkish","WG","produces","nouns","nouns","bridge","köprü",69.2896
+"Turkish","WG","produces","nouns","nouns","bucket","kova",32.6415
 "Turkish","WG","produces","nouns","nouns","bug","böcek",26.3221
+"Turkish","WG","produces","nouns","nouns","bunny","tavşan",33.8386
+"Turkish","WG","produces","nouns","nouns","bus","otobüs",35.5074
 "Turkish","WG","produces","nouns","nouns","butt","popo",24.249
 "Turkish","WG","produces","nouns","nouns","butterfly","kelebek",30.9329
 "Turkish","WG","produces","nouns","nouns","cake","kek, pasta",23.1989
@@ -6196,6 +6433,7 @@
 "Turkish","WG","produces","nouns","nouns","car","araba",21.5366
 "Turkish","WG","produces","nouns","nouns","carrots","havuç",29.6609
 "Turkish","WG","produces","nouns","nouns","cat","kedi",18.0618
+"Turkish","WG","produces","nouns","nouns","chair","sandalye/iskemle",53.3363
 "Turkish","WG","produces","nouns","nouns","cheek","yanak",24.9346
 "Turkish","WG","produces","nouns","nouns","cheese","peynir",22.7125
 "Turkish","WG","produces","nouns","nouns","chicken (animal)","tavuk",28.1256
@@ -6204,8 +6442,12 @@
 "Turkish","WG","produces","nouns","nouns","coat","palto",24.2842
 "Turkish","WG","produces","nouns","nouns","coffee","çay",17.9068
 "Turkish","WG","produces","nouns","nouns","comb (object)","tarak",26.2452
+"Turkish","WG","produces","nouns","nouns","computer","bilgisayar",54.8942
+"Turkish","WG","produces","nouns","nouns","cookie","kurabiye",199.315
 "Turkish","WG","produces","nouns","nouns","cow","inek",21.5303
 "Turkish","WG","produces","nouns","nouns","cracker","bisküvi",21.3928
+"Turkish","WG","produces","nouns","nouns","crayon","boya",32.4399
+"Turkish","WG","produces","nouns","nouns","crib","beşik",40.0784
 "Turkish","WG","produces","nouns","nouns","cupboard","dolap",24.1367
 "Turkish","WG","produces","nouns","nouns","diaper","bez (çocuk bezi)",22.1742
 "Turkish","WG","produces","nouns","nouns","dog","köpek",19.12
@@ -6228,6 +6470,7 @@
 "Turkish","WG","produces","nouns","nouns","foot","ayak",22.8561
 "Turkish","WG","produces","nouns","nouns","fork","çatal",25.2852
 "Turkish","WG","produces","nouns","nouns","frog","kurbağa",30.9329
+"Turkish","WG","produces","nouns","nouns","fruit","meyve",41.7393
 "Turkish","WG","produces","nouns","nouns","garden","bahçe",25.7337
 "Turkish","WG","produces","nouns","nouns","glasses","gözlük, bardak",25.6516
 "Turkish","WG","produces","nouns","nouns","ground","toprak",30.3108
@@ -6239,49 +6482,75 @@
 "Turkish","WG","produces","nouns","nouns","horse","at",18.9643
 "Turkish","WG","produces","nouns","nouns","ice cream","dondurma",24.6103
 "Turkish","WG","produces","nouns","nouns","jacket","ceket",21.6789
+"Turkish","WG","produces","nouns","nouns","jam","reçel",199.315
+"Turkish","WG","produces","nouns","nouns","keys","anahtar",44.3673
 "Turkish","WG","produces","nouns","nouns","kitchen","mutfak",25.9717
 "Turkish","WG","produces","nouns","nouns","knee","diz",28.4512
 "Turkish","WG","produces","nouns","nouns","lamb","kuzu",24.9373
 "Turkish","WG","produces","nouns","nouns","lamp","lamba/işık",21.6359
+"Turkish","WG","produces","nouns","nouns","leaf","yaprak",32.6415
+"Turkish","WG","produces","nouns","nouns","leg","bacak",33.8386
+"Turkish","WG","produces","nouns","nouns","lemon","limon",37.9998
 "Turkish","WG","produces","nouns","nouns","meat","et",22.4106
 "Turkish","WG","produces","nouns","nouns","meatball","köfte",24.6103
+"Turkish","WG","produces","nouns","nouns","medicine","ilaç",32.6307
 "Turkish","WG","produces","nouns","nouns","milk","süt",18.6835
 "Turkish","WG","produces","nouns","nouns","mirror","ayna",29.7505
 "Turkish","WG","produces","nouns","nouns","monkey","maymun",25.9747
 "Turkish","WG","produces","nouns","nouns","moon","ay/aydede",20.5155
 "Turkish","WG","produces","nouns","nouns","mouth","ağız",28.5857
 "Turkish","WG","produces","nouns","nouns","mud","çamur",28.8218
+"Turkish","WG","produces","nouns","nouns","necklace","kolye",37.9998
 "Turkish","WG","produces","nouns","nouns","noodles","çorba",22.5513
 "Turkish","WG","produces","nouns","nouns","nose","burun",23.0485
 "Turkish","WG","produces","nouns","nouns","olive","zeytin",21.6585
 "Turkish","WG","produces","nouns","nouns","orange (food)","portakal",24.9207
 "Turkish","WG","produces","nouns","nouns","oven","fırın",21.6789
 "Turkish","WG","produces","nouns","nouns","pacifier","biberon, emzik",24.6913
+"Turkish","WG","produces","nouns","nouns","pajamas","pijama",69.2896
 "Turkish","WG","produces","nouns","nouns","pants","pantolon",25.9717
+"Turkish","WG","produces","nouns","nouns","paper","kağıt",35.5605
 "Turkish","WG","produces","nouns","nouns","pastry","börek",23.2738
+"Turkish","WG","produces","nouns","nouns","peach","şeftali",32.4399
+"Turkish","WG","produces","nouns","nouns","peanut","fıstık",53.3363
 "Turkish","WG","produces","nouns","nouns","pear","armut",24.5182
 "Turkish","WG","produces","nouns","nouns","pen","kalem",30.8968
+"Turkish","WG","produces","nouns","nouns","picture","resim",32.4399
 "Turkish","WG","produces","nouns","nouns","pillow","yastık",26.6129
+"Turkish","WG","produces","nouns","nouns","pipe","pipet/kamış",-10.7602
 "Turkish","WG","produces","nouns","nouns","plate","tabak",25.1305
+"Turkish","WG","produces","nouns","nouns","pool","havuz",39.7615
+"Turkish","WG","produces","nouns","nouns","porch","balkon",45.6789
 "Turkish","WG","produces","nouns","nouns","potato","patates",22.3066
+"Turkish","WG","produces","nouns","nouns","potty","lazımlık/oturak, tuvalet",42.6271
+"Turkish","WG","produces","nouns","nouns","pretzel","simit",34.4444
+"Turkish","WG","produces","nouns","nouns","pudding","muhallebi",209.104
 "Turkish","WG","produces","nouns","nouns","purse","çanta",25.1743
+"Turkish","WG","produces","nouns","nouns","radio","radyo",49.7716
 "Turkish","WG","produces","nouns","nouns","rain","yağmur",30.9611
 "Turkish","WG","produces","nouns","nouns","refrigerator","buzdolabı",24.6585
 "Turkish","WG","produces","nouns","nouns","remote control","kumanda",28.6641
 "Turkish","WG","produces","nouns","nouns","rice","pilav",22.6548
 "Turkish","WG","produces","nouns","nouns","road","yol",23.7581
 "Turkish","WG","produces","nouns","nouns","rock","taş",26.5465
+"Turkish","WG","produces","nouns","nouns","room","oda",74.46
 "Turkish","WG","produces","nouns","nouns","rope","ip",26.4609
 "Turkish","WG","produces","nouns","nouns","sand","kum",24.1367
+"Turkish","WG","produces","nouns","nouns","ship","gemi/vapur",41.7393
+"Turkish","WG","produces","nouns","nouns","shirt","gömlek, tişört",42.4138
 "Turkish","WG","produces","nouns","nouns","shoe","ayakkabı/pabuç",21.338
 "Turkish","WG","produces","nouns","nouns","shovel","kürek",21.3147
+"Turkish","WG","produces","nouns","nouns","slide (object)","kaydırak",35.3085
 "Turkish","WG","produces","nouns","nouns","slipper","terlik",25.1743
+"Turkish","WG","produces","nouns","nouns","soap","sabun",34.749
 "Turkish","WG","produces","nouns","nouns","sock","çorap",30.3739
 "Turkish","WG","produces","nouns","nouns","soda","kola",21.8953
 "Turkish","WG","produces","nouns","nouns","soup","tarhana",22.1558
 "Turkish","WG","produces","nouns","nouns","spaghetti","makarna",25.8839
 "Turkish","WG","produces","nouns","nouns","spoon","kaşık",24.8381
 "Turkish","WG","produces","nouns","nouns","stairs","merdiven",18.9276
+"Turkish","WG","produces","nouns","nouns","star","yıldız",40.9229
+"Turkish","WG","produces","nouns","nouns","street","sokak",35.3085
 "Turkish","WG","produces","nouns","nouns","sun","güneş",26.2452
 "Turkish","WG","produces","nouns","nouns","sweater","kazak",24.2842
 "Turkish","WG","produces","nouns","nouns","swing (object)","salıncak",27.5089
@@ -6292,13 +6561,17 @@
 "Turkish","WG","produces","nouns","nouns","tongue","dil",23.2416
 "Turkish","WG","produces","nouns","nouns","tooth","diş",22.4355
 "Turkish","WG","produces","nouns","nouns","toy (object)","oyuncak",26.3588
+"Turkish","WG","produces","nouns","nouns","train","tren",49.4985
 "Turkish","WG","produces","nouns","nouns","tree","ağaç",22.2003
+"Turkish","WG","produces","nouns","nouns","truck","kamyon",37.9998
 "Turkish","WG","produces","nouns","nouns","tummy","göbek",28.8296
 "Turkish","WG","produces","nouns","nouns","tv","televizyon",30.8901
 "Turkish","WG","produces","nouns","nouns","vacuum","süpürge",24.7944
+"Turkish","WG","produces","nouns","nouns","vest","yelek",40.4251
 "Turkish","WG","produces","nouns","nouns","wall","duvar",25.5169
 "Turkish","WG","produces","nouns","nouns","water (beverage)","su",16.2072
 "Turkish","WG","produces","nouns","nouns","watermelon","karpuz",22.14
+"Turkish","WG","produces","nouns","nouns","window","pencere",35.0432
 "Turkish","WG","produces","nouns","nouns","yogurt","yoğurt",24.9373
 "Turkish","WG","produces","nouns","nouns","yogurt drink","ayran",23.7632
 "Turkish","WG","produces","other","other","all gone","yok",20.6874
@@ -6319,6 +6592,7 @@
 "Turkish","WG","produces","other","other","daddy","baba",11.3824
 "Turkish","WG","produces","other","other","doctor","doktor",28.2806
 "Turkish","WG","produces","other","other","don't","hayır, cıss",14.7485
+"Turkish","WG","produces","other","other","evening","akşam",44.637
 "Turkish","WG","produces","other","other","friend","arkadaş",26.266
 "Turkish","WG","produces","other","other","girl","kız",26.438
 "Turkish","WG","produces","other","other","go potty","çiş, kaka",17.9775
@@ -6329,6 +6603,7 @@
 "Turkish","WG","produces","other","other","grandpa","dede",13.1147
 "Turkish","WG","produces","other","other","grocery","bakkal",30.8136
 "Turkish","WG","produces","other","other","hello","alo",15.4003
+"Turkish","WG","produces","other","other","hide and seek","saklambaç",32.5494
 "Turkish","WG","produces","other","other","home","ev",23.8847
 "Turkish","WG","produces","other","other","lullaby","ninni",23.0366
 "Turkish","WG","produces","other","other","man","adam",22.5269
@@ -6336,6 +6611,10 @@
 "Turkish","WG","produces","other","other","meow","pisi-pisi",16.1566
 "Turkish","WG","produces","other","other","mommy","anne",12.1326
 "Turkish","WG","produces","other","other","moo","möö",17.0803
+"Turkish","WG","produces","other","other","morning","sabah",33.5453
+"Turkish","WG","produces","other","other","music","müzik",63.8651
+"Turkish","WG","produces","other","other","night","gece",42.6271
+"Turkish","WG","produces","other","other","now","hemen, şimdi",32.6307
 "Turkish","WG","produces","other","other","ok","tamam",21.5733
 "Turkish","WG","produces","other","other","ouch","uf",14.8357
 "Turkish","WG","produces","other","other","outing","atta",16.5059
@@ -6344,6 +6623,8 @@
 "Turkish","WG","produces","other","other","peekaboo","cee",13.3278
 "Turkish","WG","produces","other","other","policeman","polis",17.9916
 "Turkish","WG","produces","other","other","present","var",21.1601
+"Turkish","WG","produces","other","other","school","okul",32.5494
+"Turkish","WG","produces","other","other","sea","deniz",49.7716
 "Turkish","WG","produces","other","other","shame","ayıp",26.5465
 "Turkish","WG","produces","other","other","sibling","kardeş",21.1494
 "Turkish","WG","produces","other","other","sing","şarkı",27.1499
@@ -6353,38 +6634,52 @@
 "Turkish","WG","produces","other","other","store","dükkan",30.5965
 "Turkish","WG","produces","other","other","surprise","sürpriz",26.5256
 "Turkish","WG","produces","other","other","take in (arms)","kucak",20.8724
+"Turkish","WG","produces","other","other","thank you","teşekkür/sağol",32.2867
 "Turkish","WG","produces","other","other","today","bugün",23.0552
 "Turkish","WG","produces","other","other","uncle","amca, dayı",17.4407
 "Turkish","WG","produces","other","other","up","hop/hoppa",16.6337
 "Turkish","WG","produces","other","other","village","köy",19.375
 "Turkish","WG","produces","other","other","vroom","düt",16.1829
+"Turkish","WG","produces","other","other","watch out","dikkat",49.7716
 "Turkish","WG","produces","other","other","woof woof","havhav",15.0203
+"Turkish","WG","produces","other","other","work (place)","iş",92.3926
 "Turkish","WG","produces","other","other","yes","evet",21.2945
 "Turkish","WG","produces","other","other","yum yum","ham",14.2586
 "Turkish","WG","produces","predicates","adjectives","big","büyük, kocaman",23.986
 "Turkish","WG","produces","predicates","adjectives","bitter","acı (lezzet)",23.7375
 "Turkish","WG","produces","predicates","adjectives","clean (description)","temiz",26.5256
 "Turkish","WG","produces","predicates","adjectives","closed (description)","kapalı",30.9329
+"Turkish","WG","produces","predicates","adjectives","cold","soğuk",35.143
 "Turkish","WG","produces","predicates","adjectives","cute","cici",17.2493
 "Turkish","WG","produces","predicates","adjectives","dark","karanlık",23.2738
 "Turkish","WG","produces","predicates","adjectives","dirty","kirli, pis",19.1494
 "Turkish","WG","produces","predicates","adjectives","empty","boş",23.5782
+"Turkish","WG","produces","predicates","adjectives","funny","komik",40.9229
+"Turkish","WG","produces","predicates","adjectives","good","iyi",38.253
 "Turkish","WG","produces","predicates","adjectives","hot","sıcak",24.2429
+"Turkish","WG","produces","predicates","adjectives","little (description)","küçük",32.6307
 "Turkish","WG","produces","predicates","adjectives","many","çok",25.0175
+"Turkish","WG","produces","predicates","adjectives","naughty","yaramaz",199.315
+"Turkish","WG","produces","predicates","adjectives","new","yeni",32.6415
 "Turkish","WG","produces","predicates","adjectives","open (description)","açık",28.5075
 "Turkish","WG","produces","predicates","adjectives","pretty","güzel",30.8901
+"Turkish","WG","produces","predicates","adjectives","red","kırmızı",32.2867
 "Turkish","WG","produces","predicates","adjectives","sick","hasta",23.2738
 "Turkish","WG","produces","predicates","adjectives","sweet","tatlı",21.01
+"Turkish","WG","produces","predicates","adjectives","ugly","çirkin",38.5862
 "Turkish","WG","produces","predicates","adjectives","wet","islak",23.2344
 "Turkish","WG","produces","predicates","verbs","bathe","yıkan",29.7505
 "Turkish","WG","produces","predicates","verbs","begin","başla, ol",20.6078
 "Turkish","WG","produces","predicates","verbs","bite","isır",24.5182
 "Turkish","WG","produces","predicates","verbs","break","kır",25.7337
 "Turkish","WG","produces","predicates","verbs","bring","getir",21.3928
+"Turkish","WG","produces","predicates","verbs","carry","taşı",39.7615
+"Turkish","WG","produces","predicates","verbs","catch","yakala",45.6789
 "Turkish","WG","produces","predicates","verbs","climb","çık",21.3272
 "Turkish","WG","produces","predicates","verbs","close","kapat",23.3539
 "Turkish","WG","produces","predicates","verbs","comb (action)","tara",29.5215
 "Turkish","WG","produces","predicates","verbs","come","gel",20.3886
+"Turkish","WG","produces","predicates","verbs","cough","öksür",31.974
 "Turkish","WG","produces","predicates","verbs","count","say",24.3281
 "Turkish","WG","produces","predicates","verbs","cover","ört",26.266
 "Turkish","WG","produces","predicates","verbs","cry","ağla",26.2335
@@ -6422,10 +6717,12 @@
 "Turkish","WG","produces","predicates","verbs","love","sev",30.7196
 "Turkish","WG","produces","predicates","verbs","open","aç",18.196
 "Turkish","WG","produces","predicates","verbs","opened","açıl",23.0552
+"Turkish","WG","produces","predicates","verbs","paint","boya",37.9998
 "Turkish","WG","produces","predicates","verbs","pass","geç",28.5075
 "Turkish","WG","produces","predicates","verbs","play","oyna",23.4047
 "Turkish","WG","produces","predicates","verbs","press","bas",20.842
 "Turkish","WG","produces","predicates","verbs","pull","çek",27.4759
+"Turkish","WG","produces","predicates","verbs","push","it",35.6077
 "Turkish","WG","produces","predicates","verbs","put","koy",24.6482
 "Turkish","WG","produces","predicates","verbs","put in","sok",26.5256
 "Turkish","WG","produces","predicates","verbs","put on","tak",24.0609
@@ -6449,11 +6746,14 @@
 "Turkish","WG","produces","predicates","verbs","take","al",17.6903
 "Turkish","WG","produces","predicates","verbs","take away","götür",22.4607
 "Turkish","WG","produces","predicates","verbs","take off","çıkar",23.7632
+"Turkish","WG","produces","predicates","verbs","tear","yırt",35.2779
 "Turkish","WG","produces","predicates","verbs","throw","at",17.8491
 "Turkish","WG","produces","predicates","verbs","tickle","gir",23.986
 "Turkish","WG","produces","predicates","verbs","touch","elle",30.8382
 "Turkish","WG","produces","predicates","verbs","travel","gez",22.4607
 "Turkish","WG","produces","predicates","verbs","turn","dön",24.6103
+"Turkish","WG","produces","predicates","verbs","understand","anla",35.5074
+"Turkish","WG","produces","predicates","verbs","wake","uyan",37.9998
 "Turkish","WG","produces","predicates","verbs","walk","yürü",27.184
 "Turkish","WG","produces","predicates","verbs","wanna","iste",26.2452
 "Turkish","WG","produces","predicates","verbs","wash","yıka",24.7944
@@ -6664,6 +6964,7 @@
 "Turkish","WG","understands","nouns","nouns","vacuum","süpürge",14.9104
 "Turkish","WG","understands","nouns","nouns","vest","yelek",16.893
 "Turkish","WG","understands","nouns","nouns","wall","duvar",19.1735
+"Turkish","WG","understands","nouns","nouns","water (beverage)","su",4.74825
 "Turkish","WG","understands","nouns","nouns","watermelon","karpuz",18.1733
 "Turkish","WG","understands","nouns","nouns","window","pencere",14.5236
 "Turkish","WG","understands","nouns","nouns","yogurt","yoğurt",14.4488
@@ -6683,6 +6984,7 @@
 "Turkish","WG","understands","other","other","clap","alkış",7.33
 "Turkish","WG","understands","other","other","clown","palyaço",23.9063
 "Turkish","WG","understands","other","other","come on","hadi",13.7142
+"Turkish","WG","understands","other","other","daddy","baba",-12.5437
 "Turkish","WG","understands","other","other","doctor","doktor",16.4429
 "Turkish","WG","understands","other","other","don't","hayır, cıss",6.47789
 "Turkish","WG","understands","other","other","evening","akşam",18.313
@@ -6702,6 +7004,7 @@
 "Turkish","WG","understands","other","other","man","adam",18.9391
 "Turkish","WG","understands","other","other","market","çarşı, market, pazar",17.5238
 "Turkish","WG","understands","other","other","meow","pisi-pisi",10.0842
+"Turkish","WG","understands","other","other","mommy","anne",-17.2772
 "Turkish","WG","understands","other","other","moo","möö",13.8963
 "Turkish","WG","understands","other","other","morning","sabah",19.338
 "Turkish","WG","understands","other","other","music","müzik",14.4065
@@ -6709,8 +7012,10 @@
 "Turkish","WG","understands","other","other","now","hemen, şimdi",18.2678
 "Turkish","WG","understands","other","other","ok","tamam",13.9609
 "Turkish","WG","understands","other","other","ouch","uf",10.6437
+"Turkish","WG","understands","other","other","outing","atta",4.02915
 "Turkish","WG","understands","other","other","outside","dışarı",11.7728
 "Turkish","WG","understands","other","other","park","park",14.2825
+"Turkish","WG","understands","other","other","peekaboo","cee",46.2661
 "Turkish","WG","understands","other","other","policeman","polis",22.2482
 "Turkish","WG","understands","other","other","present","var",14.8963
 "Turkish","WG","understands","other","other","school","okul",21.0781
@@ -6734,6 +7039,7 @@
 "Turkish","WG","understands","other","other","woof woof","havhav",10.6448
 "Turkish","WG","understands","other","other","work (place)","iş",20.1452
 "Turkish","WG","understands","other","other","yes","evet",13.7708
+"Turkish","WG","understands","other","other","yum yum","ham",0.160933
 "Turkish","WG","understands","predicates","adjectives","big","büyük, kocaman",16.9775
 "Turkish","WG","understands","predicates","adjectives","bitter","acı (lezzet)",14.79
 "Turkish","WG","understands","predicates","adjectives","clean (description)","temiz",19.1477
