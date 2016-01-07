@@ -1,0 +1,563 @@
+---
+title: "Using large-scale vocabulary data to understand early word learning"
+author: "Mika Braginsky (with Michael Frank, Virginia Marchman, Daniel Yurovsky)"
+date: "`r Sys.Date()`"
+output:
+  ioslides_presentation
+runtime: shiny
+---
+
+<style type="text/css">
+slides > slide:not(.nobackground):after {
+  content: '';
+}
+</style>
+
+```{r knitr_setup, echo=FALSE}
+library(knitr)
+opts_chunk$set(echo = FALSE, error = FALSE, message = FALSE, warning = FALSE,
+               fig.pos = "center", cache = TRUE)
+               #cache.extra = tools::md5sum("aoa_prediction_funs.Rmd"))
+```
+
+```{r knit_aoa, include=FALSE}
+# include_dirs <- c("~/projects/lab/aoa-prediction/aoa_prediction_cache/html/",
+#                   "~/projects/lab/vocab-comp/vocab_comp_cache/html/")
+# 
+# for (dir in include_dirs) {
+#   for (file in unique(gsub("[.](rdb|rdx|RData)$", "", list.files(dir)))) {
+#     load_cache(label = file, path = dir)
+#   }
+# }
+# knit("aoa_prediction_funs.Rmd", tangle = TRUE)
+# source("aoa_prediction_funs.R")
+# save.image("aoa_prediction.RData")
+load("aoa_prediction.RData")
+```
+
+```{r knit_vc, include=FALSE}
+#knit("../vocab-comp/vocab_comp.Rmd", tangle = TRUE)
+#source("vocab_comp.R")
+```
+
+```{r libraries}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(readr)
+library(ggplot2)
+library(directlabels)
+library(langcog)
+library(wordbankr)
+library(boot)
+library(lazyeval)
+theme_set(theme_mikabr())
+```
+
+## Kids learn words
+
+<div class="notes">
+Plot of number of words on form produced as reported by parent.
+</div>
+
+```{r vocab_data}
+admins <- get_administration_data("English", mode = "local")
+vocab_data <- admins %>%
+  group_by(language, age) %>%
+  summarise(mean_production = mean(production))
+```
+
+```{r vocab_data_plot}
+amin <- min(vocab_data$age)
+amax <- max(vocab_data$age)
+ggplot(vocab_data, aes(x = age, y = mean_production, colour = language)) +
+  geom_smooth(size = 1, method = "loess") +
+  scale_x_continuous(name = "\nAge (months)", breaks = seq(amin, amax, 2),
+                     limits = c(amin, amax)) +
+  scale_y_continuous(name = "Mean productive vocabulary\n",# limits = c(-20, 530),
+                     breaks = seq(0, 520, 100)) +
+  scale_colour_solarized(guide = FALSE)
+```
+
+## Word learning problems {.flexbox .vcenter .build}
+
+<div class="centered">
+```{r}
+img(src = "www/word-learning.png", width = 700)
+```
+</div>
+
+identify referents, map to language, generalize concepts...
+
+## Many proposed solutions
+
+> - Cross-situational statistics (Yu & Smith, 2007)
+> - Social cues (Baldwin, 1993)
+> - Constraints and biases (Markman, 1990)
+> - Syntactic bootstrapping (Gleitman, 1990)
+> - ...
+
+<br>
+
+> - How do these interact over the course of early language learning?
+
+## A unifying framework
+
+> - Predicting word learning: what makes certain words easier/harder?
+> - No 1-1 mapping between theories and predictors...
+> - ... but directly comparing relative contributions will constrain theory.
+
+## Using large-scale developmental data
+
+<div class="centered">
+```{r, echo=FALSE}
+img(src = "www/wordbank.png", height = 400)
+```
+</div>
+
+> 1) __Vocabulary composition__
+> 2) __Age of acquisition__
+
+## Vocabulary composition {.build}
+> - How important is lexical category in predicting learning?
+> - Nouns first? (Gentner, 1982; Bates et al, 1994; Caselli et al, 1995)
+
+<div class="centered">
+```{r, echo=FALSE}
+img(src = "www/bates1994_1_key.png", height = 250)
+img(src = "www/bates1994_2_key.png", height = 250)
+```
+</div>
+
+> - But not in all languages? (Gopnik & Choi, 1995; Tardif, 1999; Gentner & Boroditsky, 2001; Bornstein et al, 2004)
+
+## Vocabulary composition
+
+> - Many possible explanations
+    - input frequency?
+    - morphology/syntax?
+    - language use?
+> - Limitations: Heterogenous methods and measures, small sample sizes
+> - Our contributions:
+    - Consistent analysis across many languages
+    - Characterize cross-linguistic universality and variation
+
+## Vocabulary composition
+
+```{r, fig.height=5.5}
+vocab_comp_data_ordered <- read_csv("talk_data/vocab_comp_data_ordered.csv") %>%
+  mutate(lexical_category = factor(lexical_category,
+                                   levels = c("Nouns", "Predicates", "Function Words"),
+                                   labels = c("Nouns  ", "Predicates  ", "Function Words")))
+
+vc_plt <- ggplot(filter(vocab_comp_data_ordered, language == "English"),
+       aes(x = vocab, y = prop, colour = lexical_category)) +
+  geom_abline(slope = 1, intercept = 0, color = "gray", linetype = "dashed") +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
+                     name = "Proportion of Category\n") +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
+                     name = "\nVocabulary Size") +
+  scale_colour_solarized(name = "") +
+  theme_mikabr(base_size = 20) +
+  theme(legend.position = "bottom",
+        legend.key = element_blank(),
+        legend.background = element_rect(fill = "transparent"))
+vc_plt + geom_point(size = 0)
+```
+
+## Vocabulary composition
+
+```{r, fig.height=5.5}
+vc_plt +
+  geom_jitter(size = 0.7, alpha = 0.5)
+```
+
+## Vocabulary composition
+
+```{r, fig.height=5.5}
+vc_plt +
+  geom_jitter(size = 0.7, alpha = 0.5) +
+  geom_smooth(method = "clm", formula = y ~ I(x ^ 3) + I(x ^ 2) + x - 1, size = 1, se = FALSE)
+```
+
+## Vocabulary composition
+
+```{r, fig.height=5.5}
+vc_plt +
+  geom_smooth(method = "clm", formula = y ~ I(x ^ 3) + I(x ^ 2) + x - 1, size = 1, se = FALSE)
+```
+
+## Vocabulary composition
+
+```{r, fig.height=5.5}
+predictions <- read_csv("talk_data/predictions.csv") %>%
+  mutate(lexical_category = factor(lexical_category,
+                                   levels = c("Nouns", "Predicates", "Function Words"),
+                                   labels = c("Nouns  ", "Predicates  ", "Function Words")))
+area_poly <- read_csv("talk_data/area_poly.csv") %>%
+  mutate(lexical_category = factor(lexical_category,
+                                   levels = c("Nouns", "Predicates", "Function Words"),
+                                   labels = c("Nouns  ", "Predicates  ", "Function Words")))
+ggplot(filter(predictions, language == "English"), aes(x = vocab, y = prop)) +
+  geom_line(aes(colour = lexical_category), size = 1) +
+  geom_polygon(data = filter(area_poly, language == "English"),
+               aes(fill = lexical_category), alpha = 0.2) +
+  geom_abline(slope = 1, intercept = 0, color = "gray", linetype = "dashed") + 
+  scale_fill_solarized(guide = FALSE) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
+                     name = "Proportion of Category\n") +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
+                     name = "\nVocabulary Size") +
+  scale_colour_solarized(name = "") +
+  theme_mikabr(base_size = 20) +
+  theme(legend.position = "bottom",
+        legend.key = element_blank(),
+        legend.background = element_rect(fill = "transparent"))
+```
+
+----
+
+```{r, fig.width=8, fig.height=6}
+language_levels <- c("Mandarin", "Cantonese", "Turkish", "Hebrew", "Swedish",
+                     "Italian", "Russian", "Spanish", "Croatian", "Norwegian",
+                     "English", "Danish", "German")
+vocab_comp_data <- read_csv("talk_data/vocab_comp_data_ordered.csv") %>%
+  mutate(language = factor(language, levels = rev(language_levels)),
+         lexical_category = factor(lexical_category,
+                                   levels = c("Nouns", "Predicates", "Function Words"),
+                                   labels = c("Nouns  ", "Predicates  ", "Function Words")))
+ggplot(vocab_comp_data, aes(x = vocab, y = prop, colour = lexical_category)) +
+  facet_wrap(~language, ncol = 5) +
+  geom_jitter(size = 0.7, alpha = 0.5) +
+  geom_smooth(method = "clm", formula = y ~ I(x ^ 3) + I(x ^ 2) + x - 1, size = 1, se = FALSE) +
+  geom_abline(slope = 1, intercept = 0, color = "gray", linetype = "dashed") + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
+                     name = "Proportion of Category\n") +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
+                     name = "\nVocabulary Size") +
+  scale_colour_solarized(name = "") +
+  theme(legend.position = "top",
+        legend.key = element_blank(),
+        legend.background = element_rect(fill = "transparent"))
+```
+
+## Vocabulary composition {.build}
+
+```{r, fig.width=8, fig.height=4}
+area_summary <- read_csv("talk_data/area_summary.csv") %>%
+  mutate(lexical_category = factor(lexical_category,
+                                   levels = c("Nouns", "Predicates", "Function Words"),
+                                   labels = c("Nouns  ", "Predicates  ", "Function Words")))
+ggplot(filter(area_summary, form == "WS"),
+       aes(y = language, x = mean, col = lexical_category)) +
+  facet_grid(. ~ lexical_category) +
+  geom_point() +
+  geom_segment(aes(x = ci_lower, xend = ci_upper,
+                   y = language, yend = language)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray") + 
+  scale_colour_solarized(name = "", guide = FALSE) +
+  scale_y_discrete(name = "", limits = language_levels) +
+  xlab("\nRelative representation in early vocabulary") +
+  theme_mikabr(base_size = 16)
+```
+
+> - Many languages have a noun bias, extent varies
+> - All (these) languages have function words under-represented
+
+## Age of acquisition {.build}
+
+```{r demo_funs}
+items <- get_item_data(mode = "local") %>%
+  filter(language == "English", form == "WG") %>%
+  mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))))
+
+get_demo_data <- function(demo_words) {
+
+  demo_items <- items %>%
+    filter(definition %in% demo_words)
+
+  get_instrument_data(instrument_language = "English",
+                      instrument_form = "WG",
+                      items = demo_items$item_id,
+                      iteminfo = demo_items,
+                      administrations = TRUE,
+                      mode = "local") %>%
+    mutate(understands = value == "understands" | value == "produces") %>%
+    group_by(definition, age) %>%
+    summarise(num_true = sum(understands, na.rm = TRUE),
+              num_false = n() - num_true,
+              prop = num_true / n())
+}
+```
+
+```{r demo_word_data_plot}
+demo_word_data <- get_demo_data(c("balloon", "mommy*", "draw")) %>%
+  ungroup() %>%
+  mutate(definition = factor(definition, levels = c("mommy*", "balloon", "draw"),
+                             labels = c("mommy", "balloon", "draw")))
+amin <- min(demo_word_data$age)
+amax <- max(demo_word_data$age)
+ggplot(demo_word_data, aes(x = age, y = prop,
+                           colour = definition, label = definition)) +
+  #geom_point() +
+  geom_smooth(size = 1, method = "loess") +
+  geom_dl(method = list(dl.trans(x = x + 0.3), "last.qp", cex = .8,
+                        fontfamily = "Open Sans")) +
+  scale_colour_solarized(guide = FALSE) +
+  scale_y_continuous(name = "Proportion of children understanding\n") +
+                     #limits = c(0, 1)) +
+  scale_x_continuous(name = "\nAge (months)", limits = c(8, 20),
+                     breaks = seq(8, 18, 1))
+```
+
+## Age of acquisition {.build}
+
+> - Frequency in child-directed speech predicts AoA (Goodman, Dale, & Li, 2008)
+> - What other predictors matter (e.g., concreteness, length)?
+> - What are their relative contributions?
+> - ...across languages?
+> - ...over development?
+
+## Estimating AoA
+
+```{r}
+all_prop_data <- read_csv("all_prop_data.csv")
+
+demo_word <- "balloon"
+demo_data <- all_prop_data %>%
+  filter(measure == "understands", language == "English",
+         uni_lemma == demo_word)
+
+plt <- ggplot(demo_data, aes(x = age, group = words)) +
+  #facet_grid(measure ~ language) +
+  #geom_line(aes(y = prop, colour = language)) +
+  scale_colour_solarized(guide = FALSE) +
+  scale_y_continuous(name = "Proportion of children understanding\n", limits = c(0, 1)) +
+  scale_x_continuous(name = "\nAge (months)", limits = c(8, 20),
+                     breaks = seq(8, 18, 1))
+
+plt + geom_blank()
+```
+
+## Estimating AoA
+
+```{r}
+plt <- plt + #geom_point(colour = solarized_palette(3)[3])
+  geom_point(aes(y = prop), colour = solarized_palette(3)[3]) +
+  geom_dl(aes(y = prop, label = uni_lemma, colour = solarized_palette(3)[3]),
+          method = list(dl.trans(x = x + 0.5), "last.qp", cex = .8,
+                        fontfamily = "Open Sans"))
+plt
+```
+
+## Estimating AoA
+
+```{r}
+plt <- plt + #geom_smooth(method = "glm", se = FALSE, size = 1,
+              #           colour = solarized_palette(3)[2])
+  geom_line(aes(y = fit_prop), colour = solarized_palette(3)[2], size = 1.5)
+plt
+```
+
+## Estimating AoA
+
+```{r}
+plt <- plt + geom_hline(aes(yintercept = 0.5), colour = "grey", linetype = "dashed")
+plt
+```
+
+## Estimating AoA
+
+```{r}
+plt <- plt +
+  geom_vline(aes(xintercept = aoa), colour = "grey", linetype = "dashed") +
+  geom_point(aes(x = aoa, y = 0.5),
+             colour = solarized_palette(3)[1], size = 4)
+plt
+```
+
+## Estimating AoA {.build}
+
+```{r}
+aoa_data %>%
+  filter(language %in% unique(crossling_model_data$language)) %>%
+  ggplot(aes(x = aoa, fill = language)) +
+  facet_wrap(~language, ncol = 4) +
+  geom_bar() +
+  xlab("\nAge of Acquisition (months)") +
+  ylab("Number of words\n") +
+  scale_fill_solarized(guide = FALSE)
+```
+
+## Predicting AoA
+
+> - Unigram frequency [log] estimated from CHILDES
+> - Number of characters
+> - Concreteness (Brysbaert, Warriner, & Kuperman, 2013)
+> - Arousal and valence (Warriner, Kuperman, & Brysbaert, 2013)
+> - Babiness (Perry, Perlman, & Lupyan, 2015)
+
+<br>
+
+> - Translation equivalents
+> - Scaled
+
+## Predicting AoA
+
+```{r english_model, cache=FALSE}
+predict_english <- function(english_predictors) {
+  english_model_data <- english_model_data_fun(english_data_fun(uni_joined,
+                                                                english_predictors,
+                                                                num_characters),
+                                               english_predictors)
+  english_predictions_fun(english_model_data,
+                          english_model_fun(english_model_data, english_predictors))
+}
+
+# input <- list("english_predictors" = c("frequency"),
+#               "label_type" = "points",
+#                "lexical_category" = "All")
+
+sidebarLayout(
+  sidebarPanel(
+    checkboxGroupInput("english_predictors", label = h4("Predictors"),
+                       choices = c("frequency", "num_characters", "concreteness",
+                                   "valence", "arousal", "babiness"),
+                       selected = c("frequency")),
+    selectInput("lexical_category", label = h4("Lexical category"),
+                choices = c("All", "Nouns", "Predicates",
+                            "Function Words", "Other"),
+                selected = "All"),
+    selectInput("label_type", label = h4("Label"), choices = c("points", "words")),
+    width = 4
+  ),
+  
+  mainPanel(
+    
+    renderPlot({
+      if (!is.null(input$english_predictors)) {
+        predictions <- predict_english(input$english_predictors)
+     } else {
+       predictions <- predict_english("frequency") %>%
+         select(-frequency) %>%
+         mutate(predicted_aoa = 16)
+     }
+      if (input$lexical_category != "All") {
+        predictions <- predictions %>%
+          filter(lexical_category == input$lexical_category)
+      }
+      predictions <- predictions %>%
+          mutate(lexical_category = factor(lexical_category,
+                                           levels = levels(lexical_category),
+                                           labels = paste0(levels(lexical_category), "  ")))
+      plt <- ggplot(predictions, aes(x = predicted_aoa, y = aoa)) +
+        geom_smooth(aes(colour = lexical_category), weight = 1, method = "lm", se = FALSE) +
+        geom_smooth(colour = "black", weight = 2, method = "lm") +
+        scale_colour_solarized(name = "") +
+        scale_x_continuous(name = "\nModel Predicted Age of Acquisition (months)",
+                           limits = c(6, 27), breaks = seq(6, 26, by = 2)) +
+        scale_y_continuous(name = "Age of Acquisition (months)\n",
+                           limits = c(6, 27), breaks = seq(6, 26, by = 2)) +
+        #          coord_fixed() +
+        annotate("text", x = 26, y = 26, size = 5, family = "Open Sans",
+                 label = sprintf("r = %.2f",
+                                 english_cor(predictions))) +
+        theme(legend.position = "bottom",
+              legend.background = element_rect(fill = "transparent"),
+              legend.key = element_blank())
+      if (input$label_type == "points") {
+        plt + geom_point(aes(colour = lexical_category), cex = 1)
+      } else if (input$label_type == "words") {
+        plt + geom_text(aes(label = uni_lemma, colour = lexical_category),
+                        cex = 4, show_guide = FALSE)
+      }
+    }, width = 500, height = 500),
+    width = 8
+  )
+)
+```
+
+## Predicting AoA {.build}
+
+```{r, fig.width = 7, fig.height = 4}
+# ggplot(joined_coef, aes(x = term, y = abs(estimate), fill = term)) +
+#   facet_wrap("type", scales = "free_x") +
+#   geom_bar(stat = "identity") +
+#   geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
+#                      ymax = abs(estimate) + 1.96 * std.error)) +
+#   scale_fill_solarized(guide = FALSE) +
+#   xlab("") +
+#   ylab("Coefficient Magnitude\n") +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r, fig.width = 6, fig.height = 4.5}
+english_coef %>%
+  mutate(language = "English") %>%
+  ggplot(aes(x = term, y = abs(estimate), fill = term)) +
+    facet_wrap(~language) +
+    geom_bar(stat = "identity") +
+    geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
+                       ymax = abs(estimate) + 1.96 * std.error)) +
+    scale_fill_solarized(guide = FALSE) +
+    xlab("") +
+    ylab("Coefficient Magnitude (Months/SD)\n") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Predicting AoA {.build}
+
+```{r}
+crossling_coef %>%
+  mutate(language = "Cross-Linguistic") %>%
+  bind_rows(lang_coef) %>%
+  mutate(language = factor(language, levels = c(langs, "Cross-Linguistic"))) %>%
+  ggplot(aes(x = term, y = abs(estimate), fill = term)) +
+    facet_wrap(~language, ncol = 4) +
+    geom_bar(stat = "identity") +
+    geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
+                       ymax = abs(estimate) + 1.96 * std.error)) +
+    scale_fill_solarized(guide = FALSE) +
+    xlab("") +
+    ylab("Coefficient Magnitude (Months/SD)\n") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Predicting AoA {.build}
+
+```{r, fig.width = 8, fig.height = 4}
+joined_predictor_means %>%
+  mutate(predictor = factor(predictor, levels = predictor_mean_levels)) %>%
+  ggplot(aes(x = aoa, y = mean, color = predictor)) +
+  facet_wrap(~type) +
+  geom_point(position = position_dodge(width = 0.1)) +
+  geom_linerange(aes(ymin = ci_lower, ymax = ci_upper, group = predictor),
+                 alpha = 0.4,
+                 position = position_dodge(width = 0.1)) +
+  geom_line(aes(group = predictor), position = position_dodge(width = 0.1)) +
+  geom_dl(aes(label = predictor),
+          method = list("first.qp", dl.trans(x = x - 0.3), cex = 0.6,
+                        fontfamily = "Open Sans")) +
+  geom_dl(aes(label = predictor),
+          method = list("last.qp", dl.trans(x = x + 0.3), cex = 0.6,
+                        fontfamily = "Open Sans")) +
+  scale_colour_solarized(guide = FALSE) +
+  xlab("\nAge of Acquisition (months)") +
+  ylab("Mean Predictor Z-Score\n")
+```
+
+## Summary
+
+> - Large-scale language acquisition data → analyses across languages and over development
+> - First such analyses of vocabulary composition and age of acquisition
+> - More languages, more predictors...
+> - Ultimate goal: characterize cross-linguistic consistencies and differences to constrain theories
+    
+
+## Thank you!  {.flexbox .vcenter}
+
+<div class="centered">
+```{r, echo=FALSE}
+img(src = "www/walrus.png", width = 300)
+```
+</div>

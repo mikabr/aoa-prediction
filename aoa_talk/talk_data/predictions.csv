@@ -1,0 +1,607 @@
+vocab,prop,lexical_category,language
+0,0,Function Words,English
+0.01,0.00553463972589308,Function Words,English
+0.02,0.0109011182211298,Function Words,English
+0.03,0.0161073447876222,Function Words,English
+0.04,0.021161228727282,Function Words,English
+0.05,0.0260706793420214,Function Words,English
+0.06,0.0308436059337521,Function Words,English
+0.07,0.0354879178043862,Function Words,English
+0.08,0.0400115242558355,Function Words,English
+0.09,0.044422334590012,Function Words,English
+0.1,0.0487282581088277,Function Words,English
+0.11,0.0529372041141944,Function Words,English
+0.12,0.0570570819080241,Function Words,English
+0.13,0.0610958007922288,Function Words,English
+0.14,0.0650612700687203,Function Words,English
+0.15,0.0689613990394106,Function Words,English
+0.16,0.0728040970062116,Function Words,English
+0.17,0.0765972732710353,Function Words,English
+0.18,0.0803488371357935,Function Words,English
+0.19,0.0840666979023983,Function Words,English
+0.2,0.0877587648727616,Function Words,English
+0.21,0.0914329473487952,Function Words,English
+0.22,0.0950971546324112,Function Words,English
+0.23,0.0987592960255214,Function Words,English
+0.24,0.102427280830038,Function Words,English
+0.25,0.106109018347872,Function Words,English
+0.26,0.109812417880937,Function Words,English
+0.27,0.113545388731144,Function Words,English
+0.28,0.117315840200404,Function Words,English
+0.29,0.12113168159063,Function Words,English
+0.3,0.125000822203735,Function Words,English
+0.31,0.128931171341628,Function Words,English
+0.32,0.132930638306224,Function Words,English
+0.33,0.137007132399433,Function Words,English
+0.34,0.141168562923168,Function Words,English
+0.35,0.14542283917934,Function Words,English
+0.36,0.149777870469861,Function Words,English
+0.37,0.154241566096644,Function Words,English
+0.38,0.1588218353616,Function Words,English
+0.39,0.163526587566641,Function Words,English
+0.4,0.168363732013679,Function Words,English
+0.41,0.173341178004627,Function Words,English
+0.42,0.178466834841395,Function Words,English
+0.43,0.183748611825896,Function Words,English
+0.44,0.189194418260042,Function Words,English
+0.45,0.194812163445745,Function Words,English
+0.46,0.200609756684917,Function Words,English
+0.47,0.206595107279469,Function Words,English
+0.48,0.212776124531314,Function Words,English
+0.49,0.219160717742363,Function Words,English
+0.5,0.225756796214529,Function Words,English
+0.51,0.232572269249723,Function Words,English
+0.52,0.239615046149858,Function Words,English
+0.53,0.246893036216844,Function Words,English
+0.54,0.254414148752595,Function Words,English
+0.55,0.262186293059022,Function Words,English
+0.56,0.270217378438037,Function Words,English
+0.57,0.278515314191552,Function Words,English
+0.58,0.287088009621479,Function Words,English
+0.59,0.29594337402973,Function Words,English
+0.6,0.305089316718216,Function Words,English
+0.61,0.314533746988851,Function Words,English
+0.62,0.324284574143545,Function Words,English
+0.63,0.33434970748421,Function Words,English
+0.64,0.344737056312759,Function Words,English
+0.65,0.355454529931103,Function Words,English
+0.66,0.366510037641155,Function Words,English
+0.67,0.377911488744826,Function Words,English
+0.68,0.389666792544028,Function Words,English
+0.69,0.401783858340674,Function Words,English
+0.7,0.414270595436674,Function Words,English
+0.71,0.427134913133942,Function Words,English
+0.72,0.440384720734389,Function Words,English
+0.73,0.454027927539926,Function Words,English
+0.74,0.468072442852466,Function Words,English
+0.75,0.482526175973921,Function Words,English
+0.76,0.497397036206203,Function Words,English
+0.77,0.512692932851223,Function Words,English
+0.78,0.528421775210894,Function Words,English
+0.79,0.544591472587128,Function Words,English
+0.8,0.561209934281836,Function Words,English
+0.81,0.57828506959693,Function Words,English
+0.82,0.595824787834323,Function Words,English
+0.83,0.613836998295925,Function Words,English
+0.84,0.63232961028365,Function Words,English
+0.85,0.651310533099409,Function Words,English
+0.86,0.670787676045114,Function Words,English
+0.87,0.690768948422677,Function Words,English
+0.88,0.71126225953401,Function Words,English
+0.89,0.732275518681025,Function Words,English
+0.9,0.753816635165633,Function Words,English
+0.91,0.775893518289748,Function Words,English
+0.92,0.798514077355279,Function Words,English
+0.93,0.821686221664141,Function Words,English
+0.94,0.845417860518243,Function Words,English
+0.95,0.8697169032195,Function Words,English
+0.96,0.894591259069821,Function Words,English
+0.97,0.92004883737112,Function Words,English
+0.98,0.946097547425308,Function Words,English
+0.99,0.972745298534298,Function Words,English
+1,1,Function Words,English
+0,0,Nouns,English
+0.01,0.0153122462895059,Nouns,English
+0.02,0.0304777523572278,Nouns,English
+0.03,0.0454977250026023,Nouns,English
+0.04,0.0603733710250657,Nouns,English
+0.05,0.0751058972240547,Nouns,English
+0.06,0.0896965103990056,Nouns,English
+0.07,0.104146417349355,Nouns,English
+0.08,0.118456824874539,Nouns,English
+0.09,0.132628939773995,Nouns,English
+0.1,0.146663968847159,Nouns,English
+0.11,0.160563118893467,Nouns,English
+0.12,0.174327596712356,Nouns,English
+0.13,0.187958609103262,Nouns,English
+0.14,0.201457362865623,Nouns,English
+0.15,0.214825064798873,Nouns,English
+0.16,0.228062921702451,Nouns,English
+0.17,0.241172140375792,Nouns,English
+0.18,0.254153927618333,Nouns,English
+0.19,0.26700949022951,Nouns,English
+0.2,0.27974003500876,Nouns,English
+0.21,0.292346768755519,Nouns,English
+0.22,0.304830898269224,Nouns,English
+0.23,0.317193630349311,Nouns,English
+0.24,0.329436171795217,Nouns,English
+0.25,0.341559729406378,Nouns,English
+0.26,0.353565509982231,Nouns,English
+0.27,0.365454720322212,Nouns,English
+0.28,0.377228567225758,Nouns,English
+0.29,0.388888257492305,Nouns,English
+0.3,0.40043499792129,Nouns,English
+0.31,0.411869995312149,Nouns,English
+0.32,0.423194456464318,Nouns,English
+0.33,0.434409588177235,Nouns,English
+0.34,0.445516597250335,Nouns,English
+0.35,0.456516690483056,Nouns,English
+0.36,0.467411074674833,Nouns,English
+0.37,0.478200956625103,Nouns,English
+0.38,0.488887543133303,Nouns,English
+0.39,0.499472040998869,Nouns,English
+0.4,0.509955657021237,Nouns,English
+0.41,0.520339597999845,Nouns,English
+0.42,0.530625070734128,Nouns,English
+0.43,0.540813282023523,Nouns,English
+0.44,0.550905438667466,Nouns,English
+0.45,0.560902747465395,Nouns,English
+0.46,0.570806415216745,Nouns,English
+0.47,0.580617648720953,Nouns,English
+0.48,0.590337654777455,Nouns,English
+0.49,0.599967640185689,Nouns,English
+0.5,0.60950881174509,Nouns,English
+0.51,0.618962376255095,Nouns,English
+0.52,0.62832954051514,Nouns,English
+0.53,0.637611511324662,Nouns,English
+0.54,0.646809495483097,Nouns,English
+0.55,0.655924699789883,Nouns,English
+0.56,0.664958331044455,Nouns,English
+0.57,0.673911596046249,Nouns,English
+0.58,0.682785701594703,Nouns,English
+0.59,0.691581854489253,Nouns,English
+0.6,0.700301261529335,Nouns,English
+0.61,0.708945129514386,Nouns,English
+0.62,0.717514665243842,Nouns,English
+0.63,0.72601107551714,Nouns,English
+0.64,0.734435567133717,Nouns,English
+0.65,0.742789346893008,Nouns,English
+0.66,0.75107362159445,Nouns,English
+0.67,0.75928959803748,Nouns,English
+0.68,0.767438483021534,Nouns,English
+0.69,0.775521483346049,Nouns,English
+0.7,0.783539805810461,Nouns,English
+0.71,0.791494657214207,Nouns,English
+0.72,0.799387244356723,Nouns,English
+0.73,0.807218774037446,Nouns,English
+0.74,0.814990453055811,Nouns,English
+0.75,0.822703488211257,Nouns,English
+0.76,0.830359086303218,Nouns,English
+0.77,0.837958454131132,Nouns,English
+0.78,0.845502798494436,Nouns,English
+0.79,0.852993326192565,Nouns,English
+0.8,0.860431244024956,Nouns,English
+0.81,0.867817758791045,Nouns,English
+0.82,0.87515407729027,Nouns,English
+0.83,0.882441406322065,Nouns,English
+0.84,0.889680952685869,Nouns,English
+0.85,0.896873923181118,Nouns,English
+0.86,0.904021524607248,Nouns,English
+0.87,0.911124963763695,Nouns,English
+0.88,0.918185447449896,Nouns,English
+0.89,0.925204182465287,Nouns,English
+0.9,0.932182375609306,Nouns,English
+0.91,0.939121233681388,Nouns,English
+0.92,0.946021963480969,Nouns,English
+0.93,0.952885771807488,Nouns,English
+0.94,0.959713865460379,Nouns,English
+0.95,0.966507451239079,Nouns,English
+0.96,0.973267735943026,Nouns,English
+0.97,0.979995926371654,Nouns,English
+0.98,0.986693229324402,Nouns,English
+0.99,0.993360851600705,Nouns,English
+1,1,Nouns,English
+0,0,Predicates,English
+0.01,0.00275931268461613,Predicates,English
+0.02,0.00589775425310447,Predicates,English
+0.03,0.00940819657161449,Predicates,English
+0.04,0.0132835115062957,Predicates,English
+0.05,0.0175165709232975,Predicates,English
+0.06,0.0221002466887695,Predicates,English
+0.07,0.0270274106688611,Predicates,English
+0.08,0.0322909347297218,Predicates,English
+0.09,0.037883690737501,Predicates,English
+0.1,0.0437985505583483,Predicates,English
+0.11,0.0500283860584131,Predicates,English
+0.12,0.056566069103845,Predicates,English
+0.13,0.0634044715607933,Predicates,English
+0.14,0.0705364652954076,Predicates,English
+0.15,0.0779549221738374,Predicates,English
+0.16,0.0856527140622321,Predicates,English
+0.17,0.0936227128267412,Predicates,English
+0.18,0.101857790333514,Predicates,English
+0.19,0.1103508184487,Predicates,English
+0.2,0.11909466903845,Predicates,English
+0.21,0.128082213968911,Predicates,English
+0.22,0.137306325106235,Predicates,English
+0.23,0.146759874316569,Predicates,English
+0.24,0.156435733466065,Predicates,English
+0.25,0.16632677442087,Predicates,English
+0.26,0.176425869047136,Predicates,English
+0.27,0.18672588921101,Predicates,English
+0.28,0.197219706778644,Predicates,English
+0.29,0.207900193616185,Predicates,English
+0.3,0.218760221589784,Predicates,English
+0.31,0.229792662565591,Predicates,English
+0.32,0.240990388409754,Predicates,English
+0.33,0.252346270988423,Predicates,English
+0.34,0.263853182167747,Predicates,English
+0.35,0.275503993813877,Predicates,English
+0.36,0.287291577792961,Predicates,English
+0.37,0.299208805971149,Predicates,English
+0.38,0.311248550214591,Predicates,English
+0.39,0.323403682389436,Predicates,English
+0.4,0.335667074361833,Predicates,English
+0.41,0.348031597997932,Predicates,English
+0.42,0.360490125163882,Predicates,English
+0.43,0.373035527725834,Predicates,English
+0.44,0.385660677549935,Predicates,English
+0.45,0.398358446502337,Predicates,English
+0.46,0.411121706449188,Predicates,English
+0.47,0.423943329256638,Predicates,English
+0.48,0.436816186790836,Predicates,English
+0.49,0.449733150917932,Predicates,English
+0.5,0.462687093504075,Predicates,English
+0.51,0.475670886415415,Predicates,English
+0.52,0.488677401518101,Predicates,English
+0.53,0.501699510678283,Predicates,English
+0.54,0.51473008576211,Predicates,English
+0.55,0.527761998635731,Predicates,English
+0.56,0.540788121165297,Predicates,English
+0.57,0.553801325216956,Predicates,English
+0.58,0.566794482656859,Predicates,English
+0.59,0.579760465351154,Predicates,English
+0.6,0.592692145165991,Predicates,English
+0.61,0.60558239396752,Predicates,English
+0.62,0.618424083621889,Predicates,English
+0.63,0.631210085995249,Predicates,English
+0.64,0.64393327295375,Predicates,English
+0.65,0.656586516363539,Predicates,English
+0.66,0.669162688090768,Predicates,English
+0.67,0.681654660001585,Predicates,English
+0.68,0.69405530396214,Predicates,English
+0.69,0.706357491838582,Predicates,English
+0.7,0.718554095497061,Predicates,English
+0.71,0.730637986803727,Predicates,English
+0.72,0.742602037624728,Predicates,English
+0.73,0.754439119826215,Predicates,English
+0.74,0.766142105274336,Predicates,English
+0.75,0.777703865835242,Predicates,English
+0.76,0.789117273375081,Predicates,English
+0.77,0.800375199760004,Predicates,English
+0.78,0.811470516856159,Predicates,English
+0.79,0.822396096529697,Predicates,English
+0.8,0.833144810646766,Predicates,English
+0.81,0.843709531073517,Predicates,English
+0.82,0.854083129676098,Predicates,English
+0.83,0.864258478320658,Predicates,English
+0.84,0.874228448873349,Predicates,English
+0.85,0.883985913200319,Predicates,English
+0.86,0.893523743167717,Predicates,English
+0.87,0.902834810641694,Predicates,English
+0.88,0.911911987488398,Predicates,English
+0.89,0.920748145573978,Predicates,English
+0.9,0.929336156764586,Predicates,English
+0.91,0.937668892926369,Predicates,English
+0.92,0.945739225925478,Predicates,English
+0.93,0.953540027628061,Predicates,English
+0.94,0.961064169900269,Predicates,English
+0.95,0.968304524608251,Predicates,English
+0.96,0.975253963618157,Predicates,English
+0.97,0.981905358796134,Predicates,English
+0.98,0.988251582008335,Predicates,English
+0.99,0.994285505120907,Predicates,English
+1,1,Predicates,English
+0,0,Function Words,Mandarin
+0.01,0.00351436287727557,Function Words,Mandarin
+0.02,0.00700187972329907,Function Words,Mandarin
+0.03,0.0104673832626653,Function Words,Mandarin
+0.04,0.0139157062199689,Function Words,Mandarin
+0.05,0.0173516813198047,Function Words,Mandarin
+0.06,0.0207801412867674,Function Words,Mandarin
+0.07,0.0242059188454518,Function Words,Mandarin
+0.08,0.0276338467204525,Function Words,Mandarin
+0.09,0.0310687576363645,Function Words,Mandarin
+0.1,0.0345154843177823,Function Words,Mandarin
+0.11,0.0379788594893008,Function Words,Mandarin
+0.12,0.0414637158755146,Function Words,Mandarin
+0.13,0.0449748862010186,Function Words,Mandarin
+0.14,0.0485172031904074,Function Words,Mandarin
+0.15,0.0520954995682759,Function Words,Mandarin
+0.16,0.0557146080592187,Function Words,Mandarin
+0.17,0.0593793613878306,Function Words,Mandarin
+0.18,0.0630945922787064,Function Words,Mandarin
+0.19,0.0668651334564408,Function Words,Mandarin
+0.2,0.0706958176456285,Function Words,Mandarin
+0.21,0.0745914775708642,Function Words,Mandarin
+0.22,0.0785569459567429,Function Words,Mandarin
+0.23,0.082597055527859,Function Words,Mandarin
+0.24,0.0867166390088075,Function Words,Mandarin
+0.25,0.0909205291241831,Function Words,Mandarin
+0.26,0.0952135585985804,Function Words,Mandarin
+0.27,0.0996005601565943,Function Words,Mandarin
+0.28,0.104086366522819,Function Words,Mandarin
+0.29,0.108675810421851,Function Words,Mandarin
+0.3,0.113373724578283,Function Words,Mandarin
+0.31,0.11818494171671,Function Words,Mandarin
+0.32,0.123114294561728,Function Words,Mandarin
+0.33,0.128166615837931,Function Words,Mandarin
+0.34,0.133346738269913,Function Words,Mandarin
+0.35,0.13865949458227,Function Words,Mandarin
+0.36,0.144109717499597,Function Words,Mandarin
+0.37,0.149702239746487,Function Words,Mandarin
+0.38,0.155441894047536,Function Words,Mandarin
+0.39,0.161333513127338,Function Words,Mandarin
+0.4,0.167381929710489,Function Words,Mandarin
+0.41,0.173591976521583,Function Words,Mandarin
+0.42,0.179968486285214,Function Words,Mandarin
+0.43,0.186516291725978,Function Words,Mandarin
+0.44,0.193240225568469,Function Words,Mandarin
+0.45,0.200145120537282,Function Words,Mandarin
+0.46,0.207235809357012,Function Words,Mandarin
+0.47,0.214517124752253,Function Words,Mandarin
+0.48,0.2219938994476,Function Words,Mandarin
+0.49,0.229670966167648,Function Words,Mandarin
+0.5,0.237553157636992,Function Words,Mandarin
+0.51,0.245645306580226,Function Words,Mandarin
+0.52,0.253952245721946,Function Words,Mandarin
+0.53,0.262478807786745,Function Words,Mandarin
+0.54,0.271229825499219,Function Words,Mandarin
+0.55,0.280210131583962,Function Words,Mandarin
+0.56,0.28942455876557,Function Words,Mandarin
+0.57,0.298877939768636,Function Words,Mandarin
+0.58,0.308575107317756,Function Words,Mandarin
+0.59,0.318520894137524,Function Words,Mandarin
+0.6,0.328720132952536,Function Words,Mandarin
+0.61,0.339177656487385,Function Words,Mandarin
+0.62,0.349898297466667,Function Words,Mandarin
+0.63,0.360886888614976,Function Words,Mandarin
+0.64,0.372148262656907,Function Words,Mandarin
+0.65,0.383687252317055,Function Words,Mandarin
+0.66,0.395508690320015,Function Words,Mandarin
+0.67,0.407617409390381,Function Words,Mandarin
+0.68,0.420018242252748,Function Words,Mandarin
+0.69,0.432716021631711,Function Words,Mandarin
+0.7,0.445715580251864,Function Words,Mandarin
+0.71,0.459021750837803,Function Words,Mandarin
+0.72,0.472639366114121,Function Words,Mandarin
+0.73,0.486573258805415,Function Words,Mandarin
+0.74,0.500828261636278,Function Words,Mandarin
+0.75,0.515409207331305,Function Words,Mandarin
+0.76,0.530320928615091,Function Words,Mandarin
+0.77,0.545568258212231,Function Words,Mandarin
+0.78,0.56115602884732,Function Words,Mandarin
+0.79,0.577089073244952,Function Words,Mandarin
+0.8,0.593372224129721,Function Words,Mandarin
+0.81,0.610010314226224,Function Words,Mandarin
+0.82,0.627008176259054,Function Words,Mandarin
+0.83,0.644370642952806,Function Words,Mandarin
+0.84,0.662102547032075,Function Words,Mandarin
+0.85,0.680208721221456,Function Words,Mandarin
+0.86,0.698693998245543,Function Words,Mandarin
+0.87,0.717563210828932,Function Words,Mandarin
+0.88,0.736821191696216,Function Words,Mandarin
+0.89,0.756472773571991,Function Words,Mandarin
+0.9,0.776522789180852,Function Words,Mandarin
+0.91,0.796976071247393,Function Words,Mandarin
+0.92,0.817837452496208,Function Words,Mandarin
+0.93,0.839111765651894,Function Words,Mandarin
+0.94,0.860803843439043,Function Words,Mandarin
+0.95,0.882918518582252,Function Words,Mandarin
+0.96,0.905460623806115,Function Words,Mandarin
+0.97,0.928434991835226,Function Words,Mandarin
+0.98,0.951846455394181,Function Words,Mandarin
+0.99,0.975699847207574,Function Words,Mandarin
+1,1,Function Words,Mandarin
+0,0,Nouns,Mandarin
+0.01,0.00973529590769844,Nouns,Mandarin
+0.02,0.0195003096837572,Nouns,Mandarin
+0.03,0.0292942952982494,Nouns,Mandarin
+0.04,0.0391165067212485,Nouns,Mandarin
+0.05,0.0489661979228277,Nouns,Mandarin
+0.06,0.0588426228730602,Nouns,Mandarin
+0.07,0.0687450355420194,Nouns,Mandarin
+0.08,0.0786726898997784,Nouns,Mandarin
+0.09,0.0886248399164105,Nouns,Mandarin
+0.1,0.098600739561989,Nouns,Mandarin
+0.11,0.108599642806587,Nouns,Mandarin
+0.12,0.118620803620278,Nouns,Mandarin
+0.13,0.128663475973136,Nouns,Mandarin
+0.14,0.138726913835232,Nouns,Mandarin
+0.15,0.148810371176642,Nouns,Mandarin
+0.16,0.158913101967437,Nouns,Mandarin
+0.17,0.169034360177692,Nouns,Mandarin
+0.18,0.179173399777479,Nouns,Mandarin
+0.19,0.189329474736872,Nouns,Mandarin
+0.2,0.199501839025944,Nouns,Mandarin
+0.21,0.209689746614769,Nouns,Mandarin
+0.22,0.219892451473418,Nouns,Mandarin
+0.23,0.230109207571967,Nouns,Mandarin
+0.24,0.240339268880488,Nouns,Mandarin
+0.25,0.250581889369054,Nouns,Mandarin
+0.26,0.260836323007739,Nouns,Mandarin
+0.27,0.271101823766615,Nouns,Mandarin
+0.28,0.281377645615757,Nouns,Mandarin
+0.29,0.291663042525237,Nouns,Mandarin
+0.3,0.301957268465129,Nouns,Mandarin
+0.31,0.312259577405506,Nouns,Mandarin
+0.32,0.322569223316441,Nouns,Mandarin
+0.33,0.332885460168007,Nouns,Mandarin
+0.34,0.343207541930279,Nouns,Mandarin
+0.35,0.353534722573328,Nouns,Mandarin
+0.36,0.363866256067228,Nouns,Mandarin
+0.37,0.374201396382053,Nouns,Mandarin
+0.38,0.384539397487876,Nouns,Mandarin
+0.39,0.39487951335477,Nouns,Mandarin
+0.4,0.405220997952808,Nouns,Mandarin
+0.41,0.415563105252063,Nouns,Mandarin
+0.42,0.42590508922261,Nouns,Mandarin
+0.43,0.43624620383452,Nouns,Mandarin
+0.44,0.446585703057868,Nouns,Mandarin
+0.45,0.456922840862727,Nouns,Mandarin
+0.46,0.467256871219169,Nouns,Mandarin
+0.47,0.477587048097269,Nouns,Mandarin
+0.48,0.487912625467099,Nouns,Mandarin
+0.49,0.498232857298732,Nouns,Mandarin
+0.5,0.508546997562243,Nouns,Mandarin
+0.51,0.518854300227704,Nouns,Mandarin
+0.52,0.529154019265188,Nouns,Mandarin
+0.53,0.539445408644769,Nouns,Mandarin
+0.54,0.54972772233652,Nouns,Mandarin
+0.55,0.560000214310514,Nouns,Mandarin
+0.56,0.570262138536825,Nouns,Mandarin
+0.57,0.580512748985526,Nouns,Mandarin
+0.58,0.590751299626689,Nouns,Mandarin
+0.59,0.600977044430389,Nouns,Mandarin
+0.6,0.611189237366699,Nouns,Mandarin
+0.61,0.621387132405691,Nouns,Mandarin
+0.62,0.63156998351744,Nouns,Mandarin
+0.63,0.641737044672018,Nouns,Mandarin
+0.64,0.651887569839498,Nouns,Mandarin
+0.65,0.662020812989955,Nouns,Mandarin
+0.66,0.67213602809346,Nouns,Mandarin
+0.67,0.682232469120088,Nouns,Mandarin
+0.68,0.692309390039912,Nouns,Mandarin
+0.69,0.702366044823004,Nouns,Mandarin
+0.7,0.712401687439439,Nouns,Mandarin
+0.71,0.722415571859289,Nouns,Mandarin
+0.72,0.732406952052628,Nouns,Mandarin
+0.73,0.742375081989529,Nouns,Mandarin
+0.74,0.752319215640066,Nouns,Mandarin
+0.75,0.76223860697431,Nouns,Mandarin
+0.76,0.772132509962337,Nouns,Mandarin
+0.77,0.782000178574219,Nouns,Mandarin
+0.78,0.791840866780029,Nouns,Mandarin
+0.79,0.80165382854984,Nouns,Mandarin
+0.8,0.811438317853727,Nouns,Mandarin
+0.81,0.821193588661761,Nouns,Mandarin
+0.82,0.830918894944017,Nouns,Mandarin
+0.83,0.840613490670568,Nouns,Mandarin
+0.84,0.850276629811486,Nouns,Mandarin
+0.85,0.859907566336846,Nouns,Mandarin
+0.86,0.86950555421672,Nouns,Mandarin
+0.87,0.879069847421182,Nouns,Mandarin
+0.88,0.888599699920305,Nouns,Mandarin
+0.89,0.898094365684162,Nouns,Mandarin
+0.9,0.907553098682826,Nouns,Mandarin
+0.91,0.916975152886371,Nouns,Mandarin
+0.92,0.92635978226487,Nouns,Mandarin
+0.93,0.935706240788397,Nouns,Mandarin
+0.94,0.945013782427024,Nouns,Mandarin
+0.95,0.954281661150825,Nouns,Mandarin
+0.96,0.963509130929873,Nouns,Mandarin
+0.97,0.972695445734241,Nouns,Mandarin
+0.98,0.981839859534003,Nouns,Mandarin
+0.99,0.990941626299231,Nouns,Mandarin
+1,1,Nouns,Mandarin
+0,0,Predicates,Mandarin
+0.01,0.0131465835099638,Predicates,Mandarin
+0.02,0.026268030281156,Predicates,Mandarin
+0.03,0.0393631638664889,Predicates,Mandarin
+0.04,0.0524308078188748,Predicates,Mandarin
+0.05,0.0654697856912261,Predicates,Mandarin
+0.06,0.078478921036455,Predicates,Mandarin
+0.07,0.091457037407474,Predicates,Mandarin
+0.08,0.104402958357195,Predicates,Mandarin
+0.09,0.117315507438531,Predicates,Mandarin
+0.1,0.130193508204394,Predicates,Mandarin
+0.11,0.143035784207696,Predicates,Mandarin
+0.12,0.15584115900135,Predicates,Mandarin
+0.13,0.168608456138268,Predicates,Mandarin
+0.14,0.181336499171362,Predicates,Mandarin
+0.15,0.194024111653545,Predicates,Mandarin
+0.16,0.206670117137729,Predicates,Mandarin
+0.17,0.219273339176826,Predicates,Mandarin
+0.18,0.231832601323748,Predicates,Mandarin
+0.19,0.244346727131409,Predicates,Mandarin
+0.2,0.256814540152719,Predicates,Mandarin
+0.21,0.269234863940593,Predicates,Mandarin
+0.22,0.281606522047941,Predicates,Mandarin
+0.23,0.293928338027676,Predicates,Mandarin
+0.24,0.306199135432711,Predicates,Mandarin
+0.25,0.318417737815958,Predicates,Mandarin
+0.26,0.330582968730329,Predicates,Mandarin
+0.27,0.342693651728737,Predicates,Mandarin
+0.28,0.354748610364093,Predicates,Mandarin
+0.29,0.366746668189311,Predicates,Mandarin
+0.3,0.378686648757302,Predicates,Mandarin
+0.31,0.390567375620979,Predicates,Mandarin
+0.32,0.402387672333254,Predicates,Mandarin
+0.33,0.41414636244704,Predicates,Mandarin
+0.34,0.425842269515248,Predicates,Mandarin
+0.35,0.437474217090792,Predicates,Mandarin
+0.36,0.449041028726583,Predicates,Mandarin
+0.37,0.460541527975534,Predicates,Mandarin
+0.38,0.471974538390557,Predicates,Mandarin
+0.39,0.483338883524564,Predicates,Mandarin
+0.4,0.494633386930468,Predicates,Mandarin
+0.41,0.505856872161182,Predicates,Mandarin
+0.42,0.517008162769616,Predicates,Mandarin
+0.43,0.528086082308685,Predicates,Mandarin
+0.44,0.5390894543313,Predicates,Mandarin
+0.45,0.550017102390373,Predicates,Mandarin
+0.46,0.560867850038816,Predicates,Mandarin
+0.47,0.571640520829543,Predicates,Mandarin
+0.48,0.582333938315465,Predicates,Mandarin
+0.49,0.592946926049495,Predicates,Mandarin
+0.5,0.603478307584545,Predicates,Mandarin
+0.51,0.613926906473527,Predicates,Mandarin
+0.52,0.624291546269354,Predicates,Mandarin
+0.53,0.634571050524938,Predicates,Mandarin
+0.54,0.644764242793191,Predicates,Mandarin
+0.55,0.654869946627026,Predicates,Mandarin
+0.56,0.664886985579355,Predicates,Mandarin
+0.57,0.674814183203091,Predicates,Mandarin
+0.58,0.684650363051145,Predicates,Mandarin
+0.59,0.69439434867643,Predicates,Mandarin
+0.6,0.704044963631858,Predicates,Mandarin
+0.61,0.713601031470342,Predicates,Mandarin
+0.62,0.723061375744793,Predicates,Mandarin
+0.63,0.732424820008126,Predicates,Mandarin
+0.64,0.74169018781325,Predicates,Mandarin
+0.65,0.75085630271308,Predicates,Mandarin
+0.66,0.759921988260527,Predicates,Mandarin
+0.67,0.768886068008503,Predicates,Mandarin
+0.68,0.777747365509922,Predicates,Mandarin
+0.69,0.786504704317694,Predicates,Mandarin
+0.7,0.795156907984733,Predicates,Mandarin
+0.71,0.803702800063951,Predicates,Mandarin
+0.72,0.812141204108261,Predicates,Mandarin
+0.73,0.820470943670574,Predicates,Mandarin
+0.74,0.828690842303802,Predicates,Mandarin
+0.75,0.836799723560859,Predicates,Mandarin
+0.76,0.844796410994657,Predicates,Mandarin
+0.77,0.852679728158107,Predicates,Mandarin
+0.78,0.860448498604122,Predicates,Mandarin
+0.79,0.868101545885615,Predicates,Mandarin
+0.8,0.875637693555498,Predicates,Mandarin
+0.81,0.883055765166683,Predicates,Mandarin
+0.82,0.890354584272082,Predicates,Mandarin
+0.83,0.897532974424609,Predicates,Mandarin
+0.84,0.904589759177174,Predicates,Mandarin
+0.85,0.911523762082691,Predicates,Mandarin
+0.86,0.918333806694071,Predicates,Mandarin
+0.87,0.925018716564228,Predicates,Mandarin
+0.88,0.931577315246073,Predicates,Mandarin
+0.89,0.938008426292519,Predicates,Mandarin
+0.9,0.944310873256478,Predicates,Mandarin
+0.91,0.950483479690863,Predicates,Mandarin
+0.92,0.956525069148585,Predicates,Mandarin
+0.93,0.962434465182557,Predicates,Mandarin
+0.94,0.968210491345692,Predicates,Mandarin
+0.95,0.973851971190901,Predicates,Mandarin
+0.96,0.979357728271097,Predicates,Mandarin
+0.97,0.984726586139193,Predicates,Mandarin
+0.98,0.989957368348101,Predicates,Mandarin
+0.99,0.995048898450732,Predicates,Mandarin
+1,1,Predicates,Mandarin

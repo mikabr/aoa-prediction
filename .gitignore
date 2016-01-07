@@ -4,6 +4,6 @@
 .idea/
 .Rhistory
 .Rproj.user
-.Rdata
+*.RData
 *.Rproj
 rsconnect/
