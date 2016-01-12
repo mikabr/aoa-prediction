@@ -98,21 +98,34 @@ def get_lang_map(stemmer, cdi_items, special_cases):
 
 # Takes a CorpusReader object, a stemmer, and a dictionary from alternate forms to items
 # Returns a FreqDist of all items in the lang_map for the corpus in the CorpusReader
-def get_lang_freqs(corpus_reader, stemmer, lang_map):
+def get_lang_stats(corpus_reader, stemmer, lang_map):
 
     freqs = nltk.FreqDist()
+    lengths = defaultdict(list)
     for corpus_file in corpus_reader.fileids():#[0:20]:
         corpus_participants = corpus_reader.participants(corpus_file)[0]
         #age = allEnglish.age(file, month=True)
         not_child = [value['id'] for key, value in corpus_participants.iteritems() if key != 'CHI']
-        corpus_words = corpus_reader.words(corpus_file, speaker=not_child)
-        corpus_stems = [stemmer(word.lower()) for word in corpus_words]
-        freqs.update(nltk.FreqDist(corpus_stems))
+
+        corpus_sents = corpus_reader.sents(corpus_file, speaker = not_child, replace = True)
+        for sent in corpus_sents:
+            for word in sent:
+                stem = stemmer(word.lower())
+                lengths[stem].append(len(sent))
+                freqs[stem] += 1
+
+
+#        corpus_words = corpus_reader.words(corpus_file, speaker=not_child, replace = True)
+#        corpus_stems = [stemmer(word.lower()) for word in corpus_words]
+#        freqs.update(nltk.FreqDist(corpus_stems))
+
+    cdi_mlus = {word: float(sum(word_lengths)) / len(word_lengths) for word, word_lengths in lengths.iteritems() if word in lang_map}
 
     sgt = nltk.SimpleGoodTuringProbDist(freqs)
     freq_sum = sum(freqs.values())
     # cdi_freqs = defaultdict(float)
     cdi_freqs = defaultdict(lambda: defaultdict(float))
+
     for key, value in freqs.iteritems():
         if key in lang_map:
             items = lang_map[key]
@@ -125,16 +138,16 @@ def get_lang_freqs(corpus_reader, stemmer, lang_map):
     cdi_freqs[unseen]['frequency'] += 0
     norm_cdi_freqs = {item : {'probability': values['probability'], 'frequency': values['count'] / freq_sum} for item, values in cdi_freqs.iteritems()}
 
-    return norm_cdi_freqs
+    return norm_cdi_freqs, cdi_mlus
 
-def get_freqs(language):
+def get_stats(language):
     lang_stemmer = get_stemmer(language)
     cdi_items = get_cdi_items(language)
-    cdi_item_freqs = get_lang_freqs(get_corpus_reader(language), lang_stemmer,
+    cdi_freqs, cdi_mlus = get_lang_stats(get_corpus_reader(language), lang_stemmer,
                                     get_lang_map(lang_stemmer, cdi_items,
                                                  get_special_cases(language, lang_stemmer)))
-    print language, float(len(cdi_item_freqs)) / len(cdi_items)
-    return cdi_item_freqs
+    print language, float(len(cdi_freqs)) / len(cdi_items)
+    return cdi_freqs, cdi_mlus
 
 def write_freqs(language, freqs):
     with open("freqs/freqs_%s.csv" % language.lower(), "w") as freq_file:
@@ -143,31 +156,38 @@ def write_freqs(language, freqs):
         for item, values in freqs.iteritems():
             freq_writer.writerow([item, str(values['probability']), str(values['frequency'])])
 
+def write_mlus(language, mlus):
+    with open("mlus/mlus_%s.csv" % language.lower(), "w") as mlu_file:
+        mlu_writer = UnicodeWriter(mlu_file)
+        mlu_writer.writerow(["item", "mlu"])
+        for item, value in mlus.iteritems():
+            mlu_writer.writerow([item, value])
 
-def get_lang_counts(language):
-    corpus_reader = get_corpus_reader(language)
-    stemmer = get_stemmer(language)
-    counts = nltk.FreqDist()
-    for corpus_file in corpus_reader.fileids():
-        corpus_participants = corpus_reader.participants(corpus_file)[0]
-        not_child = [value['id'] for key, value in corpus_participants.iteritems() if key != 'CHI']
-        corpus_words = corpus_reader.words(corpus_file, speaker=not_child)
-        corpus_stems = [stemmer(word.lower()) for word in corpus_words]
-        counts.update(nltk.FreqDist(corpus_stems))
-    return counts
-
-def write_lang_counts(language, lang_counts):
-    with open("counts/counts_%s.csv" % language.lower(), "w") as count_file:
-        count_writer = UnicodeWriter(count_file)
-        count_writer.writerow(["item", "count"])
-        for item, count in lang_counts.iteritems():
-            count_writer.writerow([item, str(count)])
+# def get_lang_counts(language):
+#     corpus_reader = get_corpus_reader(language)
+#     stemmer = get_stemmer(language)
+#     counts = nltk.FreqDist()
+#     for corpus_file in corpus_reader.fileids():
+#         corpus_participants = corpus_reader.participants(corpus_file)[0]
+#         not_child = [value['id'] for key, value in corpus_participants.iteritems() if key != 'CHI']
+#         corpus_words = corpus_reader.words(corpus_file, speaker=not_child)
+#         corpus_stems = [stemmer(word.lower()) for word in corpus_words]
+#         counts.update(nltk.FreqDist(corpus_stems))
+#     return counts
+#
+# def write_lang_counts(language, lang_counts):
+#     with open("counts/counts_%s.csv" % language.lower(), "w") as count_file:
+#         count_writer = UnicodeWriter(count_file)
+#         count_writer.writerow(["item", "count"])
+#         for item, count in lang_counts.iteritems():
+#             count_writer.writerow([item, str(count)])
 
 languages = ["italian", "norwegian", "russian", "spanish", "swedish", "turkish"] #"english",
              #"danish", "german", "cantonese" "hebrew" "mandarin" "croatian"
 for language in languages:
-   lang_freqs = get_freqs(language)
-   write_freqs(language, lang_freqs)
+   lang_freqs, lang_mlus = get_stats(language)
+   #write_freqs(language, lang_freqs)
+   write_mlus(language, lang_mlus)
 
 #eng = get_freqs("English")
 
