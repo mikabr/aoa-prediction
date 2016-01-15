@@ -6,6 +6,7 @@ output:
   html_document:
     highlight: tango
     theme: spacelab
+    toc: true
 ---
 
 ```{r setup, echo = FALSE}
@@ -26,9 +27,12 @@ library(lazyeval)
 theme_set(theme_mikabr())
 ```
 
+# Data loading
+
 Connect to the Wordbank database and pull out the raw data.
+
 ```{r, raw_data}
-data_mode <- "local"
+data_mode <- "remote"
 
 admins <- get_administration_data(mode = data_mode) %>%
   select(data_id, age, language, form)
@@ -69,7 +73,324 @@ items_by_inst <- split(words, paste(words$language, words$form, sep = "_"))
 raw_data <- map(items_by_inst, get_inst_data)
 ```
 
+# Exploratory analyses
+
+Explore AOAs for English. 
+
+```{r}
+ewg <- raw_data$English_WG
+
+ms <- ewg %>%
+  group_by(definition, age, category) %>%
+  summarise(prop = mean(value), 
+            num_true = sum(value), 
+            num_false = sum(!value))
+
+ggplot(ms, aes(age, prop, col = definition)) + 
+  geom_line() + 
+  facet_wrap(~category) +
+  scale_colour_solarized(guide=FALSE)
+```
+
+Let's compare some methods. First try empirical quantiles. This loses many observations that never go above 50%. 
+
+```{r}
+empirical_aoas <- ms %>%
+  group_by(definition, category) %>%
+  summarise(empirical_aoa = min(age[prop > .5]))
+
+qplot(empirical_aoa, data = empirical_aoas)
+qplot(empirical_aoa, facets = ~ category, data = empirical_aoas)
+```
+
+Now let's try the basic GLM version. 
+
+```{r}
+fit_glm <- function(data) {
+  model <- glm(cbind(num_true, num_false) ~ age, family = "binomial", 
+               data = data)
+  fit <- predict(model, newdata = data.frame(age = 0:36), se.fit = TRUE)
+  aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
+  
+  data.frame(definition = data$definition[1],
+             category = data$category[1],
+             glm_aoa = aoa)
+}
+
+glm_aoas <- ms %>%
+  split(.$definition) %>%
+  map(fit_glm) %>%
+  bind_rows
+
+qplot(glm_aoa, data = glm_aoas)
+qplot(glm_aoa, facets = ~ category, data = glm_aoas)
+```
+
+Compare. The GLM AOA gives a bunch of values, many of which seem crazy. 
+
+```{r}
+aoas <- full_join(empirical_aoas, glm_aoas)
+
+ggplot(aoas, aes(x = empirical_aoa, y = glm_aoa, col = category)) + 
+  geom_point() + 
+  geom_text(aes(label = definition), nudge_y = 3) +
+  scale_colour_solarized(guide=FALSE) 
+
+aoas %>%
+  gather(measure, aoa, empirical_aoa, glm_aoa) %>%
+  ggplot(aes(x = aoa)) + facet_grid(.~measure) + geom_histogram()
+```
+
+Can we do a BayesGLM to regularize things a bit? Let's explore a single curve. Basically, BayesGLM does *exactly* the same thing as GLM because of the huge amount of data, no matter what prior. Let's try also robust GLM.   
+
+```{r}
+library(arm)
+library(robustbase)
+
+target_words <- c(c("pattycake","mommy*","bye", "tomorrow","play pen", "today",
+                  "child", "all","night night","brother", "daddy", "bye", "when"), 
+                  sample(unique(ms$definition), 20))
+
+do.fits <- function(data) {
+  glm_model <- glm(cbind(num_true, num_false) ~ age, 
+                   family = "binomial", 
+                   data = data)
+  bayes_model <- bayesglm(cbind(num_true, num_false) ~ age, 
+                          family = binomial(link="logit"),
+                          prior.mean = .25, 
+                          prior.scale = c(.01), 
+                          prior.mean.for.intercept = 0, 
+                          prior.scale.for.intercept = 2.5,
+                          prior.df=Inf, 
+                          data = data)
+  rob_model <- glmrob(cbind(num_true, num_false) ~ age, 
+                      family = binomial(link="logit"), data = data)
+  
+  
+  fits <- data.frame(age = 0:36) %>%
+    mutate(glm = predict(glm_model, 
+                         type = "response", 
+                         data.frame(age = age)), 
+           bayes = predict(bayes_model, 
+                           type = "response", 
+                           data.frame(age = age)), 
+           robust = predict(rob_model, 
+                            type = "response", 
+                            data.frame(age = age)), 
+           definition = data$definition[1]) %>%
+    left_join(data) 
+  
+  return(fits)
+}
+
+mms <- ms %>%
+  filter(definition %in% target_words) %>%
+  group_by(definition) %>%
+  do(do.fits(.)) 
+
+ggplot(mms, aes(x = age)) + 
+  geom_line(aes(y = glm), col = "red") + 
+  geom_line(aes(y = bayes), col = "blue") +
+  geom_line(aes(y = robust), col = "green") + 
+  geom_point(aes(y = prop), col = "black") + 
+  scale_colour_manual(values = c("glm" = "red", 
+                                 "bayes" = "blue", 
+                                 "robustglm" = "green")) +
+  ylim(c(0,1)) + 
+  facet_wrap(~definition)
+
+```
+
+Now apply this more broadly. Note that the 50% point for logistic regression = $- \beta_1 / \beta_2$.
+
+```{r}
+fit_bglm <- function(data) {
+  model <- bayesglm(cbind(num_true, num_false) ~ age, family = "binomial", 
+                    prior.mean = .25, 
+                          prior.scale = c(.01), 
+                          prior.mean.for.intercept = 0, 
+                          prior.scale.for.intercept = 2.5,
+                          prior.df=Inf,
+                    data = data)
+  aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
+  
+  data.frame(definition = data$definition[1],
+             category = data$category[1],
+             bglm_aoa = aoa)
+}
+
+bglm_aoas <- ms %>%
+  split(.$definition) %>%
+  map(fit_bglm) %>%
+  bind_rows
+
+qplot(bglm_aoa, data = bglm_aoas)
+qplot(bglm_aoa, facets = ~ category, data = bglm_aoas)
+qplot(bglm_aoas$bglm_aoa, glm_aoas$glm_aoa, label = bglm_aoas$definition, 
+      geom = "text")
+```
+
+BayesGLM with these made-up parameters fixes some of the issues, produces a better-looking distribution with fewer crazy outliers (though still some). But how do we get around the "made up parameter" problem? 
+
+# Hierarchical model
+
+Set some stan settings. 
+
+```{r}
+library(rstan)
+library(readr)
+library(dplyr)
+
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+ms <- read_csv("engdata.csv")
+```
+
+The model. 
+
+```{r}
+hierarchical_logit <-'
+data {                            
+  int<lower=1> W; // number of words
+  int<lower=1> A; // number of ages
+  int<lower=1> N; // number of datapoints (W*A)
+  vector[A] age; // subject ages
+  int produces[N]; // count data
+  int attempts[N]; // count data
+}
+
+parameters {
+  real mu_i; // intercept mean
+  real<lower=0> sigma_i; // intercept SD
+  real mu_s; // intercept mean
+  real<lower=0> sigma_s; // intercept SD
+  real<lower=0> intercept[W]; // word mean
+  real<lower=0> slope[W]; // subject mean
+}
+
+model {
+  mu_i ~ normal(0, 10); 
+  mu_s ~ normal(0, 10);
+  sigma_i ~ normal(0, 5);
+  sigma_s ~ normal(0, 5);
+  intercept ~ normal(mu_i, sigma_i);
+  slope ~ normal(mu_s, sigma_s);
+
+  for (a in 1:A)
+    for (w in 1:W) 
+      produces[W*(a-1) + w] ~ binomial_logit(attempts[W*(a-1) + w], intercept[w] + (slope[w] * age[a]));
+}
+'
+```
+
+Now reformat the data to stan format and compute. 
+
+```{r}
+model.data <- ms %>%
+  ungroup %>%
+  mutate(word = definition, 
+         n = num_true,
+         N = num_true + num_false) %>%
+  filter(word %in% c("daddy*","mommy*","no","bye")) %>%
+  dplyr::select(word, age, n, N)
+
+ages <- unique(model.data$age)
+n.words <- length(unique(model.data$word))
+
+dat <- list(age = ages,
+            produces = model.data$n, 
+            attempts = model.data$N,             
+            W = n.words, 
+            A = length(ages), 
+            N = n.words * length(ages))
+
+samps <- stan(model_code = hierarchical_logit, 
+              cores = 4, 
+              data = dat, iter = 50, warmup=25, chains = 4, 
+              pars = c("mu_i", "sigma_i", "mu_s", "sigma_s", "slope", "intercept"))
+```
+
+Diagnostics.
+
+```{r}
+traceplot(samps, pars = c("mu_i","sigma_i","mu_s","sigma_s"), 
+                 inc_warmup = TRUE)
+```
+
+Check one curve vs. data. 
+
+```{r}
+coefs <- data.frame(summary(samps)$summary)
+coefs$name <- rownames(coefs)
+
+data <- ms[ms$definition == "mommy*",]
+xs <- 0:24
+ys <- boot::inv.logit(coefs[coefs$name == "intercept[1]",]$mean + 
+                        xs * coefs[coefs$name == "slope[1]",]$mean) 
+fit <- data.frame(xs = xs, ys = ys)
+ggplot(data, aes(x = age, y = prop)) + 
+  geom_point() +
+  geom_line(data = fit, aes(x = xs, y = ys))
+```
+
+Explore parameters. 
+
+```{r}
+library(stringr)
+library(tidyr)
+
+word_ids <- ms %>% 
+  group_by(definition) %>% 
+  summarise(category = unique(category)) %>%
+  mutate(word_id = 1:n())
+
+words <- coefs %>% 
+  filter(str_detect(name, "slope") | str_detect(name, "intercept")) %>%
+  separate(name, c("variable", "word_id"), "\\[") %>%
+  mutate(word_id = as.numeric(str_replace(word_id, "]", ""))) %>%
+  left_join(word_ids) %>%
+  select(mean, variable, definition, category) %>%
+  spread(variable, mean) %>%
+  mutate(aoa = intercept / slope) %>%
+  arrange(aoa) %>%
+  mutate(definition = factor(definition, 
+                        levels = definition,
+                        labels = definition))
+```
+
+and plot again:
+
+```{r}
+qplot(mean, as.numeric(definition), 
+      geom = "point", data=words) + 
+  geom_text(aes(x = mean + .2, label = definition), 
+            data = words[seq(1,680, 10),], 
+            size = 2)
+```
+
+Check the histogram:
+
+```{r}
+qplot(mean, geom = "blank", data = words) + 
+  geom_histogram(aes(y = ..density..)) + 
+  geom_density(col = "red")
+```
+
+What are the words with means below 1?
+
+```{r}
+filter(words, mean < 1)
+```
+```
+
+
+
+
+
+# Compute across all languages
+
 Fit models to predict each item's age of acquisition.
+
 ```{r, aoa_data}
 fit_inst_measure_uni <- function(inst_measure_uni_data) {
   ages <- min(inst_measure_uni_data$age):max(inst_measure_uni_data$age)
