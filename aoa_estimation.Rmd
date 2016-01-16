@@ -10,6 +10,7 @@ output:
 ---
 
 ```{r setup, echo = FALSE}
+rm(list=ls())
 library(knitr)
 opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 ```
@@ -78,7 +79,7 @@ raw_data <- map(items_by_inst, get_inst_data)
 Explore AOAs for English. 
 
 ```{r}
-ewg <- raw_data$English_WG
+ewg <- raw_data$Swedish_WG
 
 ms <- ewg %>%
   group_by(definition, age, category) %>%
@@ -102,6 +103,10 @@ empirical_aoas <- ms %>%
 qplot(empirical_aoa, data = empirical_aoas)
 qplot(empirical_aoa, facets = ~ category, data = empirical_aoas)
 ```
+
+# Basic models
+
+# Basic GLM
 
 Now let's try the basic GLM version. 
 
@@ -141,15 +146,54 @@ aoas %>%
   ggplot(aes(x = aoa)) + facet_grid(.~measure) + geom_histogram()
 ```
 
+# Robust GLM
+
+
+```{r}
+library(robustbase)
+fit_rglm <- function(data) {
+  model <- glmrob(cbind(num_true, num_false) ~ age, family = "binomial", 
+               data = data)
+  fit <- predict(model, newdata = data.frame(age = 0:36), se.fit = TRUE)
+  aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
+  
+  data.frame(definition = data$definition[1],
+             category = data$category[1],
+             rglm_aoa = aoa)
+}
+
+rglm_aoas <- ms %>%
+  split(.$definition) %>%
+  map(fit_rglm) %>%
+  bind_rows
+
+qplot(rglm_aoa, data = rglm_aoas)
+qplot(rglm_aoa, data = rglm_aoas) + 
+  xlim(c(0,50))
+qplot(rglm_aoa, facets = ~ category, data = rglm_aoas)
+```
+
+Looks totally reasonable except for the two crazy ones. 
+
+```{r}
+rglm_aoas$definition[rglm_aoas$rglm_aoa < 0] 
+rglm_aoas$definition[rglm_aoas$rglm_aoa > 50] 
+```
+
+
+## Bayes GLM
+
 Can we do a BayesGLM to regularize things a bit? Let's explore a single curve. Basically, BayesGLM does *exactly* the same thing as GLM because of the huge amount of data, no matter what prior. Let's try also robust GLM.   
 
 ```{r}
 library(arm)
 library(robustbase)
 
-target_words <- c(c("pattycake","mommy*","bye", "tomorrow","play pen", "today",
-                  "child", "all","night night","brother", "daddy", "bye", "when"), 
-                  sample(unique(ms$definition), 20))
+target_words <- 
+  sample(unique(ms$definition), 20)
+# c((c("pattycake","mommy*","bye", "tomorrow","play pen", "today",
+#                   "child", "all","night night","brother", "daddy", "bye", "when"),) 
+                  
 
 do.fits <- function(data) {
   glm_model <- glm(cbind(num_true, num_false) ~ age, 
@@ -192,13 +236,13 @@ ggplot(mms, aes(x = age)) +
   geom_line(aes(y = glm), col = "red") + 
   geom_line(aes(y = bayes), col = "blue") +
   geom_line(aes(y = robust), col = "green") + 
-  geom_point(aes(y = prop), col = "black") + 
   scale_colour_manual(values = c("glm" = "red", 
                                  "bayes" = "blue", 
-                                 "robustglm" = "green")) +
+                                 "robustglm" = "green"), 
+                      name = "model") +
+  geom_point(aes(y = prop), col = "black") + 
   ylim(c(0,1)) + 
   facet_wrap(~definition)
-
 ```
 
 Now apply this more broadly. Note that the 50% point for logistic regression = $- \beta_1 / \beta_2$.
@@ -232,7 +276,7 @@ qplot(bglm_aoas$bglm_aoa, glm_aoas$glm_aoa, label = bglm_aoas$definition,
 
 BayesGLM with these made-up parameters fixes some of the issues, produces a better-looking distribution with fewer crazy outliers (though still some). But how do we get around the "made up parameter" problem? 
 
-# Hierarchical model
+# Hierarchical GLM model
 
 Set some stan settings. 
 
@@ -243,42 +287,58 @@ library(dplyr)
 
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
-ms <- read_csv("engdata.csv")
+# ms <- read_csv("engdata.csv")
 ```
 
-The model. 
+The model. Constraints:
+
+* No negative slopes - we don't get worse at words. 
+* Strong prior on slopes, they should have mean and sd around .25 (empirical)
+* Much weaker prior on intercepts, though yoked their SDs (perhaps too tightly?
+
 
 ```{r}
 hierarchical_logit <-'
 data {                            
   int<lower=1> W; // number of words
   int<lower=1> A; // number of ages
-  int<lower=1> N; // number of datapoints (W*A)
   vector[A] age; // subject ages
-  int produces[N]; // count data
-  int attempts[N]; // count data
+  int<lower=0> produces[W,A]; // count data
+  int<lower=0> attempts[W,A]; // count data
 }
 
 parameters {
-  real mu_i; // intercept mean
+  real mu_i;             // intercept mean
   real<lower=0> sigma_i; // intercept SD
-  real mu_s; // intercept mean
-  real<lower=0> sigma_s; // intercept SD
-  real<lower=0> intercept[W]; // word mean
-  real<lower=0> slope[W]; // subject mean
+  
+  real<lower=0> mu_s;             // slope mean
+  real<lower=0> sigma_s; // slope SD
+
+  vector[W] intercept; // word means
+  vector[W] slope; // subject means
+}
+
+transformed parameters {
+  matrix[W,A] p;
+
+  for (w in 1:W) 
+    for (a in 1:A)
+      p[w,a] <- intercept[w] + (slope[w] * age[a]);
 }
 
 model {
   mu_i ~ normal(0, 10); 
-  mu_s ~ normal(0, 10);
-  sigma_i ~ normal(0, 5);
-  sigma_s ~ normal(0, 5);
+  sigma_i ~ normal(0, 1);
+
+  mu_s ~ normal(0, .25);
+  sigma_s ~ normal(0, .25);
+
   intercept ~ normal(mu_i, sigma_i);
   slope ~ normal(mu_s, sigma_s);
-
-  for (a in 1:A)
-    for (w in 1:W) 
-      produces[W*(a-1) + w] ~ binomial_logit(attempts[W*(a-1) + w], intercept[w] + (slope[w] * age[a]));
+  
+  for (w in 1:W) 
+    for (a in 1:A)
+      produces[w,a] ~ binomial_logit(attempts[w,a], p[w,a]);
 }
 '
 ```
@@ -291,22 +351,23 @@ model.data <- ms %>%
   mutate(word = definition, 
          n = num_true,
          N = num_true + num_false) %>%
-  filter(word %in% c("daddy*","mommy*","no","bye")) %>%
-  dplyr::select(word, age, n, N)
+  # filter(word %in% c("daddy*","mommy*","no","bye")) %>%
+  dplyr::select(word, age, category, n, N)
 
 ages <- unique(model.data$age)
 n.words <- length(unique(model.data$word))
 
 dat <- list(age = ages,
-            produces = model.data$n, 
-            attempts = model.data$N,             
+            produces = matrix(model.data$n, 
+                              nrow=n.words, ncol=length(ages), byrow = TRUE),
+            attempts = matrix(model.data$N, 
+                              nrow=n.words, ncol=length(ages), byrow = TRUE),
             W = n.words, 
-            A = length(ages), 
-            N = n.words * length(ages))
+            A = length(ages))
 
 samps <- stan(model_code = hierarchical_logit, 
               cores = 4, 
-              data = dat, iter = 50, warmup=25, chains = 4, 
+              data = dat, iter = 200, warmup=100, chains = 4, 
               pars = c("mu_i", "sigma_i", "mu_s", "sigma_s", "slope", "intercept"))
 ```
 
@@ -317,31 +378,18 @@ traceplot(samps, pars = c("mu_i","sigma_i","mu_s","sigma_s"),
                  inc_warmup = TRUE)
 ```
 
-Check one curve vs. data. 
-
-```{r}
-coefs <- data.frame(summary(samps)$summary)
-coefs$name <- rownames(coefs)
-
-data <- ms[ms$definition == "mommy*",]
-xs <- 0:24
-ys <- boot::inv.logit(coefs[coefs$name == "intercept[1]",]$mean + 
-                        xs * coefs[coefs$name == "slope[1]",]$mean) 
-fit <- data.frame(xs = xs, ys = ys)
-ggplot(data, aes(x = age, y = prop)) + 
-  geom_point() +
-  geom_line(data = fit, aes(x = xs, y = ys))
-```
-
 Explore parameters. 
 
 ```{r}
 library(stringr)
 library(tidyr)
 
-word_ids <- ms %>% 
-  group_by(definition) %>% 
-  summarise(category = unique(category)) %>%
+coefs <- data.frame(summary(samps)$summary)
+coefs$name <- rownames(coefs)
+
+word_ids <- model.data %>% 
+  group_by(word) %>% 
+  summarise(category = category[1]) %>%
   mutate(word_id = 1:n())
 
 words <- coefs %>% 
@@ -349,116 +397,198 @@ words <- coefs %>%
   separate(name, c("variable", "word_id"), "\\[") %>%
   mutate(word_id = as.numeric(str_replace(word_id, "]", ""))) %>%
   left_join(word_ids) %>%
-  select(mean, variable, definition, category) %>%
+  dplyr::select(mean, variable, word, category) %>%
   spread(variable, mean) %>%
   mutate(aoa = intercept / slope) %>%
   arrange(aoa) %>%
-  mutate(definition = factor(definition, 
-                        levels = definition,
-                        labels = definition))
+  mutate(word = factor(word, 
+                        levels = word,
+                        labels = word))
 ```
 
 and plot again:
 
 ```{r}
-qplot(mean, as.numeric(definition), 
-      geom = "point", data=words) + 
-  geom_text(aes(x = mean + .2, label = definition), 
-            data = words[seq(1,680, 10),], 
-            size = 2)
+age_range <- 0:36
+preds <- words %>%
+  group_by(word, category) %>%
+  do(data.frame(age = age_range, 
+                pred.prop = boot::inv.logit(.$intercept + age_range * .$slope))) %>%
+  left_join(model.data) %>%
+  mutate(prop = n/N) 
+
+ggplot(filter(preds, word %in% target_words), aes(x = age, y = prop)) + 
+  geom_point() + 
+  facet_wrap(~word) + 
+  geom_line(aes(x = age, y = pred.prop))
 ```
 
-Check the histogram:
+Check the histogram.
 
 ```{r}
-qplot(mean, geom = "blank", data = words) + 
+hglm.aoas <- words %>%
+  mutate(aoa = -intercept / slope)
+
+qplot(aoa, geom = "blank", data = hglm.aoas) + 
   geom_histogram(aes(y = ..density..)) + 
   geom_density(col = "red")
 ```
 
-What are the words with means below 1?
+What are the crazy ones? 
 
 ```{r}
-filter(words, mean < 1)
+hglm.aoas$word[hglm.aoas$aoa <0]
+hglm.aoas$word[hglm.aoas$aoa >50]
 ```
+
+Don't know what's going on with these but everything else looks good. 
+
+# Full comparison between models
+
+## Sample words
+
+Merge with previous data frame. 
+
+```{r}
+all.preds <- left_join(mms, 
+                       preds %>% 
+                         ungroup %>%
+                         rename(hglm = pred.prop, 
+                                definition = word) %>% 
+                         dplyr::select(definition, age, hglm)) %>%
+  dplyr::select(-num_true, -num_false)
+
+ggplot(all.preds, aes(x = age)) + 
+  geom_line(aes(y = glm), col = "red") + 
+  geom_line(aes(y = bayes), col = "blue") +
+  geom_line(aes(y = robust), col = "green") + 
+  geom_line(aes(y = hglm), col = "orange") + 
+  geom_point(aes(y = prop), col = "black") + 
+  ylim(c(0,1)) + 
+  facet_wrap(~definition) + 
+  scale_colour_manual(values = c(glm = "red", 
+                                 bayes = "blue", 
+                                 robustglm = "green", 
+                                 hglm = "orange"), 
+                      name = "model")
+
 ```
 
 
+## AOA distribution
 
+```{r}
 
+aoas <- full_join(full_join(glm_aoas, full_join(bglm_aoas, rglm_aoas)), empirical_aoas) %>%
+  full_join(hglm.aoas %>% rename(definition = word, 
+                               hglm_aoa = aoa) %>% 
+            dplyr::select(-intercept, -slope))
+  
+```
+
+Plot.
+
+```{r}
+qplot(aoa,facets = ~ measure, 
+      data = aoas %>% gather(measure, aoa, ends_with("aoa")))
+```
+
+And without the outliers. 
+
+```{r}
+qplot(aoa,facets = ~ measure, 
+      data = aoas %>% 
+        gather(measure, aoa, ends_with("aoa")) %>%
+        filter(aoa > 0 & aoa < 50))
+
+```
+
+And pairs plots. 
+
+```{r}
+pair_data <- aoas %>% 
+  dplyr::select(ends_with("aoa")) %>%
+          mutate(empirical_aoa = ifelse(is.infinite(empirical_aoa), 
+                                       NA, empirical_aoa)) %>%
+  filter(glm_aoa > 0, glm_aoa < 50, rglm_aoa > 0, rglm_aoa < 50)
+
+GGally::ggpairs(pair_data) 
+```
 
 # Compute across all languages
 
 Fit models to predict each item's age of acquisition.
 
+Commented out for computation time reasons. 
+
 ```{r, aoa_data}
-fit_inst_measure_uni <- function(inst_measure_uni_data) {
-  ages <- min(inst_measure_uni_data$age):max(inst_measure_uni_data$age)
-  model <- glm(cbind(num_true, num_false) ~ age, family = "binomial",
-               data = inst_measure_uni_data)
-  fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
-  aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
-  constants <- inst_measure_uni_data %>%
-    select(language, form, measure, lexical_category, lexical_class, uni_lemma,
-           words) %>%
-    distinct()
-  props <- inst_measure_uni_data %>%
-    ungroup() %>%
-    select(age, prop)
-  data.frame(age = ages, fit_prop = inv.logit(fit$fit), fit_se = fit$se.fit,
-             aoa = aoa, language = constants$language, form = constants$form,
-             measure = constants$measure,
-             lexical_category = constants$lexical_category,
-             lexical_class = constants$lexical_class,
-             uni_lemma = constants$uni_lemma, words = constants$words) %>%
-    left_join(props)
-}
-
-fit_inst_measure <- function(inst_measure_data) {
-  inst_measure_by_uni <- inst_measure_data %>%
-    group_by(language, form, measure,
-             lexical_category, lexical_class, uni_lemma,
-             age, data_id) %>%
-    summarise(uni_value = any(value),
-              words = paste(definition, collapse = ", ")) %>%
-    group_by(language, form, measure,
-             lexical_category, lexical_class, uni_lemma, words,
-             age) %>%
-    summarise(num_true = sum(uni_value, na.rm = TRUE),
-              num_false = n() - num_true,
-              prop = mean(uni_value, na.rm = TRUE))
-  inst_measure_by_uni %>%
-    split(paste(.$lexical_category, .$lexical_class, .$uni_lemma)) %>%
-    map(fit_inst_measure_uni) %>%
-    bind_rows()
-}
-
-fit_inst <- function(inst_data) {
-  inst_data %>%
-    split(.$measure) %>%
-    map(fit_inst_measure) %>%
-    bind_rows()
-}
-
-prop_data <- map(raw_data, fit_inst)
-all_prop_data <- bind_rows(prop_data)
-#write_csv(all_prop_data, "app/all_prop_data.csv")
+# fit_inst_measure_uni <- function(inst_measure_uni_data) {
+#   ages <- min(inst_measure_uni_data$age):max(inst_measure_uni_data$age)
+#   model <- glm(cbind(num_true, num_false) ~ age, family = "binomial",
+#                data = inst_measure_uni_data)
+#   fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
+#   aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
+#   constants <- inst_measure_uni_data %>%
+#     select(language, form, measure, lexical_category, lexical_class, uni_lemma,
+#            words) %>%
+#     distinct()
+#   props <- inst_measure_uni_data %>%
+#     ungroup() %>%
+#     select(age, prop)
+#   data.frame(age = ages, fit_prop = inv.logit(fit$fit), fit_se = fit$se.fit,
+#              aoa = aoa, language = constants$language, form = constants$form,
+#              measure = constants$measure,
+#              lexical_category = constants$lexical_category,
+#              lexical_class = constants$lexical_class,
+#              uni_lemma = constants$uni_lemma, words = constants$words) %>%
+#     left_join(props)
+# }
+# 
+# fit_inst_measure <- function(inst_measure_data) {
+#   inst_measure_by_uni <- inst_measure_data %>%
+#     group_by(language, form, measure,
+#              lexical_category, lexical_class, uni_lemma,
+#              age, data_id) %>%
+#     summarise(uni_value = any(value),
+#               words = paste(definition, collapse = ", ")) %>%
+#     group_by(language, form, measure,
+#              lexical_category, lexical_class, uni_lemma, words,
+#              age) %>%
+#     summarise(num_true = sum(uni_value, na.rm = TRUE),
+#               num_false = n() - num_true,
+#               prop = mean(uni_value, na.rm = TRUE))
+#   inst_measure_by_uni %>%
+#     split(paste(.$lexical_category, .$lexical_class, .$uni_lemma)) %>%
+#     map(fit_inst_measure_uni) %>%
+#     bind_rows()
+# }
+# 
+# fit_inst <- function(inst_data) {
+#   inst_data %>%
+#     split(.$measure) %>%
+#     map(fit_inst_measure) %>%
+#     bind_rows()
+# }
+# 
+# prop_data <- map(raw_data, fit_inst)
+# all_prop_data <- bind_rows(prop_data)
+# #write_csv(all_prop_data, "app/all_prop_data.csv")
 ```
 
 ```{r}
-aoa_data <- all_prop_data %>%
-  select(language, form, measure, lexical_category, lexical_class, uni_lemma, 
-         words, aoa) %>%
-  distinct() %>%
-  filter(aoa > 5 & aoa < 31)
-#write_csv(aoa_data, "aoa_data.csv")
+# aoa_data <- all_prop_data %>%
+#   select(language, form, measure, lexical_category, lexical_class, uni_lemma, 
+#          words, aoa) %>%
+#   distinct() %>%
+#   filter(aoa > 5 & aoa < 31)
+# #write_csv(aoa_data, "aoa_data.csv")
 ```
 
 ```{r, fig.width=10, fig.height=8}
-ggplot(aoa_data, aes(x = aoa, fill = language)) +
-  facet_wrap(~language) +
-  geom_bar() +
-  xlab("Age of Acquisition (months)") +
-  ylab("Count") +
-  scale_fill_solarized(guide = FALSE)
+# ggplot(aoa_data, aes(x = aoa, fill = language)) +
+#   facet_wrap(~language) +
+#   geom_bar() +
+#   xlab("Age of Acquisition (months)") +
+#   ylab("Count") +
+#   scale_fill_solarized(guide = FALSE)
 ```
