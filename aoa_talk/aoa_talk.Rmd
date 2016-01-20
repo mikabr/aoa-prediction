@@ -29,10 +29,10 @@ opts_chunk$set(echo = FALSE, error = FALSE, message = FALSE, warning = FALSE,
 #     load_cache(label = file, path = dir)
 #   }
 # }
-# knit("aoa_prediction_funs.Rmd", tangle = TRUE)
-# source("aoa_prediction_funs.R")
-# save.image("aoa_prediction.RData")
-load("aoa_prediction.RData")
+# knit("../aoa_prediction_funs.Rmd", tangle = TRUE)
+# source("../aoa_prediction_funs.R")
+# save.image("../aoa_prediction.RData")
+load("../aoa_prediction.RData")
 ```
 
 ```{r knit_vc, include=FALSE}
@@ -301,8 +301,8 @@ ggplot(demo_word_data, aes(x = age, y = prop,
                            colour = definition, label = definition)) +
   #geom_point() +
   geom_smooth(size = 1, method = "loess") +
-  geom_dl(method = list(dl.trans(x = x + 0.3), "last.qp", cex = .8,
-                        fontfamily = "Open Sans")) +
+#  geom_dl(method = list(dl.trans(x = x + 0.3), "last.qp", cex = .8,
+#                        fontfamily = "Open Sans")) +
   scale_colour_solarized(guide = FALSE) +
   scale_y_continuous(name = "Proportion of children understanding\n") +
                      #limits = c(0, 1)) +
@@ -321,7 +321,7 @@ ggplot(demo_word_data, aes(x = age, y = prop,
 ## Estimating AoA
 
 ```{r}
-all_prop_data <- read_csv("all_prop_data.csv")
+all_prop_data <- read_csv("../all_prop_data.csv")
 
 demo_word <- "balloon"
 demo_data <- all_prop_data %>%
@@ -343,10 +343,10 @@ plt + geom_blank()
 
 ```{r}
 plt <- plt + #geom_point(colour = solarized_palette(3)[3])
-  geom_point(aes(y = prop), colour = solarized_palette(3)[3]) +
-  geom_dl(aes(y = prop, label = uni_lemma, colour = solarized_palette(3)[3]),
-          method = list(dl.trans(x = x + 0.5), "last.qp", cex = .8,
-                        fontfamily = "Open Sans"))
+  geom_point(aes(y = prop), colour = solarized_palette(3)[3])
+#  geom_dl(aes(y = prop, label = uni_lemma, colour = solarized_palette(3)[3]),
+#          method = list(dl.trans(x = x + 0.5), "last.qp", cex = .8,
+#                        fontfamily = "Open Sans"))
 plt
 ```
 
@@ -535,12 +535,12 @@ joined_predictor_means %>%
                  alpha = 0.4,
                  position = position_dodge(width = 0.1)) +
   geom_line(aes(group = predictor), position = position_dodge(width = 0.1)) +
-  geom_dl(aes(label = predictor),
-          method = list("first.qp", dl.trans(x = x - 0.3), cex = 0.6,
-                        fontfamily = "Open Sans")) +
-  geom_dl(aes(label = predictor),
-          method = list("last.qp", dl.trans(x = x + 0.3), cex = 0.6,
-                        fontfamily = "Open Sans")) +
+#   geom_dl(aes(label = predictor),
+#           method = list("first.qp", dl.trans(x = x - 0.3), cex = 0.6,
+#                         fontfamily = "Open Sans")) +
+#   geom_dl(aes(label = predictor),
+#           method = list("last.qp", dl.trans(x = x + 0.3), cex = 0.6,
+#                         fontfamily = "Open Sans")) +
   scale_colour_solarized(guide = FALSE) +
   xlab("\nAge of Acquisition (months)") +
   ylab("Mean Predictor Z-Score\n")
