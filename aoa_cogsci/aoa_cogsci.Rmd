@@ -179,6 +179,20 @@ crossling_coef %>%
 
 _[TODO: no idea how to do this whole analysis properly...]_
 
+```{r coefs_lexcat, fig.height=2, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Magnitudes of predictor coefficients by lexical category.'}
+crossling_coefs %>%
+  mutate(term = factor(term, levels = rev(crossling_predictor_levels))) %>%
+  ggplot(aes(x = term, y = abs(estimate), colour = term)) +
+    facet_wrap(~lexical_category, ncol = 4) +
+    geom_pointrange(aes(ymin = abs(estimate) - 1.96 * std.error,
+                       ymax = abs(estimate) + 1.96 * std.error)) +
+    coord_flip() +
+    scale_colour_manual(guide = FALSE, values = rev(solarized_palette(7))) +
+    xlab("") +
+    scale_y_continuous(name = "Coefficient Magnitude (Months/SD)",
+                       breaks = seq(0, 3.5, 0.5))
+```
+
 \newpage
 
 # Discussion

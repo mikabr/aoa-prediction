@@ -390,6 +390,48 @@ crossling_predictor_levels <- crossling_coef$term[order(abs(crossling_coef$estim
 crossling_coef <- crossling_coef %>%
   mutate(term = factor(term, levels = crossling_predictor_levels))
 
+## ------------------------------------------------------------------------
+crossling_model_data <- crossling_data %>%
+  ungroup() %>%
+  select_(.dots = c("language", "lexical_category", "uni_lemma", "aoa",
+                    crossling_predictors)) %>%
+  filter(complete.cases(.)) %>%
+  mutate(lexical_category = factor(lexical_category,
+                                levels = c("nouns", "predicates",
+                                           "function_words", "other"),
+                                labels = c("Nouns", "Predicates",
+                                           "Function Words", "Other")))
+#   mutate(lexical_class = factor(lexical_class,
+#                                 levels = c("nouns", "adjectives", "verbs",
+#                                            "function_words", "other"),
+#                                 labels = c("Nouns", "Adjectives", "Verbs",
+#                                            "Function Words", "Other")))
+
+crossling_coefs <- crossling_model_data %>%
+  split(.$lexical_category) %>%
+  map(function(crossling_lexcat_data) {
+    crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + valence + 
+                              arousal + babiness + (1 + frequency + mlu + num_characters + 
+                                                      concreteness + valence + arousal + 
+                                                      babiness | language),
+                            data = crossling_lexcat_data)
+    data.frame(lexical_category = unique(crossling_lexcat_data$lexical_category),
+               term = row.names(summary(crossling_model)$coefficients),
+               estimate = summary(crossling_model)$coefficients[,"Estimate"],
+               std.error = summary(crossling_model)$coefficients[,"Std. Error"],
+               row.names = NULL) %>%
+      filter(term != "(Intercept)")
+  }) %>%
+  bind_rows()
+
+# crossling_predictors_ordered <- crossling_predictors %>%
+#   factor(levels = crossling_coef$term[order(abs(crossling_coef$estimate))])
+# 
+# crossling_predictor_levels <- crossling_coef$term[order(abs(crossling_coef$estimate),
+#                                                         decreasing = TRUE)]
+# crossling_coef <- crossling_coef %>%
+#   mutate(term = factor(term, levels = crossling_predictor_levels))
+
 ## ---- fig.width = 12, fig.height = 8-------------------------------------
 # crossling_plot_data <- crossling_model_data %>%
 #   gather_("predictor", "value", crossling_predictors) %>%
