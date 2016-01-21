@@ -119,7 +119,13 @@ def get_lang_stats(corpus_reader, stemmer, lang_map):
 #        corpus_stems = [stemmer(word.lower()) for word in corpus_words]
 #        freqs.update(nltk.FreqDist(corpus_stems))
 
-    cdi_mlus = {word: float(sum(word_lengths)) / len(word_lengths) for word, word_lengths in lengths.iteritems() if word in lang_map}
+    cdi_lengths = defaultdict(list)
+    for word, word_lengths in lengths.iteritems():
+        if word in lang_map:
+            items = lang_map[word]
+            for item in items:
+                cdi_lengths[item] += word_lengths
+    cdi_mlus = {item: float(sum(item_lengths)) / len(item_lengths) for item, item_lengths in cdi_lengths.iteritems()}
 
     sgt = nltk.SimpleGoodTuringProbDist(freqs)
     freq_sum = sum(freqs.values())
@@ -161,7 +167,7 @@ def write_mlus(language, mlus):
         mlu_writer = UnicodeWriter(mlu_file)
         mlu_writer.writerow(["item", "mlu"])
         for item, value in mlus.iteritems():
-            mlu_writer.writerow([item, value])
+            mlu_writer.writerow([item, str(value)])
 
 # def get_lang_counts(language):
 #     corpus_reader = get_corpus_reader(language)
@@ -182,12 +188,12 @@ def write_mlus(language, mlus):
 #         for item, count in lang_counts.iteritems():
 #             count_writer.writerow([item, str(count)])
 
-languages = ["italian", "norwegian", "russian", "spanish", "swedish", "turkish"] #"english",
+languages = ["english", "italian", "norwegian", "russian", "spanish", "swedish", "turkish"]
              #"danish", "german", "cantonese" "hebrew" "mandarin" "croatian"
 for language in languages:
-   lang_freqs, lang_mlus = get_stats(language)
-   #write_freqs(language, lang_freqs)
-   write_mlus(language, lang_mlus)
+    lang_freqs, lang_mlus = get_stats(language)
+    write_freqs(language, lang_freqs)
+    write_mlus(language, lang_mlus)
 
 #eng = get_freqs("English")
 
