@@ -60,11 +60,11 @@ One of the central problems facing a child acquiring their first language is to 
 
 Each of these abilities has been reliably demonstrated in the constrained learning contexts of the laboratory, indicating that they could be used for word learning. But it is less clear to what extent children actually employ them in the natural word learning environment and how they interact to create the longer-term dynamics of vocabulary acquisition. How do various word learning mechanisms differ in their relative contributions, and how does that change over the course of development?
 
-One way to address these questions is to use naturalistic large-scale vocabulary development data to examine the contribution of various theoretically-relevant factors to vocabulary growth. We can look across children to determine how easy or hard various words are to learn, and then examine the relationship between words' difficulties and various word properties that relate to proposed word learning mechanisms. Foundational work using such an approach has revealed that in English, within lexical category, words that are more frequent in speech to children are likely to be learned earlier [@goodman2008does, @roy2009exploring]. Further studies have delved into the relevance of semantic networks [@hills2009longitudinal], neighborhood density [@stokes2010neighborhood], and iconocity [@perry2015iconicity] to vocabulary construction.
+One way to address these questions is to use naturalistic large-scale vocabulary development data to examine the contribution of various theoretically-relevant factors to vocabulary growth. We can look across children to determine how easy or hard various words are to learn, and then examine the relationship between words' difficulties and various word properties that relate to proposed word learning mechanisms. Foundational work using such an approach has revealed that in English, within lexical category, words that are more frequent in speech to children are likely to be learned earlier [@goodman2008does; @roy2009exploring]. Further studies have delved into the relevance of semantic networks [@hills2009longitudinal], neighborhood density [@stokes2010neighborhood], iconocity [@perry2015iconicity], and linguistic distinctiveness [@roy2015predicting] to vocabulary construction.
 
-However, the previous studies use different datasets, focus on different predictors, and for the most part only analyze English data. It is thus impossible to compare the relative importance of the many relevant factors and to draw robust conclusions. To remedy this issue, we present analyses based on data from Wordbank (wordbank.stanford.edu), an open repository of language development data. By aggregating administrations of the MacArthur-Bates Communicative Development Inventory [@fenson2007macarthur] (CDI), a family of parent-report vocabulary checklists, Wordbank provides large-scale vocabulary data that we use to conduct analyses over development and across languages.
+However, the previous studies use different datasets, focus on different predictors, and for the most part only analyze English data. It is thus impossible to compare the relative importance of the many relevant factors and to draw robust conclusions. To remedy this issue, we present analyses based on data from Wordbank (wordbank.stanford.edu), an open repository of language development data. By aggregating administrations of the MacArthur-Bates Communicative Development Inventory [CDI; @fenson2007macarthur], a family of parent-report vocabulary checklists, Wordbank provides large-scale vocabulary data that we use to conduct analyses over development and across languages.
 
-We integrate Wordbank data with characterizations of the word learning environment from the CHILDES database [@macwhinney2000childes] and elsewhere, a multiple data source approach pioneered by [@goodman2008does]. Building on their work, we want to move beyond frequency to examine a variety of information sources. We specifically follow [@roy2015predicting] in predicting age of acquisition (AoA) as a function of several different environment predictors. In analyzing a high-density longitudinal corpus for a single English-acquiring child, Roy et al found that frequency, number of characters, and mean length of utterances were predictive of the age of a word's first production. Due to the nature of the data, this analysis was limited to one language (in fact to one subject) and could only test production, distancing the connection between properties of the input and the child's emerging understanding of words.
+We integrate Wordbank data with characterizations of the word learning environment from the CHILDES database [@macwhinney2000childes] and elsewhere, a multiple data source approach pioneered by @goodman2008does. Building on their work, we want to move beyond frequency to examine a variety of information sources. We specifically follow @roy2015predicting in predicting age of acquisition (AoA) as a function of several different environment predictors. In analyzing a high-density longitudinal corpus for a single English-acquiring child, Roy et al found that frequency, number of characters, and mean length of utterances were predictive of the age of a word's first production. Due to the nature of the data, this analysis was limited to one language (in fact to one subject) and could only test production, distancing the connection between properties of the input and the child's emerging understanding of words.
 
 Our approach provides a complimentary analysis by using CDI comprehension data to look at earliest words, across languages. We estimate the age of acquisition for around 400 words in each of `r length(unique(lang_coef$language))` languages. We also estimate each words' frequency and mean length of utterances (MLU) in which it appears, as well as obtaining ratings of each words' concreteness, valence, arousal, and relevance to babies from previously collected norms. We then predict words' AoA from all of these properties, and assess the relative contributions of each factor, along with the interaction of predictors with the lexical category and their changes over development.
 
@@ -93,7 +93,8 @@ crossling_model_data %>%
     geom_smooth(color = "black", method = "lm", se = FALSE, size = 1) +
     scale_colour_solarized(name = "") +
     xlab("Predictor Z-Score") +
-    ylab("Age of Acquisition (months)") +
+    scale_y_continuous(name = "Age of Acquisition (months)",
+                       breaks = seq(5, 25, 5)) +
     #theme_mikabr(base_size = 10) +
     theme(legend.position = "top")
 ```
@@ -215,22 +216,23 @@ cors <- predictions %>%
 
 ```{r fit, fig.height=2.3, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='English model fit.'}
 threshold <- 6
-ggplot(predictions, aes(x = predicted_aoa, y = aoa)) +
-  facet_wrap(~lexical_category, ncol = 4) +
-  geom_point(aes(colour = lexical_category), size = 0.7,
-             data = filter(predictions, error < threshold)) +
-  geom_label(aes(label = uni_lemma, colour = lexical_category), family = font,
-            show.legend = FALSE, data = filter(predictions, error >= threshold),
-            label.padding = unit(0.15, "lines"), size = 3) +
-  geom_smooth(aes(colour = lexical_category), weight = 1, method = "lm", se = FALSE) +
-  geom_smooth(colour = "black", weight = 2, method = "lm") +
-  scale_colour_solarized(name = "", guide = FALSE) +
-  scale_x_continuous(name = "Model Predicted AoA (months)",
-                     limits = c(6, 27), breaks = seq(6, 27, by = 3)) +
-  scale_y_continuous(name = "AoA (months)",
-                     limits = c(6, 27), breaks = seq(6, 27, by = 3)) +
-  geom_text(aes(x = 8.5, y = 26.5, label = sprintf("r = %.2f", cor)),
-            data = cors, family = font, size = 2.8)
+predictions %>%
+  ggplot(aes(x = predicted_aoa, y = aoa)) +
+    facet_wrap(~lexical_category, ncol = 4) +
+    geom_point(aes(colour = lexical_category), size = 0.7,
+               data = filter(predictions, error < threshold)) +
+    geom_label(aes(label = uni_lemma, colour = lexical_category), family = font,
+              show.legend = FALSE, data = filter(predictions, error >= threshold),
+              label.padding = unit(0.15, "lines"), size = 3) +
+    geom_smooth(aes(colour = lexical_category), weight = 1, method = "lm", se = FALSE) +
+    geom_smooth(colour = "black", weight = 2, method = "lm") +
+    scale_colour_solarized(name = "", guide = FALSE) +
+    scale_x_continuous(name = "Model Predicted AoA (months)",
+                       breaks = seq(5, 25, by = 5), limits = c(5, 25)) +
+    scale_y_continuous(name = "AoA (months)",
+                       breaks = seq(5, 25, by = 5), limits = c(5, 25)) +
+    geom_text(aes(x = 8, y = 24.5, label = sprintf("r = %.2f", cor)),
+              data = cors, family = font, size = 2.8)
 ```
 
 We fit a linear regression for each language's data, as well as a linear mixed-effects model with language as a random effect for all the data pooled. For illustrative purposes, Figure \ref{fig:fit} compares the predictions of the model to AoA estimates, for only English data, with outliers labelled.
