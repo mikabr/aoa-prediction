@@ -23,6 +23,7 @@ library(langcog)
 library(wordbankr)
 library(boot)
 library(lazyeval)
+library(robustbase)
 theme_set(theme_mikabr())
 ```
 
@@ -38,7 +39,9 @@ items <- get_item_data(mode = data_mode) %>%
          definition = tolower(definition))
 
 words <- items %>%
-  filter(type == "word", !is.na(uni_lemma), form == "WG")
+  filter(type == "word", !is.na(uni_lemma), form == "WG",
+         language %in% c("English", "Italian", "Norwegian", "Russian",
+                         "Spanish", "Swedish", "Turkish"))
 
 invalid_uni_lemmas <- words %>%
   group_by(uni_lemma) %>%
@@ -72,25 +75,36 @@ raw_data <- map(items_by_inst, get_inst_data)
 Fit models to predict each item's age of acquisition.
 ```{r, aoa_data}
 fit_inst_measure_uni <- function(inst_measure_uni_data) {
+  
   ages <- min(inst_measure_uni_data$age):max(inst_measure_uni_data$age)
-  model <- glm(cbind(num_true, num_false) ~ age, family = "binomial",
-               data = inst_measure_uni_data)
-  fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
-  aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
+
   constants <- inst_measure_uni_data %>%
     select(language, form, measure, lexical_category, lexical_class, uni_lemma,
            words) %>%
     distinct()
+  
   props <- inst_measure_uni_data %>%
     ungroup() %>%
     select(age, prop)
-  data.frame(age = ages, fit_prop = inv.logit(fit$fit), fit_se = fit$se.fit,
+  
+  tryCatch({
+    model <- glmrob(cbind(num_true, num_false) ~ age, family = "binomial",
+                    data = inst_measure_uni_data, y = TRUE)
+    fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
+    aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
+    fit_prop <- inv.logit(fit$fit)
+    fit_se <- fit$se.fit
+  }, error = function(e) {
+    aoa <- fit <- fit_prop <- fit_se <- NA
+  })
+  
+  data.frame(age = ages, fit_prop = fit_prop, fit_se = fit_se,
              aoa = aoa, language = constants$language, form = constants$form,
              measure = constants$measure,
              lexical_category = constants$lexical_category,
              lexical_class = constants$lexical_class,
              uni_lemma = constants$uni_lemma, words = constants$words) %>%
-    left_join(props)
+    left_join(props, by = "age")
 }
 
 fit_inst_measure <- function(inst_measure_data) {
@@ -113,6 +127,7 @@ fit_inst_measure <- function(inst_measure_data) {
 }
 
 fit_inst <- function(inst_data) {
+  print(unique(inst_data$language))
   inst_data %>%
     split(.$measure) %>%
     map(fit_inst_measure) %>%
@@ -125,19 +140,49 @@ all_prop_data <- bind_rows(prop_data)
 ```
 
 ```{r}
+all_prop_data %>%
+  filter(language == "Swedish", measure == "understands", aoa < 0) %>%
+#  filter(row_number() <= 9*16) %>%
+         #uni_lemma %in% c("play pen", "tonight", "babysitter", "teacher")) %>%
+         #uni_lemma %in% c("brother", "sister", "daddy", "mommy")) %>%
+         #uni_lemma %in% c("person", "sister", "field", "peekaboo")) %>%
+  ggplot(aes(x = age, y = prop)) +
+    facet_wrap(~uni_lemma) +
+    geom_point() +
+    geom_line(aes(x = age, y = fit_prop)) +
+    geom_hline(aes(yintercept = 0.5), color = "grey") +
+    geom_vline(aes(xintercept = aoa), color = "grey") +
+    geom_point(aes(x = aoa, y = 0.5), size = 4)
+```
+
+```{r}
 aoa_data <- all_prop_data %>%
+  filter(measure == "understands") %>%
   select(language, form, measure, lexical_category, lexical_class, uni_lemma, 
          words, aoa) %>%
-  distinct() %>%
-  filter(aoa > 5 & aoa < 31)
-#write_csv(aoa_data, "aoa_data.csv")
+  distinct()
+
+aoa_validation <- aoa_data %>%
+  mutate(valid_aoa = ifelse(!is.na(aoa) & aoa > 0 & aoa < 36,
+                            "valid_aoa", "invalid_aoa")) %>%
+  group_by(language, valid_aoa) %>%
+  summarise(n = n()) %>%
+  spread(valid_aoa, n, fill = 0) %>%
+  mutate(percent_valid = valid_aoa / (valid_aoa + invalid_aoa))
+
+aoa_data_filtered <- aoa_data %>%
+  filter(aoa > 0 & aoa <= 30)
+
+#write_csv(aoa_data_filtered, "aoa_data.csv")
 ```
 
 ```{r, fig.width=10, fig.height=8}
-ggplot(aoa_data, aes(x = aoa, fill = language)) +
-  facet_wrap(~language) +
-  geom_bar() +
-  xlab("Age of Acquisition (months)") +
-  ylab("Count") +
-  scale_fill_solarized(guide = FALSE)
+aoa_data_filtered %>%
+  #filter(measure == "understands") %>%
+  ggplot(aes(x = aoa, fill = language)) +
+    facet_wrap(~language) +
+    geom_histogram() +
+    xlab("Age of Acquisition (months)") +
+    ylab("Count") +
+    scale_fill_solarized(guide = FALSE)
 ```
