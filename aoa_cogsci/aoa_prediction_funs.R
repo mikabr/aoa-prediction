@@ -26,9 +26,8 @@ words <- items %>%
   filter(type == "word", !is.na(uni_lemma), form == "WG")
 
 uni_lemmas <- words %>%
-  #filter(language == "English") %>%
-  select(lexical_category, uni_lemma) %>%
-  distinct()
+  filter(language == "English") %>%
+  select(lexical_category, uni_lemma)
 
 ## ----aoa_data------------------------------------------------------------
 aoa_data <- read_csv("aoa_data.csv")
@@ -103,8 +102,7 @@ uni_valences <- uni_lemmas %>%
   mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
   select(-replacement) %>%
   left_join(valence) %>%
-  select(-word)
-  #select(-word, -lexical_class, -lexical_category)
+  select(-word, -lexical_class, -lexical_category)
 
 #uni_valences <- read_csv("predictors/valence/uni_lemma_valence.csv")
 
@@ -160,13 +158,11 @@ uni_joined <- aoa_data %>%
   left_join(uni_babiness) %>%
   left_join(uni_concreteness) %>%
   left_join(phonemes) %>%
-  mutate(frequency = log(frequency)) %>%
-  distinct()
+  mutate(frequency = log(frequency))
 
 ## ------------------------------------------------------------------------
 num_characters <- function(words) {
-  words %>%
-    strsplit(", ") %>%
+  strsplit(words, ", ") %>%
     map(function(word_set) {
       word_set %>%
         unlist() %>%
@@ -174,7 +170,6 @@ num_characters <- function(words) {
         unlist() %>%
         strsplit("/") %>%
         unlist() %>%
-        gsub("[*' ]", "", .) %>%
         nchar() %>%
         mean()
     }) %>%
@@ -387,13 +382,6 @@ crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + 
                         data = crossling_model_data)
 
 crossling_coef <- data.frame(term = row.names(summary(crossling_model)$coefficients),
-                             estimate = summary(crossling_model)$coefficients[,"Estimate"],
-                             std.error = summary(crossling_model)$coefficients[,"Std. Error"],
-                             t = summary(crossling_model)$coefficients[,"t value"],
-                             row.names = NULL) %>%
-  filter(term != "(Intercept)")
-
-crossling_sig <- data.frame(term = row.names(summary(crossling_model)$coefficients),
                              estimate = summary(crossling_model)$coefficients[,"Estimate"],
                              std.error = summary(crossling_model)$coefficients[,"Std. Error"],
                              row.names = NULL) %>%
@@ -743,9 +731,6 @@ lang_adj_rsq <- lang_model_list %>%
 crossling_fit <-  lm(model.response(model.frame(crossling_model)) ~ fitted(crossling_model),
                      y = TRUE)
 crossling_adj_rsq <- adj_rsq(crossling_fit)
-
-all_adj_rsq <- lang_adj_rsq
-all_adj_rsq$`Cross-Linguistic` <- crossling_adj_rsq
 
 crossling_fit_data <- data.frame(observed = model.response(model.frame(crossling_model)),
                                  fitted = fitted(crossling_model))
