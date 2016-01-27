@@ -188,12 +188,30 @@ def write_mlus(language, mlus):
 #         for item, count in lang_counts.iteritems():
 #             count_writer.writerow([item, str(count)])
 
-languages = ["english", "italian", "norwegian", "russian", "spanish", "swedish", "turkish"]
+def get_num_words(language):
+    num_words = 0
+    corpus_reader = get_corpus_reader(language)
+    for corpus_file in corpus_reader.fileids():
+        corpus_participants = corpus_reader.participants(corpus_file)[0]
+        not_child = [value['id'] for key, value in corpus_participants.iteritems() if key != 'CHI']
+        corpus_words = corpus_reader.words(corpus_file, speaker = not_child, replace = True)
+        num_words += len(corpus_words)
+    return num_words
+
+languages = ["italian", "norwegian", "russian", "spanish", "swedish", "turkish", "english"]
              #"danish", "german", "cantonese" "hebrew" "mandarin" "croatian"
-for language in languages:
-    lang_freqs, lang_mlus = get_stats(language)
-    write_freqs(language, lang_freqs)
-    write_mlus(language, lang_mlus)
+# for language in languages:
+#     lang_freqs, lang_mlus = get_stats(language)
+#     write_freqs(language, lang_freqs)
+#     write_mlus(language, lang_mlus)
+
+with open("num_words.csv", "w") as num_words_file:
+    num_words_writer = UnicodeWriter(num_words_file)
+    num_words_writer.writerow(["language", "num_words"])
+    for language in languages:
+        num_words = get_num_words(language)
+        print language, num_words
+        num_words_writer.writerow([language.capitalize(), str(num_words)])
 
 #eng = get_freqs("English")
 

@@ -49,7 +49,8 @@
 % \textwidth 16cm
 % \textheight 21cm
 
-\title{Predicting Age of Acquisition for Early Words Across Languages}
+\title{From \emph{uh-oh} to \emph{tomorrow}\\Predicting age of acquisition for
+early words across languages}
 
 
 \author{{\large \bf Mika Braginsky} \\ \texttt{mikabr@stanford.edu} \\ Department of Psychology \\ Stanford University \And {\large \bf Daniel Yurovsky} \\ \texttt{yurovsky@stanford.edu} \\ Department of Psychology \\ Stanford University \And {\large \bf Virginia A. Marchman} \\ \texttt{marchman@stanford.edu} \\ Department of Psychology \\ Stanford University \And {\large \bf Michael C. Frank} \\ \texttt{mcfrank@stanford.edu} \\ Department of Psychology \\ Stanford University}
@@ -155,8 +156,6 @@ mechanisms of word learning{]}}
 
 \emph{{[}TODO: make some predictions?{]}}
 
-\newpage
-
 \begin{CodeChunk}
 \begin{figure*}[!h]
 
@@ -256,21 +255,40 @@ word is.
 
 \begin{table}[t]
 \centering
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrr}
   \hline
-Language & Words & Mean AoA & Var AoA & N CDI \\ 
+Language & CDI Items & CDI Admins & CHILDES Words \\ 
   \hline
-English & 386 & 15.97 & 11.93 & 2452 \\ 
-  Italian & 351 & 17.36 & 18.83 & 648 \\ 
-  Norwegian & 338 & 17.48 & 15.78 & 3021 \\ 
-  Russian & 337 & 14.45 & 11.97 & 768 \\ 
-  Spanish & 333 & 17.14 & 18.75 & 778 \\ 
-  Swedish & 311 & 16.63 & 11.36 & 467 \\ 
-  Turkish & 327 & 15.41 & 12.78 & 1115 \\ 
+English & 386 & 2,452 & 7,858,051 \\ 
+  Italian & 351 & 648 & 328,168 \\ 
+  Norwegian & 338 & 3,021 & 204,406 \\ 
+  Russian & 337 & 768 & 32,398 \\ 
+  Spanish & 333 & 778 & 1,458,327 \\ 
+  Swedish & 311 & 467 & 698,515 \\ 
+  Turkish & 327 & 1,115 & 44,347 \\ 
    \hline
 \end{tabular}
 \caption{Dataset statistics} 
 \end{table}
+
+\begin{table*}[!hb]
+\centering
+\begin{tabular}{lll}
+  \hline
+Measure & Lowest & Highest \\ 
+  \hline
+aoa & mommy, bottle, peekaboo & babysitter, teacher, naughty \\ 
+  frequency & living room, cockadoodledoo, grrr & you, it, that \\ 
+  babiness & donkey, penny, jeans & baby, bib, bottle \\ 
+  concreteness & how, now, that & apple, ball, banana \\ 
+  mlu & cockadoodledoo, peekaboo, uh oh & babysitter, when (question), day \\ 
+  arousal & shh, asleep, blanket & naughty, money, scared \\ 
+  valence & sick, owie, ouch & happy, hug, love \\ 
+  num\_characters & i, in, it & cockadoodledoo, refrigerator, living room \\ 
+   \hline
+\end{tabular}
+\caption{Examples of words with the lowest and highest values for age of acquisition and each predictor.} 
+\end{table*}
 
 \newpage
 

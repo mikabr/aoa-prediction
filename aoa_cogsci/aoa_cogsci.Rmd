@@ -1,5 +1,7 @@
 ---
-title: "Predicting Age of Acquisition for Early Words Across Languages"
+title: |
+  | From _uh-oh_ to _tomorrow_
+  | Predicting age of acquisition for early words across languages
 bibliography: library.bib
 csl: apa6.csl
 document-params: "10pt, letterpaper"
@@ -76,8 +78,6 @@ _[TODO: something about how this whole thing will help understand mechanisms of 
 
 _[TODO: make some predictions?]_
 
-\newpage
-
 ```{r data, fig.height=7, fig.width=7, fig.env='figure*', fig.align='center', fig.pos='!h', dev='cairo_pdf', fig.cap='Relationship between predictors and AoA for each lexical category in each language.'}
 crossling_model_data %>%
   gather_("predictor", "value", crossling_predictors) %>%
@@ -88,10 +88,12 @@ crossling_model_data %>%
   ggplot(aes(x = value, y = aoa)) +
     #facet_wrap(~predictor, ncol = 4) +
     facet_grid(language ~ predictor, scales = "free_x") +
-    geom_point(aes(colour = lexical_category), size = 0.5, alpha = 0.3) +
-    geom_smooth(aes(colour = lexical_category), method = "lm", se = FALSE, size = 1) +
-    geom_smooth(color = "black", method = "lm", se = FALSE, size = 1) +
+    geom_point(aes(fill = lexical_category), colour = NA,
+               size = 0.5, alpha = 0.4, shape = 21) +
+    geom_smooth(aes(colour = lexical_category), method = "lm", se = FALSE, size = 0.8) +
+    geom_smooth(color = "black", method = "lm", se = FALSE, size = 0.8) +
     scale_colour_solarized(name = "") +
+    scale_fill_solarized(name = "") +
     xlab("Predictor Z-Score") +
     scale_y_continuous(name = "Age of Acquisition (months)",
                        breaks = seq(5, 25, 5)) +
@@ -132,27 +134,58 @@ num_admins <- get_administration_data(mode = "local") %>%
   group_by(language) %>%
   summarise(num_admins = n())
 
-num_words <- words %>%
-  group_by(language) %>%
-  summarise(num_words = n())
+# num_words <- words %>%
+#   group_by(language) %>%
+#   summarise(num_words = n())
 
 aoa_stats <- crossling_model_data %>%
   group_by(language) %>%
-  summarise(num_included = n(),
-            mean_aoa = mean(aoa),
-            var_aoa = var(aoa))
+  summarise(num_included = n())
+            #mean_aoa = mean(aoa),
+            #var_aoa = var(aoa))
+
+childes_stats <- read.csv("../predictors/frequency/num_words.csv") #%>%
+  #mutate(num_words = formatC(num_words, big.mark = ","))
 
 lang_stats <- aoa_stats %>%
   #left_join(num_words) %>%
-  left_join(num_admins)
-colnames(lang_stats) <- c("Language", "Words", "Mean AoA",
-                          "Var AoA", "N CDI")
+  left_join(num_admins) %>%
+  left_join(childes_stats)
+colnames(lang_stats) <- c("Language", "CDI Items", "CDI Admins", "CHILDES Words")
+                          #"Mean AoA",, "Var AoA")
 
-lang_table <- xtable(lang_stats, digits = 2,
-      caption = "Dataset statistics")
+lang_table <- xtable(lang_stats, digits = 2, caption = "Dataset statistics")
 
 print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
-      table.placement = "t")
+      table.placement = "t", format.args = list(big.mark = ","))
+```
+
+```{r extremes, results="asis"}
+num_extremes <- 3
+extremes <- crossling_model_data %>%
+    split(.$language) %>%
+    map_df(function(lang_data) {
+    map_df(c("aoa", rev(levels(crossling_predictors_ordered))), function(predictor) {
+      highest <- lang_data %>%
+        arrange_(as.formula(sprintf("~desc(%s)", predictor))) %>%
+        .$uni_lemma %>%
+        .[1:num_extremes]
+      lowest <- lang_data %>%
+        arrange_(predictor) %>%
+        .$uni_lemma %>%
+        .[1:num_extremes]
+      return(data.frame("language" = unique(lang_data$language), "Measure" = predictor,
+                        "Lowest" = paste(lowest, collapse = ", "),
+                        "Highest" = paste(highest, collapse = ", ")))
+    })
+  }) %>%
+  filter(language == "English") %>%
+  select(-language)
+
+extremes_table <- xtable(extremes, caption = "Examples of words with the lowest and highest values for age of acquisition and each predictor.")
+
+print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
+      table.placement = "!hb", floating.environment = "table*")
 ```
 
 \newpage
