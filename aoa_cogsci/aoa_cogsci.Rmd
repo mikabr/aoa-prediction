@@ -24,7 +24,7 @@ output: cogsci2016::cogsci_paper
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(fig.width = 3, fig.height = 3, fig.crop = F,
                       fig.pos = "tb", fig.path = 'figs/', echo = F,
-                      warning = F, cache = F, message = F, sanitize = T)
+                      warning = F, cache = TRUE, message = F, sanitize = T)
 ```
 
 ```{r, libraries}
@@ -68,15 +68,14 @@ However, the previous studies use different datasets, focus on different predict
 
 We integrate Wordbank data with characterizations of the word learning environment from the CHILDES database [@macwhinney2000childes] and elsewhere, a multiple data source approach pioneered by @goodman2008does. Building on their work, we want to move beyond frequency to examine a variety of information sources. We specifically follow @roy2015predicting in predicting age of acquisition (AoA) as a function of several different environment predictors. In analyzing a high-density longitudinal corpus for a single English-acquiring child, Roy et al found that frequency, number of characters, and mean length of utterances were predictive of the age of a word's first production. Due to the nature of the data, this analysis was limited to one language (in fact to one subject) and could only test production, distancing the connection between properties of the input and the child's emerging understanding of words.
 
-Our approach provides a complimentary analysis by using CDI comprehension data to look at earliest words, across languages. We estimate the age of acquisition for around 400 words in each of `r length(unique(lang_coef$language))` languages. We also estimate each words' frequency and mean length of utterances (MLU) in which it appears, as well as obtaining ratings of each words' concreteness, valence, arousal, and relevance to babies from previously collected norms. We then predict words' AoA from all of these properties, and assess the relative contributions of each factor, along with the interaction of predictors with the lexical category and their changes over development.
+Our approach provides a complimentary analysis by using CDI comprehension data to look at earliest words, across languages. We estimate the age of acquisition for around 400 words in each of `r length(unique(lang_coef$language))` languages. We also estimate each words' frequency and mean length of utterances (MLU) in which it appears, as well as obtaining ratings of each words' concreteness, valence, arousal, and relevance to babies from previously collected norms. We then predict words' AoA from all of these properties, and assess the relative contributions of each factor, along with the interaction of predictors with the lexical category and their changes over development. Each of these analyses has the potential to provide leverage on long-standing theoretical questions. 
 
-By incorporating a variety of theoretically-important factors, as well as basing our analysis on a large samples of words and children and building towards more cross-linguistic coverage, our study presents a more thorough investigatation of the question of what properties determine words' learnability.
+A first theoretical question of interest is which lexical categories are most influenced by input-related factors like frequency and utterance length compared with conceptual factors like concreteness or valence. For example, "division of dominance" theory suggests that nouns might be more sensitive to cognitive factors while predicates and closed-class words might be more sensitive to linguistic factors [@gentner2001]. On the other hand, on syntactic bootstrapping theories, nouns are argued to be learned via frequent co-occurrence (operationalized by frequency) while verbs might be more sensitive to syntactic factors (operationalized here by utterance length) [@gleitman1990], and neither would be particularly sensitive to conceptual complexity [@snedeker2007]. 
 
-_[TODO: need to relate predictors to theories, at least vaguely, not sure how to do this without setting up strawmen]_
+A second question of interest is the variability across languages in the relative importance of predictors. For example, are there differences in the importance of syntactic factors in morphologically more complex languages like Russian and Turkish, compared with simpler ones like English? Differences of this type might be revealing of the degree to which learners face different challenges in different language environments. Or consistency may suggest the operation of similar learning mechanisms and strategies that are not as dependent on the complexities of phonology, morphology, and syntax in a particular language. 
 
-_[TODO: something about how this whole thing will help understand mechanisms of word learning]_
+Overall, by incorporating a variety of theoretically-important factors, as well as basing our analysis on a large samples of words and children and building towards more cross-linguistic coverage, our study presents a more thorough investigatation of the question of what properties determine words' learnability.
 
-_[TODO: make some predictions?]_
 
 ```{r data, fig.height=7, fig.width=7, fig.env='figure*', fig.align='center', fig.pos='!h', dev='cairo_pdf', fig.cap='Relationship between predictors and AoA for each lexical category in each language.'}
 crossling_model_data %>%
@@ -94,7 +93,7 @@ crossling_model_data %>%
     geom_smooth(color = "black", method = "lm", se = FALSE, size = 0.8) +
     scale_colour_solarized(name = "") +
     scale_fill_solarized(name = "") +
-    xlab("Predictor Z-Score") +
+    xlab("Predictor z-Score") +
     scale_y_continuous(name = "Age of Acquisition (months)",
                        breaks = seq(5, 25, 5)) +
     #theme_mikabr(base_size = 10) +
@@ -129,7 +128,7 @@ __Babiness__: Lastly, we used previously collected norms of "babiness", a measur
 
 ```{r lang_stats, results="asis"}
 library(wordbankr)
-num_admins <- get_administration_data(mode = "local") %>%
+num_admins <- get_administration_data(mode = "remote") %>%
   filter(form == "WG") %>%
   group_by(language) %>%
   summarise(num_admins = n())
@@ -188,7 +187,6 @@ print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
       table.placement = "!hb", floating.environment = "table*")
 ```
 
-\newpage
 
 # Analysis
 
