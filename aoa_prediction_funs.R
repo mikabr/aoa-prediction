@@ -26,8 +26,9 @@ words <- items %>%
   filter(type == "word", !is.na(uni_lemma), form == "WG")
 
 uni_lemmas <- words %>%
-  filter(language == "English") %>%
-  select(lexical_category, uni_lemma)
+  #filter(language == "English") %>%
+  select(lexical_category, uni_lemma) %>%
+  distinct()
 
 ## ----aoa_data------------------------------------------------------------
 aoa_data <- read_csv("aoa_data.csv")
@@ -56,7 +57,9 @@ uni_freqs <- freqs %>%
   group_by(language, form, lexical_category, uni_lemma) %>%
   summarise(frequency = sum(frequency))
 
-ggplot(uni_freqs, aes(x = frequency)) + geom_histogram() + facet_wrap(~language)
+# ggplot(uni_freqs, aes(x = log(frequency))) +
+#   facet_wrap(~language) +
+#   geom_histogram()
 
 ## ------------------------------------------------------------------------
 inst_mlu <- function(language, form) {
@@ -76,9 +79,12 @@ mlus <- map2(instruments$language, instruments$form, inst_mlu) %>%
 
 uni_mlus <- mlus %>%
   group_by(language, form, lexical_category, uni_lemma) %>%
-  summarise(mlu = mean(mlu))
+  summarise(mlu = mean(mlu)) %>%
+  filter(mlu < 20) #TODO: do this better
 
-#ggplot(uni_mlus, aes(x = mlu)) + geom_histogram() + facet_wrap(~language)
+# ggplot(uni_mlus, aes(x = mlu)) +
+#   facet_wrap(~language) +
+#   geom_histogram()
 
 ## ------------------------------------------------------------------------
 valence <- read_csv("predictors/valence/valence.csv") %>%
@@ -97,7 +103,8 @@ uni_valences <- uni_lemmas %>%
   mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
   select(-replacement) %>%
   left_join(valence) %>%
-  select(-word, -lexical_class, -lexical_category)
+  select(-word)
+  #select(-word, -lexical_class, -lexical_category)
 
 #uni_valences <- read_csv("predictors/valence/uni_lemma_valence.csv")
 
@@ -153,11 +160,13 @@ uni_joined <- aoa_data %>%
   left_join(uni_babiness) %>%
   left_join(uni_concreteness) %>%
   left_join(phonemes) %>%
-  mutate(frequency = log(frequency))
+  mutate(frequency = log(frequency)) %>%
+  distinct()
 
 ## ------------------------------------------------------------------------
 num_characters <- function(words) {
-  strsplit(words, ", ") %>%
+  words %>%
+    strsplit(", ") %>%
     map(function(word_set) {
       word_set %>%
         unlist() %>%
@@ -165,6 +174,7 @@ num_characters <- function(words) {
         unlist() %>%
         strsplit("/") %>%
         unlist() %>%
+        gsub("[*' ]", "", .) %>%
         nchar() %>%
         mean()
     }) %>%
@@ -379,6 +389,13 @@ crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + 
 crossling_coef <- data.frame(term = row.names(summary(crossling_model)$coefficients),
                              estimate = summary(crossling_model)$coefficients[,"Estimate"],
                              std.error = summary(crossling_model)$coefficients[,"Std. Error"],
+                             t = summary(crossling_model)$coefficients[,"t value"],
+                             row.names = NULL) %>%
+  filter(term != "(Intercept)")
+
+crossling_sig <- data.frame(term = row.names(summary(crossling_model)$coefficients),
+                             estimate = summary(crossling_model)$coefficients[,"Estimate"],
+                             std.error = summary(crossling_model)$coefficients[,"Std. Error"],
                              row.names = NULL) %>%
   filter(term != "(Intercept)")
 
@@ -433,19 +450,20 @@ crossling_coefs <- crossling_model_data %>%
 #   mutate(term = factor(term, levels = crossling_predictor_levels))
 
 ## ---- fig.width = 12, fig.height = 8-------------------------------------
-# crossling_plot_data <- crossling_model_data %>%
-#   gather_("predictor", "value", crossling_predictors) %>%
-#   mutate(predictor = factor(predictor, levels = english_predictor_levels))
-# 
-# ggplot(crossling_plot_data, aes(x = value, y = aoa, colour = predictor)) +
-#   facet_grid(language ~ predictor) +
-#   geom_point(cex = 0.7) +
-#   geom_smooth(method = "lm", se = FALSE, cex = 1) +
-#   scale_colour_solarized(name = "") +
-#   xlab("\nPredictor Z-Score") +
-#   ylab("Age of Acquisition (months)\n") +
-#   theme(legend.position = "bottom",
-#         legend.direction = "horizontal")
+crossling_model_data %>%
+  gather_("predictor", "value", crossling_predictors) %>%
+  mutate(predictor = factor(predictor, levels = crossling_predictor_levels)) %>%
+  #filter(language == "English") %>%
+  ggplot(aes(x = value, y = aoa)) +
+    facet_grid(language ~ predictor) +
+    geom_jitter(aes(colour = lexical_category), size = 0.6, alpha = 0.3) +
+    geom_smooth(aes(colour = lexical_category), method = "lm", se = FALSE, size = 1) +
+    geom_smooth(color = "black", method = "lm", se = FALSE, size = 1) +
+    scale_colour_solarized(name = "") +
+    xlab("\nPredictor Z-Score") +
+    ylab("Age of Acquisition (months)\n") +
+    theme(legend.position = "bottom",
+          legend.direction = "horizontal")
 
 ## ---- fig.width = 5, fig.height = 4--------------------------------------
 # ggplot(crossling_coef, aes(x = term, y = abs(estimate), fill = term)) +
@@ -725,6 +743,9 @@ lang_adj_rsq <- lang_model_list %>%
 crossling_fit <-  lm(model.response(model.frame(crossling_model)) ~ fitted(crossling_model),
                      y = TRUE)
 crossling_adj_rsq <- adj_rsq(crossling_fit)
+
+all_adj_rsq <- lang_adj_rsq
+all_adj_rsq$`Cross-Linguistic` <- crossling_adj_rsq
 
 crossling_fit_data <- data.frame(observed = model.response(model.frame(crossling_model)),
                                  fitted = fitted(crossling_model))
