@@ -18,7 +18,7 @@ library(lme4)
 theme_set(theme_mikabr())
 
 ## ------------------------------------------------------------------------
-items <- get_item_data(mode = "local") %>%
+items <- get_item_data(mode = "remote") %>%
   mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))),
          definition = tolower(definition))
 

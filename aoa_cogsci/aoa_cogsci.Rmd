@@ -24,7 +24,7 @@ output: cogsci2016::cogsci_paper
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(fig.width = 3, fig.height = 3, fig.crop = F,
                       fig.pos = "tb", fig.path = 'figs/', echo = F,
-                      warning = F, cache = TRUE, message = F, sanitize = T)
+                      warning = F, cache = FALSE, message = F, sanitize = T)
 ```
 
 ```{r, libraries}
@@ -64,7 +64,7 @@ Each of these abilities has been reliably demonstrated in the constrained learni
 
 One way to address these questions is to use naturalistic large-scale vocabulary development data to examine the contribution of various theoretically-relevant factors to vocabulary growth. We can look across children to determine how easy or hard various words are to learn, and then examine the relationship between words' difficulties and various word properties that relate to proposed word learning mechanisms. Foundational work using such an approach has revealed that in English, within lexical category, words that are more frequent in speech to children are likely to be learned earlier [@goodman2008does; @roy2009exploring]. Further studies have delved into the relevance of semantic networks [@hills2009longitudinal], neighborhood density [@stokes2010neighborhood], iconocity [@perry2015iconicity], and linguistic distinctiveness [@roy2015predicting] to vocabulary construction.
 
-However, the previous studies use different datasets, focus on different predictors, and for the most part only analyze English data. It is thus impossible to compare the relative importance of the many relevant factors and to draw robust conclusions. To remedy this issue, we present analyses based on data from Wordbank (wordbank.stanford.edu), an open repository of language development data. By aggregating administrations of the MacArthur-Bates Communicative Development Inventory [CDI; @fenson2007macarthur], a family of parent-report vocabulary checklists, Wordbank provides large-scale vocabulary data that we use to conduct analyses over development and across languages.
+However, the previous studies use different datasets, focus on different predictors, and for the most part only analyze English data. It is thus impossible to compare the relative importance of the many relevant factors and to draw robust conclusions. To remedy this issue, we present analyses based on data from Wordbank (wordbank.stanford.edu), an open repository of language development data [@frankinpress]. By aggregating administrations of the MacArthur-Bates Communicative Development Inventory [CDI; @fenson2007macarthur], a family of parent-report vocabulary checklists, Wordbank provides large-scale vocabulary data that we use to conduct analyses over development and across languages.
 
 We integrate Wordbank data with characterizations of the word learning environment from the CHILDES database [@macwhinney2000childes] and elsewhere, a multiple data source approach pioneered by @goodman2008does. Building on their work, we want to move beyond frequency to examine a variety of information sources. We specifically follow @roy2015predicting in predicting age of acquisition (AoA) as a function of several different environment predictors. In analyzing a high-density longitudinal corpus for a single English-acquiring child, Roy et al found that frequency, number of characters, and mean length of utterances were predictive of the age of a word's first production. Due to the nature of the data, this analysis was limited to one language (in fact to one subject) and could only test production, distancing the connection between properties of the input and the child's emerging understanding of words.
 
@@ -76,55 +76,14 @@ A second question of interest is the variability across languages in the relativ
 
 Overall, by incorporating a variety of theoretically-important factors, as well as basing our analysis on a large samples of words and children and building towards more cross-linguistic coverage, our study presents a more thorough investigatation of the question of what properties determine words' learnability.
 
-
-```{r data, fig.height=7, fig.width=7, fig.env='figure*', fig.align='center', fig.pos='!h', dev='cairo_pdf', fig.cap='Relationship between predictors and AoA for each lexical category in each language.'}
-crossling_model_data %>%
-  gather_("predictor", "value", crossling_predictors) %>%
-  mutate(predictor = factor(predictor, levels = crossling_predictor_levels),
-         lexical_category = factor(lexical_category,
-                                   labels = paste(levels(lexical_category), "  "))) %>%
-  #filter(language == "English") %>%
-  ggplot(aes(x = value, y = aoa)) +
-    #facet_wrap(~predictor, ncol = 4) +
-    facet_grid(language ~ predictor, scales = "free_x") +
-    geom_point(aes(fill = lexical_category), colour = NA,
-               size = 0.5, alpha = 0.4, shape = 21) +
-    geom_smooth(aes(colour = lexical_category), method = "lm", se = FALSE, size = 0.8) +
-    geom_smooth(color = "black", method = "lm", se = FALSE, size = 0.8) +
-    scale_colour_solarized(name = "") +
-    scale_fill_solarized(name = "") +
-    xlab("Predictor z-Score") +
-    scale_y_continuous(name = "Age of Acquisition (months)",
-                       breaks = seq(5, 25, 5)) +
-    #theme_mikabr(base_size = 10) +
-    theme(legend.position = "top")
-```
-
 # Data
 
 We use Wordbank (wordbank.stanford.edu), an open database of developmental vocabulary data, to estimate the age of acquisition for words across `r length(unique(lang_coef$language))` languages: `r paste(unique(lang_coef$language), collapse = ", ")`. We then ask what factors are most important for predicting this age of acquisition.
 
 ## Estimating Age of Acquisition
 
-To estimate the age at which words are acquired, we took vocabulary data collected using the MacArthur-Bates Communicative Development Inventory, a family of parent-report checklists, specifically the Words & Gestures (infant) form for 8- to 18-month-olds. When filling out a CDI a form, parents are asked to indicate whether their child understands and/or says each of around 400 words. From these data, for each word on the CDI, we computed the proportion of children at each age that are reported to understand the word. We then fit a logistic curve to these proportions using robust fitting of a generalized linear model and determine when the curve crosses 0.5, i.e. at what age at least 50% of children are reported to understand the word. This point is taken to be the words' age of acquisition.
+To estimate the age at which words are acquired, we took vocabulary data collected using the MacArthur-Bates Communicative Development Inventory, a family of parent-report checklists, specifically the Words & Gestures (infant) form for 8- to 18-month-olds. When filling out a CDI a form, parents are asked to indicate whether their child understands and/or says each of around 400 words. From these data, for each word on the CDI, we computed the proportion of children at each age that are reported to understand the word. We then fit a logistic curve to these proportions using a robust generalized linear model (using the \texttt{robustbase} package in \texttt{R}) and determine when the curve crosses 0.5, i.e. at what age at least 50% of children are reported to understand the word. Following @goodman2008does, we take this point to be each word's age of acquisition.
 
-## Predictors
-
-Each of our predictors are derived from independent resources. For each word that appears on the CDI Word & Gestures form in each of our `r length(unique(lang_coef$language))` languages, we obtained an estimate of its frequency in child-directed speech, the mean utterance length (MLU) of sentences in which if appears in child-directed speech, its length in characters, and ratings of its concreteness, valence, arousal, and relevance to babies. While frequency and MLU are measured relative to the word's language, since the conceptual ratings were collected only in English, we mapped all the words onto translation equivalents across CDI forms, allowing us to use the ratings for English words cross-linguistically. While imperfect, this method allows us to examine languages for which limited resources exist.
-
-Items such as _child's own name_ were excluded in all languages. Each predictor was also centered and scaled so that they would all have comparable units. Lexical category was determined on the basis of the conceptual categories presented on the CDI form, such that Nouns is common nouns, Predicates is verbs and adjectives, Function Words is closed-class words, and Other is the remaining items.
-
-__Frequency__: For each language, we estimated word frequency from unigram count in all corpora in the CHILDES database for that language, normalized to the length of the corpus. Each word's count includes the counts of words that share the same stem (so that _dogs_ counts as _dog_) or are synonymous (so that _father_ counts as _daddy_). For polysemous word pairs, such as _orange_ as in color and _orange_ as in fruit, each occurence of _orange_ in the corpus counts for both. Finally, each word's frequency estimate is taken as the log of its count.
-
-__MLU__: For each language, we estimated each word's MLU by calculating the mean number of words in the sentences in which that word appears in all corpora in the CHILDES database for that language. Words that only occur in one sentence were excluded.
-
-__Length__: We computed the number of characters in each word in each language, which is known to be highly correlated with number of phonemes and syllables.
-
-__Concreteness__: We used previously collected norms for concreteness [@brysbaert2014concreteness], which were gathered by asking adult participants to rate how concrete the meaning of each word is by using a 5-point scale from abstract to concrete. For the `r nrow(filter(uni_concreteness, is.na(concreteness))) - 2` CDI words that weren't part of the collected norms (mostly animal sounds such as _baa baa_), we imputed a conreteness rating from the mean of all CDI words' concreteness rating.
-
-__Valence and Arousal__: We also used previously collected norms for valence and arousal [@warriner2013norms], for which adult participants are asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal). For the `r nrow(filter(uni_valences, is.na(valence))) - 2` CDI words that weren't part of the collected norms (mostly function words such as _her_), we imputed ratings from the mean of all CDI words' ratings.
-
-__Babiness__: Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015iconicity] for which adult participants are asked to judge how relevant to babies a word is.
 
 ```{r lang_stats, results="asis"}
 library(wordbankr)
@@ -184,13 +143,68 @@ extremes <- crossling_model_data %>%
 extremes_table <- xtable(extremes, caption = "Examples of words with the lowest and highest values for age of acquisition and each predictor.")
 
 print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
-      table.placement = "!hb", floating.environment = "table*")
+      table.placement = "t", floating.environment = "table")
 ```
 
 
+## Predictors
+
+Each of our predictors are derived from independent resources. For each word that appears on the CDI Word & Gestures form in each of our `r length(unique(lang_coef$language))` languages, we obtained an estimate of its frequency in child-directed speech, the mean utterance length (MLU) of sentences in which if appears in child-directed speech, its length in characters, and ratings of its concreteness, valence, arousal, and relevance to babies. Examples of each of these predictors for English are shown in Table \ref{fig:extremes}.
+
+While frequency and MLU are measured relative to the word's language, since the conceptual ratings were collected only in English, we mapped all the words onto translation equivalents across CDI forms, allowing us to use the ratings for English words cross-linguistically. While imperfect, this method allows us to examine languages for which limited resources exist. Translation equivalents are available in the wordbank database using the \texttt{wordbankr} package [@frankinpress].
+
+Items such as _child's own name_ were excluded in all languages. Each predictor was also centered and scaled so that all predictors would have comparable units. Lexical category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that Nouns contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
+
+### Frequency 
+
+For each language, we estimated word frequency from unigram count in all corpora in the CHILDES database for that language, normalized to the length of the corpus. Each word's count includes the counts of words that share the same stem (so that _dogs_ counts as _dog_) or are synonymous (so that _father_ counts as _daddy_). For polysemous word pairs, such as _orange_ as in color and _orange_ as in fruit, each occurence of _orange_ in the corpus counts for both. Finally, each word's frequency estimate is taken as the log of its count.
+
+### MLU
+
+For each language, we estimated each word's MLU by calculating the mean number of words in the sentences in which that word appears in all corpora in the CHILDES database for that language. Words that only occur in one sentence were excluded.
+
+### Length
+
+We computed the number of characters in each word in each language, which is known to be highly correlated with number of phonemes and syllables.
+
+### Concreteness
+
+We used previously collected norms for concreteness [@brysbaert2014concreteness], which were gathered by asking adult participants to rate how concrete the meaning of each word is by using a 5-point scale from abstract to concrete. For the `r nrow(filter(uni_concreteness, is.na(concreteness))) - 2` CDI words that weren't part of the collected norms (mostly animal sounds such as _baa baa_), we imputed a conreteness rating from the mean of all CDI words' concreteness rating.
+
+### Valence and Arousal
+
+We also used previously collected norms for valence and arousal [@warriner2013norms], for which adult participants are asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal). For the `r nrow(filter(uni_valences, is.na(valence))) - 2` CDI words that weren't part of the collected norms (mostly function words such as _her_), we imputed ratings from the mean of all CDI words' ratings.
+
+### Babiness
+
+Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015iconicity] for which adult participants are asked to judge how relevant to babies a word is.
+
+```{r data, fig.height=7, fig.width=7, fig.env='figure*', fig.align='center', fig.pos='!h', dev='cairo_pdf', fig.cap='Relationship between predictors and AoA for each lexical category in each language.'}
+crossling_model_data %>%
+  gather_("predictor", "value", crossling_predictors) %>%
+  mutate(predictor = factor(predictor, levels = crossling_predictor_levels),
+         lexical_category = factor(lexical_category,
+                                   labels = paste(levels(lexical_category), "  "))) %>%
+  #filter(language == "English") %>%
+  ggplot(aes(x = value, y = aoa)) +
+    #facet_wrap(~predictor, ncol = 4) +
+    facet_grid(language ~ predictor, scales = "free_x") +
+    geom_point(aes(fill = lexical_category), colour = NA,
+               size = 0.5, alpha = 0.4, shape = 21) +
+    geom_smooth(aes(colour = lexical_category), method = "lm", se = FALSE, size = 0.8) +
+    geom_smooth(color = "black", method = "lm", se = FALSE, size = 0.8) +
+    scale_colour_solarized(name = "") +
+    scale_fill_solarized(name = "") +
+    xlab("Predictor z-Score") +
+    scale_y_continuous(name = "Age of Acquisition (months)",
+                       breaks = seq(5, 25, 5)) +
+    #theme_mikabr(base_size = 10) +
+    theme(legend.position = "top")
+```
+
 # Analysis
 
-An overview of our entire dataset can be seen in Figure \ref{fig:data}, which shows each word's estimated age of acquisition against its predictor values, separated by language and lexical category. We present three analyses of these data: 1) how the word properties change over development, 2) their relative contributions to predicting AoA, and 3) their interaction with lexical category.
+An overview of our entire dataset can be seen in Figure \ref{fig:data}, which shows each word's estimated age of acquisition against its predictor values, separated by language and lexical category. We present three analyses of these data: 1) how predictor values change for words learned earlier and later, 2) their relative contributions to predicting AoA, and 3) their interaction with lexical category.
 
 ## Developmental Trajectory
 
@@ -349,15 +363,20 @@ _[TODO: mention that predictors have different variabilities, that probably matt
 
 _[TODO: emphasize the sketchiness of using ratings cross-linguistically]_
 
-\newpage
-
 # Discussion
 
-Overall, we find that while frequency is predictive of age of acquisition across languages, conceptual factors are at least as important, especially for the earliest learned words. Our results imply that distributional theories of word learning should be constrained by such conceptual factors, which are likely to apply across languages. _[TODO: actually say something]_
+What makes words easier or harder for young children to learn? Previous experimental work has largely addressed this question using small-scale experiments. While such experiments can identify sources of variation, they typically do not allow for different sources to be compared in detail. In contrast, observational studies allow the effects of individual factors (with frequency being the most common) to be measured across ages and lexical categories [e.g., @goodman2008]. Scale comes at a cost in terms of detail, however: Both the predictors and outcome data available have been quite limited. 
+
+By including `r length(unique(lang_coef$language))` languages and as many predictors, our current work expands the scope of previous observational studies of age of acquisition. Our data show a number of patterns that confirm and expand previous reports. First, predictors differed in importance across even very early development. For example, certain concepts that were more strongly associated with babies appeared to be learned early for children across languages [@tardif2008]. Second, we found general consistency in predictor coefficients across languages (even as overall model fit varied, at least in part due to the amount and quality of data for different languages). This consistency supports the idea that differences in culture or language structure do not lead to fundamentally different acquisition strategies. 
+
+Finally, different predictors appeared more important across lexical categories. Frequent, concrete nouns were learned earlier, consistent with theories that emphasize the importance of early referential speech [e.g., @baldwin1995]. But for predicates, concreteness was somewhat less important, and for function words, MLU was most predictive. Overall thse findings are consistent with theories that emphasize the role of linguistic structure over conceptual complexity in the acquisition of other lexical categories beyond nouns [@gentner2001,@snedeker2007]. 
+
+Despite its larger scope, our work still shares a number of important limitations with previous studies. First and foremost, our approach is to predict one set of individuals with data about the experience of a completely different set and ratings of concepts gathered from yet others. In contrast to dense-data approaches [@roy2015predicting], this approach fundamentally limits the amount of variability we will be able to capture. In addition, the granularity of the predictors that can be extracted from corpus data and applied to every word is necessarily quite coarse. Ideally, predictors could be targeted more specifically at particular theoretical constructs of interest (for example, the patterns of use for particular predicates).  
+Perhaps the most important theoretical challenge in the study of early language is hwo to connect between the scale of an individual observation or experiment and the broader patterns of acquisition that we observe in large datasets. We have strong theories of how individual learning situations proceed [@frank2009,@mcmurray2012]. We may not yet be able to discern the unambiguous signatures of these theories in the aggregate data we have available. But we believe that searching for these signatures at scale is a critical step in making progress on understanding language learning.  
 
 # Acknowledgements
 
-Thanks to the MacArthur-Bates CDI Advisory Board.
+Thanks to the MacArthur-Bates CDI Advisory Board. This work supported by NSF BCS #1528526.
 
 # References 
 
