@@ -82,7 +82,7 @@ We use Wordbank (wordbank.stanford.edu), an open database of developmental vocab
 
 ## Estimating Age of Acquisition
 
-To estimate the age at which words are acquired, we took vocabulary data collected using the MacArthur-Bates Communicative Development Inventory, a family of parent-report checklists, specifically the Words & Gestures (infant) form for 8- to 18-month-olds. When filling out a CDI a form, parents are asked to indicate whether their child understands and/or says each of around 400 words. From these data, for each word on the CDI, we computed the proportion of children at each age that are reported to understand the word. We then fit a logistic curve to these proportions using a robust generalized linear model (using the \texttt{robustbase} package in \texttt{R}) and determine when the curve crosses 0.5, i.e. at what age at least 50% of children are reported to understand the word. Following @goodman2008does, we take this point to be each word's age of acquisition.
+To estimate the age at which words are acquired, we took vocabulary data collected using the MacArthur-Bates Communicative Development Inventory, a family of parent-report checklists, specifically the Words & Gestures (infant) form for 8- to 18-month-olds. When filling out a CDI a form, parents are asked to indicate whether their child understands and/or says each of around 400 words. From these data, for each word on the CDI, we computed the proportion of children at each age that are reported to understand the word. We then fit a logistic curve to these proportions using a robust generalized linear model (using the \texttt{robustbase} package in \texttt{R}) and determine when the curve crosses 0.5, i.e. at what age at least 50% of children are reported to understand the word. Following @goodman2008, we take this point to be each word's age of acquisition.
 
 ```{r lang_stats, results="asis"}
 library(wordbankr)
@@ -131,60 +131,34 @@ extremes <- crossling_model_data %>%
         arrange_(predictor) %>%
         .$uni_lemma %>%
         .[1:num_extremes]
-      return(data.frame("language" = unique(lang_data$language), "Measure" = predictor,
+      return(data.frame("language" = unique(lang_data$language),
+                        "Measure" = predictor,
                         "Lowest" = paste(lowest, collapse = ", "),
                         "Highest" = paste(highest, collapse = ", ")))
     })
   }) %>%
   filter(language == "English") %>%
-  select(-language)
+  select(-language) %>%
+  mutate(order = row_number()) %>%
+  gather(Direction, Words, Lowest, Highest) %>%
+  arrange(order) %>%
+  select(-order, -Direction) %>%
+  mutate(Measure = unlist(transpose(list(unique(Measure), rep("", length(Measure))))))
 
-extremes_table <- xtable(extremes, caption = "Examples of words with the lowest and highest values for age of acquisition and each predictor.")
+extremes_table <- xtable(extremes, label = "tab:mytable", #align = "llp{1in}p{1in}",
+                         caption = "Examples of words with the lowest and highest values for age of acquisition and each predictor.")
 
 print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
-      table.placement = "t", floating.environment = "table")
+      table.placement = "!hb", floating.environment = "table")
 ```
 
-
-## Predictors
-
-Each of our predictors are derived from independent resources. For each word that appears on the CDI Word & Gestures form in each of our `r length(unique(lang_coef$language))` languages, we obtained an estimate of its frequency in child-directed speech, the mean utterance length (MLU) of sentences in which if appears in child-directed speech, its length in characters, and ratings of its concreteness, valence, arousal, and relevance to babies. Examples of each of these predictors for English are shown in Table \ref{fig:extremes}.
-
-While frequency and MLU are measured relative to the word's language, since the conceptual ratings were collected only in English, we mapped all the words onto translation equivalents across CDI forms, allowing us to use the ratings for English words cross-linguistically. While imperfect, this method allows us to examine languages for which limited resources exist. Translation equivalents are available in the wordbank database using the \texttt{wordbankr} package [@frankinpress].
-
-Items such as _child's own name_ were excluded in all languages. Each predictor was also centered and scaled so that all predictors would have comparable units. Lexical category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that Nouns contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
-
-### Frequency 
-
-For each language, we estimated word frequency from unigram count in all corpora in the CHILDES database for that language, normalized to the length of the corpus. Each word's count includes the counts of words that share the same stem (so that _dogs_ counts as _dog_) or are synonymous (so that _father_ counts as _daddy_). For polysemous word pairs, such as _orange_ as in color and _orange_ as in fruit, each occurence of _orange_ in the corpus counts for both. Finally, each word's frequency estimate is taken as the log of its count.
-
-### MLU
-
-For each language, we estimated each word's MLU by calculating the mean number of words in the sentences in which that word appears in all corpora in the CHILDES database for that language. Words that only occur in one sentence were excluded.
-
-### Length
-
-We computed the number of characters in each word in each language, which is known to be highly correlated with number of phonemes and syllables.
-
-### Concreteness
-
-We used previously collected norms for concreteness [@brysbaert2014], which were gathered by asking adult participants to rate how concrete the meaning of each word is by using a 5-point scale from abstract to concrete. For the `r nrow(filter(uni_concreteness, is.na(concreteness))) - 2` CDI words that weren't part of the collected norms (mostly animal sounds such as _baa baa_), we imputed a conreteness rating from the mean of all CDI words' concreteness rating.
-
-### Valence and Arousal
-
-We also used previously collected norms for valence and arousal [@warriner2013], for which adult participants are asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal). For the `r nrow(filter(uni_valences, is.na(valence))) - 2` CDI words that weren't part of the collected norms (mostly function words such as _her_), we imputed ratings from the mean of all CDI words' ratings.
-
-### Babiness
-
-Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015] for which adult participants are asked to judge how relevant to babies a word is.
-
-```{r data, fig.height=7, fig.width=7, fig.env='figure*', fig.align='center', fig.pos='!h', dev='cairo_pdf', fig.cap='Relationship between predictors and AoA for each lexical category in each language.'}
+```{r data, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', fig.pos='!h', dev='cairo_pdf', fig.cap='Relationship between predictors and AoA for each lexical category in each language.'}
 crossling_model_data %>%
   gather_("predictor", "value", crossling_predictors) %>%
   mutate(predictor = factor(predictor, levels = crossling_predictor_levels),
          lexical_category = factor(lexical_category,
                                    labels = paste(levels(lexical_category), "  "))) %>%
-  #filter(language == "English") %>%
+  filter(language %in% c("English", "Italian", "Norwegian")) %>%
   ggplot(aes(x = value, y = aoa)) +
     #facet_wrap(~predictor, ncol = 4) +
     facet_grid(language ~ predictor, scales = "free_x") +
@@ -200,40 +174,6 @@ crossling_model_data %>%
     #theme_mikabr(base_size = 10) +
     theme(legend.position = "top")
 ```
-
-# Analysis
-
-An overview of our entire dataset can be seen in Figure \ref{fig:data}, which shows each word's estimated age of acquisition against its predictor values, separated by language and lexical category. We present three analyses of these data: 1) how predictor values change for words learned earlier and later, 2) their relative contributions to predicting AoA, and 3) their interaction with lexical category.
-
-## Developmental Trajectory
-
-To assess developmental trends, we examine how the values of each predictor change as a function of estimated AoA. Figure \ref{fig:devo} shows these trajectories, with a cubic curve smoothing over all words. Words that are learned earlier are more frequent, higher in babiness, and appear in shorter sentences. Concreteness exhibits a U-shaped trajectory, with the earliest learned words actually being relatively abstract, such as many social routines and animal sounds.
-
-```{r devo, fig.height=3, fig.width=3, fig.env='figure', fig.align='center', dev='cairo_pdf', fig.cap='Predictor values over development.'}
-crossling_data %>%
-  gather_("predictor", "value", crossling_predictors) %>%
-  filter(!is.na(value)) %>%
-  mutate(predictor = factor(predictor, levels = crossling_predictor_levels,
-                            labels = paste(crossling_predictor_levels, " "))) %>%
-  ggplot(aes(x = aoa, y = value, colour = predictor)) +
-    #facet_wrap(~predictor, ncol = 4) +
-    #geom_point(size = 0.5, alpha = 0.2) +
-    #geom_smooth(method = "loess", se = FALSE, span = 0.75) +
-    geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-    geom_smooth(method = "lm", formula = y ~ poly(x, 3), se = FALSE) +
-    scale_colour_solarized(name = "", guide = guide_legend(nrow = 4, byrow = FALSE)) +
-    scale_x_continuous(name = "Age of Acquisition (months)",
-                       breaks = seq(0, 30, 5)) +
-    scale_y_continuous(name = "Predictor Z-Score",
-                       breaks = seq(-1.5, 1.5, 0.5)) +
-    theme(legend.position = c(0.64, 0.13),
-          legend.direction = "horizontal",
-          legend.key.height = unit(0.7, "lines"),
-          legend.key.width = unit(0.7, "lines"),
-          legend.text = element_text(size = 8))
-```
-
-## Predicting AoA
 
 ```{r}
 predict_english <- function(english_predictors) {
@@ -279,7 +219,29 @@ predictions %>%
               data = cors, family = font, size = 2.8)
 ```
 
-We fit a linear regression for each language's data, as well as a linear mixed-effects model with language as a random effect for all the data pooled. For illustrative purposes, Figure \ref{fig:fit} compares the predictions of the model to AoA estimates, for only English data, with outliers labelled.
+```{r devo, fig.height=3, fig.width=3, fig.env='figure', fig.align='center', fig.pos='!hb', dev='cairo_pdf', fig.cap='Predictor values over development.'}
+crossling_data %>%
+  gather_("predictor", "value", crossling_predictors) %>%
+  filter(!is.na(value)) %>%
+  mutate(predictor = factor(predictor, levels = crossling_predictor_levels,
+                            labels = paste(crossling_predictor_levels, " "))) %>%
+  ggplot(aes(x = aoa, y = value, colour = predictor)) +
+    #facet_wrap(~predictor, ncol = 4) +
+    #geom_point(size = 0.5, alpha = 0.2) +
+    #geom_smooth(method = "loess", se = FALSE, span = 0.75) +
+    geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+    geom_smooth(method = "lm", formula = y ~ poly(x, 3), se = FALSE) +
+    scale_colour_solarized(name = "", guide = guide_legend(nrow = 4, byrow = FALSE)) +
+    scale_x_continuous(name = "Age of Acquisition (months)",
+                       breaks = seq(0, 30, 5)) +
+    scale_y_continuous(name = "Predictor Z-Score",
+                       breaks = seq(-1.5, 1.5, 0.5)) +
+    theme(legend.position = c(0.64, 0.13),
+          legend.direction = "horizontal",
+          legend.key.height = unit(0.7, "lines"),
+          legend.key.width = unit(0.7, "lines"),
+          legend.text = element_text(size = 8))
+```
 
 ```{r coefs, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Magnitudes of predictor coefficients.'}
 plot_coefs <- crossling_coef %>%
@@ -322,8 +284,6 @@ ggplot(plot_coefs, aes(x = term, y = abs(estimate))) +
         legend.key.width = unit(0.5, "lines"))
 ```
 
-Figure \ref{fig:coefs} shows the magnitude and direction of the coefficient for each predictor in each language and cross-linguistically. We find that frequency, babiness, concreteness, and MLU are relatively stronger predictors of age of acquisition, across languages and in the cross-linguistic model. Overall there's considerable consistency in how the predictors pattern in various languages, although with interesting differences: for example, MLU in English appears to be unusually strong, while frequency in Spanish look unusually weak. There is also variability in the overall fit of the models to the data, with some languages, such as Norwegian, having relatively more of the variance explained than others, such as Turkish.
-
 ```{r coefs_lexcat, fig.height=1.7, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Magnitudes of predictor coefficients by lexical category.'}
 crossling_coefs %>%
   filter(term %in% c("frequency", "babiness", "concreteness", "mlu")) %>%
@@ -350,11 +310,55 @@ crossling_coefs %>%
           legend.key.width = unit(0.5, "lines"))
 ```
 
+## Predictors
+
+Each of our predictors are derived from independent resources. For each word that appears on the CDI Word & Gestures form in each of our `r length(unique(lang_coef$language))` languages, we obtained an estimate of its frequency in child-directed speech, the mean utterance length (MLU) of sentences in which if appears in child-directed speech, its length in characters, and ratings of its concreteness, valence, arousal, and relevance to babies. Examples of each of these predictors for English are shown in Table \ref{tab:extremes}.
+
+While frequency and MLU are measured relative to the word's language, since the conceptual ratings were collected only in English, we mapped all the words onto translation equivalents across CDI forms, allowing us to use the ratings for English words cross-linguistically. While imperfect, this method allows us to examine languages for which limited resources exist. Translation equivalents are available in the wordbank database using the \texttt{wordbankr} package [@frankinpress].
+
+Items such as _child's own name_ were excluded in all languages. Each predictor was also centered and scaled so that all predictors would have comparable units. Lexical category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that Nouns contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
+
+### Frequency 
+
+For each language, we estimated word frequency from unigram count in all corpora in the CHILDES database for that language, normalized to the length of the corpus. Each word's count includes the counts of words that share the same stem (so that _dogs_ counts as _dog_) or are synonymous (so that _father_ counts as _daddy_). For polysemous word pairs, such as _orange_ as in color and _orange_ as in fruit, each occurence of _orange_ in the corpus counts for both. Finally, each word's frequency estimate is taken as the log of its count.
+
+### MLU
+
+For each language, we estimated each word's MLU by calculating the mean number of words in the sentences in which that word appears in all corpora in the CHILDES database for that language. Words that only occur in one sentence were excluded.
+
+### Length
+
+We computed the number of characters in each word in each language, which is known to be highly correlated with number of phonemes and syllables.
+
+### Concreteness
+
+We used previously collected norms for concreteness [@brysbaert2014], which were gathered by asking adult participants to rate how concrete the meaning of each word is by using a 5-point scale from abstract to concrete. For the `r nrow(filter(uni_concreteness, is.na(concreteness))) - 2` CDI words that weren't part of the collected norms (mostly animal sounds such as _baa baa_), we imputed a conreteness rating from the mean of all CDI words' concreteness rating.
+
+### Valence and Arousal
+
+We also used previously collected norms for valence and arousal [@warriner2013], for which adult participants are asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal). For the `r nrow(filter(uni_valences, is.na(valence))) - 2` CDI words that weren't part of the collected norms (mostly function words such as _her_), we imputed ratings from the mean of all CDI words' ratings.
+
+### Babiness
+
+Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015] for which adult participants are asked to judge how relevant to babies a word is.
+
+# Analysis
+
+An overview of our entire dataset can be seen in Figure \ref{fig:data}, which shows each word's estimated age of acquisition against its predictor values, separated by language and lexical category. We present three analyses of these data: 1) how predictor values change for words learned earlier and later, 2) their relative contributions to predicting AoA, and 3) their interaction with lexical category.
+
+## Developmental Trajectory
+
+To assess developmental trends, we examine how the values of each predictor change as a function of estimated AoA. Figure \ref{fig:devo} shows these trajectories, with a cubic curve smoothing over all words. Words that are learned earlier are more frequent, higher in babiness, and appear in shorter sentences. Concreteness exhibits a U-shaped trajectory, with the earliest learned words actually being relatively abstract, such as many social routines and animal sounds.
+
+## Predicting AoA
+
+We fit a linear regression for each language's data, as well as a linear mixed-effects model with language as a random effect for all the data pooled. For illustrative purposes, Figure \ref{fig:fit} compares the predictions of the model to AoA estimates, for only English data, with outliers labelled.
+
+Figure \ref{fig:coefs} shows the magnitude and direction of the coefficient for each predictor in each language and cross-linguistically. We find that frequency, babiness, concreteness, and MLU are relatively stronger predictors of age of acquisition, across languages and in the cross-linguistic model. Overall there's considerable consistency in how the predictors pattern in various languages, although with interesting differences: for example, MLU in English appears to be unusually strong, while frequency in Spanish look unusually weak. There is also variability in the overall fit of the models to the data, with some languages, such as Norwegian, having relatively more of the variance explained than others, such as Turkish.
+
 ## Lexical Category
 
 Previous work gives reason to believe that predictors' relationship with age of acquisition differs among various lexical categories [@goodman2008]. To investigate these effects, we break down our data by lexical category and fit separate cross-linguistic linear mixed-effects models for each one. Figure \ref{fig:coefs_lexcat} shows the magnitudes and directions of the resulting coefficients, leaving off the less strong predictors. We find that frequency matters most for Nouns and comparatively little for Function Words, while MLU is irrelevant for both Nouns and Predicates, but highly informative for Function Words and Other items.
-
-_[TODO: give more examples everywhere of specific words that are low/high in AoA, predictor values]_
 
 _[TODO: mention predictors' correlations to each other]_
 

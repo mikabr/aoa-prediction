@@ -196,8 +196,8 @@ reported to understand the word. We then fit a logistic curve to these
 proportions using a robust generalized linear model (using the
 \texttt{robustbase} package in \texttt{R}) and determine when the curve
 crosses 0.5, i.e.~at what age at least 50\% of children are reported to
-understand the word. Following ({\textbf{???}}), we take this point to
-be each word's age of acquisition.
+understand the word. Following J. C. Goodman et al. (2008), we take this
+point to be each word's age of acquisition.
 
 \begin{table}[t]
 \centering
@@ -217,24 +217,88 @@ English & 386 & 2,452 & 7,858,051 \\
 \caption{Dataset statistics} 
 \end{table}
 
-\begin{table}[t]
+\begin{table}[!hb]
 \centering
-\begin{tabular}{lll}
+\begin{tabular}{ll}
   \hline
-Measure & Lowest & Highest \\ 
+Measure & Words \\ 
   \hline
-aoa & mommy, bottle, peekaboo & babysitter, teacher, naughty \\ 
-  frequency & living room, cockadoodledoo, grrr & you, it, that \\ 
-  babiness & donkey, penny, jeans & baby, bib, bottle \\ 
-  concreteness & how, now, that & apple, ball, banana \\ 
-  mlu & cockadoodledoo, peekaboo, uh oh & babysitter, when (question), day \\ 
-  arousal & shh, asleep, blanket & naughty, money, scared \\ 
-  valence & sick, owie, ouch & happy, hug, love \\ 
-  num\_characters & i, in, it & cockadoodledoo, refrigerator, living room \\ 
+aoa & mommy, bottle, peekaboo \\ 
+   & babysitter, teacher, naughty \\ 
+  frequency & living room, cockadoodledoo, grrr \\ 
+   & you, it, that \\ 
+  babiness & donkey, penny, jeans \\ 
+   & baby, bib, bottle \\ 
+  concreteness & how, now, that \\ 
+   & apple, ball, banana \\ 
+  mlu & cockadoodledoo, peekaboo, uh oh \\ 
+   & babysitter, when (question), day \\ 
+  arousal & shh, asleep, blanket \\ 
+   & naughty, money, scared \\ 
+  valence & sick, owie, ouch \\ 
+   & happy, hug, love \\ 
+  num\_characters & i, in, it \\ 
+   & cockadoodledoo, refrigerator, living room \\ 
    \hline
 \end{tabular}
 \caption{Examples of words with the lowest and highest values for age of acquisition and each predictor.} 
+\label{tab:mytable}
 \end{table}
+
+\begin{CodeChunk}
+\begin{figure*}[!h]
+
+{\centering \includegraphics{figs/data-1} 
+
+}
+
+\caption[Relationship between predictors and AoA for each lexical category in each language]{Relationship between predictors and AoA for each lexical category in each language.}\label{fig:data}
+\end{figure*}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{figure*}[tb]
+
+{\centering \includegraphics{figs/fit-1} 
+
+}
+
+\caption[English model fit]{English model fit.}\label{fig:fit}
+\end{figure*}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{figure}[!hb]
+
+{\centering \includegraphics{figs/devo-1} 
+
+}
+
+\caption[Predictor values over development]{Predictor values over development.}\label{fig:devo}
+\end{figure}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{figure*}[tb]
+
+{\centering \includegraphics{figs/coefs-1} 
+
+}
+
+\caption[Magnitudes of predictor coefficients]{Magnitudes of predictor coefficients.}\label{fig:coefs}
+\end{figure*}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{figure*}[tb]
+
+{\centering \includegraphics{figs/coefs_lexcat-1} 
+
+}
+
+\caption[Magnitudes of predictor coefficients by lexical category]{Magnitudes of predictor coefficients by lexical category.}\label{fig:coefs_lexcat}
+\end{figure*}
+\end{CodeChunk}
 
 \subsection{Predictors}\label{predictors}
 
@@ -245,7 +309,7 @@ speech, the mean utterance length (MLU) of sentences in which if appears
 in child-directed speech, its length in characters, and ratings of its
 concreteness, valence, arousal, and relevance to babies. Examples of
 each of these predictors for English are shown in Table
-\ref{fig:extremes}.
+\ref{tab:extremes}.
 
 While frequency and MLU are measured relative to the word's language,
 since the conceptual ratings were collected only in English, we mapped
@@ -313,17 +377,6 @@ Lastly, we used previously collected norms of ``babiness'', a measure of
 association with infancy (Perry et al., 2015) for which adult
 participants are asked to judge how relevant to babies a word is.
 
-\begin{CodeChunk}
-\begin{figure*}[!h]
-
-{\centering \includegraphics{figs/data-1} 
-
-}
-
-\caption[Relationship between predictors and AoA for each lexical category in each language]{Relationship between predictors and AoA for each lexical category in each language.}\label{fig:data}
-\end{figure*}
-\end{CodeChunk}
-
 \section{Analysis}\label{analysis}
 
 An overview of our entire dataset can be seen in Figure \ref{fig:data},
@@ -343,46 +396,13 @@ and appear in shorter sentences. Concreteness exhibits a U-shaped
 trajectory, with the earliest learned words actually being relatively
 abstract, such as many social routines and animal sounds.
 
-\begin{CodeChunk}
-\begin{figure}[tb]
-
-{\centering \includegraphics{figs/devo-1} 
-
-}
-
-\caption[Predictor values over development]{Predictor values over development.}\label{fig:devo}
-\end{figure}
-\end{CodeChunk}
-
 \subsection{Predicting AoA}\label{predicting-aoa}
-
-\begin{CodeChunk}
-\begin{figure*}[tb]
-
-{\centering \includegraphics{figs/fit-1} 
-
-}
-
-\caption[English model fit]{English model fit.}\label{fig:fit}
-\end{figure*}
-\end{CodeChunk}
 
 We fit a linear regression for each language's data, as well as a linear
 mixed-effects model with language as a random effect for all the data
 pooled. For illustrative purposes, Figure \ref{fig:fit} compares the
 predictions of the model to AoA estimates, for only English data, with
 outliers labelled.
-
-\begin{CodeChunk}
-\begin{figure*}[tb]
-
-{\centering \includegraphics{figs/coefs-1} 
-
-}
-
-\caption[Magnitudes of predictor coefficients]{Magnitudes of predictor coefficients.}\label{fig:coefs}
-\end{figure*}
-\end{CodeChunk}
 
 Figure \ref{fig:coefs} shows the magnitude and direction of the
 coefficient for each predictor in each language and
@@ -396,17 +416,6 @@ unusually weak. There is also variability in the overall fit of the
 models to the data, with some languages, such as Norwegian, having
 relatively more of the variance explained than others, such as Turkish.
 
-\begin{CodeChunk}
-\begin{figure*}[tb]
-
-{\centering \includegraphics{figs/coefs_lexcat-1} 
-
-}
-
-\caption[Magnitudes of predictor coefficients by lexical category]{Magnitudes of predictor coefficients by lexical category.}\label{fig:coefs_lexcat}
-\end{figure*}
-\end{CodeChunk}
-
 \subsection{Lexical Category}\label{lexical-category}
 
 Previous work gives reason to believe that predictors' relationship with
@@ -419,9 +428,6 @@ the less strong predictors. We find that frequency matters most for
 Nouns and comparatively little for Function Words, while MLU is
 irrelevant for both Nouns and Predicates, but highly informative for
 Function Words and Other items.
-
-\emph{{[}TODO: give more examples everywhere of specific words that are
-low/high in AoA, predictor values{]}}
 
 \emph{{[}TODO: mention predictors' correlations to each other{]}}
 
