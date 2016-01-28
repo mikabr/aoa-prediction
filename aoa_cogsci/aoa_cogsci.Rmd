@@ -47,12 +47,20 @@ theme_set(theme_mikabr(base_size = 12, base_family = font) +
                   panel.background = element_blank(),
                   panel.margin = unit(1, "mm"),
                   plot.margin = unit(c(0, 0, 0, 0), "mm")))
-    
+```
+
+```{r}
+# ----------
+# to run and cache all the AoA prediction computation:
+# - set working directory to this file's location
+# - uncomment and run these four lines
+# ----------
 # setwd("..")
 # knit("aoa_prediction_funs.Rmd", tangle = TRUE)
 # source("aoa_prediction_funs.R")
 # save.image("aoa_prediction.RData")
 
+# when knitting, just uses cache
 load("../aoa_prediction.RData")
 ```
 
