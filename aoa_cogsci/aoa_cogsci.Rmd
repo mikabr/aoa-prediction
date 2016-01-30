@@ -37,6 +37,7 @@ library(langcog)
 library(dplyr)
 library(tidyr)
 library(purrr)
+library(ggrepel)
 # library(extrafont)
 # loadfonts(quiet = TRUE)
 font <- "Times"
@@ -212,15 +213,19 @@ cors <- predictions %>%
 ```
 
 ```{r fit, fig.height=2.3, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='English model fit.'}
-threshold <- 6
+threshold <- 5.2
 predictions %>%
   ggplot(aes(x = predicted_aoa, y = aoa)) +
     facet_wrap(~lexical_category, ncol = 4) +
-    geom_point(aes(colour = lexical_category), size = 0.7,
-               data = filter(predictions, error < threshold)) +
-    geom_label(aes(label = uni_lemma, colour = lexical_category), family = font,
-              show.legend = FALSE, data = filter(predictions, error >= threshold),
-              label.padding = unit(0.15, "lines"), size = 3) +
+    geom_point(aes(colour = lexical_category), size = 0.5) +
+#     geom_point(aes(colour = lexical_category), size = 0.7,
+#                data = filter(predictions, error < threshold)) +
+    geom_label_repel(aes(label = uni_lemma, colour = lexical_category), size = 2,
+                    family = font, data = filter(predictions, error >= threshold),
+                    force = 27, max.iter = 1e5, label.padding = unit(0.15, "lines")) +
+#     geom_label(aes(label = uni_lemma, colour = lexical_category), family = font,
+#                     show.legend = FALSE, data = filter(predictions, error >= threshold),
+#                     label.padding = unit(0.15, "lines"), size = 3) +
     geom_smooth(aes(colour = lexical_category), weight = 1, method = "lm", se = FALSE) +
     geom_smooth(colour = "black", weight = 2, method = "lm") +
     scale_colour_solarized(name = "", guide = FALSE) +
