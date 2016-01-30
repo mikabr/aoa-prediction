@@ -171,19 +171,35 @@ joined_groups <- group_prop_data %>%
                                                "uni_lemma"))) %>%
   filter(!is.na(aoa.x), !is.na(aoa.y))
 
-ggplot(joined_groups, aes(x = aoa.x, y = aoa.y)) +
-  facet_wrap(~language) +
-  geom_point(aes(colour = lexical_category)) +
-  geom_smooth(method = "lm", colour = "black") +
-  scale_colour_solarized()
-
-cor(joined_groups$aoa.x, joined_groups$aoa.y)
 group_rsq <- joined_groups %>%
   split(.$language) %>%
   map(~ lm(aoa.y ~ aoa.x, data = .)) %>%
   map(summary) %>%
   map_dbl("adj.r.squared")
+rsq_data <- data.frame(language = names(group_rsq),
+                       adj_rsq = group_rsq,
+                       row.names = NULL)
+```
 
+```{r}
+quartz(width = 8, height = 5)
+joined_groups %>%
+  mutate(lexical_category = factor(lexical_category,
+                                   levels = c("nouns", "predicates",
+                                              "function_words", "other"),
+                                   labels = c("Nouns", "Predicates",
+                                              "Function Words", "Other"))) %>%
+  ggplot(aes(x = aoa.x, y = aoa.y)) +
+  facet_wrap(~language, ncol = 4) +
+  geom_point(aes(colour = lexical_category), size = 0.8) +
+  geom_smooth(method = "lm", colour = "black") +
+  geom_text(aes(label = sprintf("r² = %.2f", adj_rsq)),
+            data = rsq_data, x = 6, y = 29) +
+  scale_colour_solarized(name = "") +
+  theme(legend.position = "top")
+```
+
+```{r}
 #all_prop_data <- map_df(raw_data, fit_inst)
 #write_csv(all_prop_data, "app/all_prop_data.csv")
 ```
