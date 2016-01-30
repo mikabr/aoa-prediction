@@ -121,6 +121,7 @@ print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
       table.placement = "t", format.args = list(big.mark = ","))
 ```
 
+\setlength\tabcolsep{1pt}
 ```{r extremes, results="asis"}
 num_extremes <- 3
 extremes <- crossling_model_data %>%
@@ -137,19 +138,23 @@ extremes <- crossling_model_data %>%
         .[1:num_extremes]
       return(data.frame("language" = unique(lang_data$language),
                         "Measure" = predictor,
-                        "Lowest" = paste(lowest, collapse = ", "),
-                        "Highest" = paste(highest, collapse = ", ")))
+                        "min" = paste(lowest, collapse = ", "),
+                        "max" = paste(highest, collapse = ", ")))
     })
   }) %>%
   filter(language == "English") %>%
   select(-language) %>%
   mutate(order = row_number()) %>%
-  gather(Direction, Words, Lowest, Highest) %>%
+  gather(Value, Words, min, max) %>%
   arrange(order) %>%
-  select(-order, -Direction) %>%
+  select(-order) %>%
   mutate(Measure = unlist(transpose(list(unique(Measure), rep("", length(Measure))))))
 
-extremes_table <- xtable(extremes, label = "tab:mytable", #align = "llp{1in}p{1in}",
+extremes[which(extremes$Measure == "num_characters") + 1, "Measure"] <- "characters"
+extremes[which(extremes$Measure == "num_characters"), "Measure"] <- "num"
+
+extremes_table <- xtable(extremes, label = "tab:mytable", align = "llcl",
+                         #align = "llp{1in}p{1in}",
                          caption = "Examples of words with the lowest and highest values for age of acquisition and each predictor.")
 
 print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
