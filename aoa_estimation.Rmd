@@ -122,20 +122,85 @@ fit_inst_measure <- function(inst_measure_data) {
               prop = mean(uni_value, na.rm = TRUE))
   inst_measure_by_uni %>%
     split(paste(.$lexical_category, .$lexical_class, .$uni_lemma)) %>%
-    map(fit_inst_measure_uni) %>%
-    bind_rows()
+    map_df(fit_inst_measure_uni) #%>%
+    #bind_rows()
 }
 
 fit_inst <- function(inst_data) {
   print(unique(inst_data$language))
   inst_data %>%
-    split(.$measure) %>%
-    map(fit_inst_measure) %>%
-    bind_rows()
+    filter(measure == "understands") %>%
+    fit_inst_measure()
+#     split(.$measure) %>%
+#     map(fit_inst_measure) %>%
+#     bind_rows()
 }
 
-prop_data <- map(raw_data, fit_inst)
-all_prop_data <- bind_rows(prop_data)
+random_group <- function(n, probs) {
+  g <- findInterval(seq(0, 1, length = n), c(0, cumsum(probs)),
+                    rightmost.closed = TRUE)
+  names(probs)[sample(g)]
+}
+
+split_raw_data <- raw_data %>%
+  map(function(inst_data) {
+    data_groups <- inst_data %>%
+      select(data_id) %>%
+      unique() %>%
+      mutate(group = random_group(n(), c("group1" = 0.5, "group2" = 0.5)))
+    inst_data %>%
+      left_join(data_groups) %>%
+      split(.$group)
+  }) %>%
+  transpose()
+
+group_prop_data <- split_raw_data %>%
+  map(function(group_data) {
+    map_df(group_data, fit_inst)
+  })
+
+joined_groups <- group_prop_data %>%
+  map2(names(group_prop_data), function(group_data, group_name) {
+    group_data %>%
+      select(language, lexical_category, uni_lemma, aoa) %>%
+      distinct() %>%
+      filter(aoa > 0 & aoa <= 30) #%>%
+      #mutate(group = group_name)
+  }) %>%
+  reduce(function(x, y) left_join(x, y, by = c("language", "lexical_category",
+                                               "uni_lemma"))) %>%
+  filter(!is.na(aoa.x), !is.na(aoa.y))
+
+group_rsq <- joined_groups %>%
+  split(.$language) %>%
+  map(~ lm(aoa.y ~ aoa.x, data = .)) %>%
+  map(summary) %>%
+  map_dbl("adj.r.squared")
+rsq_data <- data.frame(language = names(group_rsq),
+                       adj_rsq = group_rsq,
+                       row.names = NULL)
+```
+
+```{r}
+quartz(width = 8, height = 5)
+joined_groups %>%
+  mutate(lexical_category = factor(lexical_category,
+                                   levels = c("nouns", "predicates",
+                                              "function_words", "other"),
+                                   labels = c("Nouns", "Predicates",
+                                              "Function Words", "Other"))) %>%
+  ggplot(aes(x = aoa.x, y = aoa.y)) +
+  facet_wrap(~language, ncol = 4) +
+  geom_point(aes(colour = lexical_category), size = 0.8) +
+  geom_smooth(method = "lm", colour = "black") +
+  geom_text(aes(label = sprintf("r² = %.2f", adj_rsq)),
+            data = rsq_data, x = 6, y = 29) +
+  scale_colour_solarized(name = "") +
+  theme(legend.position = "top")
+```
+
+```{r}
+#all_prop_data <- map_df(raw_data, fit_inst)
 #write_csv(all_prop_data, "app/all_prop_data.csv")
 ```
 
