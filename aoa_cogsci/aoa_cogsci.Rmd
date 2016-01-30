@@ -410,3 +410,35 @@ Thanks to the MacArthur-Bates CDI Advisory Board. This work supported by NSF BCS
 \setlength{\parindent}{-0.1in} 
 \setlength{\leftskip}{0.125in}
 \noindent
+
+
+```{r coefs2, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Magnitudes of predictor coefficients.'}
+ggplot(plot_coefs, aes(x = term, y = estimate)) +
+  facet_wrap(~language, ncol = 4) +
+  geom_rect(data = filter(plot_coefs, language == "Cross-Linguistic"),
+            aes(fill = language), xmin = -Inf, xmax = Inf,
+            ymin = -Inf, ymax = Inf, alpha = 0.03) +
+  geom_linerange(aes(colour = term,
+                     ymin = estimate - 1.96 * std.error,
+                     ymax = estimate + 1.96 * std.error)) +
+  geom_point(aes(colour = term), size = 2.5) +
+  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+#    geom_text(aes(label = paste("bar(R)^2==", adj_rsq)), parse = TRUE,
+#   geom_text(aes(label = paste("bar(R)^2==", adj_rsq)), parse = TRUE,
+#             x = 0.7, y = 1.8, family = font, size = 2.8,
+#             data = data.frame(language = names(all_adj_rsq),
+#                               adj_rsq = round(unlist(all_adj_rsq), 2),
+#                               row.names = NULL)) +
+  coord_flip() +
+  scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(7))) +
+  scale_shape_manual(name = "", values = c(1, 19),
+                     labels = c("negative", "positive")) +
+  xlab("") +
+  scale_y_continuous(name = "Coefficient Estimate (Months/SD)") +
+#                     breaks = seq(0, 2, 0.5)) +
+  theme(legend.position = c(0.87, -0.1),
+        legend.direction = "horizontal",
+        legend.key.height = unit(0.5, "lines"),
+        legend.key.width = unit(0.5, "lines"))
+```
