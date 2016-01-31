@@ -215,16 +215,17 @@ cors <- predictions %>%
 ```
 
 ```{r fit, fig.height=2.3, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='English model fit.'}
-threshold <- 5.2
+threshold <- 5
 predictions %>%
   ggplot(aes(x = predicted_aoa, y = aoa)) +
     facet_wrap(~lexical_category, ncol = 4) +
     geom_point(aes(colour = lexical_category), size = 0.5) +
 #     geom_point(aes(colour = lexical_category), size = 0.7,
 #                data = filter(predictions, error < threshold)) +
-    geom_label_repel(aes(label = uni_lemma, colour = lexical_category), size = 2,
+    geom_text_repel(aes(label = uni_lemma, colour = lexical_category), size = 2,
                     family = font, data = filter(predictions, error >= threshold),
-                    force = 27, max.iter = 1e5, label.padding = unit(0.15, "lines")) +
+                    force = 27, max.iter = 1e5) + 
+  # , label.padding = unit(0.15, "lines")) +
 #     geom_label(aes(label = uni_lemma, colour = lexical_category), family = font,
 #                     show.legend = FALSE, data = filter(predictions, error >= threshold),
 #                     label.padding = unit(0.15, "lines"), size = 3) +
@@ -277,8 +278,8 @@ ggplot(plot_coefs, aes(x = term, y = estimate)) +
             aes(fill = language), xmin = -Inf, xmax = Inf,
             ymin = -Inf, ymax = Inf, alpha = 0.03) +
   geom_linerange(aes(colour = term,
-                     ymin = abs(estimate) - 1.96 * std.error,
-                     ymax = abs(estimate) + 1.96 * std.error)) +
+                     ymin = estimate - 1.96 * std.error,
+                     ymax = estimate + 1.96 * std.error)) +
   geom_point(aes(colour = term), size = 2.5) +
 #     geom_pointrange(aes(ymin = abs(estimate) - 1.96 * std.error,
 #                         ymax = abs(estimate) + 1.96 * std.error,
@@ -311,8 +312,8 @@ crossling_coefs %>%
   mutate(term = factor(term, levels = rev(crossling_predictor_levels))) %>%
   ggplot(aes(x = term, y = estimate, colour = term)) +
     facet_wrap(~lexical_category, ncol = 4) +
-    geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
-                        ymax = abs(estimate) + 1.96 * std.error)) +
+    geom_linerange(aes(ymin = estimate - 1.96 * std.error,
+                        ymax = estimate + 1.96 * std.error)) +
     geom_point(size = 2.5) +
 #     geom_pointrange(aes(ymin = abs(estimate) - 1.96 * std.error,
 #                        ymax = abs(estimate) + 1.96 * std.error)) +
@@ -322,8 +323,8 @@ crossling_coefs %>%
 #     scale_shape_manual(name = "", values = c(1, 19),
 #                        labels = c("negative", "positive")) +
     xlab("") +
-    scale_y_continuous(name = "Coefficient Magnitude (Months/SD)",
-                       breaks = seq(0, 2.5, 0.5)) +
+    scale_y_continuous(name = "Coefficient Magnitude (Months/SD)")+
+                       # breaks = seq(0, 2.5, 0.5)) +
     theme(legend.position = c(0.87, -0.26),
           legend.direction = "horizontal",
           legend.key.height = unit(0.5, "lines"),

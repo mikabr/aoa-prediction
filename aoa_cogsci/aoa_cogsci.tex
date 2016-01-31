@@ -127,39 +127,36 @@ language communities. As such, Wordbank offers a novel resource for
 richer and more powerful analyses of vocabulary learning over
 development and across languages.
 
-We integrate Wordbank data with characterizations of the word learning
-environment from the CHILDES database (MacWhinney, 2000) and elsewhere,
-a multiple data source approach pioneered by J. C. Goodman et al.
-(2008). Building on their work, we want to move beyond frequency to
-examine a variety of information sources. We specifically follow B. C.
-Roy et al. (2015) in predicting age of acquisition (AoA) as a function
-of several different environment predictors. In analyzing a high-density
-longitudinal corpus for a single English-acquiring child, Roy et al
-found that frequency, number of characters, and mean length of
-utterances predicted the age of a word's first production. Due to the
-nature of the data, this analysis was limited to one language (in fact
-to one subject) and could only test production, distancing the
-connection between properties of the input and the child's emerging
-understanding of words.
+We integrate AoA estimates from Wordbank with characterizations of the
+word learning environment from the CHILDES database (MacWhinney, 2000)
+and elsewhere, a multiple data source approach originated by J. C.
+Goodman et al. (2008). Building on this work, we examine interactions
+between a variety of both enviornmental and conceptual factors. Using
+this same approach on a high-density longitudinal corpus for a single
+English-acquiring child, B. C. Roy et al. (2015) found that the length,
+usage frequency, and mean length of the utterances in which it occurred
+were all predictors of a word's AoA. But due to the nature of the
+dataset, this analysis used production-based AoA estimates and was
+further limited by relying on data from only one child (and hence one
+language).
 
 Our approach provides a complimentary analysis by using CDI
 comprehension data available in Wordbank to look at a common set of the
 earliest words that children learn across several different languages.
-We estimate the age of acquisition for around 400 words listed on the
-CDIs in each of 7 languages. We also estimate each word's frequency and
-mean length of utterance (MLU) based on all sentences in which each word
-appears in naturalistic corpora of talk to children {[}IS THIS TRUE?{]}
-in CHILDES. We also obtain ratings of each word's concreteness, valence,
-arousal, and relevance to babies from previously collected norms
-{[}CITATIONS??{]}. We then predict each word's AoA from all of these
-properties, assessing the relative contributions of each factor, as well
-as the interaction of predictors with the lexical category and how those
-interactions change over development. Each of these analyses has the
-potential to provide leverage on long-standing theoretical questions.
+We estimate AoA for around 400 words from CDIs in each of 7 languages.
+We also estimate each word's frequency and mean length of utterance
+(MLU) based on the sentences in which it appears in CHILDES. We also
+obtain ratings of each word's concreteness, valence, arousal, and
+relevance to babies from previously collected norms. We use these
+measures to predict each word's AoA, assessing the relative
+contributions of each, as well as how predictors change over development
+and their interactions with lexical category. Each of these analyses has
+the potential to provide leverage on long-standing theoretical
+questions.
 
 A first theoretical question of interest is which lexical categories are
 most influenced by input-related factors like frequency and utterance
-length compared with conceptual factors like concreteness or valence.
+length, compared with conceptual factors like concreteness or valence.
 For example, the ``division of dominance'' theory suggests that nouns
 might be more sensitive to cognitive factors while predicates and
 closed-class words might be more sensitive to linguistic factors
@@ -189,11 +186,10 @@ determine words' learnability.
 
 \section{Data}\label{data}
 
-We use Wordbank (wordbank.stanford.edu), an open database of
-developmental vocabulary data, to estimate the age of acquisition for
-words across 7 languages: English, Italian, Norwegian, Russian, Spanish,
-Swedish, Turkish. We then ask what factors are most important for
-predicting this age of acquisition.
+We use Wordbank, an open database of developmental vocabulary data, to
+estimate the age of acquisition for words across 7 languages: English,
+Italian, Norwegian, Russian, Spanish, Swedish, Turkish. We then ask what
+factors are most important for predicting this age of acquisition.
 
 \subsection{Estimating Age of
 Acquisition}\label{estimating-age-of-acquisition}
@@ -326,56 +322,57 @@ concreteness, valence, arousal, and relevance to babies. Examples of
 each of these predictors for English are shown in Table
 \ref{tab:extremes}.
 
-While frequency and MLU are measured relative to the word's language,
-since the conceptual ratings were collected only in English, we mapped
-all the words onto translation equivalents across CDI forms, allowing us
-to use the ratings for English words cross-linguistically. While
-imperfect, this method allows us to examine languages for which limited
-resources exist. Translation equivalents are available in the wordbank
-database using the \texttt{wordbankr} package (Frank et al., in press).
+Frequency and MLU are measured relative to the word's language. But
+since extant datasets for conceptual ratings are primarily available for
+English, we mapped all words onto translation equivalents across CDI
+forms, allowing us to use the ratings for English words across
+languages. While necessarily imperfect, this method allows us to examine
+languages for which limited resources exist. Translation equivalents are
+available in the wordbank database using the \texttt{wordbankr} package
+(Frank et al., in press).
 
 Items such as \emph{child's own name} were excluded in all languages.
 Each predictor was also centered and scaled so that all predictors would
 have comparable units. Lexical category was determined on the basis of
 the conceptual categories presented on the CDI form (e.g., ``Animals''),
-such that Nouns contains common nouns, Predicates contains verbs and
-adjectives, Function Words contains closed-class words, and Other
-contains the remaining items (following Bates et al., 1994).
+such that the noun category contained common nouns, predicates contained
+verbs and adjectives, function words contained closed-class words, and
+other contained the remaining items (following Bates et al., 1994).
 
 \subsubsection{Frequency}\label{frequency}
 
-For each language, we estimated word frequency from unigram count in all
-corpora in the CHILDES database for that language, normalized to the
-length of the corpus. Each word's count includes the counts of words
-that share the same stem (so that \emph{dogs} counts as \emph{dog}) or
-are synonymous (so that \emph{father} counts as \emph{daddy}). For
-polysemous word pairs, such as \emph{orange} as in color and
-\emph{orange} as in fruit, each occurrence of \emph{orange} in the
-corpus counts for both. Finally, each word's frequency estimate is taken
-as the log of its count.
+For each language, we estimated word frequency from unigram counts based
+on all corpora in the CHILDES database for that language. Each word's
+count includes the counts of words that share the same stem (so that
+\emph{dogs} counts as \emph{dog}) or are synonymous (so that
+\emph{father} counts as \emph{daddy}). For polysemous word pairs, such
+as \emph{orange} as in color and \emph{orange} as in fruit, each
+occurrence of \emph{orange} in the corpus was counted for both
+forms.\footnote{Polysemy is puzzle for our anlysis because word sense disambiguation is not not possible across languages. Our approach here is a pragmatic one, and should not affect our overall results given the relatively small number of polysemous words in each language.}
+Finally, counts were log transformed.
 
 \subsubsection{MLU}\label{mlu}
 
 For each language, we estimated each word's MLU by calculating the mean
-number of words in the sentences in which that word appears in all
-corpora in the CHILDES database for that language. Words that only occur
-in one sentence were excluded.
+length in words of the sentences in which that word appeared, for all
+corpora in the CHILDES database for that language. Words that only
+occurred in one sentence were excluded.
 
 \subsubsection{Length}\label{length}
 
-We computed the number of characters in each word in each language,
-which is known to be highly correlated with number of phonemes and
-syllables.
+We computed the number of characters in each word in each language.
+While imperfect, this metric of lenght is highly correlated with number
+of phonemes and syllables in each word.
 
 \subsubsection{Concreteness}\label{concreteness}
 
 We used previously collected norms for concreteness (Brysbaert,
 Warriner, \& Kuperman, 2014), which were gathered by asking adult
-participants to rate how concrete the meaning of each word is by using a
+participants to rate how concrete the meaning of each word is on a
 5-point scale from abstract to concrete. For the 120 CDI words that
 weren't part of the collected norms (mostly animal sounds such as
-\emph{baa baa}), we imputed a concreteness rating from the mean of all
-CDI words' concreteness rating.
+\emph{baa baa}), we imputed concreteness ratings as the mean of all
+other words' ratings.
 
 \subsubsection{Valence and Arousal}\label{valence-and-arousal}
 
@@ -388,8 +385,8 @@ imputed ratings from the mean of all CDI words' ratings.
 
 \subsubsection{Babiness}\label{babiness}
 
-Lastly, we used previously collected norms of ``babiness'', a measure of
-association with infancy (Perry et al., 2015) for which adult
+Lastly, we used previously collected norms of ``babiness,'' a measure of
+association with infancy (Perry et al., 2015) in which adult
 participants are asked to judge how relevant to babies a word is.
 
 \section{Analysis}\label{analysis}
@@ -401,7 +398,8 @@ three analyses of these data: 1) how predictor values change for words
 learned earlier and later, 2) their relative contributions to predicting
 AoA, and 3) their interaction with lexical category.
 
-\subsection{Developmental Trajectory}\label{developmental-trajectory}
+\subsection{Developmental
+Trajectories}\label{developmental-trajectories}
 
 To assess developmental trends, we examine how the values of each
 predictor change as a function of estimated AoA. Figure \ref{fig:devo}
@@ -409,40 +407,40 @@ shows these trajectories, with a cubic curve smoothing over all words.
 Words that are learned earlier are more frequent, higher in babiness,
 and appear in shorter sentences. Concreteness exhibits a U-shaped
 trajectory, with the earliest learned words actually being relatively
-abstract, such as many social routines and animal sounds.
+abstract (e.g., social routines and animal sounds).
 
 \subsection{Predicting AoA}\label{predicting-aoa}
 
 We fit a linear regression for each language's data, as well as a linear
 mixed-effects model with language as a random effect for all the data
-pooled. For illustrative purposes, Figure \ref{fig:fit} compares the
-predictions of the model to AoA estimates, for only English data, with
-outliers labelled.
+pooled caross languages. For illustrative purposes, Figure \ref{fig:fit}
+shows the predictions of the English model to the empirical AoA
+estimates.
 
 Figure \ref{fig:coefs} shows the magnitude and direction of the
 coefficient for each predictor in each language and
 cross-linguistically. We find that frequency, babiness, concreteness,
 and MLU are relatively stronger predictors of age of acquisition, across
-languages and in the cross-linguistic model. Overall there's
+languages and in the cross-linguistic model. Overall there was
 considerable consistency in how the predictors pattern in various
-languages, although with interesting differences: for example, MLU in
-English appears to be unusually strong, while frequency in Spanish look
-unusually weak. There is also variability in the overall fit of the
-models to the data, with some languages, such as Norwegian, having
-relatively more of the variance explained than others, such as Turkish.
+languages, although with some interesting differences. For example, MLU
+in English appears to be unusually strong, while frequency in Spanish
+look unusually weak. There is also variability in the overall fit of the
+models to the data, with some languages, such as Norwegian, having much
+more of the variance explained than others, such as Turkish.
 
 \subsection{Lexical Category}\label{lexical-category}
 
 Previous work gives reason to believe that predictors' relationship with
 age of acquisition differs among various lexical categories (J. C.
-Goodman et al., 2008). To investigate these effects, we break down our
+Goodman et al., 2008). To investigate these effects, we separated our
 data by lexical category and fit separate cross-linguistic linear
-mixed-effects models for each one. Figure \ref{fig:coefs_lexcat} shows
-the magnitudes and directions of the resulting coefficients, leaving off
-the less strong predictors. We find that frequency matters most for
-Nouns and comparatively little for Function Words, while MLU is
-irrelevant for both Nouns and Predicates, but highly informative for
-Function Words and Other items.
+mixed-effects models for each. Figure \ref{fig:coefs_lexcat} shows the
+resulting coefficient estimates (leaving off the weaker predictors for
+illustrative purposes). Frequency mattered most for nouns and
+comparatively little for function words, while MLU was irrelevant for
+both nouns and predicates, but highly informative for function words and
+other items.
 
 \emph{{[}TODO: mention predictors' correlations to each other{]}}
 
@@ -461,8 +459,8 @@ they typically do not allow for different sources to be compared in
 detail. In contrast, observational studies allow the effects of
 individual factors (with frequency being the most common) to be measured
 across ages and lexical categories (e.g., J. C. Goodman et al., 2008).
-Scale comes at a cost in terms of detail, however: Both the predictors
-and outcome data available have been quite limited.
+Scale comes at a cost in terms of detail, however: The availability of
+both predictors and outcome data has been quite limited.
 
 By including 7 languages and as many predictors, our current work
 expands the scope of previous observational studies of age of
@@ -470,12 +468,13 @@ acquisition. Our data show a number of patterns that confirm and expand
 previous reports. First, predictors differed in importance across even
 very early development. For example, certain concepts that were more
 strongly associated with babies appeared to be learned early for
-children across languages (Tardif et al., 2008). Second, we found
+children across languages (as in Tardif et al., 2008). Second, we found
 general consistency in predictor coefficients across languages (even as
 overall model fit varied, at least in part due to the amount and quality
 of data for different languages). This consistency supports the idea
 that differences in culture or language structure do not lead to
-fundamentally different acquisition strategies.
+fundamentally different acquisition strategies, at least at the level of
+detail we were able to examine.
 
 Finally, different predictors appeared more important across lexical
 categories. Frequent, concrete nouns were learned earlier, consistent
@@ -518,17 +517,6 @@ NSF BCS \#1528526.
 \section{References}\label{references}
 
 \setlength{\parindent}{-0.1in} \setlength{\leftskip}{0.125in} \noindent
-
-\begin{CodeChunk}
-\begin{figure*}[tb]
-
-{\centering \includegraphics{figs/coefs2-1} 
-
-}
-
-\caption[Magnitudes of predictor coefficients]{Magnitudes of predictor coefficients.}\label{fig:coefs2}
-\end{figure*}
-\end{CodeChunk}
 
 Baldwin, D. A. (1995). Understanding the link between joint attention
 and language. \emph{Joint Attention: Its Origins and Role in
