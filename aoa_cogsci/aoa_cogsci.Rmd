@@ -77,7 +77,7 @@ Indeed, work using such an approach has revealed that in English, within lexical
 
 To remedy this issue, we present analyses based on data from Wordbank ([wordbank.stanford.edu](http://wordbank.stanford.edu)), an open repository of cross-linguistic language development data [@frankinpress]. By aggregating administrations of the MacArthur-Bates Communicative Development Inventory [CDI; @fenson2007], a family of parent-report vocabulary checklists, Wordbank provides large-scale vocabulary data based on analogous instruments from more than 40,000 children in 14 different language communities. As such, Wordbank offers a novel resource for richer and more powerful analyses of vocabulary learning over development and across languages.
 
-We integrate AoA estimates from Wordbank with characterizations of the word learning environment from the CHILDES database [@macwhinney2000] and elsewhere, a multiple data source approach originated by @goodman2008. Building on this work, we examine interactions between a variety of both environmental and conceptual factors. Using this same approach on a high-density longitudinal corpus for a single English-acquiring child, @roy2015 found that the length, usage frequency, and mean length of the utterances in which it occurred were all predictors of a word's AoA. But due to the nature of the dataset, this analysis used production-based AoA estimates and was further limited by relying on data from only one child (and hence one language). 
+We integrate AoA estimates from Wordbank with characterizations of the word learning environment from the CHILDES database [@macwhinney2000] and elsewhere, a multiple data source approach originated by @goodman2008. Building on this work, we examine interactions between a variety of both environmental and conceptual factors. Using this same approach on a high-density longitudinal corpus for a single English-acquiring child, Roy et al. found that the length, usage frequency, and mean length of the utterances in which it occurred were all predictors of a word's AoA. But due to the nature of the dataset, this analysis used production-based AoA estimates and was further limited by relying on data from only one child (and hence one language). 
 
 Our approach provides a complimentary analysis by using CDI comprehension data available in Wordbank to look at a common set of the earliest words that children learn across several different languages. We estimate AoA for around 400 words from CDIs in each of `r length(unique(lang_coef$language))` languages. We also estimate each word's frequency and mean length of utterance (MLU) based on the sentences in which it appears in CHILDES. We also obtain ratings of each word's concreteness, valence, arousal, and relevance to babies from previously collected norms. We use these measures to predict each word's AoA, assessing the relative contributions of each, as well as how predictors change over development and their interactions with lexical category. Each of these analyses has the potential to provide leverage on long-standing theoretical questions. 
 
@@ -91,11 +91,11 @@ Overall, by incorporating a variety of theoretically-important factors, as well 
 
 We use Wordbank, an open database of developmental vocabulary data, to estimate the age of acquisition for words across `r length(unique(lang_coef$language))` languages: `r paste(unique(lang_coef$language), collapse = ", ")`. We then ask what factors are most important for predicting this age of acquisition. Table 1 gives an overview of our data sources.
 
-\setlength\tabcolsep{1pt}
+\setlength\tabcolsep{3pt}
 
 ```{r lang_stats, results="asis"}
 library(wordbankr)
-num_admins <- get_administration_data(mode = "remote") %>%
+num_admins <- get_administration_data(mode = "local") %>%
   filter(form == "WG") %>%
   group_by(language) %>%
   summarise(num_admins = n())
@@ -129,6 +129,8 @@ print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
 ## Estimating Age of Acquisition
 
 To estimate the age at which words are acquired, we took vocabulary data collected using the MacArthur-Bates Communicative Development Inventory, a family of parent-report checklists, specifically the Words & Gestures (infant) form for 8- to 18-month-olds. When filling out a CDI a form, parents are asked to indicate whether their child understands and/or says each of around 400 words. From these data, for each word on the CDI, we computed the proportion of children at each age that are reported to understand the word. We then fit a logistic curve to these proportions using a robust generalized linear model (using the \texttt{robustbase} package in \texttt{R}) and determine when the curve crosses 0.5, i.e. at what age at least 50% of children are reported to understand the word. Following @goodman2008, we take this point to be each word's age of acquisition.
+
+\setlength\tabcolsep{1pt}
 
 ```{r extremes, results="asis"}
 num_extremes <- 3
@@ -265,7 +267,7 @@ crossling_data %>%
           legend.text = element_text(size = 8))
 ```
 
-```{r coefs, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Magnitudes of predictor coefficients.'}
+```{r coefs, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by language.'}
 plot_coefs <- crossling_coef %>%
   mutate(language = "Cross-Linguistic") %>%
   bind_rows(lang_coef) %>%
@@ -278,58 +280,36 @@ ggplot(plot_coefs, aes(x = term, y = estimate)) +
   geom_rect(data = filter(plot_coefs, language == "Cross-Linguistic"),
             aes(fill = language), xmin = -Inf, xmax = Inf,
             ymin = -Inf, ymax = Inf, alpha = 0.03) +
-  geom_linerange(aes(colour = term,
-                     ymin = estimate - 1.96 * std.error,
-                     ymax = estimate + 1.96 * std.error)) +
-  geom_point(aes(colour = term), size = 2.5) +
-#     geom_pointrange(aes(ymin = abs(estimate) - 1.96 * std.error,
-#                         ymax = abs(estimate) + 1.96 * std.error,
-#                         shape = sign)) +
+  geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
+                      ymax = estimate + 1.96 * std.error,
+                      colour = term)) +
   geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-#    geom_text(aes(label = paste("bar(R)^2==", adj_rsq)), parse = TRUE,
   geom_text(aes(label = paste("bar(R)^2==", adj_rsq)), parse = TRUE,
-            x = 1, y = 1.8, family = font, size = 2.8,
+            x = 7, y = 1.1, family = font, size = 2.8,
             data = data.frame(language = names(all_adj_rsq),
                               adj_rsq = round(unlist(all_adj_rsq), 2),
                               row.names = NULL)) +
   coord_flip() +
   scale_fill_solarized(guide = FALSE) +
   scale_colour_manual(guide = FALSE, values = rev(solarized_palette(7))) +
-#   scale_shape_manual(name = "", values = c(1, 19),
-#                      labels = c("negative", "positive")) +
   xlab("") +
-  scale_y_continuous(name = "Coefficient Magnitude (Months/SD)") + 
-                     # breaks = seq(0, 2, 0.5)) +
-  theme(legend.position = c(0.87, -0.1),
-        legend.direction = "horizontal",
-        legend.key.height = unit(0.5, "lines"),
-        legend.key.width = unit(0.5, "lines"))
+  scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
 ```
 
 
-```{r coefs_lexcat, fig.height=1.7, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Magnitudes of predictor coefficients by lexical category.'}
+```{r coefs_lexcat, fig.height=1.7, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by lexical category.'}
 crossling_coefs %>%
   filter(term %in% c("frequency", "babiness", "concreteness", "mlu")) %>%
   mutate(term = factor(term, levels = rev(crossling_predictor_levels))) %>%
   ggplot(aes(x = term, y = estimate, colour = term)) +
     facet_wrap(~lexical_category, ncol = 4) +
-    geom_linerange(aes(ymin = estimate - 1.96 * std.error,
+    geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
                         ymax = estimate + 1.96 * std.error)) +
-    geom_point(size = 2.5) +
-#     geom_pointrange(aes(ymin = abs(estimate) - 1.96 * std.error,
-#                        ymax = abs(estimate) + 1.96 * std.error)) +
     geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
     coord_flip() +
     scale_colour_manual(guide = FALSE, values = rev(solarized_palette(7))[4:7]) +
-#     scale_shape_manual(name = "", values = c(1, 19),
-#                        labels = c("negative", "positive")) +
     xlab("") +
-    scale_y_continuous(name = "Coefficient Magnitude (Months/SD)")+
-                       # breaks = seq(0, 2.5, 0.5)) +
-    theme(legend.position = c(0.87, -0.26),
-          legend.direction = "horizontal",
-          legend.key.height = unit(0.5, "lines"),
-          legend.key.width = unit(0.5, "lines"))
+    scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
 ```
 
 ## Predictors
