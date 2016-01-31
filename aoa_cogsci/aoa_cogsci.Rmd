@@ -269,15 +269,15 @@ crossling_data %>%
 
 ```{r coefs, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by language.'}
 plot_coefs <- crossling_coef %>%
-  mutate(language = "Cross-Linguistic") %>%
+  mutate(language = "All Languages") %>%
   bind_rows(lang_coef) %>%
-  mutate(language = factor(language, levels = c("Cross-Linguistic", langs)),
+  mutate(language = factor(language, levels = c("All Languages", langs)),
          term = factor(term, levels = rev(levels(term))),
          sign = factor(sign(estimate)))
 
 ggplot(plot_coefs, aes(x = term, y = estimate)) +
   facet_wrap(~language, ncol = 4) +
-  geom_rect(data = filter(plot_coefs, language == "Cross-Linguistic"),
+  geom_rect(data = filter(plot_coefs, language == "All Languages"),
             aes(fill = language), xmin = -Inf, xmax = Inf,
             ymin = -Inf, ymax = Inf, alpha = 0.03) +
   geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
@@ -354,13 +354,13 @@ To assess developmental trends, we examine how the values of each predictor chan
 
 ## Predicting AoA
 
-We fit a linear regression for each language's data, as well as a linear mixed-effects model with language as a random effect for all the data pooled across languages. For illustrative purposes, Figure \ref{fig:fit} shows the predictions of the English model to the empirical AoA estimates.
+We fit a linear regression for each language's data, as well as a linear mixed-effects model with language as a random effect for all the data pooled across all languages. For illustrative purposes, Figure \ref{fig:fit} shows the predictions of the English model to the empirical AoA estimates.
 
-Figure \ref{fig:coefs} shows the magnitude and direction of the coefficient for each predictor in each language and cross-linguistically. We find that frequency, babiness, concreteness, and MLU are relatively stronger predictors of age of acquisition, across languages and in the cross-linguistic model. Overall there was considerable consistency in how the predictors pattern in various languages, although with some interesting differences. For example, MLU in English appears to be unusually strong, while frequency in Spanish look unusually weak. There is also variability in the overall fit of the models to the data, with some languages, such as Norwegian, having much more of the variance explained than others, such as Turkish.
+Figure \ref{fig:coefs} shows the coefficient estimate for each predictor in each language and for all languages combined. We find that frequency, babiness, concreteness, and MLU are relatively stronger predictors of age of acquisition, across languages and in the all languages model. Overall there was considerable consistency in how the predictors pattern in various languages, although with some interesting differences. For example, MLU in English appears to be unusually strong, while frequency in Spanish look unusually weak. There is also variability in the overall fit of the models to the data, with some languages, such as Norwegian, having much more of the variance explained than others, such as Turkish.
 
 ## Lexical Category
 
-Previous work gives reason to believe that predictors' relationship with age of acquisition differs among various lexical categories [@goodman2008]. To investigate these effects, we separated our data by lexical category and fit separate cross-linguistic linear mixed-effects models for each. Figure \ref{fig:coefs_lexcat} shows the resulting coefficient estimates (leaving off the weaker predictors for illustrative purposes). Frequency mattered most for nouns and comparatively little for function words, while MLU was irrelevant for both nouns and predicates, but highly informative for function words and other items.
+Previous work gives reason to believe that predictors' relationship with age of acquisition differs among various lexical categories [@goodman2008]. To investigate these effects, we separated our data by lexical category and fit separate linear mixed-effects models for each. Figure \ref{fig:coefs_lexcat} shows the resulting coefficient estimates (leaving off the weaker predictors for illustrative purposes). Frequency mattered most for nouns and comparatively little for function words, while MLU was irrelevant for both nouns and predicates, but highly informative for function words and other items.
 
 
 # Discussion

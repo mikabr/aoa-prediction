@@ -18,7 +18,7 @@ library(lme4)
 theme_set(theme_mikabr())
 
 ## ------------------------------------------------------------------------
-items <- get_item_data(mode = "remote") %>%
+items <- get_item_data(mode = "local") %>%
   mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))),
          definition = tolower(definition))
 
@@ -745,7 +745,7 @@ crossling_fit <-  lm(model.response(model.frame(crossling_model)) ~ fitted(cross
 crossling_adj_rsq <- adj_rsq(crossling_fit)
 
 all_adj_rsq <- lang_adj_rsq
-all_adj_rsq$`Cross-Linguistic` <- crossling_adj_rsq
+all_adj_rsq$`All Languages` <- crossling_adj_rsq
 
 crossling_fit_data <- data.frame(observed = model.response(model.frame(crossling_model)),
                                  fitted = fitted(crossling_model))
