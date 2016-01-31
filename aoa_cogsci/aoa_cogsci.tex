@@ -73,7 +73,7 @@ Learners must integrate multiple information sources to figure out how
 to map the forms they hear onto representations of their meanings.
 Across many laboratory experiments and small-scale models, a number of
 strategies have emerged as plausible components of word learning,
-including tracking co-occurence statistics between words and referents
+including tracking co-occurrence statistics between words and referents
 to deduce word meaning across situations; attending to social cues like
 pointing and eye gaze; relying on biases, such as a basic level category
 bias; drawing on knowledge of relations between words to use known
@@ -131,7 +131,7 @@ We integrate AoA estimates from Wordbank with characterizations of the
 word learning environment from the CHILDES database (MacWhinney, 2000)
 and elsewhere, a multiple data source approach originated by J. C.
 Goodman et al. (2008). Building on this work, we examine interactions
-between a variety of both enviornmental and conceptual factors. Using
+between a variety of both environmental and conceptual factors. Using
 this same approach on a high-density longitudinal corpus for a single
 English-acquiring child, B. C. Roy et al. (2015) found that the length,
 usage frequency, and mean length of the utterances in which it occurred
@@ -161,10 +161,10 @@ For example, the ``division of dominance'' theory suggests that nouns
 might be more sensitive to cognitive factors while predicates and
 closed-class words might be more sensitive to linguistic factors
 (Gentner \& Boroditsky, 2001). On the other hand, on syntactic
-bootstrapping theories, nouns are argued to be learned via frequent
-co-occurrence (operationalized by frequency) while verbs might be more
-sensitive to syntactic factors (operationalized here by utterance
-length) (Gleitman, 1990), and neither would be particularly sensitive to
+bootstrapping theories (Gleitman, 1990), nouns are argued to be learned
+via frequent co-occurrence (operationalized by frequency) while verbs
+might be more sensitive to syntactic factors (operationalized here by
+utterance length), and neither would be particularly sensitive to
 conceptual complexity (Snedeker, Geren, \& Shafto, 2007).
 
 A second question of interest is the extent to which there is
@@ -189,7 +189,28 @@ determine words' learnability.
 We use Wordbank, an open database of developmental vocabulary data, to
 estimate the age of acquisition for words across 7 languages: English,
 Italian, Norwegian, Russian, Spanish, Swedish, Turkish. We then ask what
-factors are most important for predicting this age of acquisition.
+factors are most important for predicting this age of acquisition. Table
+1 gives an overview of our data sources.
+
+\setlength\tabcolsep{1pt}
+
+\begin{table}[hb]
+\centering
+\begin{tabular}{lrrr}
+  \hline
+Language & CDI Items & CDI Admins & CHILDES Words \\ 
+  \hline
+English & 386 & 2,452 & 7,858,051 \\ 
+  Italian & 351 & 648 & 328,168 \\ 
+  Norwegian & 338 & 3,021 & 204,406 \\ 
+  Russian & 337 & 768 & 32,398 \\ 
+  Spanish & 333 & 778 & 1,458,327 \\ 
+  Swedish & 311 & 467 & 698,515 \\ 
+  Turkish & 327 & 1,115 & 44,347 \\ 
+   \hline
+\end{tabular}
+\caption{Dataset statistics} 
+\end{table}
 
 \subsection{Estimating Age of
 Acquisition}\label{estimating-age-of-acquisition}
@@ -208,27 +229,7 @@ crosses 0.5, i.e.~at what age at least 50\% of children are reported to
 understand the word. Following J. C. Goodman et al. (2008), we take this
 point to be each word's age of acquisition.
 
-\begin{table}[t]
-\centering
-\begin{tabular}{lrrr}
-  \hline
-Language & CDI Items & CDI Admins & CHILDES Words \\ 
-  \hline
-English & 386 & 2,452 & 7,858,051 \\ 
-  Italian & 351 & 648 & 328,168 \\ 
-  Norwegian & 338 & 3,021 & 204,406 \\ 
-  Russian & 337 & 768 & 32,398 \\ 
-  Spanish & 333 & 778 & 1,458,327 \\ 
-  Swedish & 311 & 467 & 698,515 \\ 
-  Turkish & 327 & 1,115 & 44,347 \\ 
-   \hline
-\end{tabular}
-\caption{Dataset statistics} 
-\end{table}
-
-\setlength\tabcolsep{1pt}
-
-\begin{table}[!hb]
+\begin{table}[hb]
 \centering
 \begin{tabular}{lcl}
   \hline
@@ -257,7 +258,7 @@ aoa & min & mommy, bottle, peekaboo \\
 \end{table}
 
 \begin{CodeChunk}
-\begin{figure*}[!h]
+\begin{figure*}[tb]
 
 {\centering \includegraphics{figs/data-1} 
 
@@ -346,10 +347,12 @@ on all corpora in the CHILDES database for that language. Each word's
 count includes the counts of words that share the same stem (so that
 \emph{dogs} counts as \emph{dog}) or are synonymous (so that
 \emph{father} counts as \emph{daddy}). For polysemous word pairs, such
-as \emph{orange} as in color and \emph{orange} as in fruit, each
-occurrence of \emph{orange} in the corpus was counted for both
-forms.\footnote{Polysemy is puzzle for our anlysis because word sense disambiguation is not not possible across languages. Our approach here is a pragmatic one, and should not affect our overall results given the relatively small number of polysemous words in each language.}
-Finally, counts were log transformed.
+as \emph{orange} as in color and \emph{orange} as in fruit, the
+occurrences of \emph{orange} in the corpus were split uniformly between
+the two
+senses.\footnote{Polysemy is puzzle for our analysis because word sense disambiguation is not possible across languages. Our approach here is a pragmatic one, and should not affect our overall results given the relatively small number of polysemous words in each language.}
+Finally, counts were normalized to the length of each corpus and then
+log transformed.
 
 \subsubsection{MLU}\label{mlu}
 
@@ -361,7 +364,7 @@ occurred in one sentence were excluded.
 \subsubsection{Length}\label{length}
 
 We computed the number of characters in each word in each language.
-While imperfect, this metric of lenght is highly correlated with number
+While imperfect, this metric of length is highly correlated with number
 of phonemes and syllables in each word.
 
 \subsubsection{Concreteness}\label{concreteness}
@@ -413,7 +416,7 @@ abstract (e.g., social routines and animal sounds).
 
 We fit a linear regression for each language's data, as well as a linear
 mixed-effects model with language as a random effect for all the data
-pooled caross languages. For illustrative purposes, Figure \ref{fig:fit}
+pooled across languages. For illustrative purposes, Figure \ref{fig:fit}
 shows the predictions of the English model to the empirical AoA
 estimates.
 
@@ -441,14 +444,6 @@ illustrative purposes). Frequency mattered most for nouns and
 comparatively little for function words, while MLU was irrelevant for
 both nouns and predicates, but highly informative for function words and
 other items.
-
-\emph{{[}TODO: mention predictors' correlations to each other{]}}
-
-\emph{{[}TODO: mention that predictors have different variabilities,
-that probably matters{]}}
-
-\emph{{[}TODO: emphasize the sketchiness of using ratings
-cross-linguistically{]}}
 
 \section{Discussion}\label{discussion}
 
@@ -481,7 +476,7 @@ categories. Frequent, concrete nouns were learned earlier, consistent
 with theories that emphasize the importance of early referential speech
 (e.g., Baldwin, 1995). But for predicates, concreteness was somewhat
 less important, and for function words, MLU was most predictive. Overall
-thse findings are consistent with theories that emphasize the role of
+these findings are consistent with theories that emphasize the role of
 linguistic structure over conceptual complexity in the acquisition of
 other lexical categories beyond nouns (Gentner \& Boroditsky, 2001,
 Snedeker et al. (2007)).
@@ -508,6 +503,10 @@ the unambiguous signatures of these theories in the aggregate data we
 have available. But we believe that searching for these signatures at
 scale is a critical step in making progress on understanding language
 learning.
+
+\vspace{1em}
+
+\fbox{\parbox[b][][c]{7.3cm}{\centering All data and code for these analyses are available at\\ \url{https://github.com/mikabr/aoa-prediction}}}
 
 \section{Acknowledgements}\label{acknowledgements}
 
