@@ -94,7 +94,7 @@ Overall, by incorporating a variety of theoretically-important factors, as well 
 
 # Data
 
-We use Wordbank, an open database of developmental vocabulary data, to estimate the age of acquisition for words across `r length(unique(lang_coef$language))` languages: `r paste(unique(lang_coef$language), collapse = ", ")`. We then ask what factors are most important for predicting this age of acquisition. Table 1 gives an overview of our data sources.
+We use Wordbank, an open database of developmental vocabulary data, to estimate the age of acquisition for words across `r length(unique(lang_coef$language))` languages: `r paste(unique(lang_coef$language), collapse = ", ")`. We then ask what factors are most important for predicting this age of acquisition. Table \ref{table:lang_stats} gives an overview of our data sources.
 
 \setlength\tabcolsep{3pt}
 
@@ -125,7 +125,8 @@ lang_stats <- aoa_stats %>%
 colnames(lang_stats) <- c("Language", "CDI Items", "CDI Admins", "CHILDES Words")
                           #"Mean AoA",, "Var AoA")
 
-lang_table <- xtable(lang_stats, digits = 2, caption = "Dataset statistics")
+lang_table <- xtable(lang_stats, digits = 2, caption = "Dataset statistics",
+                     label = "table:lang_stats")
 
 print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
       table.placement = "ht", format.args = list(big.mark = ","))
@@ -168,8 +169,7 @@ extremes <- crossling_model_data %>%
 extremes[which(extremes$Measure == "num_characters") + 1, "Measure"] <- "characters"
 extremes[which(extremes$Measure == "num_characters"), "Measure"] <- "num"
 
-extremes_table <- xtable(extremes, label = "tab:mytable", align = "llcl",
-                         #align = "llp{1in}p{1in}",
+extremes_table <- xtable(extremes, align = "llcl", label = "table:extremes",
                          caption = "Examples of words with the lowest and highest values for age of acquisition and each predictor.")
 
 print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
@@ -318,7 +318,7 @@ lexcat_coefs %>%
 
 ## Predictors
 
-Each of our predictors is derived from independent sources. For each word that appears on the CDI Word & Gestures form in each of our `r length(unique(lang_coef$language))` languages, we obtained an estimate of its frequency in child-directed speech, the mean utterance length of sentences in which if appears in child-directed speech, its length in characters, and ratings of its concreteness, valence, arousal, and relevance to babies. All items such as _child's own name_ were excluded. Examples of each of these predictors for English are shown in Table 2.
+Each of our predictors is derived from independent sources. For each word that appears on the CDI Word & Gestures form in each of our `r length(unique(lang_coef$language))` languages, we obtained an estimate of its frequency in child-directed speech, the mean utterance length of sentences in which if appears in child-directed speech, its length in characters, and ratings of its concreteness, valence, arousal, and relevance to babies. All items such as _child's own name_ were excluded. Examples of each of these predictors for English are shown in Table \ref{table:extremes}.
 
 Frequency and MLU are measured relative to the word's language. But since extant datasets for conceptual ratings are primarily available for English, we mapped all words onto translation equivalents across CDI forms, allowing us to use the ratings for English words across languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Translation equivalents are available in the wordbank database using the \texttt{wordbankr} package [@frankinpress].
 

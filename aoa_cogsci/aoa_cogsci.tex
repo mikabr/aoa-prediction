@@ -205,7 +205,7 @@ We use Wordbank, an open database of developmental vocabulary data, to
 estimate the age of acquisition for words across 7 languages: English,
 Italian, Norwegian, Russian, Spanish, Swedish, Turkish. We then ask what
 factors are most important for predicting this age of acquisition. Table
-1 gives an overview of our data sources.
+\ref{table:lang_stats} gives an overview of our data sources.
 
 \setlength\tabcolsep{3pt}
 
@@ -225,6 +225,7 @@ English & 386 & 2,452 & 7,858,051 \\
    \hline
 \end{tabular}
 \caption{Dataset statistics} 
+\label{table:lang_stats}
 \end{table}
 
 \subsection{Estimating Age of
@@ -271,7 +272,7 @@ aoa & min & mommy, bottle, peekaboo \\
    \hline
 \end{tabular}
 \caption{Examples of words with the lowest and highest values for age of acquisition and each predictor.} 
-\label{tab:mytable}
+\label{table:extremes}
 \end{table}
 
 \begin{CodeChunk}
@@ -338,7 +339,7 @@ speech, the mean utterance length of sentences in which if appears in
 child-directed speech, its length in characters, and ratings of its
 concreteness, valence, arousal, and relevance to babies. All items such
 as \emph{child's own name} were excluded. Examples of each of these
-predictors for English are shown in Table 2.
+predictors for English are shown in Table \ref{table:extremes}.
 
 Frequency and MLU are measured relative to the word's language. But
 since extant datasets for conceptual ratings are primarily available for
@@ -398,8 +399,8 @@ We also used previously collected norms for valence and arousal
 (Warriner, Kuperman, \& Brysbaert, 2013), for which adult participants
 are asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9
 excited-calm scale (arousal). For the 119 CDI words that weren't part of
-the norms (mostly function words such as \emph{her}), we imputed ratings
-from the mean of all words' ratings.
+the collected norms (mostly function words such as \emph{her}), we
+imputed ratings from the mean of all CDI words' ratings.
 
 \subsubsection{Babiness}\label{babiness}
 
