@@ -60,7 +60,17 @@ early words across languages}
 \maketitle
 
 \begin{abstract}
-\emph{{[}TODO: abstract{]}}
+Why do children learn some words so much faster than they learn other
+words? Regularities in the difficutly of learning different words can
+tell us about the mechanisms responsible for their learning. We leverage
+this relationship in a large-scale corpus analysis, predicting the age
+at which X children learn Y words in Z languages from a set of
+linguistic, environmental, and conceptual factors. We find broad
+consistency and interesting subtle variation, both across languages and
+across development. By leveraging data at a significantly larger scale
+than previous work, our analyses highlight both the power that emerges
+from unifying previously disparate theories, and the amount of reliable
+variation that still remains unexplained.
 
 \textbf{Keywords:}
 language acquisition; word learning; development
@@ -193,7 +203,7 @@ factors are most important for predicting this age of acquisition. Table
 
 \setlength\tabcolsep{3pt}
 
-\begin{table}[hb]
+\begin{table}[ht]
 \centering
 \begin{tabular}{lrrr}
   \hline
@@ -265,7 +275,7 @@ aoa & min & mommy, bottle, peekaboo \\
 
 }
 
-\caption[Relationship between predictors and AoA for each lexical category in each language]{Relationship between predictors and AoA for each lexical category in each language.}\label{fig:data}
+\caption[Relationship between predictors and AoA for each lexical category in each language]{Relationship between predictors and AoA for each lexical category in each language. Each point represents a word, with lines indicates linear model fits for each lexical category (in colors) and overall (in black).}\label{fig:data}
 \end{figure*}
 \end{CodeChunk}
 
@@ -276,7 +286,7 @@ aoa & min & mommy, bottle, peekaboo \\
 
 }
 
-\caption[English model fit]{English model fit.}\label{fig:fit}
+\caption[Comparison between the model predicted and actual ages of acquisition for words in English]{Comparison between the model predicted and actual ages of acquisition for words in English. Words with an absolute error above 5 months are labelled for reference.}\label{fig:fit}
 \end{figure*}
 \end{CodeChunk}
 
@@ -287,7 +297,7 @@ aoa & min & mommy, bottle, peekaboo \\
 
 }
 
-\caption[Predictor values over development]{Predictor values over development.}\label{fig:devo}
+\caption[Predictor values over development, with a cubic curve smoothing over all items in all languages]{Predictor values over development, with a cubic curve smoothing over all items in all languages.}\label{fig:devo}
 \end{figure}
 \end{CodeChunk}
 
@@ -298,7 +308,7 @@ aoa & min & mommy, bottle, peekaboo \\
 
 }
 
-\caption[Estimates of predictor coefficients by language]{Estimates of predictor coefficients by language.}\label{fig:coefs}
+\caption[Estimates of predictor coefficients by language and for the all language model]{Estimates of predictor coefficients by language and for the all language model. Values above 0 indicate a positive relationship (i.e. words with higher MLU tend to have a higher AoA), while values below 0 indicate a negative relationship (i.e. words with higher frequency tend to have a lower AoA.}\label{fig:coefs}
 \end{figure*}
 \end{CodeChunk}
 
@@ -309,19 +319,20 @@ aoa & min & mommy, bottle, peekaboo \\
 
 }
 
-\caption[Estimates of predictor coefficients by lexical category]{Estimates of predictor coefficients by lexical category.}\label{fig:coefs_lexcat}
+\caption[Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors]{Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors..}\label{fig:coefs_lexcat}
 \end{figure*}
 \end{CodeChunk}
 
 \subsection{Predictors}\label{predictors}
 
-Each of our predictors are derived from independent resources. For each
+Each of our predictors is derived from independent sources. For each
 word that appears on the CDI Word \& Gestures form in each of our 7
 languages, we obtained an estimate of its frequency in child-directed
-speech, the mean utterance length (MLU) of sentences in which if appears
-in child-directed speech, its length in characters, and ratings of its
-concreteness, valence, arousal, and relevance to babies. Examples of
-each of these predictors for English are shown in Table 2.
+speech, the mean utterance length of sentences in which if appears in
+child-directed speech, its length in characters, and ratings of its
+concreteness, valence, arousal, and relevance to babies. All items such
+as \emph{child's own name} were excluded. Examples of each of these
+predictors for English are shown in Table 2.
 
 Frequency and MLU are measured relative to the word's language. But
 since extant datasets for conceptual ratings are primarily available for
@@ -332,13 +343,13 @@ languages for which limited resources exist. Translation equivalents are
 available in the wordbank database using the \texttt{wordbankr} package
 (Frank et al., in press).
 
-Items such as \emph{child's own name} were excluded in all languages.
-Each predictor was also centered and scaled so that all predictors would
-have comparable units. Lexical category was determined on the basis of
-the conceptual categories presented on the CDI form (e.g., ``Animals''),
-such that the noun category contained common nouns, predicates contained
-verbs and adjectives, function words contained closed-class words, and
-other contained the remaining items (following Bates et al., 1994).
+Each numeric predictor was centered and scaled so that all predictors
+would have comparable units. Finally, lexical category was determined on
+the basis of the conceptual categories presented on the CDI form (e.g.,
+``Animals''), such that the noun category contained common nouns,
+predicates contained verbs and adjectives, function words contained
+closed-class words, and other contained the remaining items (following
+Bates et al., 1994).
 
 \subsubsection{Frequency}\label{frequency}
 
@@ -365,7 +376,7 @@ occurred in one sentence were excluded.
 
 We computed the number of characters in each word in each language.
 While imperfect, this metric of length is highly correlated with number
-of phonemes and syllables in each word.
+of phonemes and syllables in each word (Lewis \& Frank, under review).
 
 \subsubsection{Concreteness}\label{concreteness}
 
@@ -476,8 +487,8 @@ with theories that emphasize the importance of early referential speech
 less important, and for function words, MLU was most predictive. Overall
 these findings are consistent with theories that emphasize the role of
 linguistic structure over conceptual complexity in the acquisition of
-other lexical categories beyond nouns (Gentner \& Boroditsky, 2001,
-Snedeker et al. (2007)).
+other lexical categories beyond nouns (Gentner \& Boroditsky, 2001;
+Snedeker et al., 2007).
 
 Despite its larger scope, our work still shares a number of important
 limitations with previous studies. First and foremost, our approach is
@@ -492,15 +503,26 @@ particular theoretical constructs of interest (for example, the patterns
 of use for particular predicates).
 
 Perhaps the most important theoretical challenge in the study of early
-language is how to connect between the scale of an individual
-observation or experiment and the broader patterns of acquisition that
-we observe in large datasets. We have strong theories of how individual
-learning situations proceed (M. C. Frank, Goodman, \& Tenenbaum, 2009,
-McMurray, Horst, \& Samuelson (2012)). We may not yet be able to discern
-the unambiguous signatures of these theories in the aggregate data we
-have available. But we believe that searching for these signatures at
-scale is a critical step in making progress on understanding language
-learning.
+language is linking individual observations or experiments to the
+broader patterns of acquisition observed in large datasets. We have
+strong theories of how individual learning situations proceed (M. C.
+Frank, Goodman, \& Tenenbaum, 2009; McMurray, Horst, \& Samuelson,
+2012), and although we cannot yet discern unambiguous signatures of
+those theories in the large-scale data we have available, our analyses
+highlight the importance of studying aggregated data. They also
+demonstrate the value of analyzing a number of factors, including those
+predicted to be relevant by different and even competing theories.
+
+Even for English, in which our seven predictors capture the most
+variance (r\textsuperscript{2} = 0.29), much still remains unexplained.
+Further, this variance is highly reliable -- cross-validation using half
+of the English-speaking children to predict ages of acquisition for the
+other half yields r\textsuperscript{2} = 0.98. While adjudicating
+between theories is a critical component of the scientific process, it
+is important not to forget that our working theories are incomplete
+(Breiman, 2001). Unification across these theories may be the other
+critical step in making progress on understanding language learning
+(Newell, 1973).
 
 \vspace{1em}
 
@@ -524,6 +546,9 @@ Bates, E., Marchman, V., Thal, D., Fenson, L., Dale, P., Reznick, J. S.,
 the composition of early vocabulary. \emph{Journal of Child Language},
 \emph{21}(01), 85--123.
 
+Breiman, L. (2001). Statistical modeling: The two cultures.
+\emph{Statistical Science}, \emph{3}, 199--231.
+
 Brysbaert, M., Warriner, A. B., \& Kuperman, V. (2014). Concreteness
 ratings for 40 thousand generally known English word lemmas.
 \emph{Behavior Research Methods}, \emph{46}(3), 904--911.
@@ -540,9 +565,9 @@ Frank, M. C., Goodman, N. D., \& Tenenbaum, J. B. (2009). Using
 speakers' referential intentions to model early cross-situational word
 learning. \emph{Psychological Science}, \emph{20}, 578--585.
 
-Gentner, Dedre, \& Boroditsky, L. (2001). Individuation, relativity, and
-early word learning. \emph{Language Acquisition and Conceptual
-Development}, \emph{3}, 215.
+Gentner, D., \& Boroditsky, L. (2001). Individuation, relativity, and
+early word learning. In \emph{Language acquisition and conceptual
+development} (p. 215). Cambridge University Press.
 
 Gleitman, L. (1990). The structural sources of verb meanings.
 \emph{Language Acquisition}, \emph{1}(1), 3--55.
@@ -556,12 +581,20 @@ Longitudinal analysis of early semantic networks: Preferential
 attachment or preferential acquisition? \emph{Psychological Science},
 \emph{20}(6), 729--739.
 
+Lewis, M. L., \& Frank, M. C. (under review). The length of words
+reflects their conceptual complexity.
+
 MacWhinney, B. (2000). \emph{The CHILDES project: The database} (Vol.
 2). Psychology Press.
 
 McMurray, B., Horst, J. S., \& Samuelson, L. K. (2012). Word learning
 emerges from the interaction of online referent selection and slow
 associative learning. \emph{Psychological Review}, \emph{119}(4), 831.
+
+Newell, A. (1973). You can't play 20 questions with nature and win:
+Projective comments on the papers of this symposium. In W. G. Chase
+(Ed.), \emph{Visual information processing} (pp. 1--26). New York:
+Academic Press.
 
 Perry, L. K., Perlman, M., \& Lupyan, G. (2015). Iconicity in English
 and Spanish and its relation to lexical category and age of acquisition.

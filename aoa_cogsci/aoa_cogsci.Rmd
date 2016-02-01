@@ -13,7 +13,7 @@ author-information: >
     \And {\large \bf Michael C. Frank} \\ \texttt{mcfrank@stanford.edu} \\ Department of Psychology \\ Stanford University}
 
 abstract: 
-    "Why do children learn some words so much faster than they learn other words?  Regularities in the difficutly of learning different words can tell us about the *mechanisms* responsible for their learning. We leverage this relationship in a large-scale corpus analysis, predicting the age at which X children learn Y words in 7 languages from a set of linguistic, environmental, and conceptual factors. We find broad consistency and interesting subtle variation, both across languages and across development. By leveraging data at a significantly larger scale than previous work, our analyses highlight both the power that emerges from unifying previously disparate theories, and the amount of reliable variation that still remains unexplained.
+    "Why do children learn some words so much faster than they learn other words?  Regularities in the difficutly of learning different words can tell us about the mechanisms responsible for their learning. We leverage this relationship in a large-scale corpus analysis, predicting the age at which X children learn Y words in Z languages from a set of linguistic, environmental, and conceptual factors. We find broad consistency and interesting subtle variation, both across languages and across development. By leveraging data at a significantly larger scale than previous work, our analyses highlight both the power that emerges from unifying previously disparate theories, and the amount of reliable variation that still remains unexplained."
     
 keywords:
     "language acquisition; word learning; development"
@@ -123,7 +123,7 @@ colnames(lang_stats) <- c("Language", "CDI Items", "CDI Admins", "CHILDES Words"
 lang_table <- xtable(lang_stats, digits = 2, caption = "Dataset statistics")
 
 print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
-      table.placement = "hb", format.args = list(big.mark = ","))
+      table.placement = "ht", format.args = list(big.mark = ","))
 ```
 
 ## Estimating Age of Acquisition
@@ -171,7 +171,7 @@ print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
       table.placement = "hb", floating.environment = "table")
 ```
 
-```{r data, fig.height=6, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Relationship between predictors and AoA for each lexical category in each language.'}
+```{r data, fig.height=6, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Relationship between predictors and AoA for each lexical category in each language. Each point represents a word, with lines indicates linear model fits for each lexical category (in colors) and overall (in black).'}
 crossling_model_data %>%
   gather_("predictor", "value", crossling_predictors) %>%
   mutate(predictor = factor(predictor, levels = crossling_predictor_levels),
@@ -187,7 +187,7 @@ crossling_model_data %>%
     geom_smooth(color = "black", method = "lm", se = FALSE, size = 0.8) +
     scale_colour_solarized(name = "") +
     scale_fill_solarized(name = "") +
-    xlab("Predictor z-Score") +
+    xlab("Predictor Z-score") +
     scale_y_continuous(name = "Age of Acquisition (months)",
                        breaks = seq(5, 25, 5)) +
     #theme_mikabr(base_size = 10) +
@@ -217,7 +217,7 @@ cors <- predictions %>%
   summarise(cor = cor(aoa, predicted_aoa))
 ```
 
-```{r fit, fig.height=2.3, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='English model fit.'}
+```{r fit, fig.height=2.3, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Comparison between the model predicted and actual ages of acquisition for words in English. Words with an absolute error above 5 months are labelled for reference.'}
 threshold <- 5
 predictions %>%
   ggplot(aes(x = predicted_aoa, y = aoa)) +
@@ -243,7 +243,7 @@ predictions %>%
               data = cors, family = font, size = 2.8)
 ```
 
-```{r devo, fig.height=3, fig.width=3, fig.env='figure', fig.align='center', fig.pos='!hb', dev='cairo_pdf', fig.cap='Predictor values over development.'}
+```{r devo, fig.height=3, fig.width=3, fig.env='figure', fig.align='center', fig.pos='!hb', dev='cairo_pdf', fig.cap='Predictor values over development, with a cubic curve smoothing over all items in all languages.'}
 crossling_data %>%
   gather_("predictor", "value", crossling_predictors) %>%
   filter(!is.na(value)) %>%
@@ -258,7 +258,7 @@ crossling_data %>%
     scale_colour_solarized(name = "", guide = guide_legend(nrow = 4, byrow = FALSE)) +
     scale_x_continuous(name = "Age of Acquisition (months)",
                        breaks = seq(0, 30, 5)) +
-    scale_y_continuous(name = "Predictor Z-Score",
+    scale_y_continuous(name = "Predictor Z-score",
                        breaks = seq(-1.5, 1.5, 0.5)) +
     theme(legend.position = c(0.64, 0.13),
           legend.direction = "horizontal",
@@ -267,7 +267,7 @@ crossling_data %>%
           legend.text = element_text(size = 8))
 ```
 
-```{r coefs, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by language.'}
+```{r coefs, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by language and for the all language model. Values above 0 indicate a positive relationship (i.e. words with higher MLU tend to have a higher AoA), while values below 0 indicate a negative relationship (i.e. words with higher frequency tend to have a lower AoA.'}
 plot_coefs <- crossling_coef %>%
   mutate(language = "All Languages") %>%
   bind_rows(lang_coef) %>%
@@ -297,7 +297,7 @@ ggplot(plot_coefs, aes(x = term, y = estimate)) +
 ```
 
 
-```{r coefs_lexcat, fig.height=1.7, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by lexical category.'}
+```{r coefs_lexcat, fig.height=1.7, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors..'}
 crossling_coefs %>%
   filter(term %in% c("frequency", "babiness", "concreteness", "mlu")) %>%
   mutate(term = factor(term, levels = rev(crossling_predictor_levels))) %>%
@@ -314,11 +314,11 @@ crossling_coefs %>%
 
 ## Predictors
 
-Each of our predictors are derived from independent resources. For each word that appears on the CDI Word & Gestures form in each of our `r length(unique(lang_coef$language))` languages, we obtained an estimate of its frequency in child-directed speech, the mean utterance length (MLU) of sentences in which if appears in child-directed speech, its length in characters, and ratings of its concreteness, valence, arousal, and relevance to babies. Examples of each of these predictors for English are shown in Table 2.
+Each of our predictors is derived from independent sources. For each word that appears on the CDI Word & Gestures form in each of our `r length(unique(lang_coef$language))` languages, we obtained an estimate of its frequency in child-directed speech, the mean utterance length of sentences in which if appears in child-directed speech, its length in characters, and ratings of its concreteness, valence, arousal, and relevance to babies. All items such as _child's own name_ were excluded. Examples of each of these predictors for English are shown in Table 2.
 
 Frequency and MLU are measured relative to the word's language. But since extant datasets for conceptual ratings are primarily available for English, we mapped all  words onto translation equivalents across CDI forms, allowing us to use the ratings for English words across languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Translation equivalents are available in the wordbank database using the \texttt{wordbankr} package [@frankinpress].
 
-Items such as _child's own name_ were excluded in all languages. Each predictor was also centered and scaled so that all predictors would have comparable units. Lexical category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that the noun category contained common nouns, predicates contained verbs and adjectives, function words contained closed-class words, and other contained the remaining items [following @bates1994].
+Each numeric predictor was centered and scaled so that all predictors would have comparable units. Finally, lexical category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that the noun category contained common nouns, predicates contained verbs and adjectives, function words contained closed-class words, and other contained the remaining items [following @bates1994].
 
 ### Frequency 
 
@@ -330,7 +330,7 @@ For each language, we estimated each word's MLU by calculating the mean length i
 
 ### Length
 
-We computed the number of characters in each word in each language. While imperfect, this metric of length is highly correlated with number of phonemes and syllables in each word. 
+We computed the number of characters in each word in each language. While imperfect, this metric of length is highly correlated with number of phonemes and syllables in each word [@lewisunderreview].
 
 ### Concreteness
 
@@ -369,17 +369,19 @@ What makes words easier or harder for young children to learn? Previous experime
 
 By including `r length(unique(lang_coef$language))` languages and as many predictors, our current work expands the scope of previous observational studies of age of acquisition. Our data show a number of patterns that confirm and expand previous reports. First, predictors differed in importance across even very early development. For example, certain concepts that were more strongly associated with babies appeared to be learned early for children across languages [as in @tardif2008]. Second, we found general consistency in predictor coefficients across languages (even as overall model fit varied, at least in part due to the amount and quality of data for different languages). This consistency supports the idea that differences in culture or language structure do not lead to fundamentally different acquisition strategies, at least at the level of detail we were able to examine. 
 
-Finally, different predictors appeared more important across lexical categories. Frequent, concrete nouns were learned earlier, consistent with theories that emphasize the importance of early referential speech [e.g., @baldwin1995]. But for predicates, concreteness was somewhat less important, and for function words, MLU was most predictive. Overall these findings are consistent with theories that emphasize the role of linguistic structure over conceptual complexity in the acquisition of other lexical categories beyond nouns [@gentner2001, @snedeker2007]. 
+Finally, different predictors appeared more important across lexical categories. Frequent, concrete nouns were learned earlier, consistent with theories that emphasize the importance of early referential speech [e.g., @baldwin1995]. But for predicates, concreteness was somewhat less important, and for function words, MLU was most predictive. Overall these findings are consistent with theories that emphasize the role of linguistic structure over conceptual complexity in the acquisition of other lexical categories beyond nouns [@gentner2001; @snedeker2007].
 
 Despite its larger scope, our work still shares a number of important limitations with previous studies. First and foremost, our approach is to predict one set of individuals with data about the experience of a completely different set and ratings of concepts gathered from yet others. In contrast to dense-data approaches [@roy2015], this approach fundamentally limits the amount of variability we will be able to capture. In addition, the granularity of the predictors that can be extracted from corpus data and applied to every word is necessarily quite coarse. Ideally, predictors could be targeted more specifically at particular theoretical constructs of interest (for example, the patterns of use for particular predicates).
 
-Perhaps the most important theoretical challenge in the study of early language is how to connect between the scale of an individual observation or experiment and the broader patterns of acquisition that we observe in large datasets. We have strong theories of how individual learning situations proceed [@frank2009, @mcmurray2012]. Although we may not yet be able to discern the unambiguous signatures of these theories in the aggregate data we have available. Our analyses highlight the importance of aggregating across them, including factors predicted to be predictive by different and even competing theories. Even for English, in which our seven predictors capture the most variance (r^2 = .29), much still remains unexplained. Further, this variance is highly reliable---cross-validation using half the English-speaking to predict ages of acquisition for the other half yield r^2 = .98. While adjudicating between theories is a critical component of the scientific process, it is important not to forget that our working theories are incomplete [@breiman2012]. Unification across these theories may be the other critical step in making progress on understanding language learning [@newell1970].
+Perhaps the most important theoretical challenge in the study of early language is linking individual observations or experiments to the broader patterns of acquisition observed in large datasets. We have strong theories of how individual learning situations proceed [@frank2009; @mcmurray2012], and although we cannot yet discern unambiguous signatures of those theories in the large-scale data we have available, our analyses highlight the importance of studying aggregated data. They also demonstrate the value of analyzing a number of factors, including those predicted to be relevant by different and even competing theories.
 
-Could cite  e.g. waxman vs. sloutsky on conceptual stuff in category learning if we want to talk about a specific case where adjudicating among two accounts has clearly gone wrong. 
+Even for English, in which our seven predictors capture the most variance (r^2^ = 0.29), much still remains unexplained. Further, this variance is highly reliable -- cross-validation using half of the English-speaking children to predict ages of acquisition for the other half yields r^2^ = 0.98. While adjudicating between theories is a critical component of the scientific process, it is important not to forget that our working theories are incomplete [@breiman2001]. Unification across these theories may be the other critical step in making progress on understanding language learning [@newell1973].
 
- Also could cite e.g. Why We (Usually) Don’t Have to Worry About Multiple Comparisons gelman et al., or anything else that points out that social science phenomena are likely to be multi-faceted and complex.  
-
-
+```{r}
+# Could cite  e.g. waxman vs. sloutsky on conceptual stuff in category learning if we want to talk about a specific case where adjudicating among two accounts has clearly gone wrong.
+# 
+# Also could cite e.g. Why We (Usually) Don’t Have to Worry About Multiple Comparisons gelman et al., or anything else that points out that social science phenomena are likely to be multi-faceted and complex.
+```
 
 
 \vspace{1em}
