@@ -13,7 +13,7 @@ author-information: >
     \And {\large \bf Michael C. Frank} \\ \texttt{mcfrank@stanford.edu} \\ Department of Psychology \\ Stanford University}
 
 abstract: 
-    "_[TODO: abstract]_"
+    "Why do children learn some words so much faster than they learn other words?  Regularities in the difficutly of learning different words can tell us about the *mechanisms* responsible for their learning. We leverage this relationship in a large-scale corpus analysis, predicting the age at which X children learn Y words in 7 languages from a set of linguistic, environmental, and conceptual factors. We find broad consistency and interesting subtle variation, both across languages and across development. By leveraging data at a significantly larger scale than previous work, our analyses highlight both the power that emerges from unifying previously disparate theories, and the amount of reliable variation that still remains unexplained.
     
 keywords:
     "language acquisition; word learning; development"
@@ -373,7 +373,14 @@ Finally, different predictors appeared more important across lexical categories.
 
 Despite its larger scope, our work still shares a number of important limitations with previous studies. First and foremost, our approach is to predict one set of individuals with data about the experience of a completely different set and ratings of concepts gathered from yet others. In contrast to dense-data approaches [@roy2015], this approach fundamentally limits the amount of variability we will be able to capture. In addition, the granularity of the predictors that can be extracted from corpus data and applied to every word is necessarily quite coarse. Ideally, predictors could be targeted more specifically at particular theoretical constructs of interest (for example, the patterns of use for particular predicates).
 
-Perhaps the most important theoretical challenge in the study of early language is how to connect between the scale of an individual observation or experiment and the broader patterns of acquisition that we observe in large datasets. We have strong theories of how individual learning situations proceed [@frank2009, @mcmurray2012]. We may not yet be able to discern the unambiguous signatures of these theories in the aggregate data we have available. But we believe that searching for these signatures at scale is a critical step in making progress on understanding language learning.  
+Perhaps the most important theoretical challenge in the study of early language is how to connect between the scale of an individual observation or experiment and the broader patterns of acquisition that we observe in large datasets. We have strong theories of how individual learning situations proceed [@frank2009, @mcmurray2012]. Although we may not yet be able to discern the unambiguous signatures of these theories in the aggregate data we have available. Our analyses highlight the importance of aggregating across them, including factors predicted to be predictive by different and even competing theories. Even for English, in which our seven predictors capture the most variance (r^2 = .29), much still remains unexplained. Further, this variance is highly reliable---cross-validation using half the English-speaking to predict ages of acquisition for the other half yield r^2 = .98. While adjudicating between theories is a critical component of the scientific process, it is important not to forget that our working theories are incomplete [@breiman2012]. Unification across these theories may be the other critical step in making progress on understanding language learning [@newell1970].
+
+Could cite  e.g. waxman vs. sloutsky on conceptual stuff in category learning if we want to talk about a specific case where adjudicating among two accounts has clearly gone wrong. 
+
+ Also could cite e.g. Why We (Usually) Don’t Have to Worry About Multiple Comparisons gelman et al., or anything else that points out that social science phenomena are likely to be multi-faceted and complex.  
+
+
+
 
 \vspace{1em}
 \fbox{\parbox[b][][c]{7.3cm}{\centering All data and code for these analyses are available at\\ \url{https://github.com/mikabr/aoa-prediction}}}
