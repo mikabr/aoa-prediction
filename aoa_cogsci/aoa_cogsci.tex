@@ -60,17 +60,20 @@ early words across languages}
 \maketitle
 
 \begin{abstract}
-Why do children learn some words so much faster than they learn other
-words? Regularities in the difficutly of learning different words can
-tell us about the mechanisms responsible for their learning. We leverage
-this relationship in a large-scale corpus analysis, predicting the age
-at which X children learn Y words in Z languages from a set of
-linguistic, environmental, and conceptual factors. We find broad
-consistency and interesting subtle variation, both across languages and
-across development. By leveraging data at a significantly larger scale
-than previous work, our analyses highlight both the power that emerges
-from unifying previously disparate theories, and the amount of reliable
-variation that still remains unexplained.
+Why do children learn some words earlier than others? Regularities in
+the age of acquisition (AoA) of words across development and languages
+yield insights regarding the mechanisms guiding word learning. In a
+large-scale corpus analysis, we predict the age at which around 10,000
+children learn 400 words in 7 languages from independently-derived
+linguistic, environmental, and conceptual factors. Predictors were not
+uniformly strong across development and varied as a function of lexical
+category (e.g., concreteness predicted nouns while linguistic structure
+predicted function words). Moreover, there was evidence for
+cross-language consistency in predictor strength. By leveraging data at
+a significantly larger scale than previous work, our analyses highlight
+both the power that emerges from unifying previously disparate theories,
+but also the amount of reliable variation that still remains
+unexplained.
 
 \textbf{Keywords:}
 language acquisition; word learning; development
@@ -79,15 +82,15 @@ language acquisition; word learning; development
 \section{Introduction}\label{introduction}
 
 Word learning is one of the central challenges of language acquisition.
-Learners must integrate multiple information sources to figure out how
-to map the forms they hear onto representations of their meanings.
-Across many laboratory experiments and small-scale models, a number of
-strategies have emerged as plausible components of word learning,
-including tracking co-occurrence statistics between words and referents
-to deduce word meaning across situations; attending to social cues like
-pointing and eye gaze; relying on biases, such as a basic level category
-bias; drawing on knowledge of relations between words to use known
-meanings to learn new ones; and so on.
+Learners must integrate multiple information sources to map the word
+forms they hear onto representations of their meanings. Across many
+laboratory experiments and small-scale models, a number of strategies
+have emerged as plausible components of word learning, including
+tracking co-occurrence statistics between words and referents to deduce
+word meaning across situations; attending to social cues like pointing
+and eye gaze; relying on biases, such as a basic level category bias;
+drawing on knowledge of relations between words to use known meanings to
+learn new ones; and so on.
 
 Each of these strategies have been reliably demonstrated in the
 constrained learning context of the laboratory, indicating that they are
@@ -226,17 +229,17 @@ Acquisition}\label{estimating-age-of-acquisition}
 
 To estimate the age at which words are acquired, we took vocabulary data
 collected using the MacArthur-Bates Communicative Development Inventory,
-a family of parent-report checklists, specifically the Words \& Gestures
-(infant) form for 8- to 18-month-olds. When filling out a CDI a form,
-parents are asked to indicate whether their child understands and/or
-says each of around 400 words. From these data, for each word on the
-CDI, we computed the proportion of children at each age that are
-reported to understand the word. We then fit a logistic curve to these
-proportions using a robust generalized linear model (using the
-\texttt{robustbase} package in \texttt{R}) and determine when the curve
-crosses 0.5, i.e.~at what age at least 50\% of children are reported to
-understand the word. Following J. C. Goodman et al. (2008), we take this
-point to be each word's age of acquisition.
+specifically the Words \& Gestures (infant) form for 8- to
+18-month-olds. When filling out a CDI form, parents are asked to
+indicate whether their child understands and/or says each of around 400
+words. From these data, for each word on the CDI, we computed the
+proportion of children at each age who are reported to understand the
+word. We then fit a logistic curve to these proportions using a robust
+generalized linear model (using the \texttt{robustbase} package in
+\texttt{R}) and determine when the curve crosses 0.5, i.e.~at what age
+at least 50\% of children are reported to understand the word. Following
+J. C. Goodman et al. (2008), we take this point to be each word's age of
+acquisition (AoA).
 
 \setlength\tabcolsep{1pt}
 
@@ -308,7 +311,7 @@ aoa & min & mommy, bottle, peekaboo \\
 
 }
 
-\caption[Estimates of predictor coefficients by language and for the all language model]{Estimates of predictor coefficients by language and for the all language model. Values above 0 indicate a positive relationship (i.e. words with higher MLU tend to have a higher AoA), while values below 0 indicate a negative relationship (i.e. words with higher frequency tend to have a lower AoA.}\label{fig:coefs}
+\caption[Estimates of predictor coefficients by language and for the all language model]{Estimates of predictor coefficients by language and for the all language model. Values above 0 indicate a positive relationship (i.e. words with higher MLU tend to have a higher AoA), while values below 0 indicate a negative relationship (i.e. words with higher frequency tend to have a lower AoA. Ranges indicate 95\% confidence intervals.}\label{fig:coefs}
 \end{figure*}
 \end{CodeChunk}
 
@@ -319,7 +322,7 @@ aoa & min & mommy, bottle, peekaboo \\
 
 }
 
-\caption[Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors]{Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors..}\label{fig:coefs_lexcat}
+\caption[Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors]{Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors. Ranges indicate 95\% confidence intervals.}\label{fig:coefs_lexcat}
 \end{figure*}
 \end{CodeChunk}
 
@@ -360,10 +363,8 @@ count includes the counts of words that share the same stem (so that
 \emph{father} counts as \emph{daddy}). For polysemous word pairs, such
 as \emph{orange} as in color and \emph{orange} as in fruit, the
 occurrences of \emph{orange} in the corpus were split uniformly between
-the two
-senses.\footnote{Polysemy is puzzle for our analysis because word sense disambiguation is not possible across languages. Our approach here is a pragmatic one, and should not affect our overall results given the relatively small number of polysemous words in each language.}
-Finally, counts were normalized to the length of each corpus and then
-log transformed.
+the two senses. Finally, counts were normalized to the length of each
+corpus and then log transformed.
 
 \subsubsection{MLU}\label{mlu}
 
@@ -401,7 +402,7 @@ imputed ratings from the mean of all CDI words' ratings.
 
 Lastly, we used previously collected norms of ``babiness,'' a measure of
 association with infancy (Perry et al., 2015) in which adult
-participants are asked to judge how relevant to babies a word is.
+participants are asked to judge a word's relevance to babies.
 
 \section{Analysis}\label{analysis}
 
@@ -448,11 +449,12 @@ Previous work gives reason to believe that predictors' relationship with
 age of acquisition differs among various lexical categories (J. C.
 Goodman et al., 2008). To investigate these effects, we separated our
 data by lexical category and fit separate linear mixed-effects models
-for each. Figure \ref{fig:coefs_lexcat} shows the resulting coefficient
-estimates (leaving off the weaker predictors for illustrative purposes).
-Frequency mattered most for nouns and comparatively little for function
-words, while MLU was irrelevant for both nouns and predicates, but
-highly informative for function words and other items.
+for each, limiting the predictors to the 4 that are significantly
+predictive overall. Figure \ref{fig:coefs_lexcat} shows the resulting
+coefficient estimates. Frequency mattered most for nouns and
+comparatively little for function words, while MLU was irrelevant for
+both nouns and predicates, but highly informative for function words and
+other items.
 
 \section{Discussion}\label{discussion}
 
@@ -469,22 +471,22 @@ both predictors and outcome data has been quite limited.
 By including 7 languages and as many predictors, our current work
 expands the scope of previous observational studies of age of
 acquisition. Our data show a number of patterns that confirm and expand
-previous reports. First, predictors differed in importance across even
-very early development. For example, certain concepts that were more
-strongly associated with babies appeared to be learned early for
-children across languages (as in Tardif et al., 2008). Second, we found
-general consistency in predictor coefficients across languages (even as
-overall model fit varied, at least in part due to the amount and quality
-of data for different languages). This consistency supports the idea
-that differences in culture or language structure do not lead to
+previous reports. First, predictors differed in importance even very
+early development. For example, certain concepts that were more strongly
+associated with babies appeared to be learned early for children across
+languages (as in Tardif et al., 2008). Second, we found general
+consistency in predictor coefficients across languages (even as overall
+model fit varied, at least in part due to the amount and quality of data
+for different languages). This consistency supports the idea that
+differences in culture or language structure do not lead to
 fundamentally different acquisition strategies, at least at the level of
 detail we were able to examine.
 
-Finally, different predictors appeared more important across lexical
-categories. Frequent, concrete nouns were learned earlier, consistent
-with theories that emphasize the importance of early referential speech
-(e.g., Baldwin, 1995). But for predicates, concreteness was somewhat
-less important, and for function words, MLU was most predictive. Overall
+Finally, the predictors varied in strength across lexical categories.
+Frequent, concrete nouns were learned earlier, consistent with theories
+that emphasize the importance of early referential speech (e.g.,
+Baldwin, 1995). But for predicates, concreteness was somewhat less
+important, and for function words, MLU was most predictive. Overall
 these findings are consistent with theories that emphasize the role of
 linguistic structure over conceptual complexity in the acquisition of
 other lexical categories beyond nouns (Gentner \& Boroditsky, 2001;

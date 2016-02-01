@@ -424,13 +424,10 @@ crossling_model_data <- crossling_data %>%
 #                                 labels = c("Nouns", "Adjectives", "Verbs",
 #                                            "Function Words", "Other")))
 
-crossling_coefs <- crossling_model_data %>%
+lexcat_coefs <- crossling_model_data %>%
   split(.$lexical_category) %>%
   map(function(crossling_lexcat_data) {
-    crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + valence + 
-                              arousal + babiness + (1 + frequency + mlu + num_characters + 
-                                                      concreteness + valence + arousal + 
-                                                      babiness | language),
+    crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + (1 + frequency + mlu + num_characters + concreteness | language),
                             data = crossling_lexcat_data)
     data.frame(lexical_category = unique(crossling_lexcat_data$lexical_category),
                term = row.names(summary(crossling_model)$coefficients),
@@ -440,14 +437,6 @@ crossling_coefs <- crossling_model_data %>%
       filter(term != "(Intercept)")
   }) %>%
   bind_rows()
-
-# crossling_predictors_ordered <- crossling_predictors %>%
-#   factor(levels = crossling_coef$term[order(abs(crossling_coef$estimate))])
-# 
-# crossling_predictor_levels <- crossling_coef$term[order(abs(crossling_coef$estimate),
-#                                                         decreasing = TRUE)]
-# crossling_coef <- crossling_coef %>%
-#   mutate(term = factor(term, levels = crossling_predictor_levels))
 
 ## ---- fig.width = 12, fig.height = 8-------------------------------------
 crossling_model_data %>%

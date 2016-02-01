@@ -13,7 +13,7 @@ author-information: >
     \And {\large \bf Michael C. Frank} \\ \texttt{mcfrank@stanford.edu} \\ Department of Psychology \\ Stanford University}
 
 abstract: 
-    "Why do children learn some words earlier than others?  Regularities in the age of acquisition (AoA) of words across development and languages yield insights regarding the mechanisms guiding word learning. In a large-scale corpus analysis, we predict the age at which ~10,000 children learn 400 words in 7 languages from independently-derived linguistic, environmental, and conceptual factors. Predictors were not uniformly strong across development and varied as a function of lexical category (e.g., concreteness predicted nouns while linguistic structure predicted function words).  Moreover, there was evidence for cross-language consistency in predictor strength.  By leveraging data at a significantly larger scale than previous work, our analyses highlight both the power that emerges from unifying previously disparate theories, but also the amount of reliable variation that still remains unexplained."
+    "Why do children learn some words earlier than others?  Regularities in the age of acquisition (AoA) of words across development and languages yield insights regarding the mechanisms guiding word learning. In a large-scale corpus analysis, we predict the age at which around 10,000 children learn 400 words in 7 languages from independently-derived linguistic, environmental, and conceptual factors. Predictors were not uniformly strong across development and varied as a function of lexical category (e.g., concreteness predicted nouns while linguistic structure predicted function words).  Moreover, there was evidence for cross-language consistency in predictor strength.  By leveraging data at a significantly larger scale than previous work, our analyses highlight both the power that emerges from unifying previously disparate theories, but also the amount of reliable variation that still remains unexplained."
     
 keywords:
     "language acquisition; word learning; development"
@@ -267,7 +267,7 @@ crossling_data %>%
           legend.text = element_text(size = 8))
 ```
 
-```{r coefs, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by language and for the all language model. Values above 0 indicate a positive relationship (i.e. words with higher MLU tend to have a higher AoA), while values below 0 indicate a negative relationship (i.e. words with higher frequency tend to have a lower AoA.'}
+```{r coefs, fig.height=3.5, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by language and for the all language model. Values above 0 indicate a positive relationship (i.e. words with higher MLU tend to have a higher AoA), while values below 0 indicate a negative relationship (i.e. words with higher frequency tend to have a lower AoA. Ranges indicate 95\\% confidence intervals.'}
 plot_coefs <- crossling_coef %>%
   mutate(language = "All Languages") %>%
   bind_rows(lang_coef) %>%
@@ -297,9 +297,8 @@ ggplot(plot_coefs, aes(x = term, y = estimate)) +
 ```
 
 
-```{r coefs_lexcat, fig.height=1.7, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors..'}
-crossling_coefs %>%
-  filter(term %in% c("frequency", "babiness", "concreteness", "mlu")) %>%
+```{r coefs_lexcat, fig.height=1.7, fig.width=7, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Estimates of predictor coefficients by lexical category, without any separation by language and omitting the three weaker predictors. Ranges indicate 95\\% confidence intervals.'}
+lexcat_coefs %>%
   mutate(term = factor(term, levels = rev(crossling_predictor_levels))) %>%
   ggplot(aes(x = term, y = estimate, colour = term)) +
     facet_wrap(~lexical_category, ncol = 4) +
@@ -322,7 +321,10 @@ Each numeric predictor was centered and scaled so that all predictors would have
 
 ### Frequency 
 
-For each language, we estimated word frequency from unigram counts based on all corpora in the CHILDES database for that language. Each word's count includes the counts of words that share the same stem (so that _dogs_ counts as _dog_) or are synonymous (so that _father_ counts as _daddy_). For polysemous word pairs, such as _orange_ as in color and _orange_ as in fruit, the occurrences of _orange_ in the corpus were split uniformly between the two senses.\footnote{Polysemy is puzzle for our analysis because word sense disambiguation is not possible across languages. Our approach here is a pragmatic one, and should not affect our overall results given the relatively small number of polysemous words in each language.} Finally, counts were normalized to the length of each corpus and then log transformed. 
+For each language, we estimated word frequency from unigram counts based on all corpora in the CHILDES database for that language. Each word's count includes the counts of words that share the same stem (so that _dogs_ counts as _dog_) or are synonymous (so that _father_ counts as _daddy_). For polysemous word pairs, such as _orange_ as in color and _orange_ as in fruit, the occurrences of _orange_ in the corpus were split uniformly between the two senses. Finally, counts were normalized to the length of each corpus and then log transformed.
+```{r}
+#\footnote{Polysemy is puzzle for our analysis because word sense disambiguation is not possible across languages. Our approach here is a pragmatic one, and should not affect our overall results given the relatively small number of polysemous words in each language.}
+```
 
 ### MLU
 
@@ -360,7 +362,7 @@ Figure \ref{fig:coefs} shows the coefficient estimate for each predictor in each
 
 ## Lexical Category
 
-Previous work gives reason to believe that predictors' relationship with age of acquisition differs among various lexical categories [@goodman2008]. To investigate these effects, we separated our data by lexical category and fit separate linear mixed-effects models for each. Figure \ref{fig:coefs_lexcat} shows the resulting coefficient estimates (leaving off the weaker predictors for illustrative purposes). Frequency mattered most for nouns and comparatively little for function words, while MLU was irrelevant for both nouns and predicates, but highly informative for function words and other items.
+Previous work gives reason to believe that predictors' relationship with age of acquisition differs among various lexical categories [@goodman2008]. To investigate these effects, we separated our data by lexical category and fit separate linear mixed-effects models for each, limiting the predictors to the 4 that are significantly predictive overall. Figure \ref{fig:coefs_lexcat} shows the resulting coefficient estimates. Frequency mattered most for nouns and comparatively little for function words, while MLU was irrelevant for both nouns and predicates, but highly informative for function words and other items.
 
 
 # Discussion
