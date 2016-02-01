@@ -19,6 +19,9 @@ keywords:
     "language acquisition; word learning; development"
     
 output: cogsci2016::cogsci_paper
+
+header-includes:
+   - \usepackage[font=small,skip=3pt]{caption}
 ---
 
 ```{r global_options, include=FALSE}
@@ -49,6 +52,8 @@ theme_set(theme_mikabr(base_size = 12, base_family = font) +
                   panel.margin = unit(1, "mm"),
                   plot.margin = unit(c(0, 0, 0, 0), "mm")))
 ```
+
+\setlength{\dbltextfloatsep}{10pt plus 1.0pt minus 2.0pt}
 
 ```{r}
 # ----------
@@ -377,7 +382,7 @@ Despite its larger scope, our work still shares a number of important limitation
 
 Perhaps the most important theoretical challenge in the study of early language is linking individual observations or experiments to the broader patterns of acquisition observed in large datasets. We have strong theories of how individual learning situations proceed [@frank2009; @mcmurray2012], and although we cannot yet discern unambiguous signatures of those theories in the large-scale data we have available, our analyses highlight the importance of studying aggregated data. They also demonstrate the value of analyzing a number of factors, including those predicted to be relevant by different and even competing theories.
 
-Even for English, in which our seven predictors capture the most variance (r^2^ = 0.29), much still remains unexplained. Further, this variance is highly reliable -- cross-validation using half of the English-speaking children to predict ages of acquisition for the other half yields r^2^ = 0.98. While adjudicating between theories is a critical component of the scientific process, it is important not to forget that our working theories are incomplete [@breiman2001]. Unification across these theories may be the other critical step in making progress on understanding language learning [@newell1973].
+Even for English, in which our seven predictors capture the most variance (_r_^2^ = 0.29), much still remains unexplained. Further, this variance is highly reliable -- cross-validation using half of the English-speaking children to predict ages of acquisition for the other half yields _r_^2^ = 0.98. While adjudicating between theories is a critical component of the scientific process, it is important not to forget that our working theories are incomplete [@breiman2001]. Unification across these theories may be the other critical step in making progress on understanding language learning [@newell1973].
 
 ```{r}
 # Could cite  e.g. waxman vs. sloutsky on conceptual stuff in category learning if we want to talk about a specific case where adjudicating among two accounts has clearly gone wrong.
