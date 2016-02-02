@@ -384,16 +384,10 @@ crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + 
                           arousal + babiness + (1 + frequency + mlu + num_characters + 
                                                   concreteness + valence + arousal + 
                                                   babiness | language),
-                        data = crossling_model_data)
+                        data = crossling_model_data,
+                        control = lmerControl(optCtrl = list(maxfun = 1e5)))
 
 crossling_coef <- data.frame(term = row.names(summary(crossling_model)$coefficients),
-                             estimate = summary(crossling_model)$coefficients[,"Estimate"],
-                             std.error = summary(crossling_model)$coefficients[,"Std. Error"],
-                             t = summary(crossling_model)$coefficients[,"t value"],
-                             row.names = NULL) %>%
-  filter(term != "(Intercept)")
-
-crossling_sig <- data.frame(term = row.names(summary(crossling_model)$coefficients),
                              estimate = summary(crossling_model)$coefficients[,"Estimate"],
                              std.error = summary(crossling_model)$coefficients[,"Std. Error"],
                              row.names = NULL) %>%
@@ -426,8 +420,8 @@ crossling_model_data <- crossling_data %>%
 
 lexcat_coefs <- crossling_model_data %>%
   split(.$lexical_category) %>%
-  map(function(crossling_lexcat_data) {
-    crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + (1 + frequency + mlu + num_characters + concreteness | language),
+  map_df(function(crossling_lexcat_data) {
+    crossling_model <- lmer(aoa ~ frequency + babiness + concreteness + mlu + (1 + frequency + babiness + concreteness + mlu | language),
                             data = crossling_lexcat_data)
     data.frame(lexical_category = unique(crossling_lexcat_data$lexical_category),
                term = row.names(summary(crossling_model)$coefficients),
@@ -435,8 +429,7 @@ lexcat_coefs <- crossling_model_data %>%
                std.error = summary(crossling_model)$coefficients[,"Std. Error"],
                row.names = NULL) %>%
       filter(term != "(Intercept)")
-  }) %>%
-  bind_rows()
+  })
 
 ## ---- fig.width = 12, fig.height = 8-------------------------------------
 crossling_model_data %>%
@@ -605,7 +598,8 @@ lang_model_list <- map(lang_model_data_list,
 
 lang_coef <- function(lang_model) {
   tidy(lang_model) %>%
-    filter(term != "(Intercept)")
+    filter(term != "(Intercept)") %>%
+    select(term, estimate, std.error)
 }
 
 lang_coef_list <- map(lang_model_list, lang_coef)
@@ -614,12 +608,9 @@ lang_coef_list <- map(lang_model_list, lang_coef)
 # 
 # english_predictor_levels <- english_coef$term[order(abs(english_coef$estimate),
 #                                                    decreasing = TRUE)]
-lang_coef <- map(names(lang_coef_list),
-                 function(lang) lang_coef_list[[lang]] %>% mutate(language = lang)) %>%
-  bind_rows()
-
-lang_coef <- lang_coef %>%
-  mutate(term = factor(term, levels = english_predictor_levels))
+lang_coef <- map_df(names(lang_coef_list),
+                    function(lang) lang_coef_list[[lang]] %>% mutate(language = lang)) %>%
+  mutate(term = factor(term, levels = crossling_predictor_levels))
 
 ## ---- fig.width = 5, fig.height = 4--------------------------------------
 crossling_coef %>%
@@ -652,66 +643,6 @@ ggplot(crossling_predictor_smooth, aes(x = aoa, y = value, colour = predictor)) 
   ylab("Mean Predictor Z-Score")
 
 ## ------------------------------------------------------------------------
-joined_coef <- bind_rows(mutate(english_coef, type = "English"),
-                         mutate(crossling_coef, type = "Cross-Linguistic")) %>%
-  mutate(type = factor(type, levels = c("English", "Cross-Linguistic")),
-         term = factor(term, levels = english_predictor_levels))
-
-## ---- fig.width = 7, fig.height = 4--------------------------------------
-# ggplot(joined_coef, aes(x = term, y = abs(estimate), fill = term)) +
-#   facet_wrap("type", scales = "free_x") +
-#   geom_bar(stat = "identity") +
-#   geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
-#                      ymax = abs(estimate) + 1.96 * std.error)) +
-#   scale_fill_solarized(guide = FALSE) +
-#   xlab("") +
-#   ylab("Coefficient Magnitude\n") +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-## ------------------------------------------------------------------------
-english_predictor_means_2 <- english_data %>%
-  filter(floor(aoa) > 4, floor(aoa) <= 24) %>%
-  mutate(aoa = cut(floor(aoa), breaks = c(4, 14, 24))) %>%
-  gather_("predictor", "value", english_predictors) %>%
-  group_by(predictor, aoa) %>%
-  filter(!is.na(value)) %>%
-  multi_boot_standard(column = "value")
-
-crossling_predictor_means_2 <- crossling_data %>%
-  filter(floor(aoa) > 4, floor(aoa) <= 24) %>%
-  mutate(aoa = cut(floor(aoa), breaks = c(4, 14, 24))) %>%
-  gather_("predictor", "value", crossling_predictors) %>%
-  group_by(predictor, aoa) %>%
-  filter(!is.na(value)) %>%
-  multi_boot_standard(column = "value")
-
-level_base <- english_predictor_means_2 %>% filter(aoa == "(4,14]")
-predictor_mean_levels <- level_base$predictor[order(level_base$mean, decreasing = TRUE)]
-
-joined_predictor_means <- bind_rows(
-  mutate(english_predictor_means_2, type = "English"),
-  mutate(crossling_predictor_means_2, type = "Cross-Linguistic")) %>%
-  mutate(type = factor(type, levels = c("English", "Cross-Linguistic")))
-
-## ---- fig.width = 8, fig.height = 4--------------------------------------
-# joined_predictor_means %>%
-#   mutate(predictor = factor(predictor, levels = predictor_mean_levels)) %>%
-#   ggplot(aes(x = aoa, y = mean, color = predictor)) +
-#   facet_wrap(~type) +
-#   geom_point(position = position_dodge(width = 0.1)) +
-#   geom_linerange(aes(ymin = ci_lower, ymax = ci_upper, group = predictor),
-#                  alpha = 0.4,
-#                  position = position_dodge(width = 0.1)) +
-#   geom_line(aes(group = predictor), position = position_dodge(width = 0.1)) +
-#   geom_dl(aes(label = predictor),
-#           method = list("first.qp", dl.trans(x = x - 0.3), cex = 0.6)) +
-#   geom_dl(aes(label = predictor),
-#           method = list("last.qp", dl.trans(x = x + 0.3), cex = 0.6)) +
-#   scale_colour_solarized(guide = FALSE) +
-#   xlab("\nAge of Acquisition (months)") +
-#   ylab("Mean Predictor Z-Score\n")
-
-## ------------------------------------------------------------------------
 rsq <- function(object) {
   1 - sum(residuals(object, type = "response") ^ 2) / sum((object$y - mean(object$y)) ^ 2)
 }
@@ -736,10 +667,34 @@ crossling_adj_rsq <- adj_rsq(crossling_fit)
 all_adj_rsq <- lang_adj_rsq
 all_adj_rsq$`All Languages` <- crossling_adj_rsq
 
-crossling_fit_data <- data.frame(observed = model.response(model.frame(crossling_model)),
-                                 fitted = fitted(crossling_model))
-ggplot(crossling_fit_data, aes(x = fitted, y = observed)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  coord_fixed()
+## ------------------------------------------------------------------------
+predictor_cors <- crossling_model_data %>%
+  split(.$language) %>%
+  map_df(function(lang_data) {
+    #lang_data <- crossling_model_data %>% filter(language == "English")
+    expand.grid(predictor1 = crossling_predictor_levels,
+                         predictor2 = crossling_predictor_levels) %>%
+      rowwise() %>%
+      mutate(p = cor.test(lang_data[[as.character(predictor1)]],
+                          lang_data[[as.character(predictor2)]])$p.value,
+             language = unique(lang_data$language))
+#     lang_data %>%
+#       select_(.dots = crossling_predictors) %>%
+#       cor.test() %>%
+#       as.data.frame() %>%
+#       mutate(predictor1 = row.names(.)) %>%
+#       gather(predictor2, cor, -predictor1) %>%
+#       mutate(language = unique(lang_data$language))
+  }) %>%
+  mutate(predictor1 = factor(predictor1, levels = crossling_predictor_levels),
+         predictor2 = factor(predictor2, levels = rev(crossling_predictor_levels))) %>%
+  filter(predictor1 != predictor2)
+
+## ------------------------------------------------------------------------
+ggplot(predictor_cors, aes(x = predictor1, y = predictor2, fill = abs(cor))) +
+  facet_wrap(~language, ncol = 4) +
+  geom_tile() +
+  geom_text(aes(label = round(cor, 2))) +
+  scale_fill_continuous(low = "white", high = "red") +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
 

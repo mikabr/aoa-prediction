@@ -471,14 +471,8 @@ crossling_model_data <- crossling_data %>%
 lexcat_coefs <- crossling_model_data %>%
   split(.$lexical_category) %>%
   map_df(function(crossling_lexcat_data) {
-    crossling_lexcat_data <- crossling_model_data %>% filter(lexical_category == "Nouns")
-    #cat(unique(as.character(crossling_lexcat_data$lexical_category)))
-    crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + (1 + frequency + mlu + num_characters + concreteness | language),
-                            data = crossling_lexcat_data,
-                            control = lmerControl(optimizer = "nloptwrap",
-                                                  #boundary.tol = .01,
-                                                  optCtrl = list(maxfun = 1e6, tol = 0.01)))
-    summary(crossling_model)
+    crossling_model <- lmer(aoa ~ frequency + babiness + concreteness + mlu + (1 + frequency + babiness + concreteness + mlu | language),
+                            data = crossling_lexcat_data)
     data.frame(lexical_category = unique(crossling_lexcat_data$lexical_category),
                term = row.names(summary(crossling_model)$coefficients),
                estimate = summary(crossling_model)$coefficients[,"Estimate"],
@@ -706,75 +700,6 @@ ggplot(crossling_predictor_smooth, aes(x = aoa, y = value, colour = predictor)) 
   scale_x_continuous(name = "Age of Acquisition (months)",
                      breaks = seq(5, 30, 5)) +
   ylab("Mean Predictor Z-Score")
-```
-
-*  *  *  *
-  
-Summary Plots
--------------
-
-```{r}
-joined_coef <- bind_rows(mutate(english_coef, type = "English"),
-                         mutate(crossling_coef, type = "Cross-Linguistic")) %>%
-  mutate(type = factor(type, levels = c("English", "Cross-Linguistic")),
-         term = factor(term, levels = english_predictor_levels))
-```
-
-```{r, fig.width = 7, fig.height = 4}
-# ggplot(joined_coef, aes(x = term, y = abs(estimate), fill = term)) +
-#   facet_wrap("type", scales = "free_x") +
-#   geom_bar(stat = "identity") +
-#   geom_linerange(aes(ymin = abs(estimate) - 1.96 * std.error,
-#                      ymax = abs(estimate) + 1.96 * std.error)) +
-#   scale_fill_solarized(guide = FALSE) +
-#   xlab("") +
-#   ylab("Coefficient Magnitude\n") +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
-english_predictor_means_2 <- english_data %>%
-  filter(floor(aoa) > 4, floor(aoa) <= 24) %>%
-  mutate(aoa = cut(floor(aoa), breaks = c(4, 14, 24))) %>%
-  gather_("predictor", "value", english_predictors) %>%
-  group_by(predictor, aoa) %>%
-  filter(!is.na(value)) %>%
-  multi_boot_standard(column = "value")
-
-crossling_predictor_means_2 <- crossling_data %>%
-  filter(floor(aoa) > 4, floor(aoa) <= 24) %>%
-  mutate(aoa = cut(floor(aoa), breaks = c(4, 14, 24))) %>%
-  gather_("predictor", "value", crossling_predictors) %>%
-  group_by(predictor, aoa) %>%
-  filter(!is.na(value)) %>%
-  multi_boot_standard(column = "value")
-
-level_base <- english_predictor_means_2 %>% filter(aoa == "(4,14]")
-predictor_mean_levels <- level_base$predictor[order(level_base$mean, decreasing = TRUE)]
-
-joined_predictor_means <- bind_rows(
-  mutate(english_predictor_means_2, type = "English"),
-  mutate(crossling_predictor_means_2, type = "Cross-Linguistic")) %>%
-  mutate(type = factor(type, levels = c("English", "Cross-Linguistic")))
-```
-
-```{r, fig.width = 8, fig.height = 4}
-# joined_predictor_means %>%
-#   mutate(predictor = factor(predictor, levels = predictor_mean_levels)) %>%
-#   ggplot(aes(x = aoa, y = mean, color = predictor)) +
-#   facet_wrap(~type) +
-#   geom_point(position = position_dodge(width = 0.1)) +
-#   geom_linerange(aes(ymin = ci_lower, ymax = ci_upper, group = predictor),
-#                  alpha = 0.4,
-#                  position = position_dodge(width = 0.1)) +
-#   geom_line(aes(group = predictor), position = position_dodge(width = 0.1)) +
-#   geom_dl(aes(label = predictor),
-#           method = list("first.qp", dl.trans(x = x - 0.3), cex = 0.6)) +
-#   geom_dl(aes(label = predictor),
-#           method = list("last.qp", dl.trans(x = x + 0.3), cex = 0.6)) +
-#   scale_colour_solarized(guide = FALSE) +
-#   xlab("\nAge of Acquisition (months)") +
-#   ylab("Mean Predictor Z-Score\n")
 ```
 
 ```{r}
