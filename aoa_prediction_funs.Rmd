@@ -433,16 +433,10 @@ crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + 
                           arousal + babiness + (1 + frequency + mlu + num_characters + 
                                                   concreteness + valence + arousal + 
                                                   babiness | language),
-                        data = crossling_model_data)
+                        data = crossling_model_data,
+                        control = lmerControl(optCtrl = list(maxfun = 1e5)))
 
 crossling_coef <- data.frame(term = row.names(summary(crossling_model)$coefficients),
-                             estimate = summary(crossling_model)$coefficients[,"Estimate"],
-                             std.error = summary(crossling_model)$coefficients[,"Std. Error"],
-                             t = summary(crossling_model)$coefficients[,"t value"],
-                             row.names = NULL) %>%
-  filter(term != "(Intercept)")
-
-crossling_sig <- data.frame(term = row.names(summary(crossling_model)$coefficients),
                              estimate = summary(crossling_model)$coefficients[,"Estimate"],
                              std.error = summary(crossling_model)$coefficients[,"Std. Error"],
                              row.names = NULL) %>%
@@ -476,18 +470,22 @@ crossling_model_data <- crossling_data %>%
 
 lexcat_coefs <- crossling_model_data %>%
   split(.$lexical_category) %>%
-  map(function(crossling_lexcat_data) {
+  map_df(function(crossling_lexcat_data) {
+    crossling_lexcat_data <- crossling_model_data %>% filter(lexical_category == "Nouns")
+    #cat(unique(as.character(crossling_lexcat_data$lexical_category)))
     crossling_model <- lmer(aoa ~ frequency + mlu + num_characters + concreteness + (1 + frequency + mlu + num_characters + concreteness | language),
-                            data = crossling_lexcat_data)
-                            #control = lmerControl(optimizer = "bobyqa"))
+                            data = crossling_lexcat_data,
+                            control = lmerControl(optimizer = "nloptwrap",
+                                                  #boundary.tol = .01,
+                                                  optCtrl = list(maxfun = 1e6, tol = 0.01)))
+    summary(crossling_model)
     data.frame(lexical_category = unique(crossling_lexcat_data$lexical_category),
                term = row.names(summary(crossling_model)$coefficients),
                estimate = summary(crossling_model)$coefficients[,"Estimate"],
                std.error = summary(crossling_model)$coefficients[,"Std. Error"],
                row.names = NULL) %>%
       filter(term != "(Intercept)")
-  }) %>%
-  bind_rows()
+  })
 ```
 
 ```{r, fig.width = 12, fig.height = 8}
@@ -663,7 +661,8 @@ lang_model_list <- map(lang_model_data_list,
 
 lang_coef <- function(lang_model) {
   tidy(lang_model) %>%
-    filter(term != "(Intercept)")
+    filter(term != "(Intercept)") %>%
+    select(term, estimate, std.error)
 }
 
 lang_coef_list <- map(lang_model_list, lang_coef)
@@ -672,12 +671,9 @@ lang_coef_list <- map(lang_model_list, lang_coef)
 # 
 # english_predictor_levels <- english_coef$term[order(abs(english_coef$estimate),
 #                                                    decreasing = TRUE)]
-lang_coef <- map(names(lang_coef_list),
-                 function(lang) lang_coef_list[[lang]] %>% mutate(language = lang)) %>%
-  bind_rows()
-
-lang_coef <- lang_coef %>%
-  mutate(term = factor(term, levels = english_predictor_levels))
+lang_coef <- map_df(names(lang_coef_list),
+                    function(lang) lang_coef_list[[lang]] %>% mutate(language = lang)) %>%
+  mutate(term = factor(term, levels = crossling_predictor_levels))
 ```
 
 ```{r, fig.width = 5, fig.height = 4}
@@ -805,26 +801,26 @@ crossling_adj_rsq <- adj_rsq(crossling_fit)
 
 all_adj_rsq <- lang_adj_rsq
 all_adj_rsq$`All Languages` <- crossling_adj_rsq
-
-crossling_fit_data <- data.frame(observed = model.response(model.frame(crossling_model)),
-                                 fitted = fitted(crossling_model))
-ggplot(crossling_fit_data, aes(x = fitted, y = observed)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  coord_fixed()
 ```
 
 ```{r}
 predictor_cors <- crossling_model_data %>%
   split(.$language) %>%
   map_df(function(lang_data) {
-    lang_data %>%
-      select_(.dots = crossling_predictors) %>%
-      cor() %>%
-      as.data.frame() %>%
-      mutate(predictor1 = row.names(.)) %>%
-      gather(predictor2, cor, -predictor1) %>%
-      mutate(language = unique(lang_data$language))
+    #lang_data <- crossling_model_data %>% filter(language == "English")
+    expand.grid(predictor1 = crossling_predictor_levels,
+                         predictor2 = crossling_predictor_levels) %>%
+      rowwise() %>%
+      mutate(p = cor.test(lang_data[[as.character(predictor1)]],
+                          lang_data[[as.character(predictor2)]])$p.value,
+             language = unique(lang_data$language))
+#     lang_data %>%
+#       select_(.dots = crossling_predictors) %>%
+#       cor.test() %>%
+#       as.data.frame() %>%
+#       mutate(predictor1 = row.names(.)) %>%
+#       gather(predictor2, cor, -predictor1) %>%
+#       mutate(language = unique(lang_data$language))
   }) %>%
   mutate(predictor1 = factor(predictor1, levels = crossling_predictor_levels),
          predictor2 = factor(predictor2, levels = rev(crossling_predictor_levels))) %>%
