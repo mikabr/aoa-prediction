@@ -31,7 +31,7 @@ theme_set(theme_mikabr())
 
 Get items, words, and uni_lemmas.
 ```{r}
-items <- get_item_data(mode = "local") %>%
+items <- get_item_data(mode = "remote") %>%
   mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))),
          definition = tolower(definition))
 
@@ -46,6 +46,23 @@ uni_lemmas <- words %>%
 Get AoA estimates.
 ```{r aoa_data}
 aoa_data <- read_csv("aoa_data.csv")
+```
+
+Read CHILDES data, stem
+```{r load_childes}
+languages <- tolower(unique(aoa_data$language))
+
+load_childes_lang <- function(language) {
+  read_csv(sprintf("predictors/childes/data/childes_%s.csv", 
+                                   language)) %>%
+    filter(!is.na(word)) %>%
+    mutate(stem = get_word_stems(word, language)) %>%
+    group_by(stem) %>%
+    summarise(mean_sent_length = weighted.mean(mean_sent_length, word_count),
+              word_count = sum(word_count),
+              final_count = sum(final_count),
+              solo_count = sum(solo_count))
+}
 ```
 
 Get frequency estimates.
@@ -81,8 +98,7 @@ uni_freqs <- freqs %>%
 
 Build up a mapping between CDI items and possible words for them in CHILDES.
 ```{r case_map}
-stem <- function(x) SnowballC::wordStem(x) %>% gsub("'", "", .)
-
+source("predictors/frequency/stemmer.R")
 special_cases <- read_csv("predictors/frequency/data/english/english_special_cases.csv",
                           col_names = FALSE)
 
@@ -101,18 +117,18 @@ special_case_map <- map_df(1:nrow(special_cases), function(i) {
   trans_opts <- map(options, function(opt) map_chr(transforms, ~.x(opt))) %>%
     unlist() %>% unique()
   data_frame(item = rep(item, 2 * length(trans_opts)),
-             gloss = c(trans_opts, stem(trans_opts)))
+             gloss = c(trans_opts, get_word_stems(trans_opts, "english")))
 })
 
 pattern_map <- uni_lemmas$uni_lemma %>%
   unique() %>%
   map_df(function(item) {
     options <- item %>% strsplit("/") %>% unlist()
-    options <- c(options, stem(options))
+    options <- c(options, get_word_stems(options, "english"))
     trans_opts <- map(options, function(opt) map_chr(transforms, ~.x(opt))) %>%
       unlist() %>% unique()
     data_frame(item = rep(item, 2 * length(trans_opts)),
-               gloss = c(trans_opts, stem(trans_opts))) %>%
+               gloss = c(trans_opts, get_word_stems(trans_opts, "english"))) %>%
       distinct()
   })
 
