@@ -205,13 +205,13 @@ languages = ["italian", "norwegian", "russian", "spanish", "swedish", "turkish",
 #     write_freqs(language, lang_freqs)
 #     write_mlus(language, lang_mlus)
 
-with open("num_words.csv", "w") as num_words_file:
-    num_words_writer = UnicodeWriter(num_words_file)
-    num_words_writer.writerow(["language", "num_words"])
-    for language in languages:
-        num_words = get_num_words(language)
-        print language, num_words
-        num_words_writer.writerow([language.capitalize(), str(num_words)])
+# with open("num_words.csv", "w") as num_words_file:
+#     num_words_writer = UnicodeWriter(num_words_file)
+#     num_words_writer.writerow(["language", "num_words"])
+#     for language in languages:
+#         num_words = get_num_words(language)
+#         print language, num_words
+#         num_words_writer.writerow([language.capitalize(), str(num_words)])
 
 #eng = get_freqs("English")
 
