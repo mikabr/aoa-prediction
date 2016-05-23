@@ -1,0 +1,58 @@
+---
+output: html_document
+---
+
+```{r, include=FALSE}
+library(knitr)
+opts_chunk$set(echo = FALSE, error = FALSE, message = FALSE, warning = FALSE,
+               fig.pos = "center", cache = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(langcog)
+theme_set(theme_mikabr())
+```
+
+```{r}
+all_prop_data <- feather::read_feather("../aoa_estimation/saved_data/all_prop_data.feather")
+
+demo_word <- "balloon"
+demo_data <- all_prop_data %>%
+  filter(measure == "understands", language == "English",
+         uni_lemma == demo_word)
+
+plt <- ggplot(demo_data, aes(x = age, group = words)) +
+  scale_colour_solarized(guide = FALSE) +
+  scale_y_continuous(name = "Proportion of children understanding\n", limits = c(0, 1)) +
+  scale_x_continuous(name = "\nAge (months)", limits = c(8, 18),
+                     breaks = seq(8, 18, 1))
+
+plt + geom_blank()
+```
+
+```{r}
+plt <- plt +
+  geom_point(aes(y = prop), colour = solarized_palette(3)[3])
+plt
+```
+
+```{r}
+plt <- plt +
+  geom_line(aes(y = fit_prop), colour = solarized_palette(3)[2], size = 1.5)
+plt
+```
+
+```{r}
+plt <- plt + geom_hline(aes(yintercept = 0.5), colour = "grey", linetype = "dashed")
+plt
+```
+
+```{r}
+plt <- plt +
+  geom_vline(aes(xintercept = aoa), colour = "grey", linetype = "dashed") +
+  geom_point(aes(x = aoa, y = 0.5),
+             colour = solarized_palette(3)[1], size = 4)
+plt
+```
