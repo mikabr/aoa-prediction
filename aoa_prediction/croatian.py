@@ -55,3 +55,12 @@ class CroatianStemmer(object):
                 if self.imaSamoglasnik(dioba.group(1)) and len(dioba.group(1))>1:
                     return dioba.group(1)
         return pojavnica
+
+def main():
+  stemmer = CroatianStemmer()
+  words = sys.argv[1:]
+  for word in words:
+    print stemmer.stem(word)
+
+if __name__ == "__main__":
+  main()
