@@ -58,7 +58,7 @@ def get_lang_data(language):
 
 
 corpus_root = nltk.data.find('corpora/childes/data-xml/')
-languages = ["Croatian", "Danish", "English", "French", "Italian",
+languages = ["Croatian", "Danish", "French", "Italian", # "English",
              "Norwegian", "Russian", "Spanish", "Swedish", "Turkish"]
 for language in languages:
     get_lang_data(language)
