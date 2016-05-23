@@ -86,7 +86,9 @@ raw_data <- words %>%
   split(.$language) %>%
   map(get_lang_data)
 
-#feather::write_feather(bind_rows(raw_data), "raw_data.feather")
+#feather::write_feather(bind_rows(raw_data), "saved_data/raw_data.feather")
+# raw_data <- feather::read_feather("saved_data/raw_data.feather") %>%
+#   split(.$language)
 ```
 
 Fit models to predict the proportion of children of each age who are reported to understands/produce each word, and the word's age of acquisition.
@@ -97,16 +99,22 @@ fit_inst_measure_uni <- function(inst_measure_uni_data) {
   
   constants <- inst_measure_uni_data %>%
     ungroup() %>%
-    select(language, measure, lexical_category, lexical_class, uni_lemma, words) %>%
-    distinct()
-  
+    select(language, measure, uni_lemma, lexical_class, words) %>%
+    distinct() %>%
+    group_by(language, measure, uni_lemma) %>%
+    summarise(lexical_classes = lexical_class %>% unique() %>% sort() %>%
+                paste(collapse = ", "),
+              words = words %>% strsplit(", ") %>% unlist() %>% unique() %>%
+                paste(collapse = ", "))
+
   props <- inst_measure_uni_data %>%
     ungroup() %>%
     select(age, prop)
   
   tryCatch({
-    model <- glmrob(cbind(num_true, num_false) ~ age, family = "binomial",
-                    data = inst_measure_uni_data, y = TRUE)
+    model <- robustbase::glmrob(cbind(num_true, num_false) ~ age,
+                                family = "binomial",
+                                data = inst_measure_uni_data, y = TRUE)
     fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
     aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
     fit_prop <- inv.logit(fit$fit)
@@ -118,26 +126,23 @@ fit_inst_measure_uni <- function(inst_measure_uni_data) {
   data_frame(age = ages, fit_prop = fit_prop, fit_se = fit_se,
              aoa = aoa, language = constants$language,
              measure = constants$measure,
-             lexical_category = constants$lexical_category,
-             lexical_class = constants$lexical_class,
              uni_lemma = constants$uni_lemma,
+             lexical_classes = constants$lexical_classes,
              words = constants$words) %>%
     left_join(props, by = "age")
 }
 
 fit_inst_measure <- function(inst_measure_data) {
   inst_measure_by_uni <- inst_measure_data %>%
-    group_by(language, form, measure, lexical_category, lexical_class, uni_lemma,
-             age, data_id) %>%
+    group_by(language, measure, lexical_class, uni_lemma, definition, age, data_id) %>%
     summarise(uni_value = any(value),
-              words = paste(definition, collapse = ", ")) %>%
-    group_by(language, form, measure, lexical_category, lexical_class, uni_lemma,
-             words, age) %>%
+              words = definition %>% sort() %>% paste(collapse = ", ")) %>%
+    group_by(language, measure, lexical_class, uni_lemma, words, age) %>%
     summarise(num_true = sum(uni_value, na.rm = TRUE),
               num_false = n() - num_true,
               prop = mean(uni_value, na.rm = TRUE))
   inst_measure_by_uni %>%
-    split(paste(.$lexical_category, .$lexical_class, .$uni_lemma)) %>%
+    split(.$uni_lemma) %>%
     map_df(fit_inst_measure_uni)
 }
 
@@ -147,12 +152,13 @@ fit_inst <- function(inst_data) {
     select(uni_lemma, definition) %>%
     distinct() %>%
     filter(!is.na(uni_lemma))
-  inst_data %>%
+  inst_data_mapped <- inst_data %>%
     select(-uni_lemma) %>%
     left_join(lang_uni_lemmas) %>%
     filter(!is.na(uni_lemma)) %>%
     group_by(definition) %>%
-    filter("WG" %in% form) %>%
+    filter("WG" %in% form)
+  inst_data_mapped %>%
     split(.$measure) %>%
     map_df(fit_inst_measure)
 }
@@ -160,17 +166,17 @@ fit_inst <- function(inst_data) {
 
 ```{r}
 all_prop_data <- map_df(raw_data, fit_inst)
-#feather::write_feather(all_prop_data, "all_prop_data.feather")
+#feather::write_feather(all_prop_data, "saved_data/all_prop_data.feather")
 ```
 
 Narrow down the data to each word's age of acquisition and filter these such that they are within specified ranges.
 ```{r}
 aoa_data <- all_prop_data %>%
-  select(language, measure, lexical_category, lexical_class, uni_lemma, words, aoa) %>%
+  select(language, measure, uni_lemma, lexical_classes, words, aoa) %>%
   distinct()
 
 min_comp <- 0
-max_comp <- 36
+max_comp <- 30
 min_prod <- 0
 max_prod <- 36
 aoa_validation <- aoa_data %>%
@@ -189,9 +195,10 @@ aoa_data_filtered <- aoa_data %>%
            understands >= min_comp & understands <= max_comp &
            produces >= min_prod & produces <= max_prod) %>%
            # understands < produces
-  gather(measure, aoa, understands, produces)
+  gather(measure, aoa, understands, produces) %>%
+  mutate(measure = factor(measure, levels = c("understands", "produces")))
   
-#feather::write_feather(aoa_data_filtered, "aoa_data.feather")
+feather::write_feather(aoa_data_filtered, "saved_data/aoa_data.feather")
 ```
 
 ```{r, fig.width=10, fig.height=8}
@@ -202,9 +209,8 @@ aoa_data_filtered %>%
   scale_fill_solarized(name = "") +
   xlab("Age of Acquisition (months)") +
   ylab("Density") +
-  theme(legend.position = c(0.9, 0),
-        panel.grid = element_blank(),
-        strip.background = element_blank())
+  theme(legend.position = c(0.92, 0))
+#ggsave("../reports/icis_talk/aoa_dist.png", width = 10, height = 7)
 ```
 
 ```{r}
