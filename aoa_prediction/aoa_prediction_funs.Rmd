@@ -1,5 +1,5 @@
 ---
-title: Predicting Age of Acquisition for Early Words Across Languages
+title: Predicting age of acquisition for early words across languages
 author: Mika Braginsky, Daniel Yurovsky, Virginia Marchman, and Michael C. Frank
 date: "`r Sys.Date()`"
 output:
@@ -22,13 +22,7 @@ library(ggplot2)
 library(langcog)
 library(ggrepel)
 library(directlabels)
-#library(wordbankr)
-# library(boot)
-# library(lazyeval)
-# library(broom)
-# library(directlabels)
-# library(lme4)
-theme_set(theme_mikabr())
+theme_set(theme_mikabr(base_size = 18))
 font <- "Open Sans"
 ```
 
@@ -103,16 +97,16 @@ case_map <- bind_rows(special_case_map, pattern_map) %>% distinct()
 Get measure extracted from CHILDES -- unigram count, mean sentence length, utterance-final position count, singleton count.
 ```{r load_childes}
 load_childes_data <- function(lang) {
-  read_csv(sprintf("predictors/childes/data/childes_%s.csv",
+  engs <- read_csv(sprintf("predictors/childes/data/childes_%s.csv",
                           norm_lang(lang))) %>%
     filter(!is.na(word)) %>%
     mutate(stem = stem(word, norm_lang(lang)),
            language = lang) %>%
     right_join(case_map %>% filter(language == lang)) %>%
     group_by(uni_lemma) %>%
-    summarise(mean_sent_length = weighted.mean(
-      mean_sent_length, word_count, na.rm = TRUE),
+    summarise(MLU = weighted.mean(mean_sent_length, word_count, na.rm = TRUE),
               word_count = sum(word_count, na.rm = TRUE),
+              MLU = ifelse(word_count < 10, NA, MLU),
               final_count = sum(final_count, na.rm = TRUE),
               solo_count = sum(solo_count, na.rm = TRUE),
               language = lang)
@@ -123,17 +117,18 @@ childes_data <- map_df(languages, load_childes_data)
 uni_childes <- childes_data %>%
   filter(word_count != 0) %>%
   group_by(language) %>%
-  mutate(log_freq = log(word_count / sum(word_count)),
+  mutate(word_count = word_count + 1,
+         frequency = log(word_count / sum(word_count)),
          final_count = final_count + 1,
-         log_final_freq = log((final_count - solo_count) /
+         final_freq = log((final_count - solo_count) /
                                      sum(final_count - solo_count)),
          solo_count = solo_count + 1,
-         log_solo_freq = log(solo_count / sum(solo_count)))
+         solo_freq = log(solo_count / sum(solo_count)))
 
-uni_childes$resid_log_final_freq <- lm(log_final_freq ~ log_freq,
-                                       data = uni_childes)$residuals
-uni_childes$resid_log_solo_freq <- lm(log_solo_freq ~ log_freq,
-                                       data = uni_childes)$residuals
+uni_childes$final_frequency <- lm(final_freq ~ frequency,
+                                  data = uni_childes)$residuals
+uni_childes$solo_frequency <- lm(solo_freq ~ frequency,
+                                 data = uni_childes)$residuals
 ```
 
 Get estimates of valence, arousal, and dominance
@@ -219,6 +214,16 @@ uni_joined <- aoa_data %>%
   left_join(uni_concreteness) %>%
   left_join(phonemes) %>%
   distinct()
+
+# all_prop_data <- feather::read_feather("../aoa_estimation/saved_data/all_prop_data.feather")
+# uni_props <- all_prop_data %>%
+#   select(language, measure, uni_lemma, lexical_classes, words, age, prop) %>%
+#   left_join(uni_childes) %>%
+#   left_join(uni_valences) %>%
+#   left_join(uni_babiness) %>%
+#   left_join(uni_concreteness) %>%
+#   left_join(phonemes) %>%
+#   distinct()
 ```
 
 Function to get number of characters from item definitions.
@@ -243,10 +248,9 @@ num_characters <- function(words) {
 
 Fit AoA prediction models for each language and measure.
 ```{r}
-predictors <- c("log_freq", "mean_sent_length", "resid_log_final_freq", 
-                "resid_log_solo_freq",
-                "concreteness", "valence", "arousal", "babiness",
-                "num_characters")
+predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
+                "length",
+                "concreteness", "valence", "arousal", "babiness")
 
 english <- filter(uni_joined, language == "English")
 #ggplot(english, aes(x = log_freq)) + geom_density()
@@ -256,25 +260,19 @@ mean_iconicity <- mean(english$iconicity, na.rm = TRUE)
 mean_valence <- mean(english$valence, na.rm = TRUE)
 mean_arousal <- mean(english$arousal, na.rm = TRUE)
 
-# mean_concreteness <- 3
-# mean_babiness <- 5.5
-# #mean_iconicity <- mean(english$iconicity, na.rm = TRUE)
-# mean_valence <- 5
-# mean_arousal <- 5
-
 lang_data_fun <- function(lang, uni_joined, predictors) {
   uni_joined %>%
     filter(language == lang) %>%
     mutate(concreteness = ifelse(is.na(concreteness), mean_concreteness, concreteness),
            babiness = ifelse(is.na(babiness), mean_babiness, babiness),
-           #iconicity = ifelse(is.na(iconicity), mean_iconicity, iconicity),
            valence = ifelse(is.na(valence), mean_valence, valence),
            arousal = ifelse(is.na(arousal), mean_arousal, arousal)) %>%
     rowwise() %>%
-    mutate(num_characters = num_characters(words)) %>%
+    mutate(length = num_characters(words)) %>%
     ungroup() %>%
     select_(.dots = c("language", "measure", "lexical_classes", "uni_lemma", "aoa",
-                      predictors)) %>%
+    # select_(.dots = c("language", "measure", "lexical_classes", "uni_lemma", "age", "prop",
+                       predictors)) %>%
     group_by(language, measure) %>%
     mutate_each_(funs(as.numeric(scale(.))), predictors) %>%
     ungroup() %>%
@@ -288,6 +286,23 @@ lang_model_fun <- function(lang_measure_data, predictors) {
   lm(predictor_formula, data = lang_measure_data, y = TRUE)
 }
 
+# lang_model_fun <- function(lang_measure_data, predictors) {
+#   print("Fitting lmer...")
+#   predictor_formula <- as.formula(
+#     sprintf("prop ~ (1 | uni_lemma) + age + %s", paste(predictors, collapse = " + "))
+#   )
+#   interaction_formula <- as.formula(
+#     sprintf("prop ~ (1 | uni_lemma) + age + %s + %s",
+#             paste(predictors, collapse = " + "),
+#             paste(sprintf("age * %s", predictors), collapse = " + "))
+#   )
+#   # m <- glmer(prop ~ age + frequency + (1 | uni_lemma),
+#   #            family = "binomial", data = lang_measure_data)
+#   no_interact <- glmer(predictor_formula, family = "binomial", data = lang_measure_data)
+#   interact <- glmer(interaction_formula, family = "binomial", data = lang_measure_data,
+#                     control = glmerControl(optCtrl = list(maxfun = 1e5)))
+# }
+
 lang_coef_fun <- function(lang_model) {
   broom::tidy(lang_model) %>%
     filter(term != "(Intercept)") %>%
@@ -296,6 +311,9 @@ lang_coef_fun <- function(lang_model) {
 
 all_lang_data <- languages %>%
   map_df(~lang_data_fun(.x, uni_joined, predictors))
+
+# lang_prop_data <- languages %>%
+#   map_df(~lang_data_fun(.x, uni_props, predictors))
 
 lang_results <- all_lang_data %>%
   group_by(language, measure) %>%
@@ -390,7 +408,9 @@ coef_plot <- function(measure) {
                         colour = term)) +
     geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
     geom_text(aes(label = paste("bar(R)^2==", round(adj_rsq, 2))), parse = TRUE,
-              x = 9, y = 1.4, family = font, size = 3) +
+              y = max(joint_coefs[[measure]]$estimate + 1.96 *
+                        joint_coefs[[measure]]$std.error),
+              x = 9, family = font, size = 4, hjust = "right") +
     coord_flip() +
     scale_fill_solarized(guide = FALSE) +
     scale_colour_manual(guide = FALSE, values = rev(solarized_palette(length(predictors)))) +
@@ -399,6 +419,129 @@ coef_plot <- function(measure) {
 }
 coef_plot("understands")
 coef_plot("produces")
+```
+
+Examine cross-linguistic consistency in coefficient estimates.
+```{r consistency, fig.width=9, fig.height=4}
+joint_coefs_measures <- bind_rows(joint_coefs) %>%
+  mutate(measure = factor(measure, levels = c("understands", "produces")))
+ggplot(joint_coefs_measures, aes(x = term, y = estimate)) +
+  facet_wrap(~measure) +
+  geom_point(aes(colour = term), size = 1, alpha = 0.5,
+                      data = joint_coefs_measures %>%
+                        filter(language != "All Languages")) +
+  geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
+                      ymax = estimate + 1.96 * std.error,
+                      colour = term),# size = 1,
+                      data = joint_coefs_measures %>%
+                        filter(language == "All Languages")) +
+  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+  coord_flip() +
+  scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(length(predictors)))) +
+  xlab("") +
+  scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
+
+coef_var <- joint_coefs_measures %>%
+  filter(language != "All Languages") %>%
+  group_by(measure, term) %>%
+  summarise(crossling_var = var(estimate))
+
+coef_consistency <- joint_coefs_measures %>%
+  filter(language == "All Languages") %>%
+  left_join(coef_var) %>%
+  mutate(var_ratio = crossling_var / abs(estimate)) %>%
+  select(measure, term, estimate, std.error, crossling_var, var_ratio)
+```
+
+Fit AoA prediction models for each measure and lexical class across languages.
+```{r}
+lexical_classes <- list("Nouns" = "nouns",
+                        "Predicates" = c("adjectives", "adverbs", "verbs"),
+                        "Function Words" = "function_words",
+                        "Other" = "other")
+
+lexcat_predictors <- predictors %>% discard(~.x %in% c("arousal", "valence"))
+crossling_lexcat_models <- all_lang_data %>%
+  mutate(mult_lex = map(lexical_classes, ~length(unlist(strsplit(.x, ", "))))) %>%
+  filter(mult_lex == 1) %>%
+  select(-mult_lex) %>%
+  rename(lexical_class = lexical_classes) %>%
+  mutate(lexical_class = `levels<-`(factor(lexical_class), lexical_classes)) %>%
+  group_by(measure, lexical_class) %>%
+  nest() %>%
+  mutate(model = map(data, ~crossling_model_fun(.x, lexcat_predictors)))
+
+crossling_lexcat_coefs <- crossling_lexcat_models %>%
+  mutate(coef = map(model, crossling_coef_fun),
+         adj_rsq = map_dbl(model, crossling_rsq_fun)) %>%
+  select(measure, lexical_class, coef, adj_rsq) %>%
+  unnest() %>%
+  mutate(term = factor(term, levels = rev(term_order$term)))
+  # split(.$measure) %>%
+  # map(~.x %>%
+  #       arrange(desc(adj_rsq)) %>%
+  #       mutate(term = factor(term, levels = rev(term_order$term))))
+```
+
+```{r lexcat_coefs, fig.width=12, fig.height=6}
+plt_lexcat_coefs <- crossling_lexcat_coefs %>%
+  bind_rows() %>%
+  mutate(measure = factor(measure, levels = c("understands", "produces"))) %>%
+  filter(lexical_class != "Other")
+
+pal <- rev(solarized_palette(length(predictors)))
+lexcat_pal <- c(pal[1], pal[4:length(pal)])
+
+plt_lexcat_coefs %>%
+  ggplot(aes(x = term, y = estimate)) +
+    facet_grid(measure ~ lexical_class) +
+    geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
+                        ymax = estimate + 1.96 * std.error,
+                        colour = term)) +
+    geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+    coord_flip() +
+    scale_fill_solarized(guide = FALSE) +
+    scale_colour_manual(guide = FALSE,
+                        values = lexcat_pal) +
+    xlab("") +
+    scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
+
+plt_lexcat_coefs %>%
+  ggplot(aes(x = term, y = estimate)) +
+    facet_grid(measure ~ lexical_class) +
+    geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
+                        ymax = estimate + 1.96 * std.error,
+                        colour = term), alpha = 0.1,
+                    data = plt_lexcat_coefs) +
+    geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
+                        ymax = estimate + 1.96 * std.error,
+                        colour = term),
+                    data = plt_lexcat_coefs %>% filter(term %in% c("frequency"))) +
+    geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+    coord_flip() +
+    scale_fill_solarized(guide = FALSE) +
+    scale_colour_manual(guide = FALSE, values = lexcat_pal) +
+    xlab("") +
+    scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
+
+plt_lexcat_coefs %>%
+  ggplot(aes(x = term, y = estimate)) +
+    facet_grid(measure ~ lexical_class) +
+    geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
+                        ymax = estimate + 1.96 * std.error,
+                        colour = term), alpha = 0.1,
+                    data = plt_lexcat_coefs) +
+    geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
+                        ymax = estimate + 1.96 * std.error,
+                        colour = term),
+                    data = plt_lexcat_coefs %>% filter(term %in% c("MLU"))) +
+    geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+    coord_flip() +
+    scale_fill_solarized(guide = FALSE) +
+    scale_colour_manual(guide = FALSE, values = lexcat_pal) +
+    xlab("") +
+    scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
 ```
 
 Compare production vs. comprehension.
@@ -465,134 +608,94 @@ ggplot(plt_crossling_coefs, aes(x = measure, y = estimate, colour = term)) +
 
 Fit AoA prediction models for early vs late words across languages.
 ```{r}
-crossling_age_models <- all_lang_data %>%
-  group_by(measure) %>%
-  mutate(aoa_bin = cut(aoa, breaks = 2, labels = c("earlier", "later"))) %>%
-  group_by(measure, aoa_bin) %>%
-  nest() %>%
-  mutate(model = map(data, ~crossling_model_fun(.x, predictors)))
-
-crossling_age_coefs <- crossling_age_models %>%
-  mutate(coef = map(model, crossling_coef_fun),
-         adj_rsq = map_dbl(model, crossling_rsq_fun)) %>%
-  select(measure, aoa_bin, coef, adj_rsq) %>%
-  unnest() %>%
-  mutate(language = "All Languages")
+# crossling_age_models <- all_lang_data %>%
+#   group_by(measure) %>%
+#   mutate(aoa_bin = cut(aoa, breaks = 2, labels = c("earlier", "later"))) %>%
+#   group_by(measure, aoa_bin) %>%
+#   nest() %>%
+#   mutate(model = map(data, ~crossling_model_fun(.x, predictors)))
+# 
+# crossling_age_coefs <- crossling_age_models %>%
+#   mutate(coef = map(model, crossling_coef_fun),
+#          adj_rsq = map_dbl(model, crossling_rsq_fun)) %>%
+#   select(measure, aoa_bin, coef, adj_rsq) %>%
+#   unnest() %>%
+#   mutate(language = "All Languages")
 ```
 
 Compare early vs. late.
 ```{r compare_age, fig.width=10, fig.height=5}
-plt_crossling_age_coefs <- crossling_age_coefs %>%
-  mutate(measure = factor(measure, levels = c("understands", "produces")),
-         term = factor(term, levels = rev(term_order$term)))
-
-ggplot(plt_crossling_age_coefs, aes(x = aoa_bin, y = estimate, colour = term)) +
-  facet_wrap(~measure, scales = "free_y") +
-  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-  geom_linerange(aes(ymin = estimate - 1.96 * std.error,
-                      ymax = estimate + 1.96 * std.error),
-                  position = position_dodge(width = 0.1), alpha = 0.5) +
-  geom_point(position = position_dodge(width = 0.1)) +
-  geom_line(aes(group = term), position = position_dodge(width = 0.1)) +
-  geom_dl(aes(label = term),
-          method = list("first.qp", dl.trans(x = x - 0.5), cex = 0.6,
-                        fontfamily = font)) +
-  geom_dl(aes(label = term),
-          method = list("last.qp", dl.trans(x = x + 0.5), cex = 0.6,
-                        fontfamily = font)) +
-  scale_fill_solarized(guide = FALSE) +
-  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(length(predictors)))) +
-  scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
-
-age_diffs <- crossling_age_coefs %>%
-  select(measure, aoa_bin, term, estimate) %>%
-  spread(aoa_bin, estimate) %>%
-  mutate(diff = abs(earlier - later)) %>%
-  group_by(measure) %>%
-  filter(diff == max(diff))
-
-ggplot(plt_crossling_age_coefs, aes(x = aoa_bin, y = estimate, colour = term)) +
-  facet_wrap(~measure, scales = "free_y") +
-  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-  geom_linerange(aes(ymin = estimate - 1.96 * std.error,
-                      ymax = estimate + 1.96 * std.error),
-                  position = position_dodge(width = 0.1), alpha = 0,
-                 data = filter(plt_crossling_age_coefs)) +
-  geom_point(position = position_dodge(width = 0.1), alpha = 0,
-             data = filter(plt_crossling_age_coefs)) +
-  geom_line(aes(group = term), position = position_dodge(width = 0.1), alpha = 0,
-            data = filter(plt_crossling_age_coefs)) +
-  geom_linerange(aes(ymin = estimate - 1.96 * std.error,
-                      ymax = estimate + 1.96 * std.error),
-                  position = position_dodge(width = 0.1), alpha = 0.5,
-                 data = filter(plt_crossling_age_coefs, term %in% age_diffs$term)) +
-  geom_point(position = position_dodge(width = 0.1),
-             data = filter(plt_crossling_age_coefs, term %in% age_diffs$term)) +
-  geom_line(aes(group = term), position = position_dodge(width = 0.1),
-            data = filter(plt_crossling_age_coefs, term %in% age_diffs$term)) +
-  geom_dl(aes(label = term),
-          data = filter(plt_crossling_age_coefs, term %in% age_diffs$term),
-          method = list("first.qp", dl.trans(x = x - 0.5), cex = 0.6,
-                        fontfamily = font)) +
-  geom_dl(aes(label = term),
-          data = filter(plt_crossling_age_coefs, term %in% age_diffs$term),
-          method = list("last.qp", dl.trans(x = x + 0.5), cex = 0.6,
-                        fontfamily = font)) +
-  scale_fill_solarized(guide = FALSE) +
-  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(length(predictors)))) +
-  xlab("") +
-  scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
+# plt_crossling_age_coefs <- crossling_age_coefs %>%
+#   mutate(measure = factor(measure, levels = c("understands", "produces")),
+#          term = factor(term, levels = rev(term_order$term)))
+# 
+# ggplot(plt_crossling_age_coefs, aes(x = aoa_bin, y = estimate, colour = term)) +
+#   facet_wrap(~measure, scales = "free_y") +
+#   geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+#   geom_linerange(aes(ymin = estimate - 1.96 * std.error,
+#                       ymax = estimate + 1.96 * std.error),
+#                   position = position_dodge(width = 0.1), alpha = 0.5) +
+#   geom_point(position = position_dodge(width = 0.1)) +
+#   geom_line(aes(group = term), position = position_dodge(width = 0.1)) +
+#   geom_dl(aes(label = term),
+#           method = list("first.qp", dl.trans(x = x - 0.5), cex = 0.6,
+#                         fontfamily = font)) +
+#   geom_dl(aes(label = term),
+#           method = list("last.qp", dl.trans(x = x + 0.5), cex = 0.6,
+#                         fontfamily = font)) +
+#   scale_fill_solarized(guide = FALSE) +
+#   scale_colour_manual(guide = FALSE, values = rev(solarized_palette(length(predictors)))) +
+#   scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
+# 
+# age_diffs <- crossling_age_coefs %>%
+#   select(measure, aoa_bin, term, estimate) %>%
+#   spread(aoa_bin, estimate) %>%
+#   mutate(diff = abs(earlier - later)) %>%
+#   group_by(measure) %>%
+#   arrange(desc(diff))
+# age_diffs_n <- function(n) {
+#   age_diffs %>% slice(1:n)
+# }
+# 
+# age_diff_plot <- function(n) {
+#   max_age_diffs <- age_diffs_n(n)
+#   ggplot(plt_crossling_age_coefs, aes(x = aoa_bin, y = estimate, colour = term)) +
+#     facet_wrap(~measure, scales = "free_y") +
+#     geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+#     geom_linerange(aes(ymin = estimate - 1.96 * std.error,
+#                         ymax = estimate + 1.96 * std.error),
+#                     position = position_dodge(width = 0.1), alpha = 0,
+#                    data = filter(plt_crossling_age_coefs)) +
+#     geom_point(position = position_dodge(width = 0.1), alpha = 0,
+#                data = filter(plt_crossling_age_coefs)) +
+#     geom_line(aes(group = term), position = position_dodge(width = 0.1), alpha = 0,
+#               data = filter(plt_crossling_age_coefs)) +
+#     geom_linerange(aes(ymin = estimate - 1.96 * std.error,
+#                         ymax = estimate + 1.96 * std.error),
+#                     position = position_dodge(width = 0.1), alpha = 0.5,
+#                    data = filter(plt_crossling_age_coefs, term %in% max_age_diffs$term)) +
+#     geom_point(position = position_dodge(width = 0.1),
+#                data = filter(plt_crossling_age_coefs, term %in% max_age_diffs$term)) +
+#     geom_line(aes(group = term), position = position_dodge(width = 0.1),
+#               data = filter(plt_crossling_age_coefs, term %in% max_age_diffs$term)) +
+#     geom_dl(aes(label = term),
+#             data = filter(plt_crossling_age_coefs, term %in% max_age_diffs$term),
+#             method = list("first.qp", dl.trans(x = x - 0.5), cex = 0.6,
+#                           fontfamily = font)) +
+#     geom_dl(aes(label = term),
+#             data = filter(plt_crossling_age_coefs, term %in% max_age_diffs$term),
+#             method = list("last.qp", dl.trans(x = x + 0.5), cex = 0.6,
+#                           fontfamily = font)) +
+#     scale_fill_solarized(guide = FALSE) +
+#     scale_colour_manual(guide = FALSE, values = rev(solarized_palette(length(predictors)))) +
+#     xlab("") +
+#     scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
+# }
+# 
+# age_diff_plot(1)
 ```
 
-Fit AoA prediction models for each measure and lexical class across languages.
-```{r}
-lexical_classes <- list("Nouns" = "nouns",
-                        "Predicates" = c("adjectives", "adverbs", "verbs"),
-                        "Function Words" = "function_words",
-                        "Other" = "other")
-
-lexcat_predictors <- predictors %>% discard(~.x %in% c("arousal", "valence"))
-crossling_lexcat_models <- all_lang_data %>%
-  mutate(mult_lex = map(lexical_classes, ~length(unlist(strsplit(.x, ", "))))) %>%
-  filter(mult_lex == 1) %>%
-  select(-mult_lex) %>%
-  rename(lexical_class = lexical_classes) %>%
-  mutate(lexical_class = `levels<-`(factor(lexical_class), lexical_classes)) %>%
-  group_by(measure, lexical_class) %>%
-  nest() %>%
-  mutate(model = map(data, ~crossling_model_fun(.x, lexcat_predictors)))
-
-crossling_lexcat_coefs <- crossling_lexcat_models %>%
-  mutate(coef = map(model, crossling_coef_fun),
-         adj_rsq = map_dbl(model, crossling_rsq_fun)) %>%
-  select(measure, lexical_class, coef, adj_rsq) %>%
-  unnest() %>%
-  split(.$measure) %>%
-  map(~.x %>%
-        arrange(desc(adj_rsq)) %>%
-        mutate(term = factor(term, levels = rev(term_order$term))))
-```
-
-```{r lexcat_coefs, fig.width=12, fig.height=3}
-lexcat_coef_plot <- function(measure) {
-  ggplot(crossling_lexcat_coefs[[measure]], aes(x = term, y = estimate)) +
-    facet_wrap(~lexical_class, ncol = 4) +
-    geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
-                        ymax = estimate + 1.96 * std.error,
-                        colour = term)) +
-    geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-    geom_text(aes(label = paste("bar(R)^2==", round(adj_rsq, 2))), parse = TRUE,
-              x = 9, y = 1.4, family = font, size = 3) +
-    coord_flip() +
-    scale_fill_solarized(guide = FALSE) +
-    scale_colour_manual(guide = FALSE, values = rev(solarized_palette(length(predictors)))) +
-    xlab("") +
-    scale_y_continuous(name = "Coefficient Estimate (Months/SD)")
-}
-lexcat_coef_plot("understands")
-lexcat_coef_plot("produces")
-```
-
+Examine pairwise correlations between predictors.
 ```{r}
 # predictor_cors <- all_lang_data %>%
 #   split(.$language) %>%
@@ -626,6 +729,7 @@ lexcat_coef_plot("produces")
 #   theme(axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 
+Make table of words with highest/lowest values for each measure.
 ```{r}
 num_extremes <- 3
 extremes <- all_lang_data %>%
@@ -633,36 +737,51 @@ extremes <- all_lang_data %>%
     split(.$language) %>%
     map_df(function(lang_data) {
     map_df(predictors, function(predictor) {
-      highest <- lang_data %>%
+      if (predictor %in% c("frequency", "final_frequency", "solo_frequency", "MLU")) {
+        filtered_lang_data <- lang_data %>%
+          filter(frequency != min(frequency))
+      } else {
+        filtered_lang_data <- lang_data
+      }
+      highest <- filtered_lang_data %>%
         arrange_(as.formula(sprintf("~desc(%s)", predictor))) %>%
         .$uni_lemma %>%
         .[1:num_extremes]
-      lowest <- lang_data %>%
+      lowest <- filtered_lang_data %>%
         arrange_(predictor) %>%
         .$uni_lemma %>%
         .[1:num_extremes]
       return(data.frame("language" = unique(lang_data$language),
                         "Measure" = predictor,
-                        "Lowest" = paste(lowest, collapse = ", "),
-                        "Highest" = paste(highest, collapse = ", ")))
+                        "Highest" = paste(highest, collapse = ", "),
+                        "Lowest" = paste(lowest, collapse = ", ")))
     })
   }) %>%
   filter(language == "English") %>%
-  select(-language) #%>%
-  # mutate(order = row_number()) %>%
-  # gather(Value, Words, lowest, highest) %>%
-  # arrange(order) %>%
-  # select(-order) %>%
-  # mutate(Measure = unlist(transpose(list(unique(Measure), rep("", length(Measure))))))
+  select(-language)
 ```
 
 ```{r, cache=FALSE}
-#DT::datatable(extremes, style = "bootstrap", options = list(dom = "t"), rownames = FALSE)
 knitr::kable(extremes)
 ```
 
+Make table of instrument sample sizes.
+```{r}
+sample_sizes <- feather::read_feather("../aoa_estimation/saved_data/sample_sizes.feather")
+num_items <- aoa_data %>%
+  filter(measure == "understands") %>%
+  group_by(language) %>%
+  summarise(items = n())
+sample_sizes %>%
+  spread(form, N) %>%
+  left_join(num_items) %>%
+  select(language, items, WG, WS) %>%
+  rename(Language = language, Items = items) %>%
+  knitr::kable()
+```
+
 Analysis walk-through plots for English comprehension.
-```{r demo_data, fig.width=10, fig.height=5.5}
+```{r demo_data, fig.width=8, fig.height=4}
 demo_lang <- "English"
 demo_measure <- "understands"
 
@@ -677,16 +796,20 @@ demo_data <- all_lang_data %>%
   mutate(predictor = factor(predictor, levels = demo_order$term),
          lexical_class = `levels<-`(factor(lexical_class), lexical_classes))
 
-ggplot(demo_data, aes(x = value, y = aoa)) +
+demo_data %>%
+  filter(predictor %in% c("frequency", "MLU")) %>%
+ggplot(aes(x = value, y = aoa)) +
   facet_wrap(~predictor, ncol = 5) +
-  geom_jitter(aes(colour = lexical_class), size = 0.5, alpha = 0.5) +
+  geom_jitter(#aes(colour = lexical_class),
+    colour = solarized_palette(1),
+    size = 0.5, alpha = 0.5) +
   geom_smooth(method = "lm", colour = "grey3") +
   scale_colour_solarized(name = "") +
   xlab("Predictor Z-score") +
   scale_y_continuous(name = "Age of Acquisition (months)",
-                     breaks = seq(5, 30, 10)) +
-  scale_alpha(guide = FALSE) +
-  theme(legend.position = "top")
+                     breaks = seq(5, 30, 10)) #+
+  #scale_alpha(guide = FALSE) +
+  #theme(legend.position = "bottom")
 ```
 
 ```{r demo_fits, fig.width=6, fig.height=6}
@@ -701,25 +824,26 @@ demo_fits <- data_frame(uni_lemma = demo_results$data[[1]]$uni_lemma,
   mutate(lexical_class = `levels<-`(factor(lexical_class), lexical_classes),
          error = abs(aoa - predicted))
 
-ggplot(demo_fits, aes(x = predicted, y = aoa, colour = lexical_class)) +
+ggplot(demo_fits, aes(x = predicted, y = aoa)) + #, colour = lexical_class)) +
   facet_wrap(~lexical_class, ncol = 2) +
   #coord_fixed() +
   geom_abline(slope = 1, intercept = 0, colour = "grey", linetype = "dashed") +
-  geom_point(size = 0.5) +
-  geom_smooth(method = "lm") +
+  geom_point(size = 0.6, colour = solarized_palette(1)) +
+  geom_smooth(method = "lm", colour = "black") +
   geom_text_repel(aes(label = uni_lemma), data = filter(demo_fits, error > threshold),
-                  size = 3, family = font, force = 27, max.iter = 1e5) +
-  scale_colour_solarized(guide = FALSE) +
+                  size = 4, family = font, force = 27, max.iter = 1e5) +
+  #scale_colour_solarized(guide = FALSE) +
   scale_x_continuous(name = "Predicted Age of Acquisition (months)",
                      breaks = seq(5, 25, 5)) +
   scale_y_continuous(name = "Age of Acquisition (months)",
                      breaks = seq(5, 25, 5))
 ```
 
-```{r demo_coefs, fig.width=5, fig.height=3}
+```{r demo_coefs, fig.width=8, fig.height=5}
 demo_coefs <- lang_coefs %>%
   filter(language == demo_lang, measure == demo_measure) %>%
-  mutate(term = factor(term, levels = rev(demo_order$term)))
+  #mutate(term = factor(term, levels = rev(demo_order$term)))
+  mutate(term = factor(term, levels = rev(term_order$term)))
 
 ggplot(demo_coefs, aes(x = term, y = estimate)) +
   facet_wrap(~language) +

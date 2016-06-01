@@ -1,0 +1,16 @@
+- ~~re-plot just highlighted parts in coef plots~~
+- ~~scaffold result order/parts more~~
+- ~~flavor of how approach can distinguish theories/mechanisms~~
+- ~~more cooler thing about approach~~
+    - ~~flips focus from children to items~~
+    - ~~big data~~
+    - ~~pomp and circumstance about wordbank~~
+- ~~emphasize exciting and difficult nature~~
+- ~~spend more time on the hairy details part (e.g. translation equivalents "is tortilla bread?")~~
+- ~~link the lab small-scale results to need for scaling~~
+- ~~bring theory to scale using multiple data sources~~
+- ~~bigger and darker font for text~~
+- ~~18-24 pt axis labels~~
+- ~~ratio of cross-linguistic variance in coefficient to coefficient magnitude~~
+- ~~frame predictors in theoretical importance~~
+- ~~emphasize the measuring of relative contributions~~

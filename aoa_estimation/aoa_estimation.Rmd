@@ -134,7 +134,7 @@ fit_inst_measure_uni <- function(inst_measure_uni_data) {
 
 fit_inst_measure <- function(inst_measure_data) {
   inst_measure_by_uni <- inst_measure_data %>%
-    group_by(language, measure, lexical_class, uni_lemma, definition, age, data_id) %>%
+    group_by(language, measure, lexical_class, uni_lemma, age, data_id) %>%
     summarise(uni_value = any(value),
               words = definition %>% sort() %>% paste(collapse = ", ")) %>%
     group_by(language, measure, lexical_class, uni_lemma, words, age) %>%
@@ -166,6 +166,88 @@ fit_inst <- function(inst_data) {
 
 ```{r}
 all_prop_data <- map_df(raw_data, fit_inst)
+#feather::write_feather(all_prop_data, "saved_data/all_prop_data.feather")
+```
+
+```{r, aoa_data}
+# fit_inst_measure_uni <- function(inst_measure_uni_data) {
+#   
+#   ages <- min(inst_measure_uni_data$age):max(inst_measure_uni_data$age)
+#   
+#   constants <- inst_measure_uni_data %>%
+#     ungroup() %>%
+#     select(language, measure, uni_lemma, lexical_class, words) %>%
+#     distinct() %>%
+#     group_by(language, measure, uni_lemma) %>%
+#     summarise(lexical_classes = lexical_class %>% unique() %>% sort() %>%
+#                 paste(collapse = ", "),
+#               words = words %>% strsplit(", ") %>% unlist() %>% unique() %>%
+#                 paste(collapse = ", "))
+# 
+#   props <- inst_measure_uni_data %>%
+#     ungroup() %>%
+#     select(age, prop)
+#   
+#   tryCatch({
+#     model <- robustbase::glmrob(cbind(num_true, num_false) ~ age,
+#                                 family = "binomial",
+#                                 data = inst_measure_uni_data, y = TRUE)
+#     fit <- predict(model, newdata = data.frame(age = ages), se.fit = TRUE)
+#     aoa <- -model$coefficients[["(Intercept)"]] / model$coefficients[["age"]]
+#     fit_prop <- inv.logit(fit$fit)
+#     fit_se <- fit$se.fit
+#   }, error = function(e) {
+#     aoa <<- fit <<- fit_prop <<- fit_se <<- NA
+#   })
+#   
+#   data_frame(age = ages, fit_prop = fit_prop, fit_se = fit_se,
+#              aoa = aoa, language = constants$language,
+#              measure = constants$measure,
+#              uni_lemma = constants$uni_lemma,
+#              lexical_classes = constants$lexical_classes,
+#              words = constants$words) %>%
+#     left_join(props, by = "age")
+# }
+
+imd <- inst_measure_data %>%
+    split(paste(.$uni_lemma, .$data_id)) %>%
+    map(nrow)
+
+fit_inst_measure <- function(inst_measure_data) {
+#  inst_measure_by_uni <- inst_measure_data %>%
+  imd <- inst_measure_data %>%
+    group_by(language, measure, lexical_class, uni_lemma, age, data_id) %>%
+    summarise(uni_value = any(value),
+              words = definition %>% sort() %>% paste(collapse = ", ")) %>%
+    group_by(language, measure, lexical_class, uni_lemma, words, age) %>%
+    summarise(num_true = sum(uni_value, na.rm = TRUE),
+              num_false = n() - num_true,
+              prop = mean(uni_value, na.rm = TRUE))
+  # inst_measure_by_uni %>%
+  #   split(.$uni_lemma) %>%
+  #   map_df(fit_inst_measure_uni)
+}
+
+fit_inst <- function(inst_data) {
+  print(unique(inst_data$language))
+  lang_uni_lemmas <- inst_data %>%
+    select(uni_lemma, definition) %>%
+    distinct() %>%
+    filter(!is.na(uni_lemma))
+  inst_data_mapped <- inst_data %>%
+    select(-uni_lemma) %>%
+    left_join(lang_uni_lemmas) %>%
+    filter(!is.na(uni_lemma)) %>%
+    group_by(definition) %>%
+    filter("WG" %in% form)
+  inst_data_mapped %>%
+    split(.$measure) %>%
+    map_df(fit_inst_measure)
+}
+```
+
+```{r}
+uni_prop_data <- map_df(raw_data, fit_inst)
 #feather::write_feather(all_prop_data, "saved_data/all_prop_data.feather")
 ```
 
@@ -210,7 +292,7 @@ aoa_data_filtered %>%
   xlab("Age of Acquisition (months)") +
   ylab("Density") +
   theme(legend.position = c(0.92, 0))
-#ggsave("../reports/icis_talk/aoa_dist.png", width = 10, height = 7)
+ggsave("../reports/icis_talk/aoa_dist.png", width = 10, height = 7)
 ```
 
 ```{r}
@@ -319,4 +401,18 @@ ggplot(plot_aoa, aes(x = understands, y = produces)) +
   scale_colour_solarized() +
   scale_x_continuous(limits = c(0, 36)) +
   scale_y_continuous(limits = c(0, 36))
+```
+
+Make table of instrument sample sizes.
+```{r}
+sample_sizes <- raw_data %>%
+  map_df(function(lang_data) {
+    lang_data %>%
+      group_by(language, form) %>%
+      summarise(N = length(unique(data_id)))
+  })
+sum(sample_sizes$N)
+min(sample_sizes$N)
+mean(sample_sizes$N)
+feather::write_feather(sample_sizes, "saved_data/sample_sizes.feather")
 ```

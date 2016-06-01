@@ -1,0 +1,18 @@
+- ~~save offline or we might be screwed~~
+- hundreds of words?
+- ~~might reverse screen positions of language and stuff to be in the same order as what you say~~
+- ~~is the citation list on many proposed mechanisms just the intro to yu and smith (2007)?~~
+- ~~Might try to throw conceptual and perceptual in here somehow~~
+- ~~Might cite some other people for factors~~
+- ~~might try to get CDI in earlier? Or show a cdi or something?~~
+- ~~Items table maybe not super useful?~~
+- ~~distributions of AOA plots not terribly informative but look like they should be so people will fixate on them~~
+- ~~log unigram frequency is pretty technical and doesn't need to be.~~
+- ~~woah all of this stuff is way more technically described than it needs to be~~
+- ~~might say we took characters out of necessity rather than theoretical reasons~~
+- ~~Also translation equivalents comes out of nowhere~~
+- ~~Did we not use iconicity? Why not?~~
+- ~~low log freq is entirely due to difficulty processing childes~~
+- ~~holy shit these muti-language plots...~~
+- ~~general rule is don't show things you're not going to talk about~~
+- ~~that function word sentence length thing is cool! we want to talk about that~~

@@ -1,0 +1,6 @@
+- ~~for the slide estimating age of acquisition, showing one line: can you say that this line is for one word? (and which word, as an example?)~~
+- ~~description of dv's: should you say a word about why you chose to look at these measures, specifically? e.g. linking to what potential theoretical mechanisms~~
+- ~~sorry, what was the criterion for words to make it to the list? (e.g., how did cockadoodledoo make it to the list as opposed to other words that didn’t)~~
+- ~~slide with 7 graphs: can you say a word describing result for one of the 7 graphs, then show the rest?~~
+- ~~say a word about why you’re dividing by lexical category?~~
+- ~~labels on graph: would it be easier to change to simpler labels rather than e.g. "residual log…”~~

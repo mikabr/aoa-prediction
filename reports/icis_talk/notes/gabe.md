@@ -1,0 +1,27 @@
+* ~~what's an example of a Markman constraint/bias? Not clear how this
+is different from the social cues to me as an outsider~~
+* ~~"Approach" slide: proportion/age plot fits aren't logisitics, right?
+(I know this is the least important point I could make)~~
+* ~~other "Approach" slide: separate out the preceding work from the
+questions you're askign, even with just an extra line break~~
+* ~~comprehension/production plot slide: the density plots are % of word
+that first pass 50% in each month?~~
+ * ~~might want to point out that it's not cumulative to make sure no
+one gets confused~~
+* ~~isn't laplace smoothing really bad for something like rare
+occurrences of words? (Chen & Goodman 96, maybe?)~~
+ * ~~i'd think a variant of backoff makes more sense -- I know it
+doesn't mattter much nor for this audience, though~~
+* ~~do you want to mention type & token counts when you're dividing into
+nouns/preds/fn/other?~~
+ * ~~i think it's important for them to be thinking about how they
+differ overall to better understand how their factor effects differ~~
+* ~~concreteness age difference - about "less importance" than "less predictive"?~~
+* ~~why is concreteness effect negative?~~
+* ~~what the plot is quantifying is a little hard to understand~~
+* ~~here's a terrible idea for showing all the langauges in a way that
+would allow easy pattern recognition: a GIF~~
+ * ~~if you just flip through them, maybe with low-aplha background
+values of the non-focus langauges, that conceptually seems cool but is
+definitely not the right solution~~
+* ~~subbullets get pretty small font size~~

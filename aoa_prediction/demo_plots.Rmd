@@ -5,14 +5,14 @@ output: html_document
 ```{r, include=FALSE}
 library(knitr)
 opts_chunk$set(echo = FALSE, error = FALSE, message = FALSE, warning = FALSE,
-               fig.pos = "center", cache = TRUE)
+               fig.pos = "center", cache = TRUE, fig.width = 8, fig.height = 6)
 ```
 
 ```{r}
 library(dplyr)
 library(ggplot2)
 library(langcog)
-theme_set(theme_mikabr())
+theme_set(theme_mikabr(base_size = 18))
 ```
 
 ```{r}
@@ -25,8 +25,8 @@ demo_data <- all_prop_data %>%
 
 plt <- ggplot(demo_data, aes(x = age, group = words)) +
   scale_colour_solarized(guide = FALSE) +
-  scale_y_continuous(name = "Proportion of children understanding\n", limits = c(0, 1)) +
-  scale_x_continuous(name = "\nAge (months)", limits = c(8, 18),
+  scale_y_continuous(name = "Proportion of children understanding", limits = c(0, 1)) +
+  scale_x_continuous(name = "Age (months)", limits = c(8, 18),
                      breaks = seq(8, 18, 1))
 
 plt + geom_blank()
