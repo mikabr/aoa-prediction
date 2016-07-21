@@ -1,0 +1,527 @@
+---
+title: Predicting age of acquisition for early words across languages
+author: "Mika Braginsky, Daniel Yurovsky, Virginia Marchman, Michael Frank"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    highlight: tango
+    theme: spacelab
+---
+
+```{r knitr, echo = FALSE}
+library(knitr)
+opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+```
+
+```{r setup, cache = FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(readr)
+library(ggplot2)
+library(langcog)
+library(wordbankr)
+library(boot)
+library(lazyeval)
+library(robustbase)
+theme_set(theme_mikabr() +
+            theme(panel.grid = element_blank(),
+                  strip.background = element_blank()))
+font <- "Open Sans"
+```
+
+Connect to the Wordbank database and pull out the raw data.
+```{r wordbank}
+data_mode <- "local"
+
+languages <- c("Croatian", "Danish", "English", "French (Quebec)", "Italian",
+               "Norwegian", "Russian", "Spanish", "Swedish", "Turkish")
+
+admins <- get_administration_data(mode = data_mode) %>%
+  select(language, form, age, data_id) %>%
+  filter(language %in% languages)
+
+words <- get_item_data(mode = data_mode) %>%
+  filter(type == "word", language %in% languages) %>%
+  select(language, form, lexical_class, uni_lemma, definition, item_id) %>%
+  mutate(num_item_id = as.numeric(substr(item_id, 6, nchar(item_id))),
+         definition = tolower(definition))
+```
+
+```{r raw_data, cache.lazy=FALSE}
+get_inst_data <- function(inst_items) {
+  inst_language <- unique(inst_items$language)
+  inst_form <- unique(inst_items$form)
+  inst_admins <- filter(admins, language == inst_language, form == inst_form)
+  get_instrument_data(instrument_language = inst_language,
+                      instrument_form = inst_form,
+                      items = inst_items$item_id,
+                      administrations = inst_admins,
+                      iteminfo = inst_items,
+                      mode = data_mode) %>%
+    filter(!is.na(age)) %>%
+    mutate(produces = !is.na(value) & value == "produces",
+           understands = !is.na(value) &
+             (value == "understands" | value == "produces")) %>%
+    select(-value) %>%
+    gather(measure, value, produces, understands) %>%
+    mutate(language = inst_language,
+           form = inst_form)
+}
+
+get_lang_data <- function(lang_items) {
+  lang_items %>%
+    split(.$form) %>%
+    map_df(get_inst_data) %>%
+    # production for WS & WG, comprehension for WG only
+    filter(measure == "produces" | form == "WG")
+}
+
+raw_data <- words %>%
+  split(.$language) %>%
+  map(get_lang_data)
+```
+
+Save point -- raw Wordbank data.
+```{r raw_data_save}
+#feather::write_feather(bind_rows(raw_data), "saved_data/raw_data.feather")
+# raw_data <- feather::read_feather("saved_data/raw_data.feather") %>%
+#   split(.$language)
+```
+
+
+```{r sample_sizes}
+samples_sizes <- raw_data %>%
+  map_dbl(~length(unique(.x$data_id)))
+sum(samples_sizes)
+```
+
+For each language and measure, collapse across age and uni_lemma.
+```{r uni_prop_data}
+fit_inst_measure <- function(inst_measure_data) {
+
+  inst_uni_lemmas <- inst_measure_data %>%
+    ungroup() %>%
+    select(lexical_class, uni_lemma, definition) %>%
+    distinct() %>%
+    group_by(uni_lemma) %>%
+    summarise(lexical_classes = lexical_class %>% unique() %>% sort() %>%
+                paste(collapse = ", "),
+              words = definition %>% unique() %>% sort() %>%
+                paste(collapse = ", "))
+
+  inst_measure_data %>%
+    # for each child and uni_lemma, collapse across items
+    group_by(language, measure, uni_lemma, age, data_id) %>%
+    summarise(uni_value = any(value)) %>%
+    # for each age and uni_lemma, collapse across children
+    group_by(language, measure, uni_lemma, age) %>%
+    summarise(num_true = sum(uni_value, na.rm = TRUE),
+              num_false = n() - num_true,
+              prop = mean(uni_value, na.rm = TRUE)) %>%
+    left_join(inst_uni_lemmas)
+
+}
+
+fit_inst <- function(inst_data) {
+
+  lang_uni_lemmas <- inst_data %>%
+    select(uni_lemma, definition) %>%
+    distinct() %>%
+    filter(!is.na(uni_lemma))
+
+  inst_data_mapped <- inst_data %>%
+    select(-uni_lemma) %>%
+    left_join(lang_uni_lemmas) %>%
+    filter(!is.na(uni_lemma)) %>%
+    group_by(definition) %>%
+    filter("WG" %in% form)
+
+  inst_data_mapped %>%
+    split(.$measure) %>%
+    map_df(fit_inst_measure)
+
+}
+
+uni_prop_data <- map_df(raw_data, fit_inst)
+```
+
+Save point -- Wordbank data by collapsed to uni_lemma by age.
+```{r uni_prop_data_save}
+#feather::write_feather(uni_prop_data, "saved_data/uni_prop_data.feather")
+#uni_prop_data <- feather::read_feather("saved_data/uni_prop_data.feather")
+```
+
+```{r uni_lemmas}
+uni_lemmas <- uni_prop_data %>%
+  select(language, uni_lemma, words) %>%
+  distinct()
+
+norm_lang <- function(lang) {
+  lang %>% tolower() %>%
+    map_chr(~.x %>% strsplit(" ") %>% unlist() %>% .[1])
+}
+```
+
+Build up a mapping between CDI items and possible tokens for them in CHILDES.
+```{r case_map}
+source("stemmer.R")
+
+transforms <- c(
+  function(x) gsub("(.*) \\(.*\\)", "\\1", x),
+  function(x) gsub(" ", "_", x),
+  function(x) gsub(" ", "+", x),
+  function(x) gsub("(.+) \\1", "\\1", x)
+)
+
+apply_transforms <- function(str) {
+  transforms %>% map_chr(~.x(str))
+}
+
+special_case_files <- list.files("predictors/childes/special_cases/")
+
+special_case_map <-  map_df(special_case_files, function(case_file) {
+  
+  lang <- case_file %>% strsplit(".csv") %>% unlist()
+  special_cases <- read_csv(file.path("predictors/childes/special_cases/", case_file),
+                            col_names = FALSE)
+
+  map_df(1:nrow(special_cases), function(i) {
+    uni_lemma <- special_cases$X1[i]
+    options <- special_cases[i, 3:ncol(special_cases)] %>%
+      as.character() %>%
+      discard(is.na)
+    trans_opts <- map(options, apply_transforms) %>% unlist() %>% unique()
+    data_frame(language = lang,
+               uni_lemma = rep(uni_lemma, 2 * length(trans_opts)),
+               stem = c(trans_opts, stem(trans_opts, lang)))
+  })
+  
+})
+
+pattern_map <- uni_lemmas %>%
+  split(paste(.$language, .$uni_lemma, .$words)) %>%
+  map_df(function(uni_data) {
+    language <- uni_data$language %>% norm_lang()
+    uni_lemma <- uni_data$uni_lemma
+    options <- uni_data$words %>% strsplit(", ") %>% unlist() %>%
+      strsplit("/") %>% unlist()
+    options <- c(options, stem(options, language)) %>% unique()
+    trans_opts <- map(options, apply_transforms) %>% unlist() %>% unique()
+    trans_opts <- c(trans_opts, stem(trans_opts, language)) %>% unique()
+    data_frame(language = rep(uni_data$language, length(trans_opts)),
+               uni_lemma = rep(uni_lemma, length(trans_opts)),
+               stem = trans_opts)
+  })
+
+case_map <- bind_rows(special_case_map, pattern_map) %>% distinct()
+```
+
+Get measure extracted from CHILDES -- unigram count, mean sentence length, utterance-final position count, singleton count.
+```{r childes}
+load_childes_data <- function(lang) {
+  read_csv(sprintf("predictors/childes/data/childes_%s.csv",
+                          norm_lang(lang))) %>%
+    filter(!is.na(word)) %>%
+    mutate(stem = stem(word, norm_lang(lang)),
+           language = lang) %>%
+    right_join(case_map %>% filter(language == lang)) %>%
+    group_by(uni_lemma) %>%
+    summarise(MLU = weighted.mean(mean_sent_length, word_count, na.rm = TRUE),
+              word_count = sum(word_count, na.rm = TRUE),
+              MLU = ifelse(word_count < 10, NA, MLU),
+              final_count = sum(final_count, na.rm = TRUE),
+              solo_count = sum(solo_count, na.rm = TRUE),
+              language = lang)
+}
+
+childes_data <- map_df(languages, load_childes_data)
+
+uni_childes <- childes_data %>%
+  #filter(word_count != 0) %>%
+  group_by(language) %>%
+  mutate(word_count = word_count + 1,
+         frequency = log(word_count / sum(word_count)),
+         final_count = final_count + 1,
+         final_freq = log((final_count - solo_count) /
+                                     sum(final_count - solo_count)),
+         solo_count = solo_count + 1,
+         solo_freq = log(solo_count / sum(solo_count)))
+
+uni_childes$final_frequency <- lm(final_freq ~ frequency,
+                                  data = uni_childes)$residuals
+uni_childes$solo_frequency <- lm(solo_freq ~ frequency,
+                                 data = uni_childes)$residuals
+```
+
+Get estimates of valence and arousal.
+```{r valence}
+valence <- read_csv("predictors/valence/valence.csv") %>%
+  select(Word, V.Mean.Sum, A.Mean.Sum) %>%
+  rename(word = Word, valence = V.Mean.Sum, arousal = A.Mean.Sum)
+
+replacements_valence <- read_csv("predictors/valence/valence_replace.csv")
+uni_valence <- uni_lemmas %>%
+  left_join(replacements_valence) %>%
+  rowwise() %>%
+  mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
+  left_join(valence) %>%
+  select(-word) %>%
+  group_by(language, uni_lemma, words) %>%
+  summarise(valence = mean(valence, na.rm = TRUE),
+            arousal = mean(arousal, na.rm = TRUE))
+```
+
+Get estimates of iconicity and babiness.
+```{r babiness}
+babiness <- read_csv("predictors/babiness/english_babiness.csv") %>%
+  group_by(word) %>%
+  summarise(iconicity = mean(rating),
+            babiness = mean(babyAVG))
+
+replacements_babiness <- read_csv("predictors/babiness/babiness_replace.csv")
+
+uni_babiness <- uni_lemmas %>%
+  left_join(replacements_babiness) %>%
+  rowwise() %>%
+  mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
+  left_join(babiness) %>%
+  select(-word)
+```
+
+Get estimates of concreteness.
+```{r concreteness}
+concreteness <- read_csv("predictors/concreteness/concreteness.csv") %>%
+  rename(word = Word, concreteness = Conc.M)
+
+replacements_concreteness <- read_csv("predictors/concreteness/concreteness_replace.csv")
+
+uni_concreteness <- uni_lemmas %>%
+  left_join(replacements_concreteness) %>%
+  rowwise() %>%
+  mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
+  left_join(concreteness) %>%
+  group_by(language, uni_lemma, words) %>%
+  summarise(concreteness = mean(concreteness, na.rm = TRUE))
+```
+
+Put together data and predictors.
+```{r uni_joined}
+num_characters <- function(words) {
+  words %>%
+    strsplit(", ") %>%
+    map(function(word_set) {
+      word_set %>%
+        unlist() %>%
+        strsplit(" [(].*[)]") %>%
+        unlist() %>%
+        strsplit("/") %>%
+        unlist() %>%
+        gsub("[*' ]", "", .) %>%
+        nchar() %>%
+        mean()
+    }) %>%
+    unlist()
+}
+
+uni_prop_data_comp <- uni_prop_data %>%
+  mutate(length = num_characters(words))
+
+uni_joined <- uni_prop_data_comp %>%
+  filter(!grepl("name", uni_lemma)) %>%
+  left_join(uni_childes) %>%
+  left_join(uni_valence) %>%
+  left_join(uni_babiness) %>%
+  left_join(uni_concreteness) %>%
+  distinct()
+```
+
+Save point -- joined AoA data and predictor data.
+```{r uni_joined_save}
+#feather::write_feather(uni_joined, "saved_data/uni_joined.feather")
+#uni_joined <- feather::read_feather("saved_data/uni_joined.feather")
+```
+
+```{r model_setup}
+predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
+                "length", "concreteness", "valence", "arousal", "babiness")
+
+rsq <- function(object) {
+  1 - sum(residuals(object, type = "response") ^ 2) /
+    sum((object$y - mean(object$y)) ^ 2)
+}
+
+adj_rsq <- function(object) {
+  rsq <- rsq(object)
+  p <- summary(object)$df[1] - 1  # p
+  n_p <- summary(object)$df[2]  # n - p - 1
+  rsq - (1 - rsq) * (p / n_p)
+}
+
+missing <- uni_joined %>%
+  select_(.dots = c("language", "uni_lemma", predictors)) %>%
+  distinct() %>%
+  gather_("predictor", "value", predictors) %>%
+  filter(is.na(value)) %>%
+  group_by(language, uni_lemma) %>%
+  summarise(n = n(),
+            missing = paste(predictor, collapse = ", "))
+```
+
+```{r uni_model_data}
+uni_model_data <- uni_joined %>%
+  select_(.dots = c("language", "measure", "lexical_classes", "uni_lemma",
+                    "age", "num_true", "num_false", predictors)) %>%
+  group_by(language, measure) %>%
+  mutate_each_(funs(as.numeric(Hmisc::impute(.))), predictors) %>%
+  mutate_each_(funs(as.numeric(scale(.))), c(predictors, "age"))
+
+#feather::write_feather(uni_model_data, "saved_data/uni_model_data.feather")
+#uni_model_data <- feather::read_feather("saved_data/uni_model_data.feather")
+```
+
+```{r lang_models}
+lang_model_fun <- function(lang, lang_measure_data) {
+  print(sprintf("Fitting lmer for %s...", lang))
+  interaction_formula <- as.formula(
+    sprintf("cbind(num_true, num_false) ~ (age | uni_lemma) + age + %s",
+            paste(sprintf("age * %s", predictors), collapse = " + "))
+  )
+  lme4::glmer(interaction_formula, family = "binomial", data = lang_measure_data,
+              control = lme4::glmerControl(optCtrl = list(maxfun = 1e7)))
+}
+
+lang_models <- uni_model_data %>%
+  #filter(language %in% c("English", "Russian")) %>%
+  group_by(language, measure) %>%
+  nest() %>%
+  mutate(model = map2(language, data, lang_model_fun))
+```
+
+```{r lang_coefs}
+lang_coef_fun <- function(lang_model) {
+  broom::tidy(lang_model) %>%
+    filter(term != "(Intercept)", term != "age", group == "fixed") %>%
+    select(term, estimate, std.error) %>%
+    mutate(interaction = ifelse(grepl(":", term), "interaction with age",
+                                "main effect"),
+           term = gsub("age:", "", term))
+}
+
+lang_coefs <- lang_models %>%
+  mutate(coefs = map(model, lang_coef_fun)) %>%
+  select(language, measure, coefs) %>%
+  unnest()
+
+lang_rsq_fun <- function(lang_model) {
+  lang_fit <- glm(
+    model.response(model.frame(lang_model)) ~ fitted(lang_model),
+    family = "binomial",
+    y = TRUE
+  )
+  adj_rsq(lang_fit)
+}
+
+lang_rsq <- lang_models %>%
+  mutate(adj_rsq = map_dbl(model, lang_rsq_fun)) %>%
+  select(language, measure, adj_rsq)
+
+# fits <- model.response(model.frame(crossling_model)) %>%
+#   as_data_frame() %>%
+#   mutate(prop = num_true / (num_true + num_false),
+#          fit = fitted(crossling_model))
+#
+# fits <- lang_models$data[[2]] %>%
+#   mutate(prop = num_true / (num_true + num_false),
+#          fit = fitted(lang_models$model[[2]]))
+
+# ggplot(fits, aes(x = prop, y = fit)) +
+#   geom_point(aes(colour = factor(age)), size = 0.7) +
+#   geom_smooth(method = "lm") +
+#   #geom_line(aes(group = uni_lemma)) +
+#   scale_colour_solarized()
+```
+
+```{r crossling_models}
+# crossling_model_fun <- function(meas, measure_data) {
+#   print(sprintf("Fitting lmer for %s...", meas))
+#   interaction_formula <- as.formula(
+#     sprintf("cbind(num_true, num_false) ~
+#             (1 | uni_lemma) + (1 | language) + age + %s",
+# #            (age | uni_lemma) + (age | language) + age + %s",
+#             paste(sprintf("age * %s", predictors), collapse = " + "))
+#   )
+#   lme4::glmer(interaction_formula, family = "binomial", data = measure_data)
+#               #control = lme4::glmerControl(optCtrl = list(maxfun = 1e7)))
+# }
+# 
+# crossling_models <- uni_model_data %>%
+#   #filter(language %in% c("English", "Russian")) %>%
+#   group_by(measure) %>%
+#   nest() %>%
+#   mutate(model = map2(measure, data, crossling_model_fun))
+# 
+# crossling_coefs <- crossling_models %>%
+#   mutate(coefs = map(model, lang_coef_fun)) %>%
+#   select(measure, coefs) %>%
+#   unnest()
+```
+
+Combine by-language coefficients with across-language coefficients.
+```{r}
+term_order <- lang_coefs %>%
+  filter(language == "English", measure == "understands",
+         interaction == "main effect") %>%
+  arrange(desc(abs(estimate)))
+
+# term_order <- crossling_coefs %>%
+#   filter(measure == "understands") %>%
+#   arrange(desc(abs(estimate)))
+ 
+#joint_coefs <- bind_rows(lang_coefs, crossling_coefs) %>%
+joint_coefs <- lang_coefs %>%
+  split(.$measure) %>%
+  map(~.x %>%
+        #arrange(desc(adj_rsq)) %>%
+        mutate(language = factor(
+          language,
+          levels = c("All Languages",
+                     unique(language) %>% discard(~.x == "All Languages"))),
+          term = factor(term, levels = rev(term_order$term))))
+
+joint_coefs_measures <- bind_rows(joint_coefs) %>%
+  mutate(measure = factor(measure, levels = c("understands", "produces")),
+         interaction = factor(interaction,
+                              levels = c("main effect", "interaction with age")))
+
+num_coefs <- nrow(term_order)
+
+#feather::write_feather(joint_coefs_measures, "saved_data/coefs.feather")
+```
+
+Examine cross-linguistic consistency in coefficient estimates.
+```{r consistency, fig.width=9, fig.height=5}
+ggplot(joint_coefs_measures, aes(x = term, y = estimate)) +
+  facet_grid(interaction ~ measure) + #, scales = "free", space = "free") +
+  #facet_grid(. ~ interaction, scales = "free") +
+  geom_point(aes(colour = term), size = 1, alpha = 0.5) +
+                      # data = joint_coefs_measures %>%
+                      #   filter(language != "All Languages")) +
+  # geom_pointrange(aes(ymin = estimate - 1.96 * std.error,
+  #                     ymax = estimate + 1.96 * std.error,
+  #                     colour = term),# size = 1,
+  #                     data = joint_coefs_measures %>%
+  #                       filter(language == "All Languages")) +
+  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+  coord_flip() +
+  scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(num_coefs))) +
+  xlab("") +
+  scale_y_continuous(name = "Coefficient Estimate")
+```

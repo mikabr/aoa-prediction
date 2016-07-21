@@ -1,0 +1,462 @@
+ID_CDI_II;ID_CDI_I;Word_NW;Word_CDI;Translation;Homonymous;In_NW;Word_class;Lex_cat;Broad_lex;Imageability;Phon_neighbours;Phonemes;Syllables
+i_5_1;#N/A;'ei brødskive';'(brød)skive';'slice (of bread)';n;y;noun;common nouns;nominals;6,89;#N/A;7;3
+i_5_2;#N/A;'en agurk';'agurk';'cucumber';n;y;noun;common nouns;nominals;6,95;0;5;2
+i_3_1;#N/A;'et akebrett';'akebrett';'sled';n;y;noun;common nouns;nominals;6,7;3;7;3
+i_2_2;i_5_1;'ei and';'and';'duck';n;y;noun;common nouns;nominals;6,92;9;3;1
+i_7_1;#N/A;'en ankel';'ankel';'ankle';n;y;noun;common nouns;nominals;6,83;6;5;2
+i_7_2;i_10_1;'et ansikt';'ansikt';'face';n;y;noun;common nouns;nominals;6,45;3;6;2
+i_2_3;i_5_3;'en ape';'apekatt';'monkey';n;y;noun;common nouns;nominals;6,71;18;3;2
+i_5_3;i_8_1;'en appelsin';'appelsin';'orange';n;y;noun;common nouns;nominals;6,96;0;7;3
+i_7_3;i_10_2;'en arm';'arm';'arm';n;y;noun;common nouns;nominals;6,64;21;3;1
+i_12_1;i_15_1;'en baby';'baby';'baby';n;y;noun;people;nominals;6,76;0;4;2
+i_13_2;i_16_1;'å bade';'bade';'bathe';n;y;verb;games & routines;games & routines;6,72;20;4;2
+i_9_2;i_12_2;'et badekar';'badekar';'bathtub';n;y;noun;common nouns;nominals;7,14;2;7;3
+i_9_3;#N/A;'en balkong';'balkong';'balcony';n;y;noun;common nouns;nominals;6,2;0;6;2
+i_4_1;i_7_1;'en ball';'ball';'ball';n;y;noun;common nouns;nominals;6,65;23;3;1
+i_4_2;i_7_2;'en ballong';'ballong';'balloon';n;y;noun;common nouns;nominals;6,83;3;5;2
+i_5_4;i_8_2;'en banan';'banan';'banana';n;y;noun;common nouns;nominals;6,86;1;5;2
+i_12_2;i_15_2;'et barn';'barn';'child';n;y;noun;people;nominals;6,56;12;3;1
+i_9_4;#N/A;'ei barneseng';'barneseng';'cot';n;y;noun;common nouns;nominals;6,25;#N/A;7;3
+i_3_2;i_6_1;'ei barnevogn';'barnevogn';'stroller';n;y;noun;common nouns;nominals;6,93;1;8;3
+i_7_4;i_10_3;'et bein (kroppsdel)';'bein';'leg';n;y;noun;common nouns;nominals;6,74;18;3;1
+i_6_1;#N/A;'et belte';'belte';'belt';n;y;noun;common nouns;nominals;6,68;16;5;2
+i_11_1;#N/A;'en bensinstasjon';'bensinstasjon';'gas station';n;y;noun;places to go;nominals;6,8;0;12;4
+i_12_5;i_15_4;'en bestefar';'bestefar';'grandfather';n;y;noun;people;nominals;6,35;0;8;3
+i_12_6;i_15_5;'ei bestemor';'bestemor';'grandmother';n;y;noun;people;nominals;6,56;0;8;3
+i_3_3;i_6_2;'en bil';'bil';'car';n;y;noun;common nouns;nominals;6,56;19;3;1
+i_8_1;i_11_1;'et bilde';'bilde';'picture';n;y;noun;common nouns;nominals;6,04;10;5;2
+i_14_2;i_17_1;'å bite';'bite';'bite';n;y;verb;action words;predicates;6;21;4;2
+i_2_4;i_5_4;'en bjørn';'bjørn';'bear';n;y;noun;common nouns;nominals;6,78;0;4;1
+i_6_2;i_9_1;'ei bleie';'bleie';'diaper';n;y;noun;common nouns;nominals;6,54;11;4;2
+i_21_1;#N/A;'å bli';'bli';'be(come)';n;y;verb;closed-class items;closed-class;3,41;18;3;1
+i_10_3;i_13_1;'en blomst';'blomst';'flower';n;y;noun;places to go;nominals;6,69;2;6;1
+i_4_3;i_7_7;'en blyant';'blyant';'pencil';n;y;noun;common nouns;nominals;6,94;1;6;2
+i_15_2;i_18_1;'blå';'blå';'blue';n;y;adjective;descriptive words;predicates;6,47;15;3;1
+i_14_3;i_17_2;'å blåse';'blåse';'blow';n;y;verb;action words;predicates;6,26;11;5;2
+i_4_4;i_7_3;'ei bok';'bok';'book';n;y;noun;common nouns;nominals;6,66;20;3;1
+i_12_7;#N/A;'en bonde';'bonde';'farmer';n;y;noun;people;nominals;6,54;16;4;2
+i_11_2;#N/A;'en bondegård';'bondegård';'farm';n;y;noun;places to go;nominals;6,52;1;7;3
+i_9_6;i_12_4;'et bord';'bord';'table';n;y;noun;common nouns;nominals;6,79;33;3;1
+i_15_5;i_18_3;'bra';'bra';'good';n;y;adjective;descriptive words;predicates;3,73;19;3;1
+i_3_4;i_6_3;'en brannbil';'brannbil';'firetruck';n;y;noun;common nouns;nominals;7,02;0;7;2
+i_12_8;#N/A;'en brannmann';'brannmann';'fireman';n;y;noun;people;nominals;6,46;1;7;2
+i_8_5;#N/A;'et brett';'brett';'tray';n;y;noun;common nouns;nominals;6,13;20;4;1
+i_8_6;i_11_3;'briller';'briller';'glasses';n;y;noun;common nouns;nominals;7,08;14;6;2
+i_12_9;i_15_6;'en bror';'bror';'brother';n;y;noun;people;nominals;6,39;11;4;1
+i_15_7;#N/A;'brun';'brun';'brown';n;y;adjective;descriptive words;predicates;6,15;13;4;1
+i_5_7;i_8_4;'et brød';'brød';'bread';n;y;noun;common nouns;nominals;6,96;21;3;1
+i_14_4;#N/A;'å bråke';'bråke';'brawl';n;y;verb;action words;predicates;5,44;16;5;2
+i_15_6;#N/A;'bråkete';'bråkete';'noisy';n;y;adjective;descriptive words;predicates;5,01;9;7;3
+i_6_3;i_9_2;'ei bukse';'bukse';'pants';n;y;noun;common nouns;nominals;6,55;13;5;2
+i_21_3;#N/A;'å burde';'burde';'should';n;y;verb;closed-class items;closed-class;2,49;10;4;2
+i_3_6;i_6_4;'en buss';'buss';'bus';n;y;noun;common nouns;nominals;6,77;19;3;1
+i_11_3;i_14_1;'en butikk';'butikk';'store';n;y;noun;places to go;nominals;6,19;1;5;2
+i_11_4;#N/A;'en by';'byen';'downtown';n;y;noun;places to go;nominals;5,79;26;2;1
+i_14_5;#N/A;'å bygge';'bygge';'build';n;y;verb;action words;predicates;5,86;14;4;2
+i_14_6;#N/A;'å bære';'bære';'carry';n;y;verb;action words;predicates;6,09;21;4;2
+i_5_6;#N/A;'en bønne';'bønner';'beans';n;y;noun;common nouns;nominals;6,06;18;4;2
+i_8_3;i_11_2;'en børste';'børste';'brush';n;y;noun;common nouns;nominals;6,42;10;5;2
+i_8_4;#N/A;'ei bøtte';'bøtte';'bucket';n;y;noun;common nouns;nominals;6,83;22;4;2
+i_3_5;#N/A;'en båt';'båt';'boat';n;y;noun;common nouns;nominals;6,7;20;3;1
+i_11_5;#N/A;'en campingplass';'campingplass';'camping site';n;y;noun;places to go;nominals;6,83;0;10;3
+i_5_9;#N/A;'cola';'cola';'coke';n;y;noun;common nouns;nominals;6,7;#N/A;4;2
+i_16_1;i_19_1;'en dag';'dag';'day';n;y;noun;words about time;#N/A;3,9;17;3;1
+i_12_11;i_15_7;'ei dame';'dame';'lady';n;y;noun;people;nominals;6,69;8;4;2
+i_14_7;i_17_3;'å danse';'danse';'dance';n;y;verb;action words;predicates;6,65;8;5;2
+i_14_8;#N/A;'å dele';'dele';'share';n;y;verb;action words;predicates;5,16;16;4;2
+i_5_11;#N/A;'dessert';'dessert';'dessert';n;y;noun;common nouns;nominals;6,12;0;5;2
+i_9_7;#N/A;'en do';'do';'toilet';n;y;noun;common nouns;nominals;6,8;29;2;1
+i_12_12;#N/A;'en doktor';'doktor';'doctor';n;y;noun;people;nominals;6,17;1;6;2
+i_14_96;i_17_4;'å dra';'dra';'go';n;y;verb;action words;predicates;4,85;14;3;1
+i_6_4;#N/A;'en dress';'dress (ute)';'(thermal) suit';n;y;noun;common nouns;nominals;6,88;10;4;1
+i_14_9;i_17_5;'å drikke';'drikke';'drink';n;y;verb;action words;predicates;6,7;10;5;2
+i_5_13;#N/A;'en drue';'druer';grapes';n;y;noun;common nouns;nominals;6,29;11;4;2
+i_4_6;i_7_5;'ei dukke';'dukke';'doll';n;y;noun;common nouns;nominals;6,51;19;4;2
+i_2_5;i_5_5;'et dyr';'dyr';'animal';n;y;noun;common nouns;nominals;5,78;23;3;1
+i_11_6;i_14_2;'en dyrehage';'dyrehage';'zoo';n;y;noun;places to go;nominals;6,43;2;8;4
+i_14_10;i_17_6;'å dytte';'dytte';'push';n;y;verb;action words;predicates;5,98;24;4;2
+i_9_8;i_12_5;'ei dør';'dør';'door';n;y;noun;common nouns;nominals;7,07;28;3;1
+i_15_8;#N/A;'dårlig';'dårlig';'bad';n;y;adjective;descriptive words;predicates;3,72;3;4;2
+i_5_14;i_8_7;'et egg';'egg';'egg';n;y;noun;common nouns;nominals;7;22;2;1
+i_15_9;i_18_4;ekkel';'ekkelt';'yucky';n;y;adjective;descriptive words;predicates;4,52;2;5;2
+i_2_6;i_5_6;'et ekorn';'ekorn';'squirrel';n;y;noun;common nouns;nominals;6,85;3;4;2
+i_2_7;i_5_7;'en elefant';'elefant';'elephant';n;y;noun;common nouns;nominals;7,18;0;7;3
+i_2_8;i_5_8;'en elg';'elg';'moose';n;y;noun;common nouns;nominals;6,99;10;3;1
+i_5_15;i_8_8;'et eple';'eple';'apple';n;y;noun;common nouns;nominals;6,78;7;4;2
+i_5_16;#N/A;'en ert';'erter';'peas';n;y;noun;common nouns;nominals;6,91;15;2;1
+i_2_9;#N/A;'et esel';'esel';'donkey';n;y;noun;common nouns;nominals;6,72;4;4;2
+i_14_13;i_17_9;'å falle';'falle';'fall';n;y;verb;action words;predicates;5,64;35;4;2
+i_11_7;i_14_3;'en fest';'fest';'party';n;y;noun;places to go;nominals;6,32;18;4;1
+i_15_10;i_18_5;'fin';'fin';'fine';n;y;adjective;descriptive words;predicates;4,57;21;3;1
+i_7_5;i_10_4;'en finger';'finger';'finger';n;y;noun;common nouns;nominals;6,91;4;5;2
+i_14_14;#N/A;'å finne';'finne';'find';n;y;verb;action words;predicates;4,3;22;4;2
+i_2_10;i_5_9;'en fisk';'fisk';'fish';n;y;noun;common nouns;nominals;6,8;14;4;1
+i_10_4;#N/A;'et fjell';'fjell';'mountain';n;y;noun;places to go;nominals;6,67;8;4;1
+i_10_5;#N/A;'et flagg';'flagg';'flag';n;y;noun;places to go;nominals;6,48;11;4;1
+i_8_11;i_11_6;'ei flaske';'flaske';'bottle';n;y;noun;common nouns;nominals;6,59;13;6;2
+i_2_11;i_5_10;'ei flue';'flue';'fly';n;y;noun;common nouns;nominals;6,88;8;4;2
+i_3_7;i_6_5;'et fly';'fly';'airplane';n;y;noun;common nouns;nominals;6,72;17;3;1
+i_15_11;i_18_6;'forsiktig';'forsiktig';'careful';n;y;adjective;descriptive words;predicates;4,21;1;7;3
+i_15_13;i_18_7;'fort';'fort';'fast';n;y;adjective;descriptive words;predicates;5,11;12;3;1
+i_10_6;#N/A;'et fortau';'fortau';'sidewalk';n;y;noun;places to go;nominals;6,52;3;4;2
+i_14_15;i_17_10;'å forte seg';'forte seg';'hurry';n;y;verb;action words;predicates;5,04;0;7;3
+i_7_6;i_10_5;'en fot';'fot';'foot';n;y;noun;common nouns;nominals;6,7;22;3;1
+i_5_18;i_8_10;'frokostblanding';'frokostblanding';'cereal';n;y;noun;common nouns;nominals;6,41;1;13;4
+i_2_12;i_5_11;'en frosk';'frosk';'frog';n;y;noun;common nouns;nominals;6,8;3;5;1
+i_5_19;#N/A;'frukt';'frukt';'fruits';n;y;noun;common nouns;nominals;6,56;7;5;1
+i_2_13;i_5_12;'en fugl';'fugl';'bird';n;y;noun;common nouns;nominals;7;23;3;1
+i_15_15;#N/A;'full';'full';'full';n;y;adjective;descriptive words;predicates;5,97;22;3;1
+i_14_16;i_17_8;'å få';'få';'get';n;y;verb;action words;predicates;4,19;26;2;1
+i_8_13;i_11_7;'en gaffel';'gaffel';'fork';n;y;noun;common nouns;nominals;6,84;3;5;2
+i_15_16;i_18_9;'gammel';'gammel';'old';n;y;adjective;descriptive words;predicates;5,71;5;5;2
+i_9_10;i_12_6;'en garasje';'garasje';'garage';n;y;noun;common nouns;nominals;6,53;3;6;3
+i_6_5;i_9_3;'en genser';'genser';'sweater';n;y;noun;common nouns;nominals;6,7;3;6;2
+i_14_17;i_17_12;'å gi';'gi';'give';n;y;verb;action words;predicates;5,19;23;2;1
+i_14_18;#N/A;'å gjemme';'gjemme';'hide';n;y;verb;action words;predicates;5,39;23;4;2
+i_21_8;#N/A;'å gjøre';'gjøre';'do';n;y;verb;closed-class items;closed-class;4;22;4;2
+i_15_17;i_18_10;'glad';'glad';'happy';n;y;adjective;descriptive words;predicates;5,95;14;3;1
+i_8_14;i_11_8;'et glass';'glass';'glass';n;y;noun;common nouns;nominals;6,89;16;4;1
+i_14_20;#N/A;'å gli';'gli';'slide';n;y;verb;action words;predicates;5,6;19;3;1
+i_6_6;i_9_4;'en glidelås';'glidelås';'zipper';n;y;noun;common nouns;nominals;6,64;2;8;3
+i_15_18;#N/A;'god';'god';'good';n;y;adjective;descriptive words;predicates;3,68;20;2;1
+i_5_20;#N/A;'godteri';'godteri';'candy';n;y;noun;common nouns;nominals;6,44;3;6;3
+i_10_7;#N/A;'gress';'gress';'grass';n;y;noun;places to go;nominals;6,41;16;4;1
+i_10_8;#N/A;'en gressklipper';'gressklipper';'lawn mower';n;y;noun;places to go;nominals;6,86;3;10;3
+i_2_15;i_5_14;'en gris';'gris';'pig';n;y;noun;common nouns;nominals;6,9;16;4;1
+i_15_19;#N/A;'grønn';'grønn';'green';n;y;adjective;descriptive words;predicates;6,48;12;4;1
+i_5_21;#N/A;'grøt';'grøt';'porridge';n;y;noun;common nouns;nominals;6,82;12;4;1
+i_14_21;i_17_14;'å gråte';'gråte';'cry';n;y;verb;action words;predicates;6,33;10;5;2
+i_15_20;#N/A;'gul';'gul';'yellow';n;y;adjective;descriptive words;predicates;6,76;21;3;1
+i_5_22;i_8_11;'ei gulrot';'gulrot';'carrot';n;y;noun;common nouns;nominals;6,9;1;6;2
+i_12_16;i_15_10;'en gutt';'gutt';'boy';n;y;noun;people;nominals;6,69;17;3;1
+i_14_22;i_17_11;'å gå';'gå';'walk';n;y;verb;action words;predicates;6,13;24;2;1
+i_8_12;#N/A;'en gåbil';'gåbil';'toy car';n;y;noun;common nouns;nominals;5,76;0;5;2
+i_2_14;i_5_13;'ei gås';'gås';'goose';n;y;noun;common nouns;nominals;6,52;16;3;1
+i_14_23;#N/A;'å ha';'ha';'have';n;y;verb;action words;predicates;3,35;4;6;2
+i_11_8;i_14_4;'en hage';'hage';'yard';n;y;noun;places to go;nominals;6,74;22;4;2
+i_5_23;#N/A;'en hamburger';'hamburger';'hamburger';n;y;noun;common nouns;nominals;6,52;1;9;3
+i_2_16;#N/A;'en hane';'hane';'rooster';n;y;noun;common nouns;nominals;7,05;24;4;2
+i_6_8;#N/A;'en hanske';'hansker';'gloves';n;y;noun;common nouns;nominals;6,66;7;6;2
+i_15_21;i_18_12;'hard';'hard';'hard';n;y;adjective;descriptive words;predicates;4,69;27;3;1
+i_14_24;#N/A;'å hate';'hate';'hate';n;y;verb;action words;predicates;3,63;28;4;2
+i_3_8;#N/A;'et helikopter';'helikopter';'helicopter';n;y;noun;common nouns;nominals;6,9;1;10;4
+i_14_25;#N/A;'å helle';'helle';'pour';n;y;verb;action words;predicates;6;37;4;2
+i_12_17;#N/A;'ei helsesøster';'helsesøster';'nurse';n;y;noun;people;nominals;5,98;1;11;4
+i_14_26;i_17_15;'å hente';'hente';'get';n;y;verb;action words;predicates;4,47;23;5;2
+i_2_17;i_5_15;'en hest';'hest';'horse';n;y;noun;common nouns;nominals;6,77;15;4;1
+i_10_9;i_13_2;'en himmel';'himmel';'sky';n;y;noun;places to go;nominals;6,92;0;5;2
+i_14_27;i_17_16;'å hjelpe';'hjelpe';'help';n;y;verb;action words;predicates;4,67;6;5;2
+i_11_9;i_14_5;'et hjem';'hjem';'home';n;y;noun;places to go;nominals;5,72;23;3;1
+i_7_10;i_10_8;'et hode';'hode';'head';n;y;noun;common nouns;nominals;6,44;14;4;2
+i_14_28;#N/A;'å holde';'holde';'hold';n;y;verb;action words;predicates;5,48;27;4;2
+i_14_30;i_17_18;'å hoppe';'hoppe';'jump';n;y;verb;action words;predicates;6,43;23;4;2
+i_2_19;i_5_16;'en hund';'hund';'dog';n;y;noun;common nouns;nominals;6,93;19;3;1
+i_11_10;i_14_6;'et hus';'hus';'house';n;y;noun;places to go;nominals;6,56;23;3;1
+i_10_10;i_13_3;'ei huske';'huske';'swing';n;y;noun;places to go;nominals;6,42;16;5;2
+i_15_23;#N/A;'hvit';'hvit';'white';n;y;adjective;descriptive words;predicates;6,49;30;3;1
+i_2_18;#N/A;'ei høne';'høne';'hen';n;y;noun;common nouns;nominals;6,93;17;4;2
+i_14_32;#N/A;'å høre';'høre';'hear';n;y;verb;action words;predicates;5,31;23;4;2
+i_7_8;i_10_6;'ei hånd';'hånd';'hand';n;y;noun;common nouns;nominals;7,1;24;3;1
+i_8_16;i_11_10;'et håndkle';'håndkle';'towel';n;y;noun;common nouns;nominals;6,62;2;6;2
+i_7_9;i_10_7;'hår';'hår';'hair';n;y;noun;common nouns;nominals;6,67;30;3;1
+i_6_9;i_9_6;'ei jakke';'jakke';'jacket';n;y;noun;common nouns;nominals;6,69;23;4;2
+i_12_18;i_15_11;'ei jente';'jente';'girl';n;y;noun;people;nominals;6,92;19;5;2
+i_11_11;i_14_7;'en jobb';'jobb';'work';n;y;noun;places to go;nominals;5,18;11;3;1
+i_14_1;#N/A;'å jobbe';'jobbe';'work';n;y;verb;action words;predicates;5,65;15;4;2
+i_6_10;#N/A;'en joggesko';'joggesko';'sneakers';n;y;noun;common nouns;nominals;6,98;1;7;3
+i_5_25;#N/A;'et jordbær';'jordbær';'strawberry';n;y;noun;common nouns;nominals;6,9;3;6;2
+i_5_26;i_8_13;'juice';'juice';'juice';n;y;noun;common nouns;nominals;6,68;21;3;1
+i_5_27;i_8_14;'kaffe';'kaffe';'coffee';n;y;noun;common nouns;nominals;6,84;7;4;2
+i_15_24;i_18_13;'kald';'kald';'cold';n;y;adjective;descriptive words;predicates;4,98;33;3;1
+i_8_17;i_11_11;'en kam';'kam';'comb';n;y;noun;common nouns;nominals;6,71;25;3;1
+i_8_18;#N/A;'et kamera';'kamera';'camera';n;y;noun;common nouns;nominals;6,99;1;6;3
+i_2_20;i_5_17;'en kanin';'kanin';'bunny';n;y;noun;common nouns;nominals;6,92;4;5;2
+i_14_35;i_17_20;'å kaste';'kaste';'throw';n;y;verb;action words;predicates;6,53;21;5;2
+i_2_21;i_5_18;'en katt';'katt';'cat';n;y;noun;common nouns;nominals;6,81;35;3;1
+i_2_22;i_5_19;'en kattunge';'kattunge';kitten';n;y;noun;common nouns;nominals;6,68;2;6;3
+i_7_11;i_10_9;'et kinn';'kinn';'cheek';n;y;noun;common nouns;nominals;6,86;22;3;1
+i_5_29;i_8_16;'en kjeks';'kjeks';'cracker';n;y;noun;common nouns;nominals;6,42;13;4;1
+i_10_11;#N/A;'en kjelke';'kjelke';'sled';n;y;noun;places to go;nominals;6,53;9;5;2
+i_9_12;#N/A;'en kjeller';'kjeller';'basement';n;y;noun;common nouns;nominals;6,33;26;5;2
+i_6_11;i_9_7;'en kjole';'kjole';'dress';n;y;noun;common nouns;nominals;6,57;16;4;2
+i_9_13;i_12_8;'et kjøkken';'kjøkken';'kitchen';n;y;noun;common nouns;nominals;6,45;7;5;2
+i_9_14;i_12_9;'et kjøleskap';'kjøleskap';'refrigerator';n;y;noun;common nouns;nominals;6,77;2;8;3
+i_14_37;#N/A;'å kjøpe';'kjøpe';'buy';n;y;verb;action words;predicates;5,59;16;4;2
+i_14_38;i_17_22;'å kjøre';'kjøre';'drive';n;y;verb;action words;predicates;6,13;23;4;2
+i_5_30;i_8_17;'kjøtt';'kjøtt';'meat';n;y;noun;common nouns;nominals;6,21;14;3;1
+i_14_39;#N/A;'å klappe';'klappe';'clap';n;y;verb;action words;predicates;6,19;22;5;2
+i_14_40;#N/A;'å klatre';'klatre';'climb';n;y;verb;action words;predicates;6,3;9;6;2
+i_14_42;#N/A;'å kle på';'kle på';'dress';n;y;verb;action words;predicates;6,17;0;6;2
+i_14_41;i_17_23;'å klemme';'klemme';'hug';n;y;verb;action words;predicates;5,97;15;5;2
+i_15_25;#N/A;'klissete';'klissete';'sticky';n;y;adjective;descriptive words;predicates;5,98;13;7;3
+i_8_21;i_11_12;'ei klokke (bjelle)';'klokke';'clock';n;y;noun;common nouns;nominals;6,6;16;5;2
+i_12_19;#N/A;'en klovn';'klovn';'clown';n;y;noun;people;nominals;6,45;2;5;1
+i_6_12;i_9_8;'en knapp';'knapper';'buttons';n;y;noun;common nouns;nominals;6,6;19;4;1
+i_7_12;i_10_10;'et kne';'kne';'knee';n;y;noun;common nouns;nominals;6,52;13;3;1
+i_5_32;#N/A;'et knekkebrød';'knekkebrød';'crispbread';n;y;noun;common nouns;nominals;6,68;2;8;3
+i_8_22;i_11_13;'en kniv';'kniv';'knife';n;y;noun;common nouns;nominals;6,76;3;4;1
+i_9_15;i_12_10;'en komfyr';'komfyr';'stove';n;y;noun;common nouns;nominals;6,72;1;6;2
+i_8_23;i_11_14;'en kopp';'kopp';'cup';n;y;noun;common nouns;nominals;7,05;30;3;1
+i_8_24;i_11_15;'en kost (å feie)';'kost';'broom';n;y;noun;common nouns;nominals;6,44;11;4;1
+i_4_11;#N/A;'et kritt';'kritt';'chalk';n;y;noun;common nouns;nominals;6,39;16;4;1
+i_2_23;#N/A;'en krokodille';'krokodille';'crocodile';n;y;noun;common nouns;nominals;6,6;3;9;4
+i_8_25;#N/A;'ei krukke';'krukke';'jar';n;y;noun;common nouns;nominals;6,37;12;5;2
+i_2_24;i_5_20;'ei ku';'ku';'cow';n;y;noun;common nouns;nominals;6,65;29;2;1
+i_21_13;#N/A;'å kunne';'kunne';'could';n;y;verb;closed-class items;closed-class;3,19;19;4;2
+i_16_11;#N/A;'en kveld';'kveld';'evening';n;y;noun;words about time;#N/A;5,52;9;4;1
+i_2_25;i_5_21;'en kylling';'kylling';'chicken';n;y;noun;common nouns;nominals;6,79;2;5;2
+i_14_44;i_17_24;'å kysse';'kysse';'kiss';n;y;verb;action words;predicates;6,49;17;4;2
+i_21_14;#N/A;'å la';'la';'let';n;y;verb;closed-class items;closed-class;2,73;33;2;1
+i_14_45;#N/A;'å lage mat';'lage mat';'cook';n;y;verb;action words;predicates;6,01;0;8;3
+i_2_26;i_5_22;'et lam';'lam';'lamb';n;y;noun;common nouns;nominals;6,6;28;3;1
+i_8_27;i_11_16;'ei lampe';'lampe';'lamp';n;y;noun;common nouns;nominals;6,66;13;5;2
+i_15_26;#N/A;'lang';'lang';'long';n;y;adjective;descriptive words;predicates;5,51;26;3;1
+i_3_9;i_6_6;'en lastebil';'lastebil';'truck';n;y;noun;common nouns;nominals;6,42;0;8;3
+i_14_48;i_17_25;'å legge';'legge';'put';n;y;verb;action words;predicates;5,18;22;4;2
+i_4_7;#N/A;'lego';'lego';'lego';n;y;noun;common nouns;nominals;6,77;#N/A;4;2
+i_14_49;i_17_26;'å leke';'leke';'toy';n;y;verb;action words;predicates;5,53;25;4;2
+i_9_16;i_12_11;'ei lekegrind';'lekegrind';'play pen';n;y;noun;common nouns;nominals;6,58;2;8;3
+i_11_15;#N/A;'en lekeplass';'lekeplass';'playground';n;y;noun;places to go;nominals;6,57;1;8;3
+i_14_50;i_17_27;'å lese';'lese';'read';n;y;verb;action words;predicates;6,11;29;4;2
+i_14_51;#N/A;'å like';'like';'like';n;y;verb;action words;predicates;3,89;27;4;2
+i_4_13;#N/A;'lim';'lim';'glue';n;y;noun;common nouns;nominals;5,81;21;3;1
+i_15_28;i_18_14;'liten';'liten';'small';n;y;adjective;descriptive words;predicates;4,19;12;5;2
+i_8_28;i_11_17;'ei lommebok';'lommebok';'wallet';n;y;noun;common nouns;nominals;6,75;1;7;3
+i_6_13;i_9_9;'ei lue';'lue';'cap';n;y;noun;common nouns;nominals;6,66;29;3;2
+i_14_52;i_17_29;'å lukke';'lukke';'close';n;y;verb;action words;predicates;5,69;20;4;2
+i_8_29;i_11_18;'et lys';'lys';'light';n;y;noun;common nouns;nominals;6,61;28;3;1
+i_12_20;#N/A;'en lærer';'lærer';'teacher';n;y;noun;people;nominals;6,37;23;5;2
+i_14_53;i_17_28;'å løpe';'løpe';'run';n;y;verb;action words;predicates;6,05;14;4;2
+i_2_28;i_5_24;'en løve';'løve';'lion';n;y;noun;common nouns;nominals;6,61;24;4;2
+i_7_14;i_10_11;'en mage';'mage';'tummy';n;y;noun;common nouns;nominals;6,32;25;4;2
+i_14_54;#N/A;'å male';'male';'paint';n;y;verb;action words;predicates;6,8;27;4;2
+i_12_21;i_15_12;'en mamma';'mamma';'mommy';n;y;noun;people;nominals;6,42;10;4;2
+i_12_22;i_15_13;'en mann';'mann';'man';n;y;noun;people;nominals;6,65;21;3;1
+i_5_35;i_8_19;'mat';'mat';'food';n;y;noun;common nouns;nominals;6,03;25;3;1
+i_14_55;i_17_30;'å mate';'mate';'feed';n;y;verb;action words;predicates;5,85;29;4;2
+i_5_36;#N/A;'ei matpakke';'matpakke';'lunch packet';n;y;noun;common nouns;nominals;6,78;3;7;3
+i_2_29;#N/A;'en maur';'maur';'ant';n;y;noun;common nouns;nominals;6,49;9;3;1
+i_5_37;i_8_20;'melk';'melk';'milk';n;y;noun;common nouns;nominals;6,44;6;4;1
+i_5_38;#N/A;'en melon';'melon';'melon';n;y;noun;common nouns;nominals;6,65;1;5;2
+i_12_23;i_15_14;'et menneske';'mennesker';'people';n;y;noun;people;nominals;6,4;2;7;3
+i_13_18;i_16_12;'en middag';'middag';'dinner';n;y;noun;games & routines;games & routines;6,66;0;5;2
+i_14_56;#N/A;'å miste';'miste';'loose';n;y;verb;action words;predicates;5;17;5;2
+i_3_10;i_6_7;'en motorsykkel';'motorsykkel';'motorcycle';n;y;noun;common nouns;nominals;6,76;0;10;4
+i_7_15;i_10_12;'en munn';'munn';'mouth';n;y;noun;common nouns;nominals;6,57;21;3;1
+i_2_30;i_5_25;'ei mus';'mus';'mouse';n;y;noun;common nouns;nominals;6,57;20;3;1
+i_2_31;#N/A;'en mygg';'mygg';'mosquito';n;y;noun;common nouns;nominals;6,96;9;3;1
+i_15_29;i_18_15;mørk';'mørkt';'dark';n;y;adjective;descriptive words;predicates;5,69;8;4;1
+i_10_12;i_13_4;'en måne';'måne';'moon';n;y;noun;places to go;nominals;6,62;21;4;2
+i_21_16;#N/A;'å måtte';'måtte';'had to';n;y;verb;closed-class items;closed-class;3,28;22;4;2
+i_16_14;i_19_7;'ei natt';'natt';'night';n;y;noun;words about time;#N/A;5,79;29;3;1
+i_7_16;i_10_13;'en navle';'navle';'belly button';n;y;noun;common nouns;nominals;6,81;12;5;2
+i_7_17;i_10_14;'ei nese';'nese';'nose';n;y;noun;common nouns;nominals;6,76;17;4;2
+i_15_30;#N/A;'ny';'ny';'new';n;y;adjective;descriptive words;predicates;4,09;28;2;1
+i_8_31;i_11_20;'en nøkkel';'nøkler';'keys';n;y;noun;common nouns;nominals;6,67;1;5;2
+i_12_27;i_15_17;'en oldefar';'oldefar';'great-grandfather';n;y;noun;people;nominals;5,89;0;7;3
+i_12_28;i_15_18;'ei oldemor';'oldemor';'great-grandmother';n;y;noun;people;nominals;6,22;0;7;3
+i_12_29;i_15_19;'en onkel';'onkel';'uncle';n;y;noun;people;nominals;5,81;2;5;2
+i_15_32;#N/A;'oransje';'oransje';'orange';n;y;adjective;descriptive words;predicates;6,62;2;6;3
+i_5_41;i_8_21;'en ost';'ost';'cheese';n;y;noun;common nouns;nominals;6,88;15;3;1
+i_9_17;i_12_12;'en ovn';'ovn';'oven';n;y;noun;common nouns;nominals;6,73;7;3;1
+i_5_42;#N/A;'ei pannekake';'pannekake';'pancake';n;y;noun;common nouns;nominals;6,45;3;8;4
+i_12_30;i_15_20;'en pappa';'pappa/far';'daddy';n;y;noun;people;nominals;5,95;19;4;2
+i_11_16;i_14_9;'en park';'park';'park';n;y;noun;places to go;nominals;6,43;14;4;1
+i_9_18;#N/A;'en PC';'PC';'computer';n;y;noun;common nouns;nominals;6,86;2;4;2
+i_15_33;i_18_18;'pen';'pen';'pretty';n;y;adjective;descriptive words;predicates;5,56;21;3;1
+i_8_33;i_11_22;'penger';'penger';'money';n;y;noun;common nouns;nominals;6,45;14;5;2
+i_4_14;#N/A;'en penn';'penn';'pen';n;y;noun;common nouns;nominals;6,93;23;3;1
+i_2_32;i_5_26;'en pingvin';'pingvin';'penguin';n;y;noun;common nouns;nominals;6,58;0;6;2
+i_10_13;#N/A;'en pinne';'pinne';'stick';n;y;noun;places to go;nominals;6,66;31;4;2
+i_5_44;i_8_23;'en pizza';'pizza';'pizza';n;y;noun;common nouns;nominals;6,92;0;5;2
+i_8_34;i_11_23;'en plante';'plante';'plant';n;y;noun;common nouns;nominals;6,27;8;6;2
+i_14_59;i_17_32;'å plaske';'plaske';'splash';n;y;verb;action words;predicates;6,17;10;6;2
+i_4_15;#N/A;'plastilina';'plastilina';'plasticine';n;y;noun;common nouns;nominals;6,03;#N/A;10;4
+i_5_46;#N/A;'pommes frites';'pommes frites';'french fries';n;y;noun;common nouns;nominals;6,7;0;7;2
+i_2_33;#N/A;'en ponni';'ponni';'pony';n;y;noun;common nouns;nominals;6,38;4;4;2
+i_12_32;#N/A;'et postbud';'postbud';'mailman';n;y;noun;people;nominals;6,43;2;7;2
+i_5_49;#N/A;'potetgull';'potetgull';'potato chips';n;y;noun;common nouns;nominals;6,39;1;8;3
+i_4_10;#N/A;'en presang';'presang';'present';n;y;noun;common nouns;nominals;6,38;0;6;2
+i_14_60;#N/A;'å prøve';'prøve';'try';n;y;verb;action words;predicates;3,74;7;5;2
+i_4_16;#N/A;'et puslespill';'puslespill';'puzzle';n;y;noun;common nouns;nominals;6,46;2;9;3
+i_8_35;i_11_24;'ei pute';'pute';'pillow';n;y;noun;common nouns;nominals;6,46;19;4;2
+i_14_47;#N/A;'å putte';'putte';'put';n;y;verb;action words;predicates;4,81;25;4;2
+i_6_14;i_9_10;'en pysjamas';'pysjamas';'pajamas';n;y;noun;common nouns;nominals;6,59;0;7;3
+i_5_45;#N/A;'ei pølse';'pølser';'sausages';n;y;noun;common nouns;nominals;6,87;7;5;2
+i_8_36;i_11_25;'en radio';'radio';'radio';n;y;noun;common nouns;nominals;6,71;0;5;3
+i_15_34;#N/A;'rar';'rar';'nice';n;y;adjective;descriptive words;predicates;3,63;33;3;1
+i_15_35;i_18_19;'redd';'redd';'scared';n;y;adjective;descriptive words;predicates;5,11;24;3;1
+i_10_14;i_13_5;'regn';'regn';'rain';n;y;noun;places to go;nominals;6,73;30;3;1
+i_6_15;i_9_11;'regntøy';'regntøy';'rainwear';n;y;noun;common nouns;nominals;6,25;2;5;2
+i_2_34;i_5_27;'et reinsdyr';'reinsdyr';'reindeer';n;y;noun;common nouns;nominals;6,8;2;7;2
+i_15_36;i_18_20;'ren';'ren';'clean';n;y;adjective;descriptive words;predicates;5,13;29;3;1
+i_14_57;#N/A;'å reparere';'reparere';'repair';n;y;verb;action words;predicates;5,19;5;8;4
+i_14_62;i_17_33;'å ri';'ri';'ride';n;y;verb;action words;predicates;6,46;37;2;1
+i_13_20;#N/A;'å ringe';'ringe';call (on phone)';n;y;verb;games & routines;games & routines;6,29;22;4;2
+i_5_50;#N/A;'ris';'ris';'rice';n;y;noun;common nouns;nominals;6,18;38;3;1
+i_9_20;#N/A;'et rom';'rom';'room';n;y;noun;common nouns;nominals;6,22;20;3;1
+i_5_52;i_8_24;'en rosin';'rosiner';'raisins';n;y;noun;common nouns;nominals;6,6;2;5;2
+i_7_21;#N/A;'ei rumpe';'rumpe';'buttocks/bottom';n;y;noun;common nouns;nominals;7,03;14;5;2
+i_14_65;i_17_34;'å rydde';'rydde';'tidy';n;y;verb;action words;predicates;5,84;25;4;2
+i_7_22;#N/A;'en rygg';'rygg';'back';n;y;noun;common nouns;nominals;6,4;15;3;1
+i_15_37;i_18_21;'rød';'rød';'red';n;y;adjective;descriptive words;predicates;6,54;34;2;1
+i_14_66;#N/A;'å røre';'røre';'touch';n;y;verb;action words;predicates;5,81;28;4;2
+i_5_53;#N/A;'saft';'saft';'fruit juice';n;y;noun;common nouns;nominals;6,7;14;4;1
+i_8_37;i_11_26;'ei saks';'saks';'scissors';n;y;noun;common nouns;nominals;6,92;16;4;1
+i_5_55;#N/A;'salt';'salt';'salt';n;y;noun;common nouns;nominals;6,18;18;4;1
+i_6_16;#N/A;'en sandal';'sandaler';'sandals';n;y;noun;common nouns;nominals;6,8;2;6;2
+i_10_15;#N/A;'ei sandkasse';'sandkasse';'sandbox';n;y;noun;places to go;nominals;6,64;4;7;3
+i_2_35;i_5_29;'en sau';'sau';'sheep';n;y;noun;common nouns;nominals;6,99;26;2;1
+i_5_56;#N/A;'saus';'saus';'sauce';n;y;noun;common nouns;nominals;6,14;16;3;1
+i_14_67;i_17_35;'å se';'se';'look';n;y;verb;action words;predicates;5,32;37;2;1
+i_14_68;i_17_36;'å se på (TV)';'se på';'look at';n;y;verb;action words;predicates;6,12;#N/A;5;2
+i_2_36;#N/A;'en sebra';'sebra';'zebra';n;y;noun;common nouns;nominals;6,72;2;5;2
+i_8_39;#N/A;'en sekk';'sekk';'bag';n;y;noun;common nouns;nominals;6,26;30;3;1
+i_9_21;i_12_14;'ei seng';'seng';'bed';n;y;noun;common nouns;nominals;6,8;18;3;1
+i_8_40;#N/A;'en serviett';'serviett';'napkin';n;y;noun;common nouns;nominals;6,51;0;7;3
+i_14_69;#N/A;'å sette';'sette';'put';n;y;verb;action words;predicates;4,44;32;4;2
+i_14_70;i_17_37;'å si';'si';'say';n;y;verb;action words;predicates;3,92;35;2;1
+i_15_39;#N/A;'sint';'sint';'mad';n;y;adjective;descriptive words;predicates;5,17;23;4;1
+i_11_17;#N/A;'et sirkus';'sirkus';'circus';n;y;noun;places to go;nominals;6,41;2;6;2
+i_15_40;#N/A;'sist';'sist';'last';n;y;adjective;descriptive words;predicates;4,63;16;4;1
+i_14_71;#N/A;'å sitte';'sitte';'sit';n;y;verb;action words;predicates;6,69;31;4;2
+i_2_37;i_5_30;'en sjiraff';'sjiraff';'giraffe';n;y;noun;common nouns;nominals;6,84;0;5;2
+i_5_57;#N/A;'sjokolade';'sjokolade';'chocolate';n;y;noun;common nouns;nominals;6,51;2;8;4
+i_9_22;#N/A;'et skap';'skap';'closet';n;y;noun;common nouns;nominals;6,87;15;4;1
+i_2_38;i_5_31;'ei skilpadde';'skilpadde';'turtle';n;y;noun;common nouns;nominals;6,65;3;7;3
+i_15_42;i_18_22;'skitten';'skitten';'dirty';n;y;adjective;descriptive words;predicates;5,76;11;5;2
+i_8_42;i_11_29;'ei skje';'skje';'spoon';n;y;noun;common nouns;nominals;6,7;31;2;1
+i_6_18;#N/A;'et skjerf';'skjerf';'scarf';n;y;noun;common nouns;nominals;6,61;7;4;1
+i_6_19;#N/A;'ei skjorte';'skjorte';'shirt';n;y;noun;common nouns;nominals;6,66;9;4;2
+i_14_72;#N/A;'å skjære';'skjære';'cut';n;y;verb;action words;predicates;6,26;20;4;2
+i_14_73;#N/A;'å skli';'skli';'slip';n;y;verb;action words;predicates;6,44;5;4;1
+i_10_16;i_13_6;'ei sklie';'sklie';'slide';n;y;noun;places to go;nominals;6,78;4;5;2
+i_6_20;i_9_13;'en sko';'sko';'shoes';n;y;noun;common nouns;nominals;6,9;16;3;1
+i_11_18;#N/A;'skog';'skogen';'the woods';n;y;noun;places to go;nominals;6,67;7;4;1
+i_11_19;i_14_10;'en skole';'skole';'school';n;y;noun;places to go;nominals;6,29;11;5;2
+i_14_74;i_17_38;'å skrive';'skrive';'write';n;y;verb;action words;predicates;6,03;8;6;2
+i_9_23;i_12_15;'en skuff';'skuff';'drawer';n;y;noun;common nouns;nominals;6,7;5;4;1
+i_7_23;#N/A;'ei skulder';'skulder';'shoulder';n;y;noun;common nouns;nominals;6,59;1;7;2
+i_21_18;#N/A;'å skulle';'skulle';'would';n;y;verb;closed-class items;closed-class;2,89;18;5;2
+i_10_17;#N/A;'en sky';'skyer';'clouds';n;y;noun;places to go;nominals;6,48;26;2;1
+i_14_75;#N/A;'å skynde seg';'skynde seg';'hurry';n;y;verb;action words;predicates;5,13;0;7;3
+i_15_44;i_18_24;'slem';'slem';'bad';n;y;adjective;descriptive words;predicates;3,97;13;4;1
+i_14_76;#N/A;'å slikke';'slikke';'lick';n;y;verb;action words;predicates;6,29;18;5;2
+i_14_77;#N/A;'å slutte';'slutte';'finish';n;y;verb;action words;predicates;4,3;14;5;2
+i_14_78;i_17_39;'å slå';'slå';'hit';n;y;verb;action words;predicates;6,28;14;3;1
+i_14_79;#N/A;'å smake';'smake';'taste';n;y;verb;action words;predicates;4,85;15;5;2
+i_14_80;i_17_40;'å smile';'smile';'smile';n;y;verb;action words;predicates;6,58;13;5;2
+i_6_22;i_9_15;'en smokk';'smokk';'pacifier';n;y;noun;common nouns;nominals;6,64;5;4;1
+i_5_58;i_8_25;'smør';'smør';'butter';n;y;noun;common nouns;nominals;6,49;7;4;1
+i_14_81;#N/A;'å snakke';'snakke';'talk';n;y;verb;action words;predicates;5,84;15;5;2
+i_15_45;#N/A;'snill';'snill';'kind';n;y;adjective;descriptive words;predicates;4,31;9;4;1
+i_10_18;i_13_7;'snø';'snø';'snow';n;y;noun;places to go;nominals;6,83;12;3;1
+i_10_19;#N/A;'en snømann';'snømann';'snowman';n;y;noun;places to go;nominals;6,83;2;6;2
+i_9_24;i_12_16;'en sofa';'sofa';'couch';n;y;noun;common nouns;nominals;6,71;4;4;2
+i_6_23;i_9_16;'en sokk';'sokker';'socks';n;y;noun;common nouns;nominals;6,88;24;3;1
+i_10_20;i_13_8;'ei sol';'sol';'sun';n;y;noun;places to go;nominals;6,64;30;3;1
+i_2_39;i_5_32;'en sommerfugl';'sommerfugl';'butterfly';n;y;noun;common nouns;nominals;6,86;0;8;3
+i_14_82;i_17_41;'å sove';'sove';'sleep';n;y;verb;action words;predicates;6,47;18;4;2
+i_10_21;i_13_9;'en spade';'spade';'spade';n;y;noun;places to go;nominals;7,03;9;4;2
+i_5_59;i_8_26;'spagetti';'spagetti';'spaghetti';n;y;noun;common nouns;nominals;6,85;0;7;3
+i_14_83;i_17_42;'å sparke';'sparke';'kick';n;y;verb;action words;predicates;6,32;9;6;2
+i_4_17;#N/A;'et spill';'spill';'game';n;y;noun;common nouns;nominals;5,73;14;4;1
+i_14_84;#N/A;'å spille';'spille';'play';n;y;verb;action words;predicates;6,05;15;5;2
+i_14_85;i_17_43;'å spise';'spise';'eat';n;y;verb;action words;predicates;6,13;10;5;2
+i_15_48;#N/A;'stakkars';'stakkars';'poor';n;y;adjective;descriptive words;predicates;3,57;2;6;2
+i_10_22;i_13_10;'en stein';'steiner';'rocks';n;y;noun;places to go;nominals;6,92;9;4;1
+i_10_23;#N/A;'en stige';'stige';'ladder';n;y;noun;places to go;nominals;6,79;9;5;2
+i_14_86;#N/A;'å stikke';'stikke';'sting';n;y;verb;action words;predicates;5,41;20;5;2
+i_15_49;#N/A;'stille';'stille';'quiet';n;y;adjective;descriptive words;predicates;4,15;22;5;2
+i_10_24;i_13_11;'ei stjerne';'stjerner';'stars';n;y;noun;places to go;nominals;6,53;3;6;2
+i_9_26;i_12_18;'en stol';'stol';'chair';n;y;noun;common nouns;nominals;6,52;15;4;1
+i_15_50;i_18_27;'stor';'stor';'big';n;y;adjective;descriptive words;predicates;4,82;19;4;1
+i_11_20;i_14_11;'ei strand';'strand';'beach';n;y;noun;places to go;nominals;6,62;7;5;1
+i_6_25;i_9_18;'ei strømpebukse';'strømpebukse';'tights';n;y;noun;common nouns;nominals;7,01;3;12;4
+i_6_24;i_9_17;'en støvel';'støvler';'boots';n;y;noun;common nouns;nominals;6,77;0;6;2
+i_8_45;i_11_31;'en støvsuger';'støvsuger';'vacuum cleaner';n;y;noun;common nouns;nominals;6,9;4;9;3
+i_14_88;#N/A;'å stå';'stå';'stand';n;y;verb;action words;predicates;6,53;17;3;1
+i_5_60;i_8_27;'sukkertøy';'sukkertøy';'candy';n;y;noun;common nouns;nominals;6,34;2;6;3
+i_15_51;i_18_28;'sulten';'sulten';'hungry';n;y;adjective;descriptive words;predicates;4,39;10;6;2
+i_5_61;#N/A;'suppe';'suppe';'soup';n;y;noun;common nouns;nominals;6,68;23;4;2
+i_15_52;#N/A;'sur';'sur';'grumpy';n;y;adjective;descriptive words;predicates;5,43;35;3;1
+i_15_53;#N/A;'svart';'svart';'black';n;y;adjective;descriptive words;predicates;6,5;17;4;1
+i_14_90;i_17_45;'å svømme';'svømme';'swim';n;y;verb;action words;predicates;6,26;4;5;2
+i_15_54;i_18_29;'syk';'syk';'sick';n;y;adjective;descriptive words;predicates;5,96;20;3;1
+i_3_11;i_6_8;'en sykkel';'sykkel';'bicycle';n;y;noun;common nouns;nominals;6,67;5;5;2
+i_5_62;#N/A;'syltetøy';'syltetøy';jam';n;y;noun;common nouns;nominals;6,65;3;7;3
+i_14_89;i_17_46;'å synge';'synge';'sing';n;y;verb;action words;predicates;6,3;8;4;2
+i_14_91;#N/A;'å søle';'søle';'spill';n;y;verb;action words;predicates;5,81;24;4;2
+i_8_43;i_11_30;'søppel';'søppel';'rubbish';n;y;noun;common nouns;nominals;6,01;2;5;2
+i_8_44;#N/A;'ei søppelbøtte';'søppelbøtte';'rubbish bin';n;y;noun;common nouns;nominals;6,48;#N/A;9;4
+i_12_33;i_15_21;'ei søster';'søster';'sister';n;y;noun;people;nominals;5,92;5;6;2
+i_15_46;i_18_26;'søt';'søt';'cute';n;y;adjective;descriptive words;predicates;5,4;26;3;1
+i_15_47;#N/A;'søvnig';'søvnig';'sleepy';n;y;adjective;descriptive words;predicates;5,58;1;5;2
+i_4_18;i_7_8;'ei såpeboble';'såpebobler';'soap bubbles';n;y;noun;common nouns;nominals;6,8;3;9;4
+i_14_92;i_17_47;'å ta';'ta';'take';n;y;verb;action words;predicates;4,32;33;2;1
+i_10_25;#N/A;'et tak';'tak';'roof';n;y;noun;places to go;nominals;6,68;24;3;1
+i_8_46;i_11_32;'en tallerken';'tallerken';'plate';n;y;noun;common nouns;nominals;6,97;0;8;3
+i_8_47;i_11_33;'en tannbørste';'tannbørste';'toothbrush';n;y;noun;common nouns;nominals;7,2;2;8;3
+i_12_34;i_15_22;'ei tante';'tante';'aunt';n;y;noun;people;nominals;5,99;19;5;2
+i_5_63;#N/A;'te';'te';'tea';n;y;noun;common nouns;nominals;6,35;33;2;1
+i_14_93;i_17_49;'å tegne';'tegne';'draw';n;y;verb;action words;predicates;6,34;21;4;2
+i_8_48;i_11_34;'en telefon';'telefon';'telephone';n;y;noun;common nouns;nominals;6,69;0;7;3
+i_14_94;#N/A;'å tenke';'tenke';'think';n;y;verb;action words;predicates;4,13;13;5;2
+i_7_24;i_10_18;'ei tann';'tenner';'teeth';n;y;noun;common nouns;nominals;6,83;31;3;1
+i_8_49;i_11_35;'et teppe';'teppe';'blanket/carpet';n;y;noun;common nouns;nominals;6,91;20;4;2
+i_9_28;#N/A;'en terrasse';'terrasse';'terrace';n;y;noun;common nouns;nominals;6,42;3;6;3
+i_16_16;#N/A;'ei tid';'tid';'time';n;y;noun;words about time;#N/A;3,61;30;2;1
+i_2_40;i_5_33;'en tiger';'tiger';'tiger';n;y;noun;common nouns;nominals;6,64;8;5;2
+i_3_12;i_6_9;'et tog';'tog';'train';n;y;noun;common nouns;nominals;6,98;15;3;1
+i_15_55;i_18_30;'tom';'tom';'empty';n;y;adjective;descriptive words;predicates;5,49;15;3;1
+i_3_13;#N/A;'en traktor';'traktor';'tractor';n;y;noun;common nouns;nominals;6,73;0;7;2
+i_10_26;#N/A;'ei trampoline';'trampoline';'trampoline';n;y;noun;places to go;nominals;6,84;2;10;4
+i_5_64;#N/A;'tran';'tran';'cod-liver oil';n;y;noun;common nouns;nominals;6,67;12;4;1
+i_9_30;i_12_20;'ei trapp';'trapp';'stairs';n;y;noun;common nouns;nominals;6,52;15;4;1
+i_10_27;i_13_12;'et tre';'tre';'tree';n;y;noun;places to go;nominals;6,89;19;3;1
+i_14_95;#N/A;å treffe';'treffe';'meet';n;y;verb;action words;predicates;5,01;10;5;2
+i_3_14;#N/A;'en trehjulssykkel';'trehjulssykkel';'tricycle';n;y;noun;common nouns;nominals;6,76;0;11;4
+i_6_27;i_9_19;'ei t-skjorte';'t-skjorte';'t-shirt';n;y;noun;common nouns;nominals;6,69;3;6;3
+i_15_59;#N/A;'tung';'tung';'heavy';n;y;adjective;descriptive words;predicates;4,97;9;3;1
+i_7_26;i_10_20;'ei tunge';'tunge';'tongue';n;y;noun;common nouns;nominals;6,51;14;4;2
+i_9_31;i_12_21;'en TV';'TV';'TV';n;y;noun;common nouns;nominals;6,8;2;4;2
+i_5_65;#N/A;'en tyggegummi';'tyggegummi';'gum';n;y;noun;common nouns;nominals;6,44;0;8;4
+i_6_28;#N/A;'en tøffel';'tøfler';'slippers';n;y;noun;common nouns;nominals;6,53;7;5;2
+i_14_97;i_17_50;'å tørke';'tørke';'dry';n;y;verb;action words;predicates;5,25;9;5;2
+i_9_29;#N/A;'en tørketrommel';'tørketrommel';'dryer';n;y;noun;common nouns;nominals;6,82;0;11;4
+i_15_56;i_18_31;'tørr';'tørr';'dry';n;y;adjective;descriptive words;predicates;4,74;10;3;1
+i_15_57;i_18_32;'tørst';'tørst';'thirsty';n;y;adjective;descriptive words;predicates;5,05;6;4;1
+i_7_27;i_10_17;'ei tå';'tå';'toe';n;y;noun;common nouns;nominals;6,6;34;2;1
+i_2_41;i_5_34;'ei ugle';'ugle';'owl';n;y;noun;common nouns;nominals;6,52;11;4;2
+i_2_42;#N/A;'en ulv';'ulv';'wolf';n;y;noun;common nouns;nominals;6,71;8;3;1
+i_6_29;#N/A;'ei underbukse';'underbukse';'underpants';n;y;noun;common nouns;nominals;6,6;3;9;4
+i_5_66;#N/A;'en vaffel';'vafler';'waffles';n;y;noun;common nouns;nominals;6,9;5;5;2
+i_2_43;i_5_35;'en valp';'valp';'puppy';n;y;noun;common nouns;nominals;6,73;11;4;1
+i_5_67;i_8_28;'vann';'vann';'water';n;y;noun;common nouns;nominals;6,56;35;3;1
+i_10_29;#N/A;'en vannslange';'vannslange';'hose';n;y;noun;places to go;nominals;6,57;3;8;3
+i_15_61;i_18_34;'varm';'varm';'hot';n;y;adjective;descriptive words;predicates;5,21;14;4;1
+i_14_98;i_17_51;'å vaske';'vaske';'wash';n;y;verb;action words;predicates;6,21;24;5;2
+i_9_33;#N/A;'en vaskemaskin';'vaskemaskin';'washing machine';n;y;noun;common nouns;nominals;6,97;0;10;4
+i_10_30;#N/A;'en vei';'vei';'street';n;y;noun;places to go;nominals;6,43;25;2;1
+i_14_102;#N/A;'å velte';'velte';'overturn';n;y;verb;action words;predicates;5,45;28;5;2
+i_12_35;#N/A;'en venn';'venn';'friend';n;y;noun;people;nominals;5,63;32;3;1
+i_14_99;#N/A;'å vente';'vente';'wait';n;y;verb;action words;predicates;5,61;25;5;2
+i_2_44;i_5_36;'en veps';'veps';'wasp';n;y;noun;common nouns;nominals;6,71;2;4;1
+i_8_50;#N/A;'ei veske';'veske';'bag';n;y;noun;common nouns;nominals;6,29;16;5;2
+i_21_22;#N/A;'å ville';'ville';'would';n;y;verb;closed-class items;closed-class;3,22;37;4;2
+i_10_31;#N/A;'vind';'vind';'wind';n;y;noun;places to go;nominals;5,69;9;4;1
+i_9_34;i_12_23;'et vindu';'vindu';'window';n;y;noun;common nouns;nominals;6,41;4;5;2
+i_14_101;i_17_52;'å vise';'vise';'show';n;y;verb;action words;predicates;4,27;27;4;2
+i_15_63;i_18_36;vond';'vondt';'painful';n;y;adjective;descriptive words;predicates;4,2;10;3;1
+i_6_30;i_9_20;'en vott';'votter';'mittens';n;y;noun;common nouns;nominals;6,77;27;3;1
+i_21_19;#N/A;'å være';'være';'be';n;y;verb;closed-class items;closed-class;3,12;24;4;2
+i_15_60;#N/A;'våken';'våken';'awake';n;y;adjective;descriptive words;predicates;5,57;13;5;2
+i_14_104;#N/A;'å våkne';'våkne';'wake';n;y;verb;action words;predicates;5,49;9;5;2
+i_15_62;i_18_35;'våt';'våt';'wet';n;y;adjective;descriptive words;predicates;5,84;24;3;1
+i_5_68;#N/A;'yoghurt';'yoghurt';'yogurt';n;y;noun;common nouns;nominals;6,76;0;5;2
+i_15_31;i_18_17;'ødelagt';'ødelagt';'broken';n;y;adjective;descriptive words;predicates;4,96;2;7;3
+i_14_105;i_17_31;'å ødelegge';'ødelegge';'break';n;y;verb;action words;predicates;5,61;4;7;4
+i_14_106;#N/A;'å ønske';'ønske';'wish';n;y;verb;action words;predicates;3,42;7;5;2
+i_7_18;i_10_15;'et øre (kroppsdel)';'øre';'ear';n;y;noun;common nouns;nominals;6,65;28;4;2
+i_7_19;i_10_16;'et øye';'øye';'eye';n;y;noun;common nouns;nominals;6,71;19;2;2
+i_14_107;i_17_53;'å åpne';'åpne';'open';n;y;verb;action words;predicates;6,23;6;4;2
