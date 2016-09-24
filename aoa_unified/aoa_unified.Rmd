@@ -85,15 +85,19 @@ raw_data <- words %>%
 Save point -- raw Wordbank data.
 ```{r raw_data_save}
 #feather::write_feather(bind_rows(raw_data), "saved_data/raw_data.feather")
-# raw_data <- feather::read_feather("saved_data/raw_data.feather") %>%
-#   split(.$language)
+raw_data <- feather::read_feather("saved_data/raw_data.feather") %>%
+  split(.$language)
 ```
 
-
 ```{r sample_sizes}
-samples_sizes <- raw_data %>%
+sample_sizes <- raw_data %>%
   map_dbl(~length(unique(.x$data_id)))
-sum(samples_sizes)
+
+feather::write_feather(
+  data_frame(language = names(sample_sizes),
+             num_admins = sample_sizes),
+  "saved_data/sample_sizes.feather"
+)
 ```
 
 For each language and measure, collapse across age and uni_lemma.
@@ -384,6 +388,7 @@ uni_model_data <- uni_joined %>%
                     "age", "num_true", "num_false", predictors)) %>%
   group_by(language, measure) %>%
   mutate_each_(funs(as.numeric(Hmisc::impute(.))), predictors) %>%
+  mutate(unscaled_age = age) %>%
   mutate_each_(funs(as.numeric(scale(.))), c(predictors, "age"))
 
 #feather::write_feather(uni_model_data, "saved_data/uni_model_data.feather")
@@ -470,6 +475,61 @@ lexcat_coefs <- lexcat_models %>%
 #   geom_smooth(method = "lm") +
 #   #geom_line(aes(group = uni_lemma)) +
 #   scale_colour_solarized()
+```
+
+```{r lang_base_models}
+lang_base_model_fun <- function(lang, lang_measure_data) {
+  print(sprintf("Fitting lmer for %s...", lang))
+  formula <- as.formula(
+    sprintf("cbind(num_true, num_false) ~ (age | uni_lemma) + age")
+  )
+  lme4::glmer(formula, family = "binomial", data = lang_measure_data)
+}
+
+lang_base_models <- uni_model_data %>%
+  group_by(language, measure) %>%
+  nest() %>%
+  mutate(model = map2(language, data, lang_base_model_fun))
+
+lang_base_fits <- lang_base_models %>%
+  group_by(language, measure) %>%
+  mutate(data = map2(data, model, ~.x %>% mutate(fitted = fitted(.y))))
+
+lang_base_aoas <- lang_base_fits %>%
+  mutate(data = map(
+    data, ~.x %>% group_by(lexical_classes, uni_lemma) %>%
+      summarise(base_aoa = unscaled_age[min(which(fitted > 0.5))])
+  )) %>%
+  select(-model) %>%
+  ungroup() %>%
+  unnest()
+
+
+lang_fits <- lang_models %>%
+  group_by(language, measure) %>%
+  mutate(data = map2(data, model, ~.x %>% mutate(fitted = fitted(.y))))
+
+lang_aoas <- lang_fits %>%
+  mutate(data = map(
+    data, ~.x %>% group_by(lexical_classes, uni_lemma) %>%
+      summarise(aoa = unscaled_age[min(which(fitted > 0.5))])
+  )) %>%
+  select(-model) %>%
+  ungroup() %>%
+  unnest()
+
+
+aoas <- lang_aoas %>%
+  left_join(lang_base_aoas)
+```
+
+```{r}
+ggplot(aoas, aes(x = base_aoa, y = aoa, colour = lexical_classes)) +
+  facet_wrap(~language, ncol = 5) +
+  coord_equal() +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, colour = "grey", linetype = "dashed") +
+  scale_colour_solarized()
 ```
 
 ```{r crossling_models}
