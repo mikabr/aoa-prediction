@@ -69,10 +69,10 @@ theme_set(theme_bw() +
             theme(panel.grid = element_blank(),
                   strip.background = element_blank(),
                   legend.key = element_blank()))
-data_path <- "../../aoa_unified/saved_data/"
-# uni_joined <- feather::read_feather(
-#   "../../aoa_unified/saved_data/uni_joined.feather"
-# )
+data_path <- "../../aoa_unified/saved_data"
+uni_joined <- feather::read_feather(
+  file.path(data_path, "uni_joined.feather")
+)
 uni_model_data <- feather::read_feather(
   file.path(data_path, "uni_model_data.feather")
 )
@@ -108,36 +108,59 @@ Second, which lexical categories are most influenced by input-related factors, l
 
 # Approach {#approach .unnumbered}
 
+
 <!-- We use CDI data from Wordbank to estimate the acquisition trajectories for words across `r num_langs` languages: `r paste(unique(lang_coefs$language), collapse = ", ")`. We then ask what factors are most important for predicting this trajectory.  -->
 
 
 ```{r lang_stats, results="asis"}
-# num_admins <- get_administration_data(mode = "local") %>%
-#   group_by(language, form) %>%
-#   summarise(num_admins = n())
-# 
-# aoa_stats <- uni_model_data %>%
-#   group_by(language, measure) %>%
-#   summarise(num_included = n())
-# 
-# childes_stats <- read_csv("../predictors/frequency/num_words.csv")
-# 
-# lang_stats <- aoa_stats %>%
-#   left_join(num_admins) %>%
-#   left_join(childes_stats)
-# colnames(lang_stats) <- c("Language", "CDI Items", "CDI Admins", "CHILDES Tokens")
-# 
-# lang_table <- xtable(lang_stats, digits = 2, caption = "Dataset statistics",
-#                      label = "table:lang_stats")
-# 
-# print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
-#       table.placement = "ht", format.args = list(big.mark = ","))
+sample_sizes <- feather::read_feather(
+  file.path(data_path, "sample_sizes.feather")
+)
+
+uni_lemmas <- uni_model_data %>%
+  group_by(language) %>%
+  summarise(num_included = length(unique(uni_lemma)))
+
+lang_stats <- uni_lemmas %>%
+  left_join(sample_sizes) %>%
+  #left_join(childes_stats)
+  rename(Language = language,
+         "CDI Items" = num_included,
+         "CDI Admins" = num_admins)
+
+lang_table <- xtable::xtable(lang_stats, digits = 0,
+                             caption = "Dataset statistics",
+                             label = "table:lang_stats")
+
+print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
+      table.placement = "ht", format.args = list(big.mark = ","))
 ```
 
+To estimate the trajectory words' acquisition, we used vocabulary data collected using CDI instruments, including both Words & Gestures (WG) forms for younger children and  Words & Sentences (WS) forms for older children. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) for each of around 400-700 words. Typically, both comprehension and production are queried for younger children and production only is queried for older children, but details vary from adaptation to adaptation. Table \ref{table:lang_stats} gives an overview of our data sources. 
 
-To estimate the trajectory words' acquisition, we used vocabulary data collected using CDI instruments, including both Words & Gestures (WG) forms for younger children and  Words & Sentences (WS) forms for older children. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) each of around 400-700 words. Typically, both comprehension and production are queried for younger children and production only is queried for older children, but details vary from adaptation to adaptation. Table \ref{table:lang_stats} gives an overview of our data sources [TODO: port this table].
+For each word, CDI data yield a trajectory reflecting how commonly it is learned across ages (see Figure \ref{fig:demo_trajectories} for some examples). We then predict on the basis of age, properties of the word, and the interactions between age and each property.
 
-From these data, for each word on the CDI, we computed the proportion of children at each age who were reported to understand/produce the word. This procedure results in a trajectory reflecting how commonly a word is learned over age (see \ref{fig:example_trajectories} for some examples [TODO: add example trajectories plot]). Then, using logistic mixed effects models, we predict this trajectory on the basis of age, properties of the word, and the interactions between age and each property.
+```{r demo_trajectories, fig.width=7, fig.height=3, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Example trajectories for the words "dog" and "jump" across language.'}
+demo_lemmas <- c("dog", "jump")
+demo_data <- uni_joined %>%
+  filter(uni_lemma %in% demo_lemmas,
+         measure == "produces")
+word_data <- demo_data %>%
+  distinct(language, uni_lemma, words) %>%
+  mutate(x = ifelse(uni_lemma == demo_lemmas[1], 8, 35),
+         y = ifelse(uni_lemma == demo_lemmas[1], 1, 0))
+
+ggplot(demo_data, aes(x = age, y = prop, colour = uni_lemma)) +
+  facet_wrap(~language, ncol = 5) +
+  geom_point(size = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, size = 1.3) +
+  geom_label(aes(x = x, y = y, label = words), data = word_data, size = 3,
+             label.padding = unit(0.15, "lines"),
+             vjust = "inward", hjust = "inward") +
+  scale_colour_solarized(guide = FALSE) +
+  scale_y_continuous(name = "Proportion of children") +
+  scale_x_continuous(name = "Age (months)")
+```
 
 
 ```{r extremes, results='asis'}
@@ -170,17 +193,23 @@ extremes <- uni_model_data %>%
     })
   })
 
-extremes_table <- extremes %>%
+extremes_display <- extremes %>%
   filter(language == "English") %>%
   select(-language) %>%
-  mutate(order = row_number()) %>%
-  gather(Value, Words, highest, lowest) %>%
-  arrange(order) %>%
-  select(-order) %>%
-  mutate(Predictor = list(unique(Predictor), rep("", length(Predictor) / 2)) %>%
-           transpose() %>% unlist()) %>%
+  rename(Lowest = lowest, Highest = highest)
+
+extremes_display$Highest[5] <- "cockadoodledoo, refrigerator,\n rocking chair"
+
+  #mutate(order = row_number()) %>%
+  #gather(Value, Words, highest, lowest) %>%
+  #arrange(order) %>%
+  #select(-order) %>%
+  #mutate(Predictor = list(unique(Predictor), rep("", length(Predictor) / 2)) %>%
+  #         transpose() %>% unlist()) %>%
+
+extremes_table <- extremes_display %>%
   xtable::xtable(align = "llll", label = "table:extremes",
-                 caption = "Examples of words with the lowest and highest values for each predictor.")
+                 caption = "Words with the lowest and highest values for each predictor in English.")
 
 print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
       table.placement = "b!", floating.environment = "table")
@@ -295,7 +324,6 @@ Translation equivalents are available in the Wordbank database using the \texttt
 
 For all analyses, we used logistic mixed-effects regression models (fit with \texttt{lme4 1.1-12} in \texttt{R}) to predict the number of children who understand/produce each word at each age from age, the above predictors, and the interactions of age with the predictors. Each model was fit to all data from a particular language community and included a random intercept for each word and a random slope of age for each word. 
 
-<!-- Leave these lines as they are at the end of your .Rmd file to ensure placement of methods & acknowledgements sections before the references-->
 \showmatmethods
 \showacknow
 \pnasbreak

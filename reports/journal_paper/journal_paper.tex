@@ -199,8 +199,29 @@ We use CDI data from Wordbank to estimate the acquisition trajectories
 for words across 10 languages: Croatian, Danish, English, French
 (Quebec), Italian, Norwegian, Russian, Spanish, Swedish, Turkish. We
 then ask what factors are most important for predicting this trajectory.
-Table \ref{table:lang_stats} gives an overview of our data sources
-{[}TODO: port this table{]}.
+Table \ref{table:lang_stats} gives an overview of our data sources.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrr}
+  \hline
+Language & CDI Items & CDI Admins \\ 
+  \hline
+Croatian & 390 & 627 \\ 
+  Danish & 383 & 6,112 \\ 
+  English & 393 & 7,902 \\ 
+  French (Quebec) & 396 & 1,364 \\ 
+  Italian & 396 & 1,401 \\ 
+  Norwegian & 381 & 12,225 \\ 
+  Russian & 409 & 1,805 \\ 
+  Spanish & 399 & 1,872 \\ 
+  Swedish & 371 & 1,367 \\ 
+  Turkish & 396 & 3,537 \\ 
+   \hline
+\end{tabular}
+\caption{Dataset statistics} 
+\label{table:lang_stats}
+\end{table}
 
 \subsection{Estimating Acquisition
 Trajectory}\label{estimating-acquisition-trajectory}
@@ -215,38 +236,38 @@ comprehension and production, while WS asks only about production). From
 these data, for each word on the CDI, we computed the proportion of
 children at each age who were reported to understand/produce the word.
 This results in a trajectory reflecting how commonly a word is learned
-over age (see \ref{fig:example_trajectories} for some examples {[}TODO:
-add example trajectories plot{]}). We then predict on the basis of age,
-properties of the word, and the interactions between age and each
-property.
+over age (see Table \ref{fig:demo_trajectories} for some examples). We
+then predict on the basis of age, properties of the word, and the
+interactions between age and each property.
+
+\begin{figure*}
+
+{\centering \includegraphics{journal_paper_files/figure-latex/demo_trajectories-1} 
+
+}
+
+\caption{Example trajectories for the words "dog" and "jump" across language.}\label{fig:demo_trajectories}
+\end{figure*}
 
 \begin{table}[b!]
 \centering
 \begin{tabular}{lll}
   \hline
-Predictor & Value & Words \\ 
+Predictor & Highest & Lowest \\ 
   \hline
-frequency & highest & you, it, that \\ 
-   & lowest & cockadoodledoo, grrr, church \\ 
-  MLU & highest & when (question), day, store \\ 
-   & lowest & peekaboo, ouch, hello \\ 
-  final\_frequency & highest & book, it, there \\ 
-   & lowest & give, when (question), put \\ 
-  solo\_frequency & highest & no, yes, what \\ 
-   & lowest & tooth, feed, aunt \\ 
-  length & highest & cockadoodledoo, refrigerator, rocking chair \\ 
-   & lowest & i, go, hi \\ 
-  concreteness & highest & apple, baby, ball \\ 
-   & lowest & how, now, that \\ 
-  valence & highest & happy, hug, love \\ 
-   & lowest & sick, hurt (description), ouch \\ 
-  arousal & highest & naughty, money, scared \\ 
-   & lowest & shh, asleep, blanket \\ 
-  babiness & highest & baby, bib, bottle \\ 
-   & lowest & donkey, penny, jeans \\ 
+frequency & you, it, that & cockadoodledoo, grrr, church \\ 
+  MLU & when (question), day, store & peekaboo, ouch, hello \\ 
+  final\_frequency & book, it, there & give, when (question), put \\ 
+  solo\_frequency & no, yes, what & tooth, feed, aunt \\ 
+  length & cockadoodledoo, refrigerator,
+ rocking chair & i, go, hi \\ 
+  concreteness & apple, baby, ball & how, now, that \\ 
+  valence & happy, hug, love & sick, hurt (description), ouch \\ 
+  arousal & naughty, money, scared & shh, asleep, blanket \\ 
+  babiness & baby, bib, bottle & donkey, penny, jeans \\ 
    \hline
 \end{tabular}
-\caption{Examples of words with the lowest and highest values for each predictor.} 
+\caption{Words with the lowest and highest values for each predictor in English.} 
 \label{table:extremes}
 \end{table}
 
@@ -287,7 +308,7 @@ forms, allowing us to use the ratings for English words across
 languages. While necessarily imperfect, this method allows us to examine
 languages for which limited resources exist. Translation equivalents are
 available in the Wordbank database using the \texttt{wordbankr} package
-in \texttt{R} (\textbf{???}).
+in \texttt{R} (6).
 
 Each numeric predictor was centered and scaled so that all predictors
 would have comparable units. Lexical category was determined on the
