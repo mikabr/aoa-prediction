@@ -85,8 +85,8 @@ raw_data <- words %>%
 Save point -- raw Wordbank data.
 ```{r raw_data_save}
 #feather::write_feather(bind_rows(raw_data), "saved_data/raw_data.feather")
-raw_data <- feather::read_feather("saved_data/raw_data.feather") %>%
-  split(.$language)
+#raw_data <- feather::read_feather("saved_data/raw_data.feather") %>%
+#  split(.$language)
 ```
 
 ```{r sample_sizes}
@@ -158,6 +158,7 @@ Save point -- Wordbank data by collapsed to uni_lemma by age.
 
 ```{r uni_lemmas}
 uni_lemmas <- uni_prop_data %>%
+  ungroup() %>%
   select(language, uni_lemma, words) %>%
   distinct()
 
@@ -343,6 +344,7 @@ uni_joined <- uni_prop_data_comp %>%
   left_join(uni_valence) %>%
   left_join(uni_babiness) %>%
   left_join(uni_concreteness) %>%
+  ungroup() %>%
   distinct()
 ```
 
@@ -478,58 +480,58 @@ lexcat_coefs <- lexcat_models %>%
 ```
 
 ```{r lang_base_models}
-lang_base_model_fun <- function(lang, lang_measure_data) {
-  print(sprintf("Fitting lmer for %s...", lang))
-  formula <- as.formula(
-    sprintf("cbind(num_true, num_false) ~ (age | uni_lemma) + age")
-  )
-  lme4::glmer(formula, family = "binomial", data = lang_measure_data)
-}
-
-lang_base_models <- uni_model_data %>%
-  group_by(language, measure) %>%
-  nest() %>%
-  mutate(model = map2(language, data, lang_base_model_fun))
-
-lang_base_fits <- lang_base_models %>%
-  group_by(language, measure) %>%
-  mutate(data = map2(data, model, ~.x %>% mutate(fitted = fitted(.y))))
-
-lang_base_aoas <- lang_base_fits %>%
-  mutate(data = map(
-    data, ~.x %>% group_by(lexical_classes, uni_lemma) %>%
-      summarise(base_aoa = unscaled_age[min(which(fitted > 0.5))])
-  )) %>%
-  select(-model) %>%
-  ungroup() %>%
-  unnest()
-
-
-lang_fits <- lang_models %>%
-  group_by(language, measure) %>%
-  mutate(data = map2(data, model, ~.x %>% mutate(fitted = fitted(.y))))
-
-lang_aoas <- lang_fits %>%
-  mutate(data = map(
-    data, ~.x %>% group_by(lexical_classes, uni_lemma) %>%
-      summarise(aoa = unscaled_age[min(which(fitted > 0.5))])
-  )) %>%
-  select(-model) %>%
-  ungroup() %>%
-  unnest()
-
-
-aoas <- lang_aoas %>%
-  left_join(lang_base_aoas)
+# lang_base_model_fun <- function(lang, lang_measure_data) {
+#   print(sprintf("Fitting lmer for %s...", lang))
+#   formula <- as.formula(
+#     sprintf("cbind(num_true, num_false) ~ (age | uni_lemma) + age")
+#   )
+#   lme4::glmer(formula, family = "binomial", data = lang_measure_data)
+# }
+# 
+# lang_base_models <- uni_model_data %>%
+#   group_by(language, measure) %>%
+#   nest() %>%
+#   mutate(model = map2(language, data, lang_base_model_fun))
+# 
+# lang_base_fits <- lang_base_models %>%
+#   group_by(language, measure) %>%
+#   mutate(data = map2(data, model, ~.x %>% mutate(fitted = fitted(.y))))
+# 
+# lang_base_aoas <- lang_base_fits %>%
+#   mutate(data = map(
+#     data, ~.x %>% group_by(lexical_classes, uni_lemma) %>%
+#       summarise(base_aoa = unscaled_age[min(which(fitted > 0.5))])
+#   )) %>%
+#   select(-model) %>%
+#   ungroup() %>%
+#   unnest()
+# 
+# 
+# lang_fits <- lang_models %>%
+#   group_by(language, measure) %>%
+#   mutate(data = map2(data, model, ~.x %>% mutate(fitted = fitted(.y))))
+# 
+# lang_aoas <- lang_fits %>%
+#   mutate(data = map(
+#     data, ~.x %>% group_by(lexical_classes, uni_lemma) %>%
+#       summarise(aoa = unscaled_age[min(which(fitted > 0.5))])
+#   )) %>%
+#   select(-model) %>%
+#   ungroup() %>%
+#   unnest()
+# 
+# 
+# aoas <- lang_aoas %>%
+#   left_join(lang_base_aoas)
 ```
 
 ```{r}
-ggplot(aoas, aes(x = base_aoa, y = aoa, colour = lexical_classes)) +
-  facet_wrap(~language, ncol = 5) +
-  coord_equal() +
-  geom_point() +
-  geom_abline(slope = 1, intercept = 0, colour = "grey", linetype = "dashed") +
-  scale_colour_solarized()
+# ggplot(aoas, aes(x = base_aoa, y = aoa, colour = lexical_classes)) +
+#   facet_wrap(~language, ncol = 5) +
+#   coord_equal() +
+#   geom_point() +
+#   geom_abline(slope = 1, intercept = 0, colour = "grey", linetype = "dashed") +
+#   scale_colour_solarized()
 ```
 
 ```{r crossling_models}
@@ -645,7 +647,7 @@ ggplot(lang_coefs, aes(x = estimate, y = term)) +
   ylab("") +
   scale_x_continuous(name = "Coefficient Estimate")
 
-ggsave("../reports/cogsci_talk/lang_coefs.png", width = 7, height = 5)
+#ggsave("../reports/cogsci_talk/lang_coefs.png", width = 7, height = 5)
 ```
 
 ```{r consistency, fig.width=9, fig.height=5}
@@ -680,7 +682,8 @@ ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
                       drop = FALSE) +
   xlab("") +
   scale_y_continuous(name = "Coefficient Estimate")
-ggsave("../reports/cogsci_talk/lexcat_coefs.png", width = 9, height = 5)
+
+#ggsave("../reports/cogsci_talk/lexcat_coefs.png", width = 9, height = 5)
 ```
 
 Analysis walk-through plots for English comprehension.
