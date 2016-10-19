@@ -832,3 +832,46 @@ eng_prod <- uni_model_data %>%
 
 ggcorplot(eng_prod)
 ```
+
+Cross-linguistic consistency analyses.
+```{r}
+empirical_coef_cors <- lang_coefs %>%
+  group_by(interaction, measure, term) %>%
+  summarise(empirical_coef_var = var(estimate))
+
+baseline_sample <- function(i) {
+  lang_coefs %>%
+    group_by(interaction, measure, language) %>%
+    mutate(term = sample(term)) %>%
+    group_by(interaction, measure, term) %>%
+    summarise(coef_var = var(estimate)) %>%
+    mutate(sample = i)
+}
+
+num_samples <- 1000
+baseline_samples <- map_df(1:num_samples, baseline_sample)
+baseline_summary <- baseline_samples %>%
+  group_by(interaction, measure, term) %>%
+  summarise(mean_coef_var = mean(coef_var),
+            ci_lower_coef_var = ci_lower(coef_var),
+            ci_upper_coef_var = ci_upper(coef_var))
+
+coef_cors <- empirical_coef_cors %>%
+  left_join(baseline_summary)
+```
+
+```{r}
+num_coefs <- length(unique(lang_coefs$term))
+ggplot(coef_cors, aes(y = term)) +
+  facet_grid(measure ~ interaction, scales = "free") +
+  #coord_flip() +
+  geom_point(aes(x = empirical_coef_var, colour = term), size = 3) +
+  geom_errorbarh(aes(xmin = ci_lower_coef_var, xmax = ci_upper_coef_var,
+                     x = mean_coef_var),
+                 height = 0) +
+  scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE,
+                      values = rev(solarized_palette(num_coefs))) +
+  ylab("") +
+  scale_x_continuous(name = "Coefficient Variance Across Languages")
+```
