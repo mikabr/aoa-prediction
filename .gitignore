@@ -8,3 +8,4 @@
 *.Rproj
 rsconnect/
 *.pyc
+raw_data.feather
