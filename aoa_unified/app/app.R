@@ -7,22 +7,29 @@ library(ggplot2)
 library(langcog)
 theme_set(theme_mikabr())
 
-ui <- shinyUI(fluidPage(theme = shinytheme("spacelab"),
+ui <- shinyUI(
+  fluidPage(
+    theme = shinytheme("spacelab"),
 
-   titlePanel("Cross-Linguistic AoA Comparison"),
+    titlePanel("Cross-Linguistic AoA Comparison"),
 
-   sidebarLayout(
-      sidebarPanel(width = 3,
+    sidebarLayout(
+      sidebarPanel(
+        width = 2,
         uiOutput("language1"),
         uiOutput("language2")
-    ),
+      ),
 
-      mainPanel(with = 3, align = "center",
-         plotOutput("scatter"), br(),
-         textOutput("r")
+      mainPanel(
+        width = 10,
+        align = "center",
+          column(width = 6, plotOutput("all")),
+          column(width = 6, plotOutput("lexcat")),
+        br(), textOutput("r")
       )
-   )
-))
+    )
+  )
+)
 
 server <- shinyServer(function(input, output) {
 
@@ -58,14 +65,28 @@ server <- shinyServer(function(input, output) {
              language2 == input$language2)
   })
 
-  output$scatter <- renderPlot({
-    ggplot(pair(), aes(x = aoa1, y = aoa2)) +
+  output$all <- renderPlot({
+    ggplot(pair(), aes(x = aoa1, y = aoa2, colour = lexical_class)) +
       coord_equal() +
       geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "grey") +
       geom_smooth(method = "lm", colour = "black") +
-      geom_text(aes(label = uni_lemma), colour = solarized_palette(1)) +
+      geom_text(aes(label = uni_lemma)) +
       scale_x_continuous(limits = c(0, 40), name = "Language 1 AoA") +
-      scale_y_continuous(limits = c(0, 40), name = "Language 2 AoA")
+      scale_y_continuous(limits = c(0, 40), name = "Language 2 AoA") +
+      scale_colour_solarized(guide = FALSE)
+  })
+
+  output$lexcat <- renderPlot({
+    ggplot(pair(), aes(x = aoa1, y = aoa2, colour = lexical_class)) +
+      facet_wrap(~lexical_class, drop = TRUE) +
+      coord_equal() +
+      geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "grey") +
+      geom_smooth(method = "lm", colour = "black") +
+      #geom_text(aes(label = uni_lemma)) +
+      geom_point(size = 0.7) +
+      scale_x_continuous(limits = c(0, 40), name = "Language 1 AoA") +
+      scale_y_continuous(limits = c(0, 40), name = "Language 2 AoA") +
+      scale_colour_solarized(guide = FALSE)
   })
 
   output$r <- renderText({

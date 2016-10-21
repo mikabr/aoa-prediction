@@ -33,20 +33,20 @@ lang_coefs <- uni_prop_data %>%
 lang_coefs <- lang_coefs %>%
   mutate(aoa = -intercept / slope)
 
-pair_aoa <- lang_coefs %>%
-  filter(measure == "understands", aoa > 0, aoa < 40) %>%
-  group_by(uni_lemma) %>%
-  filter(n() == 10) %>%
-  select(language, uni_lemma, aoa) %>%
-  spread(language, aoa)
-
-ggcorplot(pair_aoa)
+# pair_aoa <- lang_coefs %>%
+#   filter(measure == "understands", aoa > 0, aoa < 40) %>%
+#   group_by(uni_lemma) %>%
+#   filter(n() == 10) %>%
+#   select(language, lexical_class, uni_lemma, aoa) %>%
+#   spread(language, aoa)
+#
+# ggcorplot(pair_aoa)
 
 aoas <- lang_coefs %>%
   filter(measure == "understands", aoa > 0, aoa < 40) %>%
-  select(language, uni_lemma, aoa)
+  select(language, lexical_class, uni_lemma, aoa)
 
-feather::write_feather(aoas, "aoas.feather")
+feather::write_feather(aoas, "app/aoas.feather")
 
 pair_cor <- function(l1, l2) {
   pair_aoas <- aoas %>%
@@ -65,12 +65,13 @@ pair_aoas <- map_df(unique(aoas$language), function(l1) {
   })
 })
 
-ggplot(pair_aoas, aes(x = aoa1, y = aoa2)) +
+ggplot(pair_aoas, aes(x = aoa1, y = aoa2, colour = lexical_class)) +
   facet_grid(language1 ~ language2) +
   coord_equal() +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "grey") +
   geom_point() +
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") +
+  scale_colour_solarized()
   #geom_text(aes(label = uni_lemma))
 
 lang_cors <- expand.grid(language1 = unique(lang_coefs$language),
