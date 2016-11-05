@@ -38,7 +38,7 @@ languages <- c("Croatian", "Danish", "English", "French (Quebec)", "Italian",
                "Norwegian", "Russian", "Spanish", "Swedish", "Turkish")
 
 admins <- get_administration_data(mode = data_mode) %>%
-  select(language, form, age, data_id) %>%
+  select(language, form, sex, age, data_id) %>%
   filter(language %in% languages)
 
 words <- get_item_data(mode = data_mode) %>%
@@ -861,17 +861,63 @@ coef_cors <- empirical_coef_cors %>%
 ```
 
 ```{r}
-num_coefs <- length(unique(lang_coefs$term))
-ggplot(coef_cors, aes(y = term)) +
-  facet_grid(measure ~ interaction, scales = "free") +
-  #coord_flip() +
-  geom_point(aes(x = empirical_coef_var, colour = term), size = 3) +
-  geom_errorbarh(aes(xmin = ci_lower_coef_var, xmax = ci_upper_coef_var,
-                     x = mean_coef_var),
+pair_cors <- function(dataset_coefs) {
+  by_lang <- dataset_coefs %>% split(.$language)
+  map_df(cross2(by_lang, by_lang),
+      ~data_frame(language1 = unique(.x[[1]][["language"]]),
+                  language2 = unique(.x[[2]][["language"]]),
+                  cor = cor(.x[[1]][["estimate"]], .x[[2]][["estimate"]])))
+}
+
+coef_cors <- function(coefs) {
+  coefs %>%
+    group_by(interaction, measure) %>%
+    nest() %>%
+    mutate(cors = map(data, pair_cors)) %>%
+    select(-data) %>%
+    unnest()
+}
+
+mean_coef_cors <- function(cors) {
+  cors %>%
+    filter(language1 != language2) %>%
+    group_by(interaction, measure) %>%
+    summarise(cor = mean(cor))
+}
+
+baseline_sample <- function(i) {
+  lang_coefs %>%
+    group_by(interaction, measure, language) %>%
+    mutate(estimate = sample(estimate)) %>%
+    coef_cors() %>%
+    mean_coef_cors() %>%
+    mutate(sample = i)
+}
+
+num_samples <- 100
+baseline_samples <- map_df(1:num_samples, baseline_sample)
+baseline_summary <- baseline_samples %>%
+  group_by(interaction, measure) %>%
+  summarise(mean_cor = mean(cor),
+            ci_lower_cor = ci_lower(cor),
+            ci_upper_cor = ci_upper(cor))
+
+empirical_coef_cors <- lang_coefs %>%
+  coef_cors()
+
+coef_cor_data <- empirical_coef_cors %>%
+  mean_coef_cors() %>%
+  left_join(baseline_summary)
+```
+
+```{r}
+ggplot(coef_cor_data, aes(y = measure)) +
+  facet_wrap(~interaction) +
+  geom_errorbarh(aes(xmin = ci_lower_cor, xmax = ci_upper_cor, x = mean_cor),
                  height = 0) +
-  scale_fill_solarized(guide = FALSE) +
-  scale_colour_manual(guide = FALSE,
-                      values = rev(solarized_palette(num_coefs))) +
-  ylab("") +
-  scale_x_continuous(name = "Coefficient Variance Across Languages")
+  geom_point(aes(x = mean_cor)) +
+  geom_point(aes(x = cor), size = 3) +
+  scale_x_continuous(name = "Average pairwise correlation of coefficients",
+                     limits = c(-0.1, 1)) +
+  ylab("")
 ```
