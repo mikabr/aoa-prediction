@@ -80,6 +80,16 @@ lexcat_coefs <- feather::read_feather(
   file.path(data_path, "lexcat_coefs.feather")
 )
 
+baseline_summary <- feather::read_feather(
+  file.path(data_path, "baseline_summary.feather")
+)
+empirical_summary <- feather::read_feather(
+  file.path(data_path, "empirical_summary.feather")
+)
+empirical_lang_summary <- feather::read_feather(
+  file.path(data_path, "empirical_lang_summary.feather")
+)
+
 predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
                 "length", "concreteness", "valence", "arousal", "babiness")
 num_langs <- length(unique(lang_coefs$language))
@@ -231,9 +241,23 @@ ggplot(lang_coefs, aes(x = estimate, y = term)) +
   scale_x_continuous(name = "Coefficient Estimate")
 ```
 
-<!--
-TODO: average pairwise correlation between languages' predictor coefs
--->
+```{r consistency, fig.width=4, fig.height=2.5, dev='cairo_pdf', fig.cap='TODO'}
+ggplot(NULL, aes(x = dummy, y = mean_cor)) +
+  facet_grid(measure ~ interaction) +
+  coord_flip() +
+  geom_pointrange(aes(ymin = ci_lower_cor, ymax = ci_upper_cor),
+                  data = baseline_summary, colour = "darkgrey") +
+  geom_point(aes(y = cor, colour = language),
+             data = empirical_lang_summary, alpha = 0.5) +
+  geom_errorbarh(aes(xmin = 0.8, xmax = 1.2, x = 1, y = cor),
+                 size = 1, height = 0,
+                 data = empirical_summary) +
+  scale_y_continuous(name = "Average pairwise correlation of coefficients",
+                     limits = c(-0.1, 1)) +
+  xlab("") +
+  scale_colour_solarized(guide = FALSE) +
+  theme(axis.ticks.y = element_blank())
+```
 
 ```{r lexcat_coefs, fig.width=7, fig.height=4, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='TODO'}
 plt_lexcat_coefs <- lexcat_coefs %>%

@@ -885,39 +885,78 @@ mean_coef_cors <- function(cors) {
     summarise(cor = mean(cor))
 }
 
+summarise_cors <- function(df) {
+  df %>%
+  summarise(mean_cor = mean(cor),
+            ci_lower_cor = ci_lower(cor),
+            ci_upper_cor = ci_upper(cor))
+}
+
 baseline_sample <- function(i) {
   lang_coefs %>%
     group_by(interaction, measure, language) %>%
     mutate(estimate = sample(estimate)) %>%
     coef_cors() %>%
-    mean_coef_cors() %>%
+    #mean_coef_cors() %>% 
     mutate(sample = i)
 }
 
 num_samples <- 100
 baseline_samples <- map_df(1:num_samples, baseline_sample)
+baseline_lang_summary <- baseline_samples %>%
+  filter(language1 != language2) %>%
+  group_by(interaction, measure, sample, language1) %>%
+  summarise(cor = mean(cor)) %>%
+  group_by(interaction, measure, language1) %>%
+  summarise_cors() %>%
+  mutate(dummy = "") %>%
+  rename(language = language1)
+
 baseline_summary <- baseline_samples %>%
+  filter(language1 != language2) %>%
+  group_by(interaction, measure, sample) %>%
+  summarise(cor = mean(cor)) %>%
   group_by(interaction, measure) %>%
-  summarise(mean_cor = mean(cor),
-            ci_lower_cor = ci_lower(cor),
-            ci_upper_cor = ci_upper(cor))
+  summarise_cors() %>%
+  mutate(dummy = "")
 
-empirical_coef_cors <- lang_coefs %>%
-  coef_cors()
+empirical_cors <- lang_coefs %>%
+  coef_cors() %>%
+  filter(language1 != language2)
 
-coef_cor_data <- empirical_coef_cors %>%
-  mean_coef_cors() %>%
-  left_join(baseline_summary)
+empirical_lang_summary <- empirical_cors %>%
+  group_by(interaction, measure, language1) %>%
+  summarise(cor = mean(cor),
+            dummy = "") %>%
+  rename(language = language1)
+
+empirical_summary <- empirical_cors %>%
+  group_by(interaction, measure) %>%
+  summarise(cor = mean(cor),
+            dummy = "")
+
+feather::write_feather(baseline_summary,
+                       "saved_data/baseline_summary.feather")
+feather::write_feather(empirical_summary,
+                       "saved_data/empirical_summary.feather")
+feather::write_feather(empirical_lang_summary,
+                       "saved_data/empirical_lang_summary.feather")
 ```
 
 ```{r}
-ggplot(coef_cor_data, aes(y = measure)) +
-  facet_wrap(~interaction) +
-  geom_errorbarh(aes(xmin = ci_lower_cor, xmax = ci_upper_cor, x = mean_cor),
-                 height = 0) +
-  geom_point(aes(x = mean_cor)) +
-  geom_point(aes(x = cor), size = 3) +
-  scale_x_continuous(name = "Average pairwise correlation of coefficients",
+ggplot(NULL, aes(x = dummy, y = mean_cor)) +
+  facet_grid(measure ~ interaction) +
+  coord_flip() +
+  geom_pointrange(aes(ymin = ci_lower_cor, ymax = ci_upper_cor),
+                  data = baseline_summary, colour = "darkgrey") +
+  geom_point(aes(y = cor, colour = language),
+             data = empirical_lang_summary, alpha = 0.5) +
+  geom_errorbarh(aes(xmin = 0.8, xmax = 1.2, x = 1, y = cor),
+                 size = 1, height = 0,
+                 data = empirical_summary) +
+  scale_y_continuous(name = "Average pairwise correlation of coefficients",
                      limits = c(-0.1, 1)) +
-  ylab("")
+  xlab("") +
+  scale_colour_solarized(guide = FALSE) +
+  theme(axis.ticks.y = element_blank())
 ```
