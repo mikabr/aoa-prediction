@@ -111,6 +111,29 @@ We integrate estimates of words' acquisition trajectories from Wordbank with cha
 
 <!-- Our work provides a complimentary analysis by using CDI comprehension and production data available in Wordbank to look at the earliest words that children learn across several different languages. We estimate acqusition trajectories for approximately 400 words from CDIs in each of `r num_langs` languages.-->
 
+```{r demo_trajectories, fig.width=7, fig.height=3, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Example trajectories for the words "dog" and "jump" across language.'}
+demo_lemmas <- c("dog", "jump")
+demo_data <- uni_joined %>%
+  filter(uni_lemma %in% demo_lemmas,
+         measure == "produces")
+word_data <- demo_data %>%
+  distinct(language, uni_lemma, words) %>%
+  mutate(x = ifelse(uni_lemma == demo_lemmas[1], 8, 35),
+         y = ifelse(uni_lemma == demo_lemmas[1], 1, 0))
+
+ggplot(demo_data, aes(x = age, y = prop, colour = uni_lemma)) +
+  facet_wrap(~language, ncol = 5) +
+  geom_point(size = 0.8) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"),
+              se = FALSE, size = 1) +
+  geom_label(aes(x = x, y = y, label = words), data = word_data, size = 3,
+             label.padding = unit(0.15, "lines"),
+             vjust = "inward", hjust = "inward") +
+  scale_colour_solarized(guide = FALSE) +
+  scale_y_continuous(name = "Proportion of children") +
+  scale_x_continuous(name = "Age (months)")
+```
+
 First, we ask the extent to which there is consistency across languages in the relative importance of predictors. To take one subsidiary question, are there differences in the importance of grammar-related factors in morphologically more complex languages like Russian and Turkish, compared with simpler ones like English? Differences of this type might be revealing of the degree to which learners face different challenges in learning different languages or in different language environments. Alternatively, consistency may suggest the operation of similar learning contexts, mechanisms, or strategies that are not as dependent on the complexities of phonology, morphology, and syntax in a particular language.
 
 Second, which lexical categories are most influenced by input-related factors, like frequency and utterance length, compared with conceptual factors like concreteness and valence? "Division of dominance" theory suggests that nouns might be more sensitive to cognitive factors, while predicates and closed-class words might be more sensitive to linguistic factors [@gentner2001]. On the other hand, on syntactic bootstrapping theories [@gleitman1990], nouns are argued to be learned via frequent co-occurrence (operationalized by frequency) while verbs might be more sensitive to syntactic factors (operationalized here by utterance length), and neither would be particularly sensitive to conceptual complexity [@snedeker2007].
@@ -138,35 +161,13 @@ lang_table <- xtable::xtable(lang_stats, digits = 0,
                              label = "table:lang_stats")
 
 print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
-      table.placement = "ht", format.args = list(big.mark = ","))
+      #table.placement = "ht",
+      format.args = list(big.mark = ","))
 ```
 
 To estimate the trajectory of words' acquisition, we used vocabulary data collected using CDI instruments, including both Words & Gestures (WG) forms for younger children and Words & Sentences (WS) forms for older children. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) for each of around 400-700 words. Typically, both comprehension and production are queried for younger children and production only is queried for older children, but details vary from adaptation to adaptation. We use data from the items on the WG form for our comprehension measure, and data from the items in common between the WG and WS forms for our production measure. Table \ref{table:lang_stats} gives an overview of our AoA data [TODO: redo CHILDES stats].
 
 For each word, CDI data yield a trajectory reflecting how commonly it is learned across ages (see Figure \ref{fig:demo_trajectories} for some examples). We then predict on the basis of age, properties of the word, and the interactions between age and each feature of the word. The magnitude of the standardized coefficient on each feature gives an estimate of the importance of that feature in predicting whether words are learned earlier or later. Interactions with age then estimate how this effect is modulated for earlier and later-learned words. For example, a positive effect of association with babies ("babiness") means that words associated with babies are learned earlier; a negative interaction with age means that high babiness primarily leads to greater learning for younger children.
-
-```{r demo_trajectories, fig.width=7, fig.height=3, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='Example trajectories for the words "dog" and "jump" across language.'}
-demo_lemmas <- c("dog", "jump")
-demo_data <- uni_joined %>%
-  filter(uni_lemma %in% demo_lemmas,
-         measure == "produces")
-word_data <- demo_data %>%
-  distinct(language, uni_lemma, words) %>%
-  mutate(x = ifelse(uni_lemma == demo_lemmas[1], 8, 35),
-         y = ifelse(uni_lemma == demo_lemmas[1], 1, 0))
-
-ggplot(demo_data, aes(x = age, y = prop, colour = uni_lemma)) +
-  facet_wrap(~language, ncol = 5) +
-  geom_point(size = 0.8) +
-  geom_smooth(method = "glm", method.args = list(family = "binomial"),
-              se = FALSE, size = 1) +
-  geom_label(aes(x = x, y = y, label = words), data = word_data, size = 3,
-             label.padding = unit(0.15, "lines"),
-             vjust = "inward", hjust = "inward") +
-  scale_colour_solarized(guide = FALSE) +
-  scale_y_continuous(name = "Proportion of children") +
-  scale_x_continuous(name = "Age (months)")
-```
 
 
 ```{r extremes, results='asis'}
@@ -204,21 +205,14 @@ extremes_display <- extremes %>%
   select(-language) %>%
   rename(Lowest = lowest, Highest = highest)
 
-extremes_display$Highest[5] <- "cockadoodledoo, refrigerator,\n rocking chair"
-
-  #mutate(order = row_number()) %>%
-  #gather(Value, Words, highest, lowest) %>%
-  #arrange(order) %>%
-  #select(-order) %>%
-  #mutate(Predictor = list(unique(Predictor), rep("", length(Predictor) / 2)) %>%
-  #         transpose() %>% unlist()) %>%
-
 extremes_table <- extremes_display %>%
-  xtable::xtable(align = "llll", label = "table:extremes",
+  xtable::xtable(align = "llp{2.8cm}p{2.8cm}",
+                 label = "table:extremes",
                  caption = "Words with the lowest and highest values for each predictor in English.")
 
-print(extremes_table, type = "latex", comment = FALSE, include.rownames = FALSE,
-      table.placement = "b!", floating.environment = "table")
+print(extremes_table, type = "latex", comment = FALSE,
+      include.rownames = FALSE,
+      table.placement = "b!")
 ```
 
 ```{r lang_coefs, fig.width=7, fig.height=5, fig.env='figure*', fig.align='center', dev='cairo_pdf', fig.cap='TODO'}
@@ -291,7 +285,9 @@ Figure \ref{fig:lang_coefs} shows the coefficient estimate for each predictor in
 
 A potential concern for comparing these coefficient estimates is predictor collinearity. Fortunately, in every language, the only high correlations were between frequency and number of characters, a reflection of Zipf's Law [@zipf1935], and between frequency and concreteness, probably as a consequence of the complexity bias [@lewis2016].
 
-Overall, there is considerable consistency in how the predictors pattern in various languages -- a priori, it could have been the case that different languages have wildly different effects of experiential vs. structural factors, but this is not what we seem to find. Another observation of note is the differences between coefficient estimates between measures: the largest asymmetry is displayed by length, which is far more predictive for production than comprehension. Thus as measured here, length seems to be playing more the role of how difficult a word is to say than how difficult it is to remember.
+Overall, there is considerable consistency in how the predictors pattern in various languages -- a priori, it could have been the case that different languages have wildly different effects of experiential vs. structural factors, but this is not what we seem to find. Figure \ref{fig:consistency} shows the average pairwise correlation of predictor coefficients across languages (i.e. the correlation of coefficients for English with coefficients for Russian, for Spanish, and so on). These averages are far outside of bootstrapped estimates for the average of pairwise correlation for a randomized baseline of shuffling predictor coefficients within language, suggesting that coefficient estimates are more consistent across languages than would be expected by chance.
+
+Another observation of note is the differences between coefficient estimates between measures: the largest asymmetry is displayed by length, which is far more predictive for production than comprehension. Thus as measured here, length seems to be playing more the role of how difficult a word is to say than how difficult it is to remember.
 
 Next, we wanted to examine not just the contributions of various factors to word learning, but also how their relative importance changes over development. Across languages, positive age interactions can be seen for concreteness and frequency (i.e. their effects increase with age). Conversely, there are negative age interactions for babiness and valence in comprehension and for solo frequency in production.
 
@@ -304,7 +300,7 @@ What makes words easier or harder for young children to learn? Previous experime
 
 By including `r num_langs` languages and `r num_coefs` predictors, our current work expands the scope of previous observational studies of age of acquisition. Our data show a number of patterns that confirm and expand previous reports. First, predictors changed in relative importance across development. For example, certain concepts that were more strongly associated with babies appeared to be learned early for children across languages [as in @tardif2008].
 
-Second, we found general consistency in predictor coefficients across languages (even as overall model fit varied, at least in part due to the amount and quality of data for different languages). This consistency supports the idea that differences in culture or language structure do not lead to fundamentally different acquisition strategies, at least at the level of detail we were able to examine.
+Second, we found general consistency in predictor coefficients across languages. This consistency supports the idea that differences in culture or language structure do not lead to fundamentally different acquisition strategies, at least at the level of detail we were able to examine.
 
 Lastly, the predictors varied in strength across lexical categories. Frequent, concrete nouns were learned earlier, consistent with theories that emphasize the importance of early referential speech [e.g., @baldwin1995]. But for predicates, concreteness was somewhat less important, and for function words, MLU was most predictive. Overall these findings are consistent with theories that emphasize the role of linguistic structure over conceptual complexity in the acquisition of other lexical categories beyond nouns [@gentner2001; @snedeker2007].
 
