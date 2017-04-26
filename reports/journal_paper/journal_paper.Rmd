@@ -342,11 +342,6 @@ Finally, our work underscores the incompleteness of the current understanding of
 
 In sum, by examining predictors of early word learning across languages, we identified substantial consistency in the factors constributing to the ease or difficulty of learning individual words. These findings testify to the importance of building open, shared resources in the study of language learning -- without the efforts of many research groups across many language communities, such studies would be impossible. In addition, we hope that our work here provides a baseline for the building of future predictive models that allow theories of language learning to be tested at scale. 
 
-<!--
-[TODO: is there a way to make this point?] 
-
--->
-
 ## Materials and Methods
 
 All code and data to reproduce our analyses is available at [https://github.com/mikabr/aoa-prediction](https://github.com/mikabr/aoa-prediction).
