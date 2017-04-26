@@ -281,7 +281,7 @@ Each of our predictors is derived from independent sources. For each word that a
 
 # Results {#results .unnumbered}
 
-Figure \ref{fig:lang_coefs} shows the coefficient estimate for each predictor in each language. We find that babiness, frequency, MLU, and concreteness are relatively stronger predictors of age of acquisition across languages. Given the emphasis on frequency effects in the language acquisition literature [@ambridge2015], one might have expected frequency to dominate, but several other predictors are just as strong in this analysis. Some factors previously argued to be important for word learning, namely valence and arousal, appear to have limited relevance when compared to other factors.
+Figure \ref{fig:lang_coefs} shows the coefficient estimate for each predictor in each language. We find that babiness, frequency, MLU, and concreteness are relatively stronger predictors of age of acquisition across languages. Given the emphasis on frequency effects in the language acquisition literature [@ambridge2015], one might have expected frequency to dominate, but several other predictors are just as strong in this analysis. Some factors previously argued to be important for word learning, namely valence and arousal [@moors2013], appear to have limited relevance when compared to other factors.
 
 ```{r collinearity}
 cors <- uni_model_data %>%
@@ -342,31 +342,42 @@ Finally, our work underscores the incompleteness of the current understanding of
 
 In sum, by examining predictors of early word learning across languages, we identified substantial consistency in the factors constributing to the ease or difficulty of learning individual words. These findings testify to the importance of building open, shared resources in the study of language learning -- without the efforts of many research groups across many language communities, such studies would be impossible. In addition, we hope that our work here provides a baseline for the building of future predictive models that allow theories of language learning to be tested at scale. 
 
+
+```{r}
+missing <- uni_joined %>%
+  select_(.dots = c("language", "uni_lemma", predictors)) %>%
+  distinct() %>%
+  gather_("predictor", "value", predictors) %>%
+  filter(is.na(value)) %>%
+  group_by(language, predictor) %>%
+  summarise(n = n())
+```
+
 ## Materials and Methods
 
-All code and data to reproduce our analyses is available at [https://github.com/mikabr/aoa-prediction](https://github.com/mikabr/aoa-prediction).
+All code and data to reproduce our analyses are available at `https://github.com/mikabr/aoa-prediction`.
 
 ### Predictor variables
 
-Each numeric predictor was centered and scaled so that all predictors would have comparable units.
+Each numeric predictor was centered and scaled so that all predictors would have comparable units. For each predictor, missing values (CDI words that were not in the relevant corpus or norms) were imputed from the mean for their respective language and measure.
 
 Translation equivalents are available in the Wordbank database using the \texttt{wordbankr} package in \texttt{R} [@frank2016]. Translation equivalents were constructed by the authors and independently hand-checked by native speakers.
 
-*Lexical category.* Category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that the Nouns category contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
+*Lexical category.*  Category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that the Nouns category contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
 
-*Frequency.* For each language, we estimated word frequency from unigram counts based on all corpora in CHILDES for that language. Each word's count includes the counts of words that share the same stem (so that "dogs" counts as "dog") or are synonymous (so that "father" counts as "daddy"). For polysemous word pairs (e.g., "orange" as in color or fruit), occurrences of the word in the corpus were split uniformly between the senses on the CDI. Counts were normalized to the length of each corpus and then log transformed.
+*Frequency.*  For each language, we estimated word frequency from unigram counts based on all corpora in CHILDES for that language. Each word's count includes the counts of words that share the same stem (so that "dogs" counts as "dog") or are synonymous (so that "father" counts as "daddy"). For polysemous word pairs (e.g., "orange" as in color or fruit), occurrences of the word in the corpus were split uniformly between the senses on the CDI. Counts were normalized to the length of each corpus, Laplace smoothed, and then log transformed.
 
-*Solo and Final Frequencies.* Using the same dataset as for frequency, we estimated the frequency with which each of word occurs as the sole word in an utterance, and the frequency with which it appears as the final word of an utterance (not counting single-word utterances). Since both of these estimates are by necessity highly correlated with frequency, we residualized unigram frequency out of both of them, so that values reflect an estimate of the effect of solo/final frequency over and above frequency itself.
+*Solo and Final Frequencies.*  Using the same dataset as for frequency, we estimated the frequency with which each of word occurs as the sole word in an utterance, and the frequency with which it appears as the final word of an utterance (not counting single-word utterances). As with frequency, solo and final counts were normalized to the length of each corpus, Laplace smoothed, and log transformed. Since both of these estimates are by necessity highly correlated with frequency, we then residualized unigram frequency out of both of them, so that values reflect an estimate of the effect of solo/final frequency over and above frequency itself.
 
-*MLU.* For each language, we estimated each word's MLU by calculating the mean length in words of the utterances in which that word appeared, for all corpora in CHILDES for that language. Words that only occurred in one utterance were excluded.
+*MLU.*  For each language, we estimated each word's MLU by calculating the mean length in words of the utterances in which that word appeared, for all corpora in CHILDES for that language. For words that occurred fewer than 10 times, MLU estimates were not used (i.e. treated as missing).
 
-*Length.* We computed the number of characters in each word in each language. While imperfect, this metric of length is highly correlated with number of phonemes and syllables [@lewis2016].
+*Length.*  We computed the number of characters in each word in each language. While imperfect, this metric of length is highly correlated with number of phonemes and syllables [@lewis2016].
 
-*Concreteness.* We used previously collected norms for concreteness [@brysbaert2014], which were gathered by asking adult participants to rate how concrete the meaning of each word is on a 5-point scale from abstract to concrete. For the [TODO] CDI words that were not part of the collected norms, we imputed ratings from the mean of all CDI words' ratings.
+*Concreteness.*  We used previously collected norms for concreteness [@brysbaert2014], which were gathered by asking adult participants to rate how concrete the meaning of each word is on a 5-point scale from abstract to concrete.
 
-*Valence and Arousal.* We also used previously collected norms for valence and arousal [@warriner2013], for which adult participants were asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal). For the TODO CDI words that were not part of the collected norms (mostly function words), we imputed ratings from the mean of all CDI words' ratings.
+*Valence and Arousal.*  We also used previously collected norms for valence and arousal [@warriner2013], for which adult participants were asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal).
 
-*Babiness.* Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015] for which adult participants were asked to judge a word's relevance to babies.
+*Babiness.*  Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015] for which adult participants were asked to judge a word's relevance to babies on a 1-10 scale.
 
 ### Analysis
 
