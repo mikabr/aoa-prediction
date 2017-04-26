@@ -1,5 +1,5 @@
 ---
-title: "From _uh-oh_ to _tomorrow_: Predicting age of acquisition for early words across languages"
+title: "Predicting the acquisition of words across languages"
 
 # Use letters for affiliations, numbers to show equal authorship (if applicable) and to indicate the corresponding author
 author:
@@ -24,8 +24,10 @@ corresponding_author:
   - code: 1
     text: "To whom correspondence should be addressed. Email: mikabr@mit.edu."
 
+lead_author_surname: Braginsky
+
 author_contributions: |
-  Author contributions: TODO
+  Author contributions: M.B. and D.Y. conducted data processing and analysis, with supervision from V.M. and M.C.F.; all authors contributed to writing the paper.
 
 ## Remove this if not required
 conflict_of_interest: |
