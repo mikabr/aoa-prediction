@@ -91,13 +91,12 @@ Save point -- raw Wordbank data.
 
 ```{r sample_sizes}
 sample_sizes <- raw_data %>%
-  map_dbl(~length(unique(.x$data_id)))
+  map_df(~.x %>%
+           group_by(measure) %>%
+           summarise(num_admins = n_distinct(data_id)) %>%
+           mutate(language = unique(.x$language)))
 
-feather::write_feather(
-  data_frame(language = names(sample_sizes),
-             num_admins = sample_sizes),
-  "saved_data/sample_sizes.feather"
-)
+feather::write_feather(sample_sizes, "saved_data/sample_sizes.feather")
 ```
 
 For each language and measure, collapse across age and uni_lemma.
