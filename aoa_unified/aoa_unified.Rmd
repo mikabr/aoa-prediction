@@ -14,19 +14,13 @@ opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 ```
 
 ```{r setup, cache = FALSE}
-library(dplyr)
-library(tidyr)
-library(purrr)
-library(readr)
-library(ggplot2)
+library(tidyverse)
 library(langcog)
 library(wordbankr)
 library(boot)
 library(lazyeval)
 library(robustbase)
-theme_set(theme_mikabr() +
-            theme(panel.grid = element_blank(),
-                  strip.background = element_blank()))
+theme_set(theme_mikabr())
 font <- "Open Sans"
 ```
 
@@ -37,9 +31,19 @@ data_mode <- "local"
 languages <- c("Croatian", "Danish", "English", "French (Quebec)", "Italian",
                "Norwegian", "Russian", "Spanish", "Swedish", "Turkish")
 
-admins <- get_administration_data(mode = data_mode) %>%
-  select(language, form, sex, age, data_id) %>%
+admins <- get_administration_data(mode = data_mode, original_ids = TRUE) %>%
+  select(language, form, sex, age, data_id, longitudinal, source_name,
+         original_id) %>%
   filter(language %in% languages)
+
+first_longitudinals <- admins %>%
+  filter(longitudinal) %>%
+  group_by(source_name, original_id) %>%
+  arrange(age) %>%
+  slice(1)
+
+admins <- admins %>%
+  filter(!longitudinal | data_id %in% first_longitudinals$data_id)
 
 words <- get_item_data(mode = data_mode) %>%
   filter(type == "word", language %in% languages) %>%
@@ -84,8 +88,8 @@ raw_data <- words %>%
 
 Save point -- raw Wordbank data.
 ```{r raw_data_save}
-#feather::write_feather(bind_rows(raw_data), "saved_data/raw_data.feather")
-#raw_data <- feather::read_feather("saved_data/raw_data.feather") %>%
+# feather::write_feather(bind_rows(raw_data), "raw_data.feather")
+# raw_data <- feather::read_feather("saved_data/raw_data.feather") %>%
 #  split(.$language)
 ```
 
@@ -96,7 +100,7 @@ sample_sizes <- raw_data %>%
            summarise(num_admins = n_distinct(data_id)) %>%
            mutate(language = unique(.x$language)))
 
-feather::write_feather(sample_sizes, "saved_data/sample_sizes.feather")
+# feather::write_feather(sample_sizes, "saved_data/sample_sizes.feather")
 ```
 
 For each language and measure, collapse across age and uni_lemma.
