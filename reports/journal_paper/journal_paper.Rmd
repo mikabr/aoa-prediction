@@ -68,6 +68,11 @@ theme_set(theme_bw() +
             theme(panel.grid = element_blank(),
                   strip.background = element_blank(),
                   legend.key = element_blank()))
+
+label_caps <- as_labeller(function(value) {
+  paste0(toupper(substr(value, 1, 1)), tolower(substr(value, 2, nchar(value))))
+})
+
 data_path <- "../../aoa_unified/saved_data"
 uni_joined <- feather::read_feather(
   file.path(data_path, "uni_joined.feather")
@@ -227,29 +232,14 @@ print(extremes_table, type = "latex", comment = FALSE,
 
 num_coefs <- length(unique(lang_coefs$term))
 
-lang_coefs <- lang_coefs %>%
-  ungroup %>%
-  mutate(measure = fct_recode(measure, 
-                               "Understands" = "understands", 
-                               "Produces" = "produces"),
-         interaction = fct_recode(interaction, 
-                                   "Main effect" = "main effect", 
-                                   "Interaction with age" = "interaction with age"))
 mean_coefs <- lang_coefs %>%
   group_by(term, measure, interaction) %>%
   summarise(mean = mean(estimate),
             ci_lower = ci_lower(estimate),
-            ci_upper = ci_upper(estimate)) %>%
-  ungroup %>%
-  mutate(measure = fct_recode(measure, 
-                               "Understands" = "understands", 
-                               "Produces" = "produces"),
-         interaction = fct_recode(interaction, 
-                                   "Main effect" = "main effect", 
-                                   "Interaction with age" = "interaction with age"))
+            ci_upper = ci_upper(estimate))
 
 ggplot(lang_coefs, aes(x = estimate, y = term)) +
-  facet_grid(measure ~ interaction) +
+  facet_grid(measure ~ interaction, labeller = label_caps) +
   geom_point(aes(colour = term), size = 1, alpha = 0.4) +
   geom_point(aes(x = mean, colour = term), size = 3, data = mean_coefs) +
   geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
@@ -302,47 +292,16 @@ Figure \ref{fig:lang_coefs} shows the coefficient estimate for each predictor in
 
 
 ```{r consistency, fig.width=4, fig.height=2.5, fig.align='center', fig.cap="Correlations of coefficients estimates between languages. Each point represents the mean of one language's coefficients' correlation with each other language's coefficients, with the black line indicating the overall mean across languages. The grey region and dashed line show a bootstrapped 95\\% confidence interval of a randomized baseline where predictor coefficients are shuffled within language."}
-
-empirical_lang_summary <- empirical_lang_summary %>%
-  ungroup %>%
-  mutate(measure = fct_recode(measure, 
-                               "Understands" = "understands", 
-                               "Produces" = "produces"),
-         interaction = fct_recode(interaction, 
-                                   "Main effect" = "main effect", 
-                                   "Interaction with age" = "interaction with age"))
-
-empirical_summary <- empirical_summary %>%
-  ungroup %>%
-  mutate(measure = fct_recode(measure, 
-                               "Understands" = "understands", 
-                               "Produces" = "produces"),
-         interaction = fct_recode(interaction, 
-                                   "Main effect" = "main effect", 
-                                   "Interaction with age" = "interaction with age"))
-
-baseline_summary <- baseline_summary %>%
-  ungroup %>%
-  mutate(measure = fct_recode(measure, 
-                               "Understands" = "understands", 
-                               "Produces" = "produces"),
-         interaction = fct_recode(interaction, 
-                                   "Main effect" = "main effect", 
-                                   "Interaction with age" = "interaction with age"))
-
-
-
 ggplot(NULL, aes(x = dummy, y = mean_cor)) +
-  facet_grid(measure ~ interaction) +
+  facet_grid(measure ~ interaction, labeller = label_caps) +
   coord_flip() +
-  # geom_pointrange(aes(ymin = ci_lower_cor, ymax = ci_upper_cor),
-  #                 data = baseline_summary, colour = "darkgrey") +
   geom_point(aes(y = cor, colour = language),
              data = empirical_lang_summary, alpha = 0.5) +
   geom_errorbarh(aes(xmin = 0.8, xmax = 1.2, x = 1, y = cor),
                  size = 1, height = 0,
                  data = empirical_summary) +
-  geom_rect(aes(ymin = ci_lower_cor, ymax = ci_upper_cor, xmin = 0.5, xmax = 1.5),
+  geom_rect(aes(ymin = ci_lower_cor, ymax = ci_upper_cor, xmin = 0.5,
+                xmax = 1.5),
                   data = baseline_summary, colour = "lightgray", alpha = .1, linetype = 0) +
   geom_hline(data = baseline_summary, aes(yintercept = mean_cor), lty = 2) + 
   scale_y_continuous(name = "Mean pairwise correlation of coefficients",
@@ -351,19 +310,13 @@ ggplot(NULL, aes(x = dummy, y = mean_cor)) +
   scale_colour_solarized(guide = FALSE) +
   theme(axis.ticks.y = element_blank(),
         axis.title.y = element_text(size = 14))
-
-# baseline_summary
 ```
 
 
 ```{r lexcat_coefs, fig.width=7, fig.height=3.8, fig.env='figure*', fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories (as described in Figure 2), with separate models for each lexical category."}
-
 plt_lexcat_coefs <- lexcat_coefs %>%
   filter(interaction == "main effect",
-         !(term %in% c("valence", "arousal"))) %>%
-  mutate(measure = fct_recode(measure, "Understands" = "understands", 
-                              "Produces" = "produces"), 
-         lexical_category = fct_recode(lexical_category, "Function words" = "Function Words"))
+         !(term %in% c("valence", "arousal")))
 
 mean_lexcat_coefs <- plt_lexcat_coefs %>%
   group_by(lexical_category, term, measure, interaction) %>%
@@ -372,16 +325,17 @@ mean_lexcat_coefs <- plt_lexcat_coefs %>%
             ci_upper = ci_upper(estimate))
 
 ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
-  facet_grid(measure ~ lexical_category) +
+  facet_grid(measure ~ lexical_category, labeller = label_caps) +
   geom_point(aes(colour = term), size = 1, alpha = 0.4) +
-  geom_point(aes(y = mean, colour = term), size = 3, data = mean_lexcat_coefs) +
+  geom_point(aes(y = mean, colour = term), size = 3,
+             data = mean_lexcat_coefs) +
   geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
   coord_flip() +
   scale_fill_solarized(guide = FALSE) +
-  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(num_coefs)),
+  scale_colour_manual(guide = FALSE,
+                      values = rev(solarized_palette(num_coefs)),
                       drop = FALSE) +
-  xlab("") +
-  scale_y_continuous(name = "Coefficient estimate")
+  labs(x = "", y = "Coefficient estimate")
 ```
 
 
