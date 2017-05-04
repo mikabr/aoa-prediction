@@ -69,9 +69,11 @@ theme_set(theme_bw() +
                   strip.background = element_blank(),
                   legend.key = element_blank()))
 
-label_caps <- as_labeller(function(value) {
-  paste0(toupper(substr(value, 1, 1)), tolower(substr(value, 2, nchar(value))))
-})
+label_caps <- function(value) {
+  if_else(toupper(value) == value, value,
+          paste0(toupper(substr(value, 1, 1)),
+                 tolower(substr(value, 2, nchar(value)))))
+}
 
 data_path <- "../../aoa_unified/saved_data"
 uni_joined <- feather::read_feather(
@@ -97,8 +99,11 @@ empirical_lang_summary <- feather::read_feather(
   file.path(data_path, "empirical_lang_summary.feather")
 )
 
-predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
-                "length", "concreteness", "valence", "arousal", "babiness")
+predictors <- levels(lang_coefs$term)
+display_predictors <- predictors %>%
+  map_chr(~gsub("_", " ", .x) %>% label_caps()) %>%
+  set_names(predictors)
+
 num_langs <- n_distinct(lang_coefs$language)
 ```
 
@@ -158,7 +163,9 @@ To estimate the trajectory of words' acquisition, we used vocabulary data collec
 demo_lemmas <- c("dog", "jump")
 demo_data <- uni_joined %>%
   filter(uni_lemma %in% demo_lemmas,
-         measure == "produces")
+         measure == "produces") %>%
+  mutate(language = gsub("(.*) \\(.*\\)", "\\1", language))
+
 word_data <- demo_data %>%
   distinct(language, uni_lemma, words) %>%
   mutate(x = ifelse(uni_lemma == demo_lemmas[1], 8, 35),
@@ -232,6 +239,9 @@ print(extremes_table, type = "latex", comment = FALSE,
 
 num_coefs <- length(unique(lang_coefs$term))
 
+lang_coefs <- lang_coefs %>%
+  mutate(term = `levels<-`(term, display_predictors))
+
 mean_coefs <- lang_coefs %>%
   group_by(term, measure, interaction) %>%
   summarise(mean = mean(estimate),
@@ -239,12 +249,13 @@ mean_coefs <- lang_coefs %>%
             ci_upper = ci_upper(estimate))
 
 ggplot(lang_coefs, aes(x = estimate, y = term)) +
-  facet_grid(measure ~ interaction, labeller = label_caps) +
+  facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
   geom_point(aes(colour = term), size = 1, alpha = 0.4) +
   geom_point(aes(x = mean, colour = term), size = 3, data = mean_coefs) +
   geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
   scale_fill_solarized(guide = FALSE) +
-  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(num_coefs))) +
+  scale_colour_manual(guide = FALSE,
+                      values = rev(solarized_palette(num_coefs))) +
   ylab("") +
   scale_x_continuous(name = "Coefficient estimate")
 ```
@@ -293,7 +304,7 @@ Figure \ref{fig:lang_coefs} shows the coefficient estimate for each predictor in
 
 ```{r consistency, fig.width=4, fig.height=2.5, fig.align='center', fig.cap="Correlations of coefficients estimates between languages. Each point represents the mean of one language's coefficients' correlation with each other language's coefficients, with the black line indicating the overall mean across languages. The grey region and dashed line show a bootstrapped 95\\% confidence interval of a randomized baseline where predictor coefficients are shuffled within language."}
 ggplot(NULL, aes(x = dummy, y = mean_cor)) +
-  facet_grid(measure ~ interaction, labeller = label_caps) +
+  facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
   coord_flip() +
   geom_point(aes(y = cor, colour = language),
              data = empirical_lang_summary, alpha = 0.5) +
@@ -301,8 +312,8 @@ ggplot(NULL, aes(x = dummy, y = mean_cor)) +
                  size = 1, height = 0,
                  data = empirical_summary) +
   geom_rect(aes(ymin = ci_lower_cor, ymax = ci_upper_cor, xmin = 0.5,
-                xmax = 1.5),
-                  data = baseline_summary, colour = "lightgray", alpha = .1, linetype = 0) +
+                xmax = 1.5), data = baseline_summary, colour = "lightgray",
+            alpha = .1, linetype = 0) +
   geom_hline(data = baseline_summary, aes(yintercept = mean_cor), lty = 2) + 
   scale_y_continuous(name = "Mean pairwise correlation of coefficients",
                      limits = c(-0.1, 1)) +
@@ -316,7 +327,8 @@ ggplot(NULL, aes(x = dummy, y = mean_cor)) +
 ```{r lexcat_coefs, fig.width=7, fig.height=3.8, fig.env='figure*', fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories (as described in Figure 2), with separate models for each lexical category."}
 plt_lexcat_coefs <- lexcat_coefs %>%
   filter(interaction == "main effect",
-         !(term %in% c("valence", "arousal")))
+         !(term %in% c("valence", "arousal"))) %>%
+  mutate(term = `levels<-`(term, display_predictors))
 
 mean_lexcat_coefs <- plt_lexcat_coefs %>%
   group_by(lexical_category, term, measure, interaction) %>%
@@ -325,7 +337,7 @@ mean_lexcat_coefs <- plt_lexcat_coefs %>%
             ci_upper = ci_upper(estimate))
 
 ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
-  facet_grid(measure ~ lexical_category, labeller = label_caps) +
+  facet_grid(measure ~ lexical_category, labeller = as_labeller(label_caps)) +
   geom_point(aes(colour = term), size = 1, alpha = 0.4) +
   geom_point(aes(y = mean, colour = term), size = 3,
              data = mean_lexcat_coefs) +
