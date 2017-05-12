@@ -9,3 +9,5 @@
 rsconnect/
 *.pyc
 raw_data.feather
+*.log
+*.xwm
