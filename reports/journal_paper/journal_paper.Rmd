@@ -186,7 +186,7 @@ ggplot(demo_data, aes(x = age, y = prop, colour = uni_lemma)) +
   scale_x_continuous(name = "Age (months)", breaks = seq(10, 35, 5))
 ```
 
-For each word, CDI data yield a trajectory reflecting the proportion of children that are reported to produce or understand the word at each age covered by the instrument (see Figure \ref{fig:demo_trajectories} for some examples). We then use a mixed-effects logistic regression model to predict these proportions on the basis of age, properties of the word, and interactions between age and each property of the word. We also fit such models separately to the words in each lexical category. The magnitude of the standardized coefficient on each feature gives an estimate of its importance in predicting whether words are learned earlier or later. Interactions between features and age estimate how this effect is modulated for earlier and later-learned words. For example, a positive effect of association with babies ("babiness") means that words associated with babies are learned earlier; a negative interaction with age means that high babiness primarily leads to higher rates of production and comprehension for younger children.
+For each word, CDI data yield a trajectory reflecting the number of children that are reported to produce or understand the word at each age covered by the instrument (see Figure \ref{fig:demo_trajectories} for some examples). We then use a mixed-effects logistic regression model to predict whether each child knows the word on the basis of the child's age, properties of the word, and interactions between age and each property of the word. We also fit such models separately to the words in each lexical category. The magnitude of the standardized coefficient on each feature gives an estimate of its importance in predicting whether words are learned earlier or later. Interactions between features and age estimate how this effect is modulated for earlier and later-learned words. For example, a positive effect of association with babies ("babiness") means that words associated with babies are learned earlier; a negative interaction with age means that high babiness primarily leads to higher rates of production and comprehension for younger children.
 
 
 ```{r extremes, results='asis'}
@@ -427,7 +427,7 @@ Category was determined on the basis of the conceptual categories presented on t
 
 ### Analysis
 
-For all analyses, we used logistic mixed-effects regression models (fit with \texttt{lme4 1.1-12} in \texttt{R}) to predict the number of children who understand/produce each word at each age from age, the above predictors, and the interactions of age with the predictors. Each model was fit to all data from a particular language community and included a random intercept for each word and a random slope of age for each word.
+For all analyses, we used logistic mixed-effects regression models (fit with \texttt{lme4 1.1-12} in \texttt{R}) to predict whether each child understands/produces each word from age, the above predictors, and the interactions of age with the predictors. Each model was fit to all data from a particular language community and included a random intercept for each word and a random slope of age for each word.
 
 \showmatmethods \showacknow \pnasbreak
 
