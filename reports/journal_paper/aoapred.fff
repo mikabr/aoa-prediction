@@ -1,0 +1,42 @@
+\begin{figure*}
+
+{\centering \includegraphics{aoapred_files/figure-latex/unnamed-chunk-2-1}
+
+}
+
+\caption{Example production trajectories for the words "dog" and "jump" across languages. Points show average proportion of children producing each word for each one-month age group. Lines show the best-fitting logistic curve. Labels show the forms of the word in each language.}\label{fig:unnamed-chunk-2}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+
+{\centering \includegraphics{aoapred_files/figure-latex/unnamed-chunk-3-1}
+
+}
+
+\caption{Estimates of coefficients in predicting words' developmental trajectories. Each point represents a predictor's coefficient in one language, with the large point showing the mean across languages. Larger coefficient values indicate a greater effect of the predictor on acquisition: positive main effects indicate that words with higher values of the predictor tend to be understood/produced by more children, while negative main effects indicate that words with lower values of the predictor tend to be understood/produced by more children; positive age interactions indicate that the predictor's effect increases with age, while negative age interactions indicate the predictor's effect decreases with age.}\label{fig:unnamed-chunk-3}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+
+{\centering \includegraphics{aoapred_files/figure-latex/unnamed-chunk-4-1}
+
+}
+
+\caption{Correlations of coefficients estimates between languages. Each point represents the mean of one language's coefficients' correlation with each other language's coefficients, with the black line indicating the overall mean across languages. The grey region and dashed line show a bootstrapped 95\% confidence interval of a randomized baseline where predictor coefficients are shuffled within language.}\label{fig:unnamed-chunk-4}
+\end{figure*}
+\efloatseparator
+ 
+\begin{figure*}
+
+{\centering \includegraphics{aoapred_files/figure-latex/unnamed-chunk-5-1}
+
+}
+
+\caption{Estimates of coefficients in predicting words' developmental trajectories (as described in Figure 2), with separate models for each lexical category.}\label{fig:unnamed-chunk-5}
+\end{figure*}
+\efloatseparator
+ 
