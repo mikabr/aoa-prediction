@@ -1,0 +1,19 @@
+author:
+  - name          : Mika Braginsky
+    affiliation   : 1
+    corresponding : yes    # Define only one corresponding author
+    email         : mikabr@mit.edu
+  - name          : Daniel Yurovsky
+    affiliation   : 2
+  - name          : Virginia A. Marchman
+    affiliation   : 3
+  - name          : Michael C. Frank
+    affiliation   : 3
+
+affiliation:
+  - id            : 1
+    institution   : Department of Brain and Cognitive Sciences, Massachusetts Institute of Technology
+  - id            : 2
+    institution   : Department of Psychology, University of Chicago
+  - id            : 3
+    institution   : Department of Psychology, Stanford University

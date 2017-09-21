@@ -1,26 +1,12 @@
 ---
 title             : "Consistency and variability in word learning across languages"
-shorttitle        : "Consistency and variability in word learning"
+shorttitle        : "Word learning consistency and variability"
 
-author: 
-  - name          : Mika Braginsky
-    affiliation   : 1
-    corresponding : yes    # Define only one corresponding author
-    email         : mikabr@mit.edu
-  - name          : Daniel Yurovsky
-    affiliation   : 2
-  - name          : Virginia A. Marchman
-    affiliation   : 3
-  - name          : Michael C. Frank
-    affiliation   : 3
+author:
+  - name          : Anonymized
 
 affiliation:
-  - id            : 1
-    institution   : Department of Brain and Cognitive Sciences, Massachusetts Institute of Technology
-  - id            : 2
-    institution   : Department of Psychology, University of Chicago
-  - id            : 3
-    institution   : Department of Psychology, Stanford University
+  - institutaion  : ""
 
 abstract: |
   Why do children learn some words earlier than others? The order in which words are acquired can provide clues about the mechanisms of word learning. In a large-scale corpus analysis, we use data from over 38,000 children to estimate the acquisition trajectories of around 400 words in ten languages, predicting them on the basis of independently-derived environmental and conceptual factors. We examine the consistency and variability of these predictors across languages, by lexical category, and over development. The ordering of predictors across languages is quite similar, suggesting similar processes in operation. In contrast, the ordering of predictors across different lexical categories is distinct, in line with theories that posit distinct factors at play in the acquisition of content words and function words. By leveraging data at a significantly larger scale than previous work, our analyses identify candidate generalizations about the processes underlying word learning across languages.
@@ -426,19 +412,10 @@ Category was determined on the basis of the conceptual categories presented on t
 
 For all analyses, we used logistic mixed-effects regression models (fit with `lme4 1.1-12` in `R`) to predict whether each child understands/produces each word from age, the above predictors, and the interactions of age with the predictors. Each model was fit to all data from a particular language community and included a random intercept for each word and a random slope of age for each word.
 
-\newpage
 
 # Acknowledgements
 
 Thank you to the labs and individuals who contributed data to Wordbank and to NSF BCS \#1528526 for support.
-
-# Author Contributions
-
-M.B. and D.Y. conducted data processing and analysis, with supervision from V.A.M. and M.C.F.; all authors contributed to writing the paper.
-
-# Competing Interest Statement
-
-The authors declare no conflict of interest.
 
 
 \newpage
