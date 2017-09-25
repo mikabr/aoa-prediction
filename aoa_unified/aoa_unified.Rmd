@@ -262,6 +262,18 @@ uni_childes$solo_frequency <- lm(solo_freq ~ frequency,
                                  data = uni_childes)$residuals
 ```
 
+```{r}
+kl <- read_csv("predictors/topics//2017-05-19_18_29_49_resid_kl_indiv_childes.csv")
+
+uni_kl <- kl %>%
+  mutate(stem = stem(word, "english"),
+         language = "English") %>%
+  right_join(case_map %>% filter(language == "English")) %>%
+  group_by(uni_lemma) %>%
+  summarise(kl_mean = mean(mean),
+            kl_median = median(median))
+```
+
 Get estimates of valence and arousal.
 ```{r valence}
 valence <- read_csv("predictors/valence/valence.csv") %>%
@@ -344,6 +356,7 @@ uni_prop_data_comp <- uni_prop_data %>%
 uni_joined <- uni_prop_data_comp %>%
   filter(!grepl("name", uni_lemma)) %>%
   left_join(uni_childes) %>%
+  left_join(uni_kl) %>%
   left_join(uni_valence) %>%
   left_join(uni_babiness) %>%
   left_join(uni_concreteness) %>%
@@ -358,8 +371,9 @@ Save point -- joined AoA data and predictor data.
 ```
 
 ```{r model_setup}
-predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
-                "length", "concreteness", "valence", "arousal", "babiness")
+predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency", 
+                "kl_mean", "kl_median", "length", "concreteness", "valence",
+                "arousal", "babiness")
 
 rsq <- function(object) {
   1 - sum(residuals(object, type = "response") ^ 2) /
