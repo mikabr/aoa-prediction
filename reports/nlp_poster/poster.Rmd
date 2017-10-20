@@ -1,0 +1,279 @@
+---
+output: 
+  html_document: 
+    highlight: tango
+    theme: cosmo
+---
+
+```{r include=FALSE} 
+library(tidyverse)
+library(magrittr)
+library(langcog)
+library(wordbankr)
+library(forcats)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE,
+                      cache = TRUE, dpi = 300) # dev = 'cairo_pdf')
+theme_set(theme_mikabr())
+# theme_set(theme_bw() +
+#             theme(panel.grid = element_blank(),
+#                   strip.background = element_blank(),
+#                   legend.key = element_blank()))
+#theme_set(papaja::theme_apa())
+
+label_caps <- function(value) {
+  if_else(toupper(value) == value, value,
+          paste0(toupper(substr(value, 1, 1)),
+                 tolower(substr(value, 2, nchar(value)))))
+}
+
+data_path <- "../../aoa_unified/saved_data"
+uni_joined <- feather::read_feather(
+  file.path(data_path, "uni_joined.feather")
+)
+uni_model_data <- feather::read_feather(
+  file.path(data_path, "uni_model_data.feather")
+)
+lang_coefs <- feather::read_feather(
+  file.path(data_path, "lang_coefs.feather")
+)
+lexcat_coefs <- feather::read_feather(
+  file.path(data_path, "lexcat_coefs.feather")
+)
+
+baseline_summary <- feather::read_feather(
+  file.path(data_path, "baseline_summary.feather")
+)
+empirical_summary <- feather::read_feather(
+  file.path(data_path, "empirical_summary.feather")
+)
+empirical_lang_summary <- feather::read_feather(
+  file.path(data_path, "empirical_lang_summary.feather")
+)
+
+predictors <- levels(lang_coefs$term)
+display_predictors <- predictors %>%
+  map_chr(~gsub("_", " ", .x) %>% label_caps()) %>%
+  set_names(predictors)
+
+num_langs <- n_distinct(lang_coefs$language)
+```
+
+```{r lang_stats, results="asis"}
+sample_sizes <- feather::read_feather(
+  file.path(data_path, "sample_sizes.feather")
+)
+
+uni_lemmas <- uni_model_data %>%
+  group_by(language) %>%
+  summarise(num_included = n_distinct(uni_lemma))
+
+lang_stats <- sample_sizes %>%
+  spread(measure, num_admins) %>%
+  left_join(uni_lemmas) %>%
+  mutate(language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
+  select(Language = language,
+         "CDI Items" = num_included,
+         "N production" = produces,
+         "N comprehension" = understands)
+
+knitr::kable(lang_stats)
+# lang_table <- xtable::xtable(
+#   lang_stats, digits = 0,
+#   caption = "Dataset statistics for acquisition data from Wordbank.",
+#   label = "table:lang_stats"
+# )
+# 
+# print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
+#       table.placement = "b",
+#       format.args = list(big.mark = ","))
+```
+
+
+```{r, fig.width=13, fig.height=2.25, fig.env='figure*', fig.align='center', fig.cap='Example production trajectories for the words "dog" and "jump" across languages. Points show average proportion of children producing each word for each one-month age group. Lines show the best-fitting logistic curve. Labels show the forms of the word in each language.'}
+demo_lemmas <- c("dog", "jump")
+demo_data <- uni_joined %>%
+  filter(uni_lemma %in% demo_lemmas,
+         measure == "produces") %>%
+  mutate(language = gsub("(.*) \\(.*\\)", "\\1", language))
+
+word_data <- demo_data %>%
+  distinct(language, uni_lemma, words) %>%
+  mutate(x = ifelse(uni_lemma == demo_lemmas[1], 8, 35),
+         y = ifelse(uni_lemma == demo_lemmas[1], 1, 0))
+
+ggplot(demo_data, aes(x = age, y = prop, colour = uni_lemma)) +
+  facet_wrap(~language, nrow = 1) +
+  geom_point(size = 0.8, alpha = 0.4) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"),
+              se = FALSE, size = 1) +
+  geom_label(aes(x = x, y = y, label = words), data = word_data, size = 3,
+             label.padding = unit(0.15, "lines"),
+             vjust = "inward", hjust = "inward") +
+  scale_colour_solarized(guide = FALSE) +
+  scale_y_continuous(name = "Proportion producing") +
+  scale_x_continuous(name = "Age (months)", breaks = seq(10, 30, 10))
+#ggsave("demo_data.png", width = 13, height = 2.25)
+```
+
+```{r extremes, results='asis'}
+num_extremes <- 3
+extremes <- uni_model_data %>%
+  filter(measure == "understands") %>%
+  distinct_(.dots = c("language", "uni_lemma", predictors)) %>%
+  mutate(uni_lemma = gsub("(.*) \\(.*\\)", "\\1", uni_lemma)) %>%
+  split(.$language) %>%
+  map_df(function(lang_data) {
+    map_df(predictors, function(predictor) {
+      if (predictor %in%
+          c("frequency", "final_frequency", "solo_frequency", "MLU")) {
+        filtered_lang_data <- lang_data %>%
+          filter(frequency != min(frequency))
+      } else {
+        filtered_lang_data <- lang_data
+      }
+      highest <- filtered_lang_data %>%
+        arrange_(as.formula(sprintf("~desc(%s)", predictor))) %>%
+        .$uni_lemma %>%
+        .[1:num_extremes]
+      lowest <- filtered_lang_data %>%
+        arrange_(predictor) %>%
+        .$uni_lemma %>%
+        .[1:num_extremes]
+      return(data.frame("language" = unique(lang_data$language),
+                        "Predictor" = predictor,
+                        "highest" = paste(highest, collapse = ", "),
+                        "lowest" = paste(lowest, collapse = ", ")))
+    })
+  })
+
+extremes_display <- extremes %>%
+  filter(language == "English") %>%
+  select(-language) %>%
+  rename(Lowest = lowest, Highest = highest) %>%
+  mutate(Predictor = gsub("_", " ", Predictor),
+         Predictor = map_chr(Predictor, label_caps)) %>%
+  arrange(desc(row_number()))
+
+knitr::kable(extremes_display)
+
+# extremes_table <- extremes_display %>%
+#   xtable::xt?able(
+#     label = "table:extremes",
+#     caption = "Items with the highest and lowest values for each predictor in English."
+#   )
+# 
+# print(extremes_table, type = "latex", comment = FALSE,
+#       table.placement = "t",
+#       include.rownames = FALSE)
+```
+
+
+```{r, fig.width=7, fig.height=4.5, fig.env='figure*', fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories. Each point represents a predictor's coefficient in one language, with the large point showing the mean across languages. Larger coefficient values indicate a greater effect of the predictor on acquisition: positive main effects indicate that words with higher values of the predictor tend to be understood/produced by more children, while negative main effects indicate that words with lower values of the predictor tend to be understood/produced by more children; positive age interactions indicate that the predictor's effect increases with age, while negative age interactions indicate the predictor's effect decreases with age."}
+
+num_coefs <- length(unique(lang_coefs$term))
+
+lang_coefs <- lang_coefs %>%
+  mutate(term = `levels<-`(term, display_predictors))
+
+mean_coefs <- lang_coefs %>%
+  group_by(term, measure, interaction) %>%
+  summarise(mean = mean(estimate),
+            ci_lower = ci_lower(estimate),
+            ci_upper = ci_upper(estimate))
+
+ggplot(lang_coefs, aes(x = estimate, y = term)) +
+  facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
+  geom_point(aes(colour = term), size = 1, alpha = 0.4) +
+  geom_point(aes(x = mean, colour = term), size = 3, data = mean_coefs) +
+  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
+  scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE,
+                      values = rev(solarized_palette(num_coefs))) +
+  ylab("") +
+  scale_x_continuous(name = "Coefficient estimate")
+#ggsave("lang_coefs.png", width = 7, height = 4.5)
+```
+
+```{r collinearity}
+cors <- uni_model_data %>%
+  split(paste(.$language, .$measure)) %>%
+  map_df(function(lang_data) {
+    pred_data <- lang_data %>%
+      select_(.dots = c("uni_lemma", predictors)) %>%
+      distinct() %>%
+      gather_("predictor", "value", predictors) %>%
+      split(.$predictor)
+    
+    map(pred_data, function(pd1) {
+      map_dbl(pred_data, function(pd2) cor(pd1$value, pd2$value))
+    }) %>%
+      as.data.frame() %>%
+      mutate(predictor1 = row.names(.)) %>%
+      gather_("predictor2", "cor", predictors) %>%
+      filter(predictor1 != predictor2) %>%
+      mutate(language = unique(lang_data$language),
+             measure = unique(lang_data$measure))
+
+  })
+
+mean_cors <- cors %>%
+  group_by(predictor1, predictor2) %>%
+  summarise(mean_cor = mean(cor))
+pair_cor <- function(p1, p2) {
+  mean_cors %>%
+    filter(predictor1 == p1, predictor2 == p2) %$%
+    mean_cor
+}
+```
+
+```{r, fig.width=5, fig.height=3, fig.align='center', fig.cap="Correlations of coefficients estimates between languages. Each point represents the mean of one language's coefficients' correlation with each other language's coefficients, with the black line indicating the overall mean across languages. The grey region and dashed line show a bootstrapped 95\\% confidence interval of a randomized baseline where predictor coefficients are shuffled within language."}
+ggplot(NULL, aes(x = dummy, y = mean_cor)) +
+  facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
+  coord_flip() +
+  geom_point(aes(y = cor, colour = language),
+             data = empirical_lang_summary, alpha = 0.5) +
+  geom_errorbarh(aes(xmin = 0.8, xmax = 1.2, x = 1, y = cor),
+                 size = 1, height = 0,
+                 data = empirical_summary) +
+  geom_rect(aes(ymin = ci_lower_cor, ymax = ci_upper_cor, xmin = 0.5,
+                xmax = 1.5), data = baseline_summary, colour = "lightgray",
+            alpha = .1, linetype = 0) +
+  geom_hline(data = baseline_summary, aes(yintercept = mean_cor), lty = 2) + 
+  scale_y_continuous(name = "Mean pairwise correlation of coefficients",
+                     limits = c(-0.1, 1)) +
+  xlab("") +
+  scale_colour_solarized(guide = FALSE) +
+  theme(axis.ticks.y = element_blank()
+        #axis.title.y = element_text(size = 14),
+        #strip.text.y = element_text(size = 6)
+        )
+#ggsave("cors.png", width = 5, height = 3)
+```
+
+
+```{r, fig.width=7, fig.height=3.5, fig.env='figure*', fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories (as described in Figure 2), with separate models for each lexical category."}
+plt_lexcat_coefs <- lexcat_coefs %>%
+  filter(interaction == "main effect",
+         !(term %in% c("valence", "arousal"))) %>%
+  mutate(term = `levels<-`(term, display_predictors))
+
+mean_lexcat_coefs <- plt_lexcat_coefs %>%
+  group_by(lexical_category, term, measure, interaction) %>%
+  summarise(mean = mean(estimate),
+            ci_lower = ci_lower(estimate),
+            ci_upper = ci_upper(estimate))
+
+ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
+  facet_grid(measure ~ lexical_category, labeller = as_labeller(label_caps)) +
+  geom_point(aes(colour = term), size = 1, alpha = 0.4) +
+  geom_point(aes(y = mean, colour = term), size = 3,
+             data = mean_lexcat_coefs) +
+  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+  coord_flip() +
+  scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE,
+                      values = rev(solarized_palette(num_coefs)),
+                      drop = FALSE) +
+  labs(x = "", y = "Coefficient estimate")
+#ggsave("lexcat_coefs.png", width = 7, height = 3.5)
+```
