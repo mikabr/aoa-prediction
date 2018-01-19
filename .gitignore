@@ -5,7 +5,6 @@
 .Rhistory
 .Rproj.user
 *.RData
-*.Rproj
 rsconnect/
 *.pyc
 raw_data.feather
