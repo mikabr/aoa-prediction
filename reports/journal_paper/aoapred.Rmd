@@ -566,8 +566,7 @@ coarse. Ideally, predictors could be targeted more specifically at particular
 theoretical constructs of interest (for example, the patterns of use for
 specific predicates).
 
-Finally, our data are observations gleaned from parent report. CDI instruments are both reliable and valid, and the cross-linguistic adaptations we used contain the original researchers' best attempts to create culturally-appropriate word lists, but several biases are still likely present in our data. First, parents are biased reporters 
-
+Finally, our data are observations gleaned from parent report. CDI instruments are both reliable and valid, and they 
 and are subject to
 both causal confounding and confounding via biases in parent observation. While
 the adaptations of the CDI we used
