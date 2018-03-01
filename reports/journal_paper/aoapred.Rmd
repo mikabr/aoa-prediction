@@ -6,7 +6,7 @@ author:
   - name          : Anonymized
 
 affiliation:
-  - institutaion  : ""
+  - institution  : ""
 
 abstract: |
   Why do children learn some words earlier than others? The order in which words are acquired can provide clues about the mechanisms of word learning. In a large-scale corpus analysis, we use data from over 38,000 children to estimate the acquisition trajectories of around 400 words in ten languages, predicting them on the basis of independently-derived environmental and conceptual factors. We examine the consistency and variability of these predictors across languages, by lexical category, and over development. The ordering of predictors across languages is quite similar, suggesting similar processes in operation. In contrast, the ordering of predictors across different lexical categories is distinct, in line with theories that posit distinct factors at play in the acquisition of content words and function words. By leveraging data at a significantly larger scale than previous work, our analyses identify candidate generalizations about the processes underlying word learning across languages.
@@ -79,19 +79,111 @@ display_predictors <- predictors %>%
 num_langs <- n_distinct(lang_coefs$language)
 ```
 
-In spite of tremendous individual variation in rate of development [@fenson2007], the first words that children utter are strikingly consistent [@tardif2008;@schneider2015]: they tend to talk about important people in their life ("mom", "dad"), social routines ("hi", "uh oh"), animals ("dog", "duck"), and foods ("milk", "banana"). Even as children must learn from their experiences and according to their own interests [@mayor2014;@nelson1973], their vocabulary grows rapidly, typically adding more nouns, but also verbs ("go") and other predicates ("hot") to their production repertoires.  Over just their first three years, children learn hundreds or even thousands of words [@fenson1994;@mayor2011]. Why are some words learned so early and some much later? 
+# Introduction
 
-This simple question about the order of the acquisition of first words can provide a window into the nature of children's language learning. Posed as a statistical problem, the challenge is to find what variables best predict the age at which different words are acquired. Previous work using this approach has revealed that in English, within a lexical category (e.g., nouns, verbs), words that are more frequent in speech to children are likely to be learned earlier [@goodman2008]. And further studies have found evidence that a variety of other semantic and linguistic factors are related to word acquisition [@hills2009;@stokes2010;@perry2015;@roy2015;@swingley2017]. 
+In spite of tremendous individual variation in rate of development
+[@fenson2007], the first words that children utter are strikingly consistent
+[@tardif2008;@schneider2015]: they tend to talk about important people in their
+life ("mom", "dad"), social routines ("hi", "uh oh"), animals ("dog", "duck"),
+and foods ("milk", "banana"). Even as children must learn from their experiences
+and according to their own interests [@mayor2014;@nelson1973], their vocabulary
+grows rapidly, typically adding more nouns, but also verbs ("go") and other
+predicates ("hot") to their production repertoires.  Over just their first three
+years, children learn hundreds or even thousands of words
+[@fenson1994;@mayor2011]. Why are some words learned so early and some much
+later?
 
-But these exciting findings are limited in their generality because they use different datasets, focus on different predictors, and almost exclusively analyze English data. They do not allow for cross-linguistic comparison of the relative importance of the many relevant factors under consideration in children from different language communities. Such cross-linguistic comparisons are critical, as identifying commonalities (and differences) across languages is our best strategy for uncovering the universal mechanisms that are in play for all children and differentiating them from patterns of acquisition that emerge due to the particulars of a given language or culture [@slobin1985;@bates1987]. Our goal is to extend these classic approaches by assessing the degree to which the predictors of word learning are consistent across different languages and cultures, as well as whether there are similar patterns across different word types (e.g., nouns vs. verbs). 
+This simple question about the order of the acquisition of first words can
+provide a window into the nature of children's language learning. Posed as a
+statistical problem, the challenge is to find what variables best predict the
+age at which different words are acquired. Previous work using this approach has
+revealed that in English, within a lexical category (e.g., nouns, verbs), words
+that are more frequent in speech to children are likely to be learned earlier
+[@goodman2008]. And further studies have found evidence that a variety of other
+semantic and linguistic factors are related to word acquisition
+[@hills2009;@stokes2010;@perry2015;@roy2015;@swingley2017].
 
-To conduct cross-linguistic comparisons, we rely on data from Wordbank ([wordbank.stanford.edu](http://wordbank.stanford.edu)) [@frank2016]. Wordbank is an open repository of cross-linguistic language development data that aggregates administrations of the MacArthur-Bates Communicative Development Inventory [CDI; @fenson2007], a family of parent-report vocabulary checklists, and currently includes data from more than 60,000 children. By aggregating across large samples, idiosyncratic patterns of individual variation are less likely to overpower general trends in which words are relatively easy or hard to learn, allowing us to investigate what features affect their acquisition across languages.
+But these exciting findings are limited in their generality because they use
+different datasets, focus on different predictors, and almost exclusively
+analyze data from English-elearning children. They do not allow for cross-linguistic comparison of the relative importance of the many relevant factors under consideration in children from different language communities. Such cross-linguistic comparisons are
+critical, as identifying commonalities (and differences) across languages is our
+best strategy for uncovering the universal mechanisms that are in play for all
+children and differentiating them from patterns of acquisition that emerge due
+to the particulars of a given language or culture [@slobin1985;@bates1987]. Our
+goal is to extend these classic approaches by assessing the degree to which the
+predictors of word learning are consistent across different languages and
+cultures, as well as whether there are similar patterns across different word
+types (e.g., nouns vs. verbs).
 
-In our analyses, we integrate estimates of words' acquisition trajectories from Wordbank with characterizations of the word learning environment from the CHILDES database [@macwhinney2000] and elsewhere, a data-integration methodology originated by @goodman2008. Using this approach, we examine the impact of multiple environmental and conceptual factors. To measure environmental input, we estimated each word's frequency, mean length of utterance (MLU), frequency as sole utterance constituent, and frequency in utterance-final position. To measure conceptual factors, we obtained ratings of each word's concreteness, valence, arousal, and association with babies from previously collected norms. We used these measures to predict words’ acquisition trajectories, assessing the relative contributions of each, as well as how they change over development and interact with lexical category. These analyses address two important questions.
+The primary tool for characterizing the breadth of children's early vocabulary in these previous studies is structured parent report. While naturalistic language samples and experimental methods both can be valuable methods, outside of a few examples [e.g., @roy2015], neither method provides the kind of holistic view that comes from 
 
-First, we ask about the degree of consistency across languages in the relative importance of predictors. Consistency in the ordering of predictors would suggest that similar information sources are important for learners, regardless of language. Such evidence would point to the importance of similar learning mechanisms across languages despite superficial dissimilarities (e.g., greater morphological complexity in Russian and Turkish, greater phonological complexity in Danish). Conversely, variability would reveal the degree to which learners face different challenges in learning different languages.
+e MacArthur-Bates Communicative Development
+Inventory [CDI; @fenson2007], a family of parent-report vocabulary checklists.
 
-Second, we ask which lexical categories are most influenced by environmental factors, like frequency and utterance length, compared with conceptual factors like concreteness and valence. Division of dominance theory suggests that nouns might be more sensitive to conceptual factors, while predicates and closed-class words might be more sensitive to environmental (linguistic) factors [@gentner2001]. And on syntactic bootstrapping theories [@gleitman1990], nouns are argued to be learned via frequent co-occurrence (operationalized by frequency) while verbs might be more sensitive to syntactic factors (operationalized here by utterance length) [@snedeker2007]. Thus, examining the relative contribution of different predictors across lexical categories can help test the predictions of influential theories of acquisition.
+
+Parent report is an inexpensive and widely used method for gathering reliable
+and valid data about the nature and extent of young children's productive and
+receptive language [see @fenson1994 for review; cf. @feldman2000, @fenson2000].
+Because of its low cost and flexibility, CDI instruments have been adapted for
+dozens of different languages, leading to a wide range of forms containing sets
+of words that are customized to particular languages and cultures to provide
+relevant information regarding how individual children's vocabularies vary (see
+SI for more details on the adaptations used in our study).
+
+To conduct cross-linguistic comparisons, we rely on data from Wordbank
+([wordbank.stanford.edu](http://wordbank.stanford.edu)) [@frank2016]. Wordbank
+is an open repository of cross-linguistic language development data that
+aggregates administrations of the CDI across languages. Wordbank archives
+data from these adaptations and currently includes data from more than 60,000
+children. This large sample means that idiosyncratic patterns of individual
+variation are less likely to overpower general trends in which words are
+relatively easy or hard to learn, allowing us to investigate what features
+affect their acquisition across languages.
+
+No currently available dataset characterizes both children's productive and
+receptive knowledge of a large sample of words *and* their environmental input
+at the scale necessary for our analyses. Thus, in our analyses, we integrate
+estimates of words' acquisition trajectories from the Wordbank data with
+independent characterizations of the word learning environment. We derive these
+estimates from transcripts of speech to children in the CHILDES database
+[@macwhinney2000], a data-integration methodology originated by @goodman2008.
+This method relies on large samples to average out the (substantial) differences
+between children and care environments, but allows for analyses that cannot be
+performed on smaller datasets or datasets that measure only child or environment
+but not both.
+
+As our particular measures of environmental input, we estimated each word's
+frequency, mean length of utterance in words (MLU), frequency as a sole
+utterance constituent, and frequency in utterance-final position. While these
+measures are crude, they are both easy to compute and relatively comparable
+across the languages in our sample. We combined these measures with available
+psycholinguistic norms for the words in our sample, using adult ratings of each
+word's concreteness, valence, arousal, and association with babies as proxies
+for conceptual properties of each word. We used these measures to predict words’
+acquisition trajectories, assessing the relative contributions of each, as well
+as how they change over development and interact with lexical category. These
+analyses address two important questions.
+
+First, we ask about the degree of consistency across languages in the relative
+importance of predictors. Consistency in the ordering of predictors would
+suggest that similar information sources are important for learners, regardless
+of language. Such evidence would point to the importance of similar learning
+mechanisms across languages despite superficial dissimilarities (e.g., greater
+morphological complexity in Russian and Turkish, greater phonological complexity
+in Danish). Conversely, variability would reveal the degree to which learners
+face different challenges in learning different languages.
+
+Second, we ask which lexical categories are most influenced by environmental
+factors, like frequency and utterance length, compared with conceptual factors
+like concreteness and valence. Division of dominance theory suggests that nouns
+might be more sensitive to conceptual factors, while predicates and closed-class
+words might be more sensitive to environmental (linguistic) factors
+[@gentner2001]. And on syntactic bootstrapping theories [@gleitman1990], nouns
+are argued to be learned via frequent co-occurrence (operationalized by
+frequency) while verbs might be more sensitive to syntactic factors
+(operationalized here by utterance length) [@snedeker2007]. Thus, examining the
+relative contribution of different predictors across lexical categories can help
+test the predictions of influential theories of acquisition.
 
 
 # Approach {#approach .unnumbered}
@@ -335,21 +427,90 @@ Previous work gives reason to believe that predictors' relationship with age of 
 
 # Discussion {.unnumbered}
 
-What makes words easier or harder for young children to learn? Previous experimental work has largely addressed this question using small-scale experiments. While such experiments can identify sources of variation, they typically do not allow for different sources to be compared in detail. In contrast, observational studies allow the effects of individual factors to be measured across ages and lexical categories [e.g., @goodman2008;@hills2009;@swingley2017]. Such work has identified a number of candidate predictors of word learning. By including `r num_langs` languages and `r num_coefs` predictors, our work expands the scope of these studies dramatically, leading to several new findings.
+What makes words easier or harder for young children to learn? Previous
+experimental work has largely addressed this question using small-scale
+experiments. While such experiments can identify sources of variation, they
+typically do not allow for different sources to be compared in detail. In
+contrast, observational studies allow the effects of individual factors to be
+measured across ages and lexical categories [e.g.,
+@goodman2008;@hills2009;@swingley2017]. Such work has identified a number of
+candidate predictors of word learning. By including `r num_langs` languages and
+`r num_coefs` predictors, our work expands the scope of these studies
+dramatically, leading to several new findings.
 
-First, we found consistency in the ordering of predictors across languages at a level substantially greater than the predictions of a chance model. This consistency supports the idea that differences in culture or language structure do not lead to fundamentally different acquisition strategies, at least at the level of detail we were able to examine. Instead, they are likely produced by processes that are similar across populations and languages. Such processes could include learning mechanisms or biases internal to children, or interactional dynamics between children or caregivers. We believe these consistencies should be an important topic for future investigation. 
+First, we found consistency in the ordering of predictors across languages at a
+level substantially greater than the predictions of a chance model. This
+consistency supports the idea that differences in culture or language structure
+do not lead to fundamentally different acquisition strategies, at least at the
+level of detail we were able to examine. Instead, they are likely produced by
+processes that are similar across populations and languages. Such processes
+could include learning mechanisms or biases internal to children, or
+interactional dynamics between children or caregivers. We believe these
+consistencies should be an important topic for future investigation.
 
-Second, predictors varied substantially in their weights across lexical categories. Frequent, concrete nouns were learned earlier, consistent with theories that emphasize the importance of early referential speech [e.g., @baldwin1995]. But for predicates, concreteness was somewhat less important. And for function words, MLU was most predictive, perhaps because it is easiest to decode the meanings of function words that are used in short sentences (or because such words have meanings that are easiest to decode). Overall these findings are consistent with some predictions of both division of dominance theory, which highlights the role of conceptual structure in noun acquisition [@gentner2001], and syntactic bootstrapping theory, which emphasizes linguistic structure over conceptual complexity in the acquisition of lexical categories other than nouns [@snedeker2007]. More generally, our methods here provide a way forward for testing the predictions of these theories across languages and at the level of the entire lexicon rather than individual words.
+Second, predictors varied substantially in their weights across lexical
+categories. Frequent, concrete nouns were learned earlier, consistent with
+theories that emphasize the importance of early referential speech [e.g.,
+@baldwin1995]. But for predicates, concreteness was somewhat less important. And
+for function words, MLU was most predictive, perhaps because it is easiest to
+decode the meanings of function words that are used in short sentences (or
+because such words have meanings that are easiest to decode). Overall these
+findings are consistent with some predictions of both division of dominance
+theory, which highlights the role of conceptual structure in noun acquisition
+[@gentner2001], and syntactic bootstrapping theory, which emphasizes linguistic
+structure over conceptual complexity in the acquisition of lexical categories
+other than nouns [@snedeker2007]. More generally, our methods here provide a way
+forward for testing the predictions of these theories across languages and at
+the level of the entire lexicon rather than individual words.
 
-In addition to these new insights, several findings emerge that confirm and expand previous reports. Environmental frequency was an important predictor of learning, with more frequently heard words learned earlier [@goodman2008;@swingley2017]. Predictors also changed in relative importance across development. For example, certain words whose meanings were more strongly associated with babies appeared to be learned early for children across the languages in our sample [as in @tardif2008]. Finally, word length showed a disassociation between comprehension and production, suggesting that challenges in production do not carry over to comprehension (at least in parent-report data).
+In addition to these new insights, several findings emerge that confirm and
+expand previous reports. Environmental frequency was an important predictor of
+learning, with more frequently heard words learned earlier
+[@goodman2008;@swingley2017]. Predictors also changed in relative importance
+across development. For example, certain words whose meanings were more strongly
+associated with babies appeared to be learned early for children across the
+languages in our sample [as in @tardif2008]. Finally, word length showed a
+disassociation between comprehension and production, suggesting that challenges
+in production do not carry over to comprehension (at least in parent-report
+data).
 
-Despite its larger scope, our work shares a number of important limitations with previous studies. First and foremost, our approach is to predict one set of individuals with data about the experience of a completely different set and ratings of concepts gathered from yet others. In contrast to dense-data analyses [@roy2015], this approach fundamentally limits the amount of variability we will be able to capture. In addition, the granularity of the predictors that can be extracted from corpus data and applied to every word is necessarily quite coarse. Ideally, predictors could be targeted more specifically at particular theoretical constructs of interest (for example, the patterns of use for specific predicates). Finally, our data are observations gleaned from parent report and are subject to both causal confounding and confounding via biases in parent observation. Thus, our conclusions will require further testing through converging evidence from both laboratory experiments and direct observation. 
+Despite its larger scope, our work shares a number of important limitations with
+previous studies. First and foremost, our approach is to predict one set of
+individuals with data about the experience of a completely different set and
+ratings of concepts gathered from yet others. In contrast to dense-data analyses
+[@roy2015], this approach fundamentally limits the amount of variability we will
+be able to capture. In addition, the granularity of the predictors that can be
+extracted from corpus data and applied to every word is necessarily quite
+coarse. Ideally, predictors could be targeted more specifically at particular
+theoretical constructs of interest (for example, the patterns of use for
+specific predicates).
 
-<!--
-Finally, our work underscores the incompleteness of the current understanding of vocabulary development. Even for English, the language in which our model captures the most variance ($r^2 = 0.29$), much still remains unexplained. Furthermore, this variance is highly reliable---cross-validation using half of the English-speaking children to predict ages of acquisition for the other half yields $r^2 = 0.98$. This gap highlights an important theoretical challenge in the study of early language: linking individual datapoints to the broader patterns of acquisition. We have strong theories of how individual learning situations proceed, but must unify these theories to make progress on understanding language learning at scale.
--->
+Finally, our data are observations gleaned from parent report. CDI instruments are both reliable and valid, and the cross-linguistic adaptations we used contain the original researchers' best attempts to create culturally-appropriate word lists, but several biases are still likely present in our data. First, parents are biased reporters FIXME
 
-In sum, by examining predictors of early word learning across languages, we identified substantial cross-linguistic consistency in the factors contributing to the ease or difficulty of learning individual words. These findings testify to the importance of building open, shared resources in the study of language learning -- without the efforts of many research groups across many language communities, such studies would be impossible. In addition, we hope that our work here provides a baseline for the building of future predictive models that allow theories of language learning to be tested at scale. 
+
+Thus, our conclusions will require further testing through converging evidence
+from both laboratory experiments and direct observation.
+
+<!-- Finally, our work underscores the incompleteness of the current
+understanding of vocabulary development. Even for English, the language in which
+our model captures the most variance ($r^2 = 0.29$), much still remains
+unexplained. Furthermore, this variance is highly reliable---cross-validation
+using half of the English-speaking children to predict ages of acquisition for
+the other half yields $r^2 = 0.98$. This gap highlights an important theoretical
+challenge in the study of early language: linking individual datapoints to the
+broader patterns of acquisition. We have strong theories of how individual
+learning situations proceed, but must unify these theories to make progress on
+understanding language learning at scale. -->
+
+In sum, by examining predictors of early word learning across languages, we
+identified substantial cross-linguistic consistency in the factors contributing
+to the ease or difficulty of learning individual words. These findings testify
+to the importance of building open, shared resources in the study of language
+learning -- without the efforts of many research groups across many language
+communities, such studies would be impossible. In addition, we hope that our
+work here provides a baseline for the building of future predictive models that
+allow theories of language learning to be tested at scale.
+
 
 
 ```{r}
