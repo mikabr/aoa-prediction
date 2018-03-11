@@ -304,7 +304,11 @@ ggplot(lang_coefs, aes(x = estimate, y = term)) +
   scale_x_continuous(name = "Coefficient estimate")
 ```
 
-Each of our predictors is derived from independent sources. For each word that appears on the CDI forms in each of our `r num_langs` languages, we used corpora of child-directed speech in that language to obtain an estimate of its frequency, the mean length of utterances in which it appears, its frequency as the sole consituent of utterance, and its frequency in utterance final position (with frequency residualized out of solo and final frequencies). Additionally, we computed each word's length in characters and included ratings of its concreteness, valence, arousal, and relatedness to babies. Since existing datasets for conceptual ratings are primarily available for English, we mapped all words onto translation equivalents across CDI forms, verified by native speaker judgements, allowing us to use the ratings for English words across languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Example words for these predictors in English are shown in Table 2.
+Each of our predictors is derived from independent sources. For each word that appears on the CDI forms in each of our `r num_langs` languages, we used corpora of child-directed speech in that language to obtain an estimate of its frequency, the mean length of utterances in which it appears, its frequency as the sole consituent of utterance, and its frequency in utterance final position (with frequency residualized out of solo and final frequencies). Additionally, we computed each word's length in characters and included ratings of its concreteness, valence, arousal, and relatedness to babies. 
+
+We included this last factor because previous studies have shown robust consistency in the types of words that children learn very early [@tardif2008]. These words seem to describe concepts that are important or exciting in the lives of infants in a way that standard psycholinguistic features like concreteness do not. Capturing this intution quantitatively is difficult, but @perry2015 provides a proxy measure as a first step. This measure is simply the degree to which a particular word was "associated with babies." Intuitively, we expect this measure to capture the degree to which words like "bottle" feature heavily in the environment (and presumably, mental life) of many babies. 
+
+Since existing datasets for all of these conceptual ratings are primarily available for English, we mapped all words onto translation equivalents across CDI forms, verified by native speaker judgements, allowing us to use the ratings for English words across languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Example words for these predictors in English are shown in Table 2.
 
 ```{r collinearity}
 cors <- uni_model_data %>%
@@ -465,7 +469,7 @@ coarse. Ideally, predictors could be targeted more specifically at particular
 theoretical constructs of interest (for example, the patterns of use for
 specific predicates).
 
-Finally, our data are observations gleaned from parent report. CDI instruments are both reliable and valid, and the cross-linguistic adaptations we used contain the original researchers' best attempts to create culturally-appropriate word lists, but several biases are still likely present in our data. First, parents are biased reporters FIXME
+Finally, our data are observations gleaned from parent report. CDI instruments are both reliable and valid, and the cross-linguistic adaptations we used contain the original researchers' best attempts to create culturally-appropriate word lists. Nevertheless,  several biases are still likely present in our data. First, parent 
 
 
 Thus, our conclusions will require further testing through converging evidence
