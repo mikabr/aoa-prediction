@@ -1,0 +1,49 @@
+```{r results="asis"}
+num_extremes <- 3
+extremes <- uni_model_data %>%
+  filter(measure == "understands") %>%
+  distinct_(.dots = c("language", "uni_lemma", predictors)) %>%
+  mutate(uni_lemma = gsub("(.*) \\(.*\\)", "\\1", uni_lemma)) %>%
+  split(.$language) %>%
+  map_df(function(lang_data) {
+    map_df(predictors, function(predictor) {
+      if (predictor %in%
+          c("frequency", "final_frequency", "solo_frequency", "MLU")) {
+        filtered_lang_data <- lang_data %>%
+          filter(frequency != min(frequency))
+      } else {
+        filtered_lang_data <- lang_data
+      }
+      highest <- filtered_lang_data %>%
+        arrange_(as.formula(sprintf("~desc(%s)", predictor))) %>%
+        .$uni_lemma %>%
+        .[1:num_extremes]
+      lowest <- filtered_lang_data %>%
+        arrange_(predictor) %>%
+        .$uni_lemma %>%
+        .[1:num_extremes]
+      return(data.frame("language" = unique(lang_data$language),
+                        "Predictor" = predictor,
+                        "highest" = paste(highest, collapse = ", "),
+                        "lowest" = paste(lowest, collapse = ", ")))
+    })
+  })
+
+extremes_display <- extremes %>%
+  filter(language == "English (American)") %>%
+  select(-language) %>%
+  rename(Lowest = lowest, Highest = highest) %>%
+  mutate(Predictor = gsub("_", " ", Predictor),
+         Predictor = map_chr(Predictor, label_caps)) %>%
+  arrange(desc(row_number()))
+
+extremes_table <- extremes_display %>%
+  xtable::xtable(
+    label = "table:extremes",
+    caption = "Items with the highest and lowest values for each predictor in English."
+  )
+
+print(extremes_table, type = "latex", comment = FALSE,
+      table.placement = "t",
+      include.rownames = FALSE)
+```

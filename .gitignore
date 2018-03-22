@@ -10,3 +10,6 @@ rsconnect/
 raw_data.feather
 *.log
 *.xwm
+*.fff
+*.tex
+*.pdf

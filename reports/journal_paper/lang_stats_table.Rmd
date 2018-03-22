@@ -1,0 +1,29 @@
+```{r lang_stats, results="asis"}
+# sample_sizes <- read_feather(
+#   file.path(data_path, "sample_sizes.feather")
+# )
+
+uni_lemmas <- uni_model_data %>%
+  group_by(language) %>%
+  summarise(num_included = n_distinct(uni_lemma))
+
+lang_stats <- sample_sizes %>%
+  group_by(language, measure) %>%
+  summarise(num_admins = sum(n)) %>%
+  spread(measure, num_admins) %>%
+  left_join(uni_lemmas) %>%
+  select(Language = language,
+         "CDI Items" = num_included,
+         "N production" = produces,
+         "N comprehension" = understands)
+
+lang_table <- xtable::xtable(
+  lang_stats, digits = 0,
+  caption = "Dataset statistics for acquisition data from Wordbank.",
+  label = "table:lang_stats"
+)
+
+print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
+      table.placement = "b",
+      format.args = list(big.mark = ","))
+```

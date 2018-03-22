@@ -6,7 +6,7 @@ author:
   - name          : Anonymized
 
 affiliation:
-  - institution  : ""
+  - institution   : ""
 
 abstract: |
   Why do children learn some words earlier than others? The order in which words are acquired can provide clues about the mechanisms of word learning. In a large-scale corpus analysis, we use data from over 38,000 children to estimate the acquisition trajectories of around 400 words in ten languages, predicting them on the basis of independently-derived environmental and conceptual factors. We examine the consistency and variability of these predictors across languages, by lexical category, and over development. The ordering of predictors across languages is quite similar, suggesting similar processes in operation. In contrast, the ordering of predictors across different lexical categories is distinct, in line with theories that posit distinct factors at play in the acquisition of content words and function words. By leveraging data at a significantly larger scale than previous work, our analyses identify candidate generalizations about the processes underlying word learning across languages.
@@ -15,11 +15,11 @@ keywords          : word learning, language acquisition, corpus analysis
 
 bibliography      : [aoapred.bib]
 
-figsintext        : no
+figsintext        : yes
 figurelist        : no
 tablelist         : no
 footnotelist      : no
-lineno            : yes
+lineno            : no
 
 lang              : "english"
 class             : "man"
@@ -27,19 +27,16 @@ output            : papaja::apa6_pdf
 csl               : pnas.csl
 ---
 
-```{r include=FALSE} 
+```{r setup, include=FALSE, cache=FALSE} 
 library(tidyverse)
-library(magrittr)
 library(langcog)
-library(wordbankr)
-library(forcats)
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE,
                       cache = TRUE, dev = 'cairo_pdf')
-# theme_set(theme_bw() +
-#             theme(panel.grid = element_blank(),
-#                   strip.background = element_blank(),
-#                   legend.key = element_blank()))
 theme_set(papaja::theme_apa())
+
+data_path <- "../../aoa_unified/saved_data"
+data_files <- list.files(data_path, full.names = TRUE)
+for (file in data_files) load(file)
 
 label_caps <- function(value) {
   if_else(toupper(value) == value, value,
@@ -47,36 +44,11 @@ label_caps <- function(value) {
                  tolower(substr(value, 2, nchar(value)))))
 }
 
-data_path <- "../../aoa_unified/saved_data"
-uni_joined <- feather::read_feather(
-  file.path(data_path, "uni_joined.feather")
-)
-uni_model_data <- feather::read_feather(
-  file.path(data_path, "uni_model_data.feather")
-)
-lang_coefs <- feather::read_feather(
-  file.path(data_path, "lang_coefs.feather")
-)
-lexcat_coefs <- feather::read_feather(
-  file.path(data_path, "lexcat_coefs.feather")
-)
-
-baseline_summary <- feather::read_feather(
-  file.path(data_path, "baseline_summary.feather")
-)
-empirical_summary <- feather::read_feather(
-  file.path(data_path, "empirical_summary.feather")
-)
-empirical_lang_summary <- feather::read_feather(
-  file.path(data_path, "empirical_lang_summary.feather")
-)
-
+num_langs <- n_distinct(lang_coefs$language)
 predictors <- levels(lang_coefs$term)
 display_predictors <- predictors %>%
   map_chr(~gsub("_", " ", .x) %>% label_caps()) %>%
   set_names(predictors)
-
-num_langs <- n_distinct(lang_coefs$language)
 ```
 
 # Introduction
@@ -105,21 +77,25 @@ semantic and linguistic factors are related to word acquisition
 
 But these exciting findings are limited in their generality because they use
 different datasets, focus on different predictors, and almost exclusively
-analyze data from English-elearning children. They do not allow for cross-linguistic comparison of the relative importance of the many relevant factors under consideration in children from different language communities. Such cross-linguistic comparisons are
-critical, as identifying commonalities (and differences) across languages is our
-best strategy for uncovering the universal mechanisms that are in play for all
-children and differentiating them from patterns of acquisition that emerge due
-to the particulars of a given language or culture [@slobin1985;@bates1987]. Our
-goal is to extend these classic approaches by assessing the degree to which the
-predictors of word learning are consistent across different languages and
-cultures, as well as whether there are similar patterns across different word
-types (e.g., nouns vs. verbs).
+analyze data from English-elearning children. They do not allow for
+cross-linguistic comparison of the relative importance of the many relevant
+factors under consideration in children from different language communities.
+Such cross-linguistic comparisons are critical, as identifying commonalities
+(and differences) across languages is our best strategy for uncovering the
+universal mechanisms that are in play for all children and differentiating them
+from patterns of acquisition that emerge due to the particulars of a given
+language or culture [@slobin1985;@bates1987]. Our goal is to extend these
+classic approaches by assessing the degree to which the predictors of word
+learning are consistent across different languages and cultures, as well as
+whether there are similar patterns across different word types (e.g., nouns vs.
+verbs).
 
-The primary tool for characterizing the breadth of children's early vocabulary in these previous studies is structured parent report. While naturalistic language samples and experimental methods both can be valuable methods, outside of a few examples [e.g., @roy2015], neither method provides the kind of holistic view that comes from 
-
-e MacArthur-Bates Communicative Development
-Inventory [CDI; @fenson2007], a family of parent-report vocabulary checklists.
-
+The primary tool for characterizing the breadth of children's early vocabulary
+in these previous studies is structured parent report. While naturalistic
+language samples and experimental methods both can be valuable methods, outside
+of a few examples [e.g., @roy2015], neither method provides the kind of holistic
+view that comes from thee MacArthur-Bates Communicative Development Inventory
+[CDI; @fenson2007], a family of parent-report vocabulary checklists.
 
 Parent report is an inexpensive and widely used method for gathering reliable
 and valid data about the nature and extent of young children's productive and
@@ -133,8 +109,8 @@ SI for more details on the adaptations used in our study).
 To conduct cross-linguistic comparisons, we rely on data from Wordbank
 ([wordbank.stanford.edu](http://wordbank.stanford.edu)) [@frank2016]. Wordbank
 is an open repository of cross-linguistic language development data that
-aggregates administrations of the CDI across languages. Wordbank archives
-data from these adaptations and currently includes data from more than 60,000
+aggregates administrations of the CDI across languages. Wordbank archives data
+from these adaptations and currently includes data from more than 60,000
 children. This large sample means that idiosyncratic patterns of individual
 variation are less likely to overpower general trends in which words are
 relatively easy or hard to learn, allowing us to investigate what features
@@ -188,33 +164,7 @@ test the predictions of influential theories of acquisition.
 
 # Approach {#approach .unnumbered}
 
-```{r lang_stats, results="asis"}
-sample_sizes <- feather::read_feather(
-  file.path(data_path, "sample_sizes.feather")
-)
-
-uni_lemmas <- uni_model_data %>%
-  group_by(language) %>%
-  summarise(num_included = n_distinct(uni_lemma))
-
-lang_stats <- sample_sizes %>%
-  spread(measure, num_admins) %>%
-  left_join(uni_lemmas) %>%
-  mutate(language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
-  select(Language = language,
-         "CDI Items" = num_included,
-         "N production" = produces,
-         "N comprehension" = understands)
-
-lang_table <- xtable::xtable(
-  lang_stats, digits = 0,
-  caption = "Dataset statistics for acquisition data from Wordbank.",
-  label = "table:lang_stats"
-)
-
-print(lang_table, type = "latex", comment = FALSE, include.rownames = FALSE,
-      table.placement = "b",
-      format.args = list(big.mark = ","))
+```{r lang_stats_table, child="lang_stats_table.Rmd"}
 ```
 
 To estimate the trajectory of words' acquisition, we used vocabulary data collected using CDI instruments adapted in many different languages, including both Words & Gestures (WG) forms for younger children and Words & Sentences (WS) forms for older children. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) each of around 400-700 words. Typically, both comprehension and production are queried for younger children and only production is queried for older children, but details vary from adaptation to adaptation. We use data from the items on the WG form for our comprehension measure, and data from the items in common between the WG and WS forms for our production measure. Table 1 gives an overview of our acquisition data [@kovacevic1996;@bleses2008;@boudreault2007;@trudeau2011;@caselli2012;@caselli1995;@simonsen2014;@vershinina2011;@yeliseyeva2009;@fenson2003;@eriksson2002;@acarlar2008].
@@ -222,7 +172,8 @@ To estimate the trajectory of words' acquisition, we used vocabulary data collec
 
 ```{r, fig.width=7, fig.height=3.5, fig.env='figure*', fig.align='center', fig.cap='Example production trajectories for the words "dog" and "jump" across languages. Points show average proportion of children producing each word for each one-month age group. Lines show the best-fitting logistic curve. Labels show the forms of the word in each language.'}
 demo_lemmas <- c("dog", "jump")
-demo_data <- uni_joined %>%
+demo_data <- uni_model_data %>%
+  ungroup() %>%
   filter(uni_lemma %in% demo_lemmas,
          measure == "produces") %>%
   mutate(language = gsub("(.*) \\(.*\\)", "\\1", language))
@@ -232,7 +183,7 @@ word_data <- demo_data %>%
   mutate(x = ifelse(uni_lemma == demo_lemmas[1], 8, 35),
          y = ifelse(uni_lemma == demo_lemmas[1], 1, 0))
 
-ggplot(demo_data, aes(x = age, y = prop, colour = uni_lemma)) +
+ggplot(demo_data, aes(x = unscaled_age, y = prop, colour = uni_lemma)) +
   facet_wrap(~language, ncol = 5) +
   geom_point(size = 0.8, alpha = 0.4) +
   geom_smooth(method = "glm", method.args = list(family = "binomial"),
@@ -248,54 +199,7 @@ ggplot(demo_data, aes(x = age, y = prop, colour = uni_lemma)) +
 For each word, CDI data yield a trajectory reflecting the number of children that are reported to produce or understand the word at each age covered by the instrument (see Figure 1 for some examples). We then use a mixed-effects logistic regression model to predict whether each child knows the word on the basis of the child's age, properties of the word, and interactions between age and each property of the word. We also fit such models separately to the words in each lexical category. The magnitude of the standardized coefficient on each feature gives an estimate of its importance in predicting whether words are learned earlier or later. Interactions between features and age give estimates of how this effect is modulated for earlier and later-learned words. For example, a positive effect of association with babies ("babiness") means that words associated with babies are learned earlier; a negative interaction with age means that high babiness primarily leads to higher rates of production and comprehension for younger children.
 
 
-```{r extremes, results='asis'}
-num_extremes <- 3
-extremes <- uni_model_data %>%
-  filter(measure == "understands") %>%
-  distinct_(.dots = c("language", "uni_lemma", predictors)) %>%
-  mutate(uni_lemma = gsub("(.*) \\(.*\\)", "\\1", uni_lemma)) %>%
-  split(.$language) %>%
-  map_df(function(lang_data) {
-    map_df(predictors, function(predictor) {
-      if (predictor %in%
-          c("frequency", "final_frequency", "solo_frequency", "MLU")) {
-        filtered_lang_data <- lang_data %>%
-          filter(frequency != min(frequency))
-      } else {
-        filtered_lang_data <- lang_data
-      }
-      highest <- filtered_lang_data %>%
-        arrange_(as.formula(sprintf("~desc(%s)", predictor))) %>%
-        .$uni_lemma %>%
-        .[1:num_extremes]
-      lowest <- filtered_lang_data %>%
-        arrange_(predictor) %>%
-        .$uni_lemma %>%
-        .[1:num_extremes]
-      return(data.frame("language" = unique(lang_data$language),
-                        "Predictor" = predictor,
-                        "highest" = paste(highest, collapse = ", "),
-                        "lowest" = paste(lowest, collapse = ", ")))
-    })
-  })
-
-extremes_display <- extremes %>%
-  filter(language == "English") %>%
-  select(-language) %>%
-  rename(Lowest = lowest, Highest = highest) %>%
-  mutate(Predictor = gsub("_", " ", Predictor),
-         Predictor = map_chr(Predictor, label_caps)) %>%
-  arrange(desc(row_number()))
-
-extremes_table <- extremes_display %>%
-  xtable::xtable(
-    label = "table:extremes",
-    caption = "Items with the highest and lowest values for each predictor in English."
-  )
-
-print(extremes_table, type = "latex", comment = FALSE,
-      table.placement = "t",
-      include.rownames = FALSE)
+```{r extremes_table, child="extremes_table.Rmd"}
 ```
 
 
@@ -353,12 +257,61 @@ mean_cors <- cors %>%
   summarise(mean_cor = mean(cor))
 pair_cor <- function(p1, p2) {
   mean_cors %>%
-    filter(predictor1 == p1, predictor2 == p2) %$%
-    mean_cor
+    filter(predictor1 == p1, predictor2 == p2) %>%
+    .$mean_cor
 }
 ```
 
 A potential concern for comparing coefficient estimates is predictor collinearity. Fortunately, in every language, the highest correlations were between MLU and solo frequency (mean over languages and measures _r = _ `r sprintf("%.2f", pair_cor("solo_frequency", "MLU"))`), as expected given the similarity of these factors; and frequency and number of characters (mean over languages and measures _r = _ `r sprintf("%.2f", pair_cor("frequency", "length"))`), a reflection of Zipf's Law [@zipf1935].
+
+
+# Materials and Methods
+
+All code and data to reproduce our analyses are available at `https://github.com/mikabr/aoa-prediction`.
+
+## Predictor variables
+
+Each numeric predictor was centered and scaled so that all predictors would have comparable units. For each predictor, missing values (CDI items that were not in the relevant corpus or norms) were imputed from the mean for their respective language and measure. Placeholder items, such as "child's own name", were excluded.
+
+Translation equivalents are available in the Wordbank database using the `wordbankr` package in `R` [@frank2016]. Translation equivalents were constructed by the authors and independently hand-checked by native speakers.
+
+### Frequency
+
+For each language, we estimated word frequency from unigram counts based on all corpora in CHILDES for that language. Each word's count includes the counts of words that share the same stem (so that "dogs" counts as "dog") or are synonymous (so that "father" counts as "daddy"). For polysemous word pairs (e.g., "orange" as in color or fruit), occurrences of the word in the corpus were split uniformly between the senses on the CDI. Counts were normalized to the length of each corpus, Laplace smoothed, and then log transformed.
+
+### Solo and Final Frequencies
+
+Using the same dataset as for frequency, we estimated the frequency with which each of word occurs as the sole word in an utterance, and the frequency with which it appears as the final word of an utterance (not counting single-word utterances). As with frequency, solo and final counts were normalized to the length of each corpus, Laplace smoothed, and log transformed. Since both of these estimates are by necessity highly correlated with frequency, we then residualized unigram frequency out of both of them, so that values reflect an estimate of the effect of solo/final frequency over and above frequency itself.
+
+### MLU
+
+For each language, we estimated each word's MLU by calculating the mean length in words of the utterances in which that word appeared, for all corpora in CHILDES for that language. For words that occurred fewer than 10 times, MLU estimates were not used (i.e. treated as missing).
+
+### Length
+
+We computed the number of characters in each word in each language. While imperfect, this metric of length is highly correlated with number of phonemes and syllables [@lewis2016].
+
+### Concreteness
+
+We used previously collected norms for concreteness [@brysbaert2014], which were gathered by asking adult participants to rate how concrete the meaning of each word is on a 5-point scale from abstract to concrete.
+
+### Valence and Arousal
+
+We also used previously collected norms for valence and arousal [@warriner2013], for which adult participants were asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal).
+
+### Babiness
+
+Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015] for which adult participants were asked to judge a word's association with babies on a 1-10 scale.
+
+
+## Lexical category
+
+Category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that the Nouns category contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
+
+
+## Analysis
+
+For all analyses, we used logistic mixed-effects regression models (fit with `lme4 1.1-12` in `R`) to predict whether each child understands/produces each word from age, the above predictors, and the interactions of age with the predictors. Each model was fit to all data from a particular language community and included a random intercept for each word and a random slope of age for each word.
 
 
 # Results {#results .unnumbered}
@@ -367,53 +320,53 @@ Figure 2 shows the coefficient estimate for each predictor in each language. We 
 
 
 ```{r, fig.width=5, fig.height=3, fig.align='center', fig.cap="Correlations of coefficients estimates between languages. Each point represents the mean of one language's coefficients' correlation with each other language's coefficients, with the black line indicating the overall mean across languages. The grey region and dashed line show a bootstrapped 95\\% confidence interval of a randomized baseline where predictor coefficients are shuffled within language."}
-ggplot(NULL, aes(x = dummy, y = mean_cor)) +
-  facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
-  coord_flip() +
-  geom_point(aes(y = cor, colour = language),
-             data = empirical_lang_summary, alpha = 0.5) +
-  geom_errorbarh(aes(xmin = 0.8, xmax = 1.2, x = 1, y = cor),
-                 size = 1, height = 0,
-                 data = empirical_summary) +
-  geom_rect(aes(ymin = ci_lower_cor, ymax = ci_upper_cor, xmin = 0.5,
-                xmax = 1.5), data = baseline_summary, colour = "lightgray",
-            alpha = .1, linetype = 0) +
-  geom_hline(data = baseline_summary, aes(yintercept = mean_cor), lty = 2) + 
-  scale_y_continuous(name = "Mean pairwise correlation of coefficients",
-                     limits = c(-0.1, 1)) +
-  xlab("") +
-  scale_colour_solarized(guide = FALSE) +
-  theme(axis.ticks.y = element_blank()
-        #axis.title.y = element_text(size = 14),
-        #strip.text.y = element_text(size = 6)
-        )
+# ggplot(NULL, aes(x = dummy, y = mean_cor)) +
+#   facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
+#   coord_flip() +
+#   geom_point(aes(y = cor, colour = language),
+#              data = empirical_lang_summary, alpha = 0.5) +
+#   geom_errorbarh(aes(xmin = 0.8, xmax = 1.2, x = 1, y = cor),
+#                  size = 1, height = 0,
+#                  data = empirical_summary) +
+#   geom_rect(aes(ymin = ci_lower_cor, ymax = ci_upper_cor, xmin = 0.5,
+#                 xmax = 1.5), data = baseline_summary, colour = "lightgray",
+#             alpha = .1, linetype = 0) +
+#   geom_hline(data = baseline_summary, aes(yintercept = mean_cor), lty = 2) + 
+#   scale_y_continuous(name = "Mean pairwise correlation of coefficients",
+#                      limits = c(-0.1, 1)) +
+#   xlab("") +
+#   scale_colour_solarized(guide = FALSE) +
+#   theme(axis.ticks.y = element_blank()
+#         #axis.title.y = element_text(size = 14),
+#         #strip.text.y = element_text(size = 6)
+#         )
 ```
 
 
 ```{r, fig.width=7, fig.height=3.5, fig.env='figure*', fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories (as described in Figure 2), with separate models for each lexical category."}
-plt_lexcat_coefs <- lexcat_coefs %>%
-  filter(interaction == "main effect",
-         !(term %in% c("valence", "arousal"))) %>%
-  mutate(term = `levels<-`(term, display_predictors))
-
-mean_lexcat_coefs <- plt_lexcat_coefs %>%
-  group_by(lexical_category, term, measure, interaction) %>%
-  summarise(mean = mean(estimate),
-            ci_lower = ci_lower(estimate),
-            ci_upper = ci_upper(estimate))
-
-ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
-  facet_grid(measure ~ lexical_category, labeller = as_labeller(label_caps)) +
-  geom_point(aes(colour = term), size = 1, alpha = 0.4) +
-  geom_point(aes(y = mean, colour = term), size = 3,
-             data = mean_lexcat_coefs) +
-  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-  coord_flip() +
-  scale_fill_solarized(guide = FALSE) +
-  scale_colour_manual(guide = FALSE,
-                      values = rev(solarized_palette(num_coefs)),
-                      drop = FALSE) +
-  labs(x = "", y = "Coefficient estimate")
+# plt_lexcat_coefs <- lexcat_coefs %>%
+#   filter(interaction == "main effect",
+#          !(term %in% c("valence", "arousal"))) %>%
+#   mutate(term = `levels<-`(term, display_predictors))
+# 
+# mean_lexcat_coefs <- plt_lexcat_coefs %>%
+#   group_by(lexical_category, term, measure, interaction) %>%
+#   summarise(mean = mean(estimate),
+#             ci_lower = ci_lower(estimate),
+#             ci_upper = ci_upper(estimate))
+# 
+# ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
+#   facet_grid(measure ~ lexical_category, labeller = as_labeller(label_caps)) +
+#   geom_point(aes(colour = term), size = 1, alpha = 0.4) +
+#   geom_point(aes(y = mean, colour = term), size = 3,
+#              data = mean_lexcat_coefs) +
+#   geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+#   coord_flip() +
+#   scale_fill_solarized(guide = FALSE) +
+#   scale_colour_manual(guide = FALSE,
+#                       values = rev(solarized_palette(num_coefs)),
+#                       drop = FALSE) +
+#   labs(x = "", y = "Coefficient estimate")
 ```
 
 
@@ -511,67 +464,6 @@ communities, such studies would be impossible. In addition, we hope that our
 work here provides a baseline for the building of future predictive models that
 allow theories of language learning to be tested at scale.
 
-
-
-```{r}
-missing <- uni_joined %>%
-  select_(.dots = c("language", "uni_lemma", predictors)) %>%
-  distinct() %>%
-  gather_("predictor", "value", predictors) %>%
-  filter(is.na(value)) %>%
-  group_by(language, predictor) %>%
-  summarise(n = n())
-```
-
-\newpage
-
-# Materials and Methods
-
-All code and data to reproduce our analyses are available at `https://github.com/mikabr/aoa-prediction`.
-
-## Predictor variables
-
-Each numeric predictor was centered and scaled so that all predictors would have comparable units. For each predictor, missing values (CDI items that were not in the relevant corpus or norms) were imputed from the mean for their respective language and measure. Placeholder items, such as "child's own name", were excluded.
-
-Translation equivalents are available in the Wordbank database using the `wordbankr` package in `R` [@frank2016]. Translation equivalents were constructed by the authors and independently hand-checked by native speakers.
-
-### Frequency
-
-For each language, we estimated word frequency from unigram counts based on all corpora in CHILDES for that language. Each word's count includes the counts of words that share the same stem (so that "dogs" counts as "dog") or are synonymous (so that "father" counts as "daddy"). For polysemous word pairs (e.g., "orange" as in color or fruit), occurrences of the word in the corpus were split uniformly between the senses on the CDI. Counts were normalized to the length of each corpus, Laplace smoothed, and then log transformed.
-
-### Solo and Final Frequencies
-
-Using the same dataset as for frequency, we estimated the frequency with which each of word occurs as the sole word in an utterance, and the frequency with which it appears as the final word of an utterance (not counting single-word utterances). As with frequency, solo and final counts were normalized to the length of each corpus, Laplace smoothed, and log transformed. Since both of these estimates are by necessity highly correlated with frequency, we then residualized unigram frequency out of both of them, so that values reflect an estimate of the effect of solo/final frequency over and above frequency itself.
-
-### MLU
-
-For each language, we estimated each word's MLU by calculating the mean length in words of the utterances in which that word appeared, for all corpora in CHILDES for that language. For words that occurred fewer than 10 times, MLU estimates were not used (i.e. treated as missing).
-
-### Length
-
-We computed the number of characters in each word in each language. While imperfect, this metric of length is highly correlated with number of phonemes and syllables [@lewis2016].
-
-### Concreteness
-
-We used previously collected norms for concreteness [@brysbaert2014], which were gathered by asking adult participants to rate how concrete the meaning of each word is on a 5-point scale from abstract to concrete.
-
-### Valence and Arousal
-
-We also used previously collected norms for valence and arousal [@warriner2013], for which adult participants were asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal).
-
-### Babiness
-
-Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015] for which adult participants were asked to judge a word's association with babies on a 1-10 scale.
-
-
-## Lexical category
-
-Category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that the Nouns category contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
-
-
-## Analysis
-
-For all analyses, we used logistic mixed-effects regression models (fit with `lme4 1.1-12` in `R`) to predict whether each child understands/produces each word from age, the above predictors, and the interactions of age with the predictors. Each model was fit to all data from a particular language community and included a random intercept for each word and a random slope of age for each word.
 
 
 # Acknowledgements
