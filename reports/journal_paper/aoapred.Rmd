@@ -53,20 +53,21 @@ display_predictors <- predictors %>%
 
 # Introduction
 
-In spite of tremendous individual variation in rate of development
+Despite tremendous individual variation in rate of development
 [@fenson2007], the first words that children utter are strikingly consistent
 [@tardif2008;@schneider2015]: they tend to talk about important people in their
 life ("mom", "dad"), social routines ("hi", "uh oh"), animals ("dog", "duck"),
-and foods ("milk", "banana"). Even as children must learn from their experiences
+and foods ("milk", "banana"). Even as children learn from their experiences
 and according to their own interests [@mayor2014;@nelson1973], their vocabulary
 grows rapidly, typically adding more nouns, but also verbs ("go") and other
-predicates ("hot") to their production repertoires.  Over just their first three
+predicates ("hot") to their repertoires.  Over just their first three
 years, children learn hundreds or even thousands of words
-[@fenson1994;@mayor2011]. Why are some words learned so early and some much
-later?
+[@fenson1994;@mayor2011]. 
 
-This simple question about the order of the acquisition of first words can
-provide a window into the nature of children's language learning. Posed as a
+One classic approach to word learning focuses on the specific mechanisms that children bring to bear on the learning problem. For example, across many laboratory experiments, a variety of mechanisms have been identified as plausible drivers of early word learning, including co-occurrence based and cross-situational word learning[@schwartz1983,@yu2007]; social cues use [@baldwin1993]; and syntactic bootstrapping [@gleitman1990,@mintz2003]. Indeed, many theories of early word learning take this multiplicity of cues and processes as a central feature [e.g., @hollich2000;@bloom2000]. As important as this work on mechanism is, though, these studies typically are aimed at understanding how one or a small handful of words are learned in the lab. They do not directly address the overall composition and ordering of growth in the lexicon. Why are some words learned so early and some much later?
+
+This question about the order of the acquisition of first words can
+provide a different window into the nature of children's language learning. Posed as a
 statistical problem, the challenge is to find what variables best predict the
 age at which different words are acquired. Previous work using this approach has
 revealed that in English, within a lexical category (e.g., nouns, verbs), words
@@ -77,59 +78,36 @@ semantic and linguistic factors are related to word acquisition
 
 But these exciting findings are limited in their generality because they use
 different datasets, focus on different predictors, and almost exclusively
-analyze data from English-elearning children. They do not allow for
-cross-linguistic comparison of the relative importance of the many relevant
-factors under consideration in children from different language communities.
-Such cross-linguistic comparisons are critical, as identifying commonalities
-(and differences) across languages is our best strategy for uncovering the
-universal mechanisms that are in play for all children and differentiating them
-from patterns of acquisition that emerge due to the particulars of a given
-language or culture [@slobin1985;@bates1987]. Our goal is to extend these
-classic approaches by assessing the degree to which the predictors of word
-learning are consistent across different languages and cultures, as well as
-whether there are similar patterns across different word types (e.g., nouns vs.
-verbs).
+analyze data from English-elearning children. They do not allow for cross-linguistic comparison of the relative importance of the many relevant factors under consideration in children from different language communities. Such cross-linguistic comparisons are
+critical. Identifying commonalities (and differences) across languages is our
+best strategy for uncovering the universal mechanisms that are in play for all
+children and differentiating them from patterns of acquisition that emerge due
+to the particulars of a given language or culture [@slobin1985;@bates1987]. Our
+goal is thus to extend these classic approaches by assessing the degree to which the
+predictors of word learning are consistent across different languages and
+cultures, as well as whether there are similar patterns across different word
+types (e.g., nouns vs. verbs).
 
-The primary tool for characterizing the breadth of children's early vocabulary
-in these previous studies is structured parent report. While naturalistic
-language samples and experimental methods both can be valuable methods, outside
-of a few examples [e.g., @roy2015], neither method provides the kind of holistic
-view that comes from thee MacArthur-Bates Communicative Development Inventory
-[CDI; @fenson2007], a family of parent-report vocabulary checklists.
+The primary tool for characterizing the breadth of children's early vocabulary in these previous studies has been structured parent report. Naturalistic language samples and experimental methods are both valuable methods for assessing aspects of child language [@bornstein1998,@fernald2006]. But outside of a few ultra-dense transcripts [e.g., @roy2015], neither method typically provides the kind of holistic view that comes from parent report. We focus in particular on the MacArthur-Bates Communicative Development Inventory [CDI; @fenson2007], a family of parent-report vocabulary checklists in which parents are asked whether their child either "understands" or "says and understands" individual words.
 
-Parent report is an inexpensive and widely used method for gathering reliable
+CDIs are an inexpensive and widely-used method for gathering reliable
 and valid data about the nature and extent of young children's productive and
-receptive language [see @fenson1994 for review; cf. @feldman2000, @fenson2000].
-Because of its low cost and flexibility, CDI instruments have been adapted for
-dozens of different languages, leading to a wide range of forms containing sets
-of words that are customized to particular languages and cultures to provide
-relevant information regarding how individual children's vocabularies vary (see
-SI for more details on the adaptations used in our study).
+receptive language [see @fenson1994 for review; cf. @feldman2000, @fenson2000]. Although CDIs cannot reveal the whole of a child's vocabulary, they do give an estimate of a child's knowledge about several hundred words, far more than the handful that are typically tested in a lab experiment. Although any parent report measure is subject to some reporting biases, the CDI is designed to minimize these by asking parents to report only on observable behaviors that are currently (rather than retrospectively) demonstrated. In addition, because of the low cost of adminstering survey instruments of this type compared with transcribing naturalistic recordings, it is far easier to gather samples in containing data about hundreds or thousands of children. Such large samples in turn make it possible to recover stable estimates of the average difficulty of individual words, even if individual children's data may be noisy.
 
-To conduct cross-linguistic comparisons, we rely on data from Wordbank
-([wordbank.stanford.edu](http://wordbank.stanford.edu)) [@frank2016]. Wordbank
-is an open repository of cross-linguistic language development data that
-aggregates administrations of the CDI across languages. Wordbank archives data
-from these adaptations and currently includes data from more than 60,000
-children. This large sample means that idiosyncratic patterns of individual
-variation are less likely to overpower general trends in which words are
-relatively easy or hard to learn, allowing us to investigate what features
-affect their acquisition across languages.
+Finally, CDI instruments have been used in dozens of different languages, providing an opportunity for cross-linguistic comparison. The American English CDI is not simply translated to other languages verbatim, however; instead, groups typically adapt the form for their particular linguistic and cultural situation as well as their scientific goal. This process leads to a wide range of forms with a common structure, but htat contain sets of words that are customized to particular languages and cultures to provide relevant information regarding how individual children's vocabularies vary (see SI for more details on the adaptations used in our study).
 
-No currently available dataset characterizes both children's productive and
-receptive knowledge of a large sample of words *and* their environmental input
-at the scale necessary for our analyses. Thus, in our analyses, we integrate
-estimates of words' acquisition trajectories from the Wordbank data with
-independent characterizations of the word learning environment. We derive these
-estimates from transcripts of speech to children in the CHILDES database
-[@macwhinney2000], a data-integration methodology originated by @goodman2008.
-This method relies on large samples to average out the (substantial) differences
-between children and care environments, but allows for analyses that cannot be
+In our study, we conduct cross-linguistic comparisons of the age of acquisition of particular words using Wordbank
+([wordbank.stanford.edu](http://wordbank.stanford.edu)) [@frank2016], an open repository that aggregates administrations of the CDI across languages. Wordbank currently includes data from more than 60,000 children. This large sample means that idiosyncratic patterns of individual variation are less likely to overpower general trends in which words are relatively easier or harder to learn, allowing us to investigate what features affect their acquisition across languages.
+
+In our analyses, we integrate estimates of words' acquisition trajectories from the Wordbank data with independent characterizations of the word learning environment from other datasets. The use of secondary datasets for these analyses is warranted because no currently available resource provides data on *both* children's language environment and their learning outcomes for more than a small handful of children). 
+We derive our estimates of the language environment from transcripts of speech to children in the CHILDES database
+[@macwhinney2000]. This data-integration methodology wsa originated by @goodman2008; it relies on large samples to average out the (substantial) differences
+between children and care environments, but it also allows for analyses that cannot be
 performed on smaller datasets or datasets that measure only child or environment
 but not both.
 
 As our particular measures of environmental input, we estimated each word's
-frequency, mean length of utterance in words (MLU), frequency as a sole
+frequency in parent speech to children, mean length of the parent utterances containing that word (MLU), frequency as a sole
 utterance constituent, and frequency in utterance-final position. While these
 measures are crude, they are both easy to compute and relatively comparable
 across the languages in our sample. We combined these measures with available
@@ -137,12 +115,9 @@ psycholinguistic norms for the words in our sample, using adult ratings of each
 word's concreteness, valence, arousal, and association with babies as proxies
 for conceptual properties of each word. We used these measures to predict words’
 acquisition trajectories, assessing the relative contributions of each, as well
-as how they change over development and interact with lexical category. These
-analyses address two important questions.
+as how they change over development and interact with lexical category. 
 
-First, we ask about the degree of consistency across languages in the relative
-importance of predictors. Consistency in the ordering of predictors would
-suggest that similar information sources are important for learners, regardless
+These analyses address two  questions. First, we ask about the degree of consistency across languages in the relative importance of predictors. Consistency in the ordering of predictors would suggest that similar information sources are important for learners, regardless
 of language. Such evidence would point to the importance of similar learning
 mechanisms across languages despite superficial dissimilarities (e.g., greater
 morphological complexity in Russian and Turkish, greater phonological complexity
@@ -228,7 +203,11 @@ ggplot(lang_coefs, aes(x = estimate, y = term)) +
   scale_x_continuous(name = "Coefficient estimate")
 ```
 
-Each of our predictors is derived from independent sources. For each word that appears on the CDI forms in each of our `r num_langs` languages, we used corpora of child-directed speech in that language to obtain an estimate of its frequency, the mean length of utterances in which it appears, its frequency as the sole consituent of utterance, and its frequency in utterance final position (with frequency residualized out of solo and final frequencies). Additionally, we computed each word's length in characters and included ratings of its concreteness, valence, arousal, and relatedness to babies. Since existing datasets for conceptual ratings are primarily available for English, we mapped all words onto translation equivalents across CDI forms, verified by native speaker judgements, allowing us to use the ratings for English words across languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Example words for these predictors in English are shown in Table 2.
+Each of our predictors is derived from independent sources. For each word that appears on the CDI forms in each of our `r num_langs` languages, we used corpora of child-directed speech in that language to obtain an estimate of its frequency, the mean length of utterances in which it appears, its frequency as the sole consituent of utterance, and its frequency in utterance final position (with frequency residualized out of solo and final frequencies). Additionally, we computed each word's length in characters.
+
+To capture conceptual factors in acquisition, we included ratings of each word's concreteness, valence, arousal, and relatedness to babies. All of these ratings were compiled based on previous studies using adult raters. In addition, since existing datasets for all of these conceptual ratings are primarily available for English, we mapped all words onto translation equivalents across CDI forms, verified by native speaker judgements, allowing us to use the ratings for English words across languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Example words for these predictors in English are shown in Table 2.
+
+A word about "babiness." Previous studies have shown robust consistency in the types of words that children learn very early [@tardif2008]. These words seem to describe concepts that are important or exciting in the lives of infants in a way that standard psycholinguistic features like concreteness do not. Capturing this intution quantitatively is difficult, but @perry2015 provides a proxy measure as a first step. This measure is simply the degree to which a particular word was "associated with babies." Intuitively, we expect this measure to capture the degree to which words like "bottle" feature heavily in the environment (and presumably, mental life) of many babies. 
 
 ```{r collinearity}
 cors <- uni_model_data %>%
@@ -438,11 +417,7 @@ coarse. Ideally, predictors could be targeted more specifically at particular
 theoretical constructs of interest (for example, the patterns of use for
 specific predicates).
 
-Finally, our data are observations gleaned from parent report. CDI instruments are both reliable and valid, and the cross-linguistic adaptations we used contain the original researchers' best attempts to create culturally-appropriate word lists, but several biases are still likely present in our data. First, parents are biased reporters FIXME
-
-
-Thus, our conclusions will require further testing through converging evidence
-from both laboratory experiments and direct observation.
+Finally, our data are observations gleaned from parent report. CDI instruments are both reliable and valid, and the cross-linguistic adaptations we used contain the original researchers' best attempts to create culturally-appropriate word lists. Nevertheless,  this observational design introduces many sources of uncertainty and bias. First, Wordbank data reflect the sampling and administration methods of many groups around the world; these introduce many unknown biases that we cannot control (though they would likely not contribute to observed consistencies). Second, language and culture covary completely in our sample and so variability that we observe cannot be attributed to one or the other. Finally, some observed consistencies could arise from consistency in parental reporting biases. For example, across languages parents might be generally biased to under-report comprehension of function words. In sum, despite the quantity of data analyzed here, our conclusions will require further testing through converging evidence from both laboratory experiments and direct observation.
 
 <!-- Finally, our work underscores the incompleteness of the current
 understanding of vocabulary development. Even for English, the language in which
