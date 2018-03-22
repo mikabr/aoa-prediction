@@ -1,0 +1,518 @@
+---
+title: AoA data loading
+output:
+  html_notebook:
+    highlight: tango
+    theme: spacelab
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r knitr, echo=FALSE, cache=FALSE, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+library(tidyverse)
+library(glue)
+library(wordbankr)
+library(langcog)
+theme_set(theme_mikabr())
+font <- theme_mikabr()$text$family
+```
+
+## Wordbank
+
+Connect to the Wordbank database and pull out the raw data.
+```{r wordbank}
+languages <- c("Croatian", "Danish", "English (American)", "French (Quebec)",
+               "Italian", "Norwegian", "Russian", "Spanish (Mexican)",
+               "Swedish", "Turkish")
+
+forms <- c("WS", "WG", "Oxford CDI")
+
+admins <- get_administration_data(original_ids = TRUE) %>%
+  filter(language %in% languages, form %in% forms)
+
+# take earliest administration for any child with multiple administrations
+first_longitudinals <- admins %>%
+  filter(longitudinal) %>%
+  group_by(source_name, original_id) %>%
+  arrange(age) %>%
+  slice(1)
+
+# remove problematic datasets
+source_exclude <- c("Fernald (Outreach)")
+
+admins <- admins %>%
+  filter(!longitudinal | data_id %in% first_longitudinals$data_id) %>%
+  filter(!(paste(source_name, source_name, sep = "_") %in% source_exclude)) %>%
+  select(language, form, age, data_id)
+
+words <- get_item_data() %>%
+  filter(language %in% languages, form %in% forms, type == "word") %>%
+  select(language, form, lexical_class, category, uni_lemma, definition,
+         item_id, num_item_id)
+```
+
+```{r raw_data, cache.lazy=FALSE}
+get_inst_data <- function(inst_items) {
+  inst_language <- unique(inst_items$language)
+  inst_form <- unique(inst_items$form)
+  print(glue("Getting data for {inst_language} {inst_form}..."))
+  inst_admins <- filter(admins, language == inst_language, form == inst_form)
+  get_instrument_data(language = inst_language,
+                      form = inst_form,
+                      items = inst_items$item_id,
+                      administrations = inst_admins,
+                      iteminfo = inst_items) %>%
+    filter(!is.na(age)) %>%
+    mutate(produces = !is.na(value) & value == "produces",
+           understands = !is.na(value) &
+             (value == "understands" | value == "produces")) %>%
+    select(-value) %>%
+    gather(measure, value, produces, understands) %>%
+    filter(measure == "produces" | form == "WG") %>%
+    mutate(language = inst_language, form = inst_form) %>%
+    select(-item_id)
+}
+
+raw_data <- words %>%
+  split(.$language) %>%
+  map(~.x %>% split(.$form) %>% map_df(get_inst_data))
+```
+
+Save point -- raw Wordbank data.
+```{r raw_data_save}
+save(raw_data, file = "raw_data.RData")
+#load("raw_data.RData")
+```
+
+```{r sample_sizes}
+sample_sizes <- raw_data %>%
+  map_df(~.x %>%
+           distinct(language, measure, age, data_id) %>%
+           count(language, measure, age))
+
+save(sample_sizes, file = "../saved_data/sample_sizes.RData")
+```
+
+For each language and measure, collapse across age and uni_lemma.
+```{r uni_prop_data}
+collapse_inst_measure <- function(inst_measure_data) {
+  print(glue("Wrangling {unique(inst_measure_data$language)}
+             {unique(inst_measure_data$measure)}"))
+  
+  inst_uni_lemmas <- inst_measure_data %>%
+    ungroup() %>%
+    distinct(lexical_class, category, uni_lemma, definition) %>%
+    group_by(uni_lemma) %>%
+    nest(.key = "items")
+
+  inst_measure_data %>%
+    # for each child and uni_lemma, collapse across items
+    group_by(language, measure, uni_lemma, age, data_id) %>%
+    summarise(uni_value = any(value)) %>%
+    # for each age and uni_lemma, collapse across children
+    group_by(language, measure, uni_lemma, age) %>%
+    summarise(num_true = sum(uni_value, na.rm = TRUE),
+              num_false = n() - num_true,
+              prop = mean(uni_value, na.rm = TRUE)) %>%
+    left_join(inst_uni_lemmas)
+  
+}
+
+collapse_inst <- function(inst_data) {
+  
+  lang_uni_lemmas <- inst_data %>%
+    distinct(uni_lemma, definition) %>%
+    filter(!is.na(uni_lemma))
+  
+  inst_data_mapped <- inst_data %>%
+    select(-uni_lemma) %>%
+    left_join(lang_uni_lemmas) %>%
+    filter(!is.na(uni_lemma)) %>%
+    group_by(definition) %>%
+    filter("WG" %in% form | "Oxford CDI" %in% form)
+  
+  inst_data_mapped %>%
+    split(.$measure) %>%
+    map_df(collapse_inst_measure)
+  
+}
+
+uni_prop_data <- map_df(raw_data, collapse_inst)
+```
+
+Save point -- Wordbank data by collapsed to uni_lemma by age.
+```{r uni_prop_data_save}
+save(uni_prop_data, file = "../saved_data/uni_prop_data.RData")
+#load("../saved_data/uni_prop_data.RData")
+```
+
+```{r uni_lemmas}
+collapse_items <- function(items) {
+  items %>% unique() %>% sort() %>% paste(collapse = ", ")
+}
+
+uni_words <- uni_prop_data %>%
+  unnest() %>%
+  distinct(language, uni_lemma, lexical_class, category, definition) %>%
+  group_by(language, uni_lemma) %>%
+  summarise(lexical_classes = lexical_class %>% collapse_items(),
+            words = definition %>% collapse_items() %>% tolower())
+
+# exclude body parts that are commonly euphemized
+exclude_uni_lemmas <- words %>%
+  distinct(category, uni_lemma, definition) %>%
+  filter(category == "body_parts" & grepl("\\*", definition)) %>%
+  .$uni_lemma %>%
+  unique()
+  
+# exclude any items consisting of a person's name, make string representations
+# of item lexical classes and definitions
+uni_prop_data <- uni_prop_data %>%
+  filter(!str_detect(uni_lemma, " name"),
+         !(uni_lemma %in% exclude_uni_lemmas)) %>%
+  left_join(uni_words)
+
+uni_lemmas <- uni_prop_data %>%
+  ungroup() %>%
+  distinct(language, uni_lemma, words)
+```
+
+
+## CHILDES
+
+Build up a mapping between CDI items and possible tokens for them in CHILDES.
+```{r case_map}
+norm_lang <- function(lang)
+  lang %>% tolower() %>% strsplit(" ") %>% map_chr(~.x[1])
+
+source("stemmer.R")
+
+transforms <- c(
+  function(x) gsub("(.*) \\(.*\\)", "\\1", x),
+  function(x) gsub(" ", "_", x),
+  function(x) gsub(" ", "+", x),
+  function(x) gsub("(.+) \\1", "\\1", x)
+)
+
+apply_transforms <- function(str) {
+  transforms %>% map_chr(~.x(str))
+}
+
+special_case_files <- list.files("predictors/childes/special_cases/")
+
+special_case_map <-  map_df(special_case_files, function(case_file) {
+  
+  lang <- case_file %>% strsplit(".csv") %>% unlist()
+  special_cases <- read_csv(file.path("predictors/childes/special_cases/", case_file),
+                            col_names = FALSE)
+  
+  map_df(1:nrow(special_cases), function(i) {
+    uni_lemma <- special_cases$X1[i]
+    options <- special_cases[i, 3:ncol(special_cases)] %>%
+      as.character() %>%
+      discard(is.na)
+    trans_opts <- map(options, apply_transforms) %>% unlist() %>% unique()
+    data_frame(language = lang,
+               uni_lemma = rep(uni_lemma, 2 * length(trans_opts)),
+               stem = c(trans_opts, stem(trans_opts, lang)))
+  })
+  
+})
+
+pattern_map <- uni_lemmas %>%
+  split(paste(.$language, .$uni_lemma, .$words)) %>%
+  map_df(function(uni_data) {
+    language <- uni_data$language %>% norm_lang()
+    uni_lemma <- uni_data$uni_lemma
+    options <- uni_data$words %>% strsplit(", ") %>% unlist() %>%
+      strsplit("/") %>% unlist()
+    options <- c(options, stem(options, language)) %>% unique()
+    trans_opts <- map(options, apply_transforms) %>% unlist() %>% unique()
+    trans_opts <- c(trans_opts, stem(trans_opts, language)) %>% unique()
+    data_frame(language = rep(uni_data$language, length(trans_opts)),
+               uni_lemma = rep(uni_lemma, length(trans_opts)),
+               stem = trans_opts)
+  })
+
+case_map <- bind_rows(special_case_map, pattern_map) %>% distinct()
+```
+
+Get measure extracted from CHILDES -- unigram count, mean sentence length, utterance-final position count, singleton count.
+```{r childes}
+load_childes_data <- function(lang) {
+  read_csv(sprintf("predictors/childes/data/childes_%s.csv",
+                   norm_lang(lang))) %>%
+    filter(!is.na(word)) %>%
+    mutate(stem = stem(word, norm_lang(lang)),
+           language = lang) %>%
+    right_join(case_map %>% filter(language == lang)) %>%
+    group_by(uni_lemma) %>%
+    summarise(MLU = weighted.mean(mean_sent_length, word_count, na.rm = TRUE),
+              word_count = sum(word_count, na.rm = TRUE),
+              MLU = ifelse(word_count < 10, NA, MLU),
+              final_count = sum(final_count, na.rm = TRUE),
+              solo_count = sum(solo_count, na.rm = TRUE),
+              language = lang)
+}
+
+childes_data <- map_df(languages, load_childes_data)
+
+uni_childes <- childes_data %>%
+  filter(word_count != 0) %>%
+  group_by(language) %>%
+  # mutate(word_count = word_count,
+  #        frequency = log(word_count / sum(word_count)),
+  #        final_count = final_count,
+  #        final_freq = log((final_count - solo_count) /
+  #                           sum(final_count - solo_count)),
+  #        solo_count = solo_count,
+  #        solo_freq = log(solo_count / sum(solo_count)))
+  mutate(word_count = word_count + 1,
+         frequency = log(word_count / sum(word_count)),
+         final_count = final_count + 1,
+         final_freq = log((final_count - solo_count) /
+                            sum(final_count - solo_count)),
+         solo_count = solo_count + 1,
+         solo_freq = log(solo_count / sum(solo_count)))
+
+# residualize frequency out of final and solo frequencies
+uni_childes$final_frequency <- lm(final_freq ~ frequency,
+                                  data = uni_childes)$residuals
+uni_childes$solo_frequency <- lm(solo_freq ~ frequency,
+                                 data = uni_childes)$residuals
+```
+
+```{r valence}
+# valence <- read_csv("predictors/valence/valence.csv") %>%
+#   select(Word, V.Mean.Sum, A.Mean.Sum) %>%
+#   rename(word = Word, valence = V.Mean.Sum, arousal = A.Mean.Sum)
+# 
+# replacements_valence <- read_csv("predictors/valence/valence_replace.csv")
+# 
+# uni_valence <- uni_lemmas %>%
+#   left_join(replacements_valence) %>%
+#   mutate(word = if_else(is.na(replacement), uni_lemma, replacement)) %>%
+#   select(-replacement) %>%
+#   mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
+#   left_join(valence) %>%
+#   select(-word) %>%
+#   group_by(language, uni_lemma, words) %>%
+#   summarise(valence = mean(valence, na.rm = TRUE),
+#             arousal = mean(arousal, na.rm = TRUE))
+# 
+# uni_valence <- uni_lemmas %>%
+#   left_join(replacements_valence) %>%
+#   rowwise() %>%
+#   mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+#   select(-replacement) %>%
+#   mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
+#   left_join(valence) %>%
+#   select(-word) %>%
+#   group_by(language, uni_lemma, words) %>%
+#   summarise(valence = mean(valence, na.rm = TRUE),
+#             arousal = mean(arousal, na.rm = TRUE))
+```
+
+
+Get estimates of valence and arousal.
+```{r valence}
+valence <- read_csv("predictors/valence/valence.csv") %>%
+  select(Word, V.Mean.Sum, A.Mean.Sum) %>%
+  rename(word = Word, valence = V.Mean.Sum, arousal = A.Mean.Sum)
+
+replacements_valence <- read_csv("predictors/valence/valence_replace.csv")
+uni_valence <- uni_lemmas %>%
+  left_join(replacements_valence) %>%
+  rowwise() %>%
+  mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
+  left_join(valence) %>%
+  select(-word) %>%
+  group_by(language, uni_lemma, words) %>%
+  summarise(valence = mean(valence, na.rm = TRUE),
+            arousal = mean(arousal, na.rm = TRUE))
+```
+
+Get estimates of iconicity and babiness.
+```{r babiness}
+babiness <- read_csv("predictors/babiness/english_babiness.csv") %>%
+  group_by(word) %>%
+  summarise(iconicity = mean(rating),
+            babiness = mean(babyAVG))
+
+replacements_babiness <- read_csv("predictors/babiness/babiness_replace.csv")
+
+uni_babiness <- uni_lemmas %>%
+  left_join(replacements_babiness) %>%
+  rowwise() %>%
+  mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
+  left_join(babiness) %>%
+  select(-word)
+```
+
+Get estimates of concreteness.
+```{r concreteness}
+concreteness <- read_csv("predictors/concreteness/concreteness.csv") %>%
+  rename(word = Word, concreteness = Conc.M)
+
+replacements_concreteness <- read_csv("predictors/concreteness/concreteness_replace.csv")
+
+uni_concreteness <- uni_lemmas %>%
+  left_join(replacements_concreteness) %>%
+  rowwise() %>%
+  mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
+  select(-replacement) %>%
+  mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
+  left_join(concreteness) %>%
+  group_by(language, uni_lemma, words) %>%
+  summarise(concreteness = mean(concreteness, na.rm = TRUE))
+```
+
+Get word lengths in phonemes and characters.
+```{r lengths_funs}
+lang_codes <- list(
+  "Croatian" = "hr",
+  "Danish" = "da",
+  "English (American)" = "en-us",
+  "French (Quebec)" = "fr",
+  "Italian" = "it",
+  "Norwegian" = "no",
+  "Russian" = "ru",
+  "Spanish (Mexican)" = "es",
+  "Swedish" = "sv",
+  "Turkish" = "tr"
+)
+
+get_ipa <- function(word, lang) {
+  lang_code <- lang_codes[[lang]]
+  system2("espeak", args = c("--ipa=3", "-v", lang_code, "-q", glue("'{word}'")),
+          stdout = TRUE) %>%
+    gsub("^ ", "", .) %>%
+    gsub("[ˈˌ]", "", .)
+}
+
+get_phons <- function(words, lang) {
+  words %>% map_chr(function(word) word %>% get_ipa(lang))
+}
+
+num_phons <- function(phon_words) {
+  phon_words %>% map_dbl(function(phon_word) {
+    phon_word %>%
+      map_dbl(~.x %>% str_split("[_ \\-]+") %>% unlist() %>%
+                keep(nchar(.) > 0 & !grepl("\\(.*\\)", .x)) %>% length()) %>%
+      mean()
+  })
+}
+
+str_phons <- function(phon_words) {
+  phon_words %>% map(function(phon_word) {
+    phon_word %>%
+      map_chr(~.x %>% str_split("[_ \\-]+") %>% unlist() %>%
+                keep(nchar(.) > 0 & !grepl("\\(.*\\)", .x)) %>%
+                paste(collapse = ""))
+  })
+}
+
+num_chars <- function(words) {
+  map_dbl(words, ~gsub("[[:punct:]]", "", .x) %>% nchar() %>% mean())
+}
+```
+
+```{r lengths}
+# clean_words(c("dog", "dog / cat", "dog (animal)", "(a) dog", "dog*", "dog(go)", "(a)dog", " dog ", "Cat"))
+clean_words <- function(word_set) {
+  word_set %>%
+    
+    # dog / doggo
+    strsplit("/") %>% flatten_chr() %>%
+    
+    # dog (animal) | (a) dog
+    strsplit(" \\(.*\\)|\\(.*\\) ") %>% flatten_chr() %>%
+    
+    # dog* | dog? | dog! | ¡dog! | dog's
+    gsub("[*?!¡']", "", .) %>%
+    
+    # dog(go) | (a)dog
+    map_if(
+      # if "dog(go)"
+      ~grepl("\\(.*\\)", .x),
+      # replace with "dog" and "doggo"
+      ~c(sub("\\(.*\\)", "", .x),
+         sub("(.*)\\((.*)\\)", "\\1\\2", .x))
+    ) %>%
+    flatten_chr() %>%
+  
+    # trim
+    gsub("^ +| +$", "", .) %>%
+    
+    keep(nchar(.) > 0) %>%
+    tolower() %>%
+    unique()
+    
+}
+  
+fixed_words <- read_csv("predictors/phonemes/fixed_words.csv") %>%
+  select(language, uni_lemma, definition, fixed_word) %>%
+  filter(!is.na(uni_lemma), !is.na(fixed_word))
+
+uni_cleaned <- uni_prop_data %>%
+  unnest() %>%
+  distinct(language, uni_lemma, definition) %>%
+  left_join(fixed_words) %>%
+  mutate(fixed_definition = if_else(is.na(fixed_word), definition, fixed_word),
+         cleaned_words = map(fixed_definition, clean_words)) %>%
+  select(-fixed_word)
+
+uni_phons <- uni_cleaned %>%
+  group_by(language) %>%
+  mutate(phons = map(cleaned_words, ~get_phons(.x, unique(language))))
+
+fixed_phons <- read_csv("predictors/phonemes/fixed_phons.csv") %>%
+  select(language, uni_lemma, definition, fixed_phon) %>%
+  filter(!is.na(uni_lemma), !is.na(fixed_phon)) %>%
+  mutate(fixed_phon = strsplit(fixed_phon, ", "))
+
+uni_phons_fixed <- uni_phons %>%
+  left_join(fixed_phons) %>%
+  mutate(phons = if_else(map_lgl(fixed_phon, is.null), phons, fixed_phon),
+         str_phons = str_phons(phons)) %>%
+  select(-fixed_phon)
+
+#save(uni_phons_fixed, file = "../saved_data/uni_phons.RData")
+
+uni_lengths <- uni_phons_fixed %>%
+  mutate(num_char = num_chars(cleaned_words),
+         num_phon = num_phons(phons)) %>%
+  group_by(language, uni_lemma) %>%
+  summarise(num_chars = mean(num_char), num_phons = mean(num_phon))
+
+phons_cors <- uni_lengths %>%
+  distinct(language, uni_lemma, num_chars, num_phons) %>%
+  group_by(language) %>%
+  nest() %>%
+  mutate(phon_cor = map_dbl(data, ~cor(.x$num_chars, .x$num_phons))) %>%
+  arrange(phon_cor)
+```
+
+Put together data and predictors.
+
+```{r uni_joined}
+uni_joined <- uni_prop_data %>%
+  left_join(uni_lengths) %>%
+  left_join(uni_childes) %>%
+  left_join(uni_valence) %>%
+  left_join(uni_babiness) %>%
+  left_join(uni_concreteness) %>%
+  ungroup() %>%
+  distinct()
+```
+
+Save point -- joined AoA data and predictor data.
+```{r uni_joined_save}
+save(uni_joined, file = "../saved_data/uni_joined.RData")
+#load("../saved_data/uni_joined.RData")
+```

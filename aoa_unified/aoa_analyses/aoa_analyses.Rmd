@@ -1,0 +1,385 @@
+---
+title: AoA analyses
+output:
+  html_document:
+    highlight: tango
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggridges)
+library(langcog)
+library(lme4)
+library(lmerTest)
+library(broom)
+theme_set(papaja::theme_apa())
+```
+
+```{r}
+load("../saved_data/uni_joined.RData")
+```
+
+```{r model_setup}
+predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
+                "num_phons", "concreteness", "valence", "arousal", "babiness")
+```
+
+Impute and scale data for input into models.
+```{r uni_model_data}
+cols <- c("language", "measure", "uni_lemma", "lexical_classes", "words", "age",
+          "num_true", "num_false", "prop", predictors)
+
+uni_model_data <- uni_joined %>%
+  select(!!cols) %>%
+  group_by(language, measure) %>%
+  mutate_at(vars(!!predictors), funs(as.numeric(Hmisc::impute(.)))) %>%
+  mutate(unscaled_age = age) %>%
+  mutate_at(vars(c(!!predictors, "age")), funs(as.numeric(scale(.))))
+```
+
+Save point -- model input data.
+```{r uni_model_data_save}
+save(uni_model_data, file = "../saved_data/uni_model_data.RData")
+```
+
+Fit models for each language and measure.
+```{r lang_models}
+# lang_model_fun <- function(lang, lang_measure_data) {
+#   print(sprintf("Fitting lmer for %s...", lang))
+#   interaction_formula <- as.formula(
+#     sprintf("cbind(num_true, num_false) ~ (age | uni_lemma) + %s",
+#             paste(sprintf("age * %s", predictors), collapse = " + "))
+#   )
+#   glmer(interaction_formula, family = "binomial", data = lang_measure_data)
+#               #control = lme4::glmerControl(optCtrl = list(maxfun = 1e7)))
+# }
+# 
+# lang_models <- uni_model_data %>%
+#   #filter(language %in% c("Turkish")) %>%
+#   group_by(language, measure) %>%
+#   nest() %>%
+#   mutate(model = map2(language, data, lang_model_fun))
+# 
+# lexcat_models <- uni_model_data %>%
+#   filter(!grepl(",", lexical_classes),
+#          lexical_classes != "other") %>%
+#   mutate(lexical_category = `levels<-`(
+#     factor(lexical_classes),
+#     list(
+#       "Nouns" = "nouns",
+#       "Predicates" = c("verbs", "adjectives", "adverbs"),
+#       "Function Words" = "function_words"
+#     ))) %>%
+#   select(-lexical_classes) %>%
+#   group_by(language, measure, lexical_category) %>%
+#   nest() %>%
+#   mutate(model = map2(language, data, lang_model_fun))
+```
+
+```{r}
+converged <- function(m) {
+  return(!any(grepl("failed to converge", m@optinfo$conv$lme4$messages)))
+}
+
+crossling_model_fun <- function(measure, measure_data) {
+  print(sprintf("Fitting lmer for %s...", measure))
+  effects <- paste(c("age", predictors), collapse = " + ")
+  interaction_formula <- as.formula(
+    glue("cbind(num_true, num_false) ~
+            ({effects} | language) + (age | language:uni_lemma) + {effects}")
+  )
+  # sprintf("cbind(num_true, num_false) ~
+    #         (age | language) + (age | language:uni_lemma) + %s",
+    #         paste(c("age", predictors), collapse = " + "))
+            #paste(sprintf("age * %s", predictors), collapse = " + "))
+  # )
+  print(Sys.time())
+  measure_model <- glmer(interaction_formula, family = "binomial",
+                         data = measure_data)
+  print(Sys.time())
+  if (converged(measure_model)) return(measure_model)
+  
+  # if model doesn't converge, run again starting from current estimates
+  current <- getME(measure_model, c("theta", "fixef"))
+  measure_model_updated <- update(measure_model, start = current)
+  print(Sys.time())
+  return(measure_model_updated)
+}
+
+uni_model_data %>%
+  group_by(measure) %>%
+  nest() %>%
+  mutate(model = map2(measure, data, crossling_model_fun))
+
+comp_model_age <- comp_model
+comp_model <- crossling_model_fun(
+  "understands", filter(uni_model_data, measure == "understands")
+)
+summary(comp_model)
+
+comp_coefs <- tidy(comp_model) %>%
+  filter(group == "fixed", !(term %in% c("(Intercept)", "age"))) %>%
+  arrange(abs(estimate)) %>%
+  mutate(term = fct_inorder(term),
+         ci_upper = estimate + 1.96 * std.error,
+         ci_lower = estimate - 1.96 * std.error)
+
+ggplot(comp_coefs, aes(x = term, y = estimate)) +
+  #facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
+  coord_flip() +
+  geom_pointrange(aes(colour = term, ymin = ci_lower, ymax = ci_upper)) +
+  #geom_point(aes(x = mean, colour = term), size = 3, data = mean_coefs) +
+  geom_hline(yintercept = 0, color = "grey", linetype = "dotted") +
+  #scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE,
+                      values = rev(solarized_palette(nrow(comp_coefs)))) +
+  xlab("") +
+  scale_y_continuous(name = "Coefficient estimate")
+
+comp_aug <- augment(comp_model)
+fits <- as_data_frame(comp_aug[,1]) %>%
+  mutate(fitted = comp_aug$.fitted,
+         prop = num_true / (num_true + num_false))
+comp_rsq <- cor(fits$prop, fits$fitted) ^ 2
+
+comp_effects <- as.data.frame(ranef(comp_model))
+lang_effects <- comp_effects %>% filter(grpvar == "language")
+
+ggplot(lang_effects, aes(x = condval, y = grp)) +
+  facet_wrap(~term) +
+  geom_point() +
+  geom_vline(xintercept = 0, linetype = "dotted", colour = "darkgrey")
+```
+
+
+```{r lang_coefs}
+lang_coef_fun <- function(lang_model) {
+  broom::tidy(lang_model) %>%
+    filter(term != "(Intercept)", term != "age", group == "fixed") %>%
+    select(term, estimate, std.error) %>%
+    mutate(interaction = ifelse(grepl(":", term), "interaction with age",
+                                "main effect"),
+           term = gsub("age:", "", term))
+}
+
+lang_coefs <- lang_models %>%
+  mutate(coefs = map(model, lang_coef_fun)) %>%
+  select(language, measure, coefs) %>%
+  unnest()
+
+lexcat_coefs <- lexcat_models %>%
+  mutate(coefs = map(model, lang_coef_fun)) %>%
+  select(language, measure, lexical_category, coefs) %>%
+  unnest()
+```
+
+Combine by-language coefficients with across-language coefficients.
+```{r}
+measure_levels <- c("understands", "produces")
+effect_levels <- c("main effect", "interaction with age")
+
+lang_coefs <- lang_coefs %>%
+  mutate(term = factor(term, levels = predictors),
+         measure = factor(measure, levels = measure_levels),
+         interaction = factor(interaction, levels = effect_levels))
+
+lexcat_coefs <- lexcat_coefs %>%
+  mutate(term = factor(term, levels = predictors),
+         measure = factor(measure, levels = measure_levels),
+         interaction = factor(interaction, levels = effect_levels))
+
+save(lang_coefs, file = "saved_data/lang_coefs.RData")
+```
+
+Examine cross-linguistic consistency in coefficient estimates.
+```{r consistency, fig.width=9, fig.height=5}
+num_coefs <- n_distinct(lang_coefs$term)
+mean_coefs <- lang_coefs %>%
+  group_by(term, measure, interaction) %>%
+  summarise(mean = mean(estimate),
+            ci_lower = ci_lower(estimate),
+            ci_upper = ci_upper(estimate))
+
+ggplot(lang_coefs, aes(x = estimate, y = term)) +
+  facet_grid(measure ~ interaction) +
+  geom_point(aes(colour = term), size = 1, alpha = 0.4) +
+  geom_point(aes(x = mean, colour = term), size = 3, data = mean_coefs) +
+  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
+  scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(num_coefs))) +
+  ylab("") +
+  scale_x_continuous(name = "Coefficient Estimate")
+```
+
+```{r consistency, fig.width=9, fig.height=5}
+plt_lexcat_coefs <- lexcat_coefs %>%
+  # mutate(term = factor(term, levels = rev(term_order$term)),
+  #        measure = factor(measure, levels = c("understands", "produces")),
+  #        interaction = factor(interaction,
+  #                             levels = c("main effect", "interaction with age"))) %>%
+  filter(interaction == "main effect",
+         !(term %in% c("valence", "arousal")))
+
+mean_lexcat_coefs <- plt_lexcat_coefs %>%
+  group_by(lexical_category, term, measure, interaction) %>%
+  summarise(mean = mean(estimate),
+            ci_lower = ci_lower(estimate),
+            ci_upper = ci_upper(estimate))
+
+ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
+  facet_grid(measure ~ lexical_category) + #, scales = "free", space = "free") +
+  #facet_grid(. ~ interaction, scales = "free") +
+  geom_point(aes(colour = term), size = 1, alpha = 0.4) +
+  # data = joint_coefs_measures %>%
+  #   filter(language != "All Languages")) +
+  geom_point(aes(y = mean, colour = term), size = 3, data = mean_lexcat_coefs) +
+  # geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper, y = mean,
+  #                     colour = term),# size = 1,
+  #                     data = mean_coefs) +
+  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
+  coord_flip() +
+  scale_fill_solarized(guide = FALSE) +
+  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(num_coefs)),
+                      drop = FALSE) +
+  xlab("") +
+  scale_y_continuous(name = "Coefficient Estimate")
+```
+
+Predictor correlation.
+```{r}
+eng_prod <- uni_model_data %>%
+  filter(language == "English", measure == "produces") %>%
+  select_(.dots = c("uni_lemma", predictors)) %>%
+  distinct()
+
+ggcorplot(eng_prod)
+```
+
+Cross-linguistic consistency analyses.
+```{r}
+empirical_coef_cors <- lang_coefs %>%
+  group_by(interaction, measure, term) %>%
+  summarise(empirical_coef_var = var(estimate))
+
+baseline_sample <- function(i) {
+  lang_coefs %>%
+    group_by(interaction, measure, language) %>%
+    mutate(term = sample(term)) %>%
+    group_by(interaction, measure, term) %>%
+    summarise(coef_var = var(estimate)) %>%
+    mutate(sample = i)
+}
+
+num_samples <- 1000
+baseline_samples <- map_df(1:num_samples, baseline_sample)
+baseline_summary <- baseline_samples %>%
+  group_by(interaction, measure, term) %>%
+  summarise(mean_coef_var = mean(coef_var),
+            ci_lower_coef_var = ci_lower(coef_var),
+            ci_upper_coef_var = ci_upper(coef_var))
+
+coef_cors <- empirical_coef_cors %>%
+  left_join(baseline_summary)
+```
+
+```{r}
+pair_cors <- function(dataset_coefs) {
+  by_lang <- dataset_coefs %>% split(.$language)
+  map_df(cross2(by_lang, by_lang),
+      ~data_frame(language1 = unique(.x[[1]][["language"]]),
+                  language2 = unique(.x[[2]][["language"]]),
+                  cor = cor(.x[[1]][["estimate"]], .x[[2]][["estimate"]])))
+}
+
+coef_cors <- function(coefs) {
+  coefs %>%
+    group_by(interaction, measure) %>%
+    nest() %>%
+    mutate(cors = map(data, pair_cors)) %>%
+    select(-data) %>%
+    unnest()
+}
+
+mean_coef_cors <- function(cors) {
+  cors %>%
+    filter(language1 != language2) %>%
+    group_by(interaction, measure) %>%
+    summarise(cor = mean(cor))
+}
+
+summarise_cors <- function(df) {
+  df %>%
+  summarise(mean_cor = mean(cor),
+            ci_lower_cor = ci_lower(cor),
+            ci_upper_cor = ci_upper(cor))
+}
+
+baseline_sample <- function(i) {
+  lang_coefs %>%
+    group_by(interaction, measure, language) %>%
+    mutate(estimate = sample(estimate)) %>%
+    coef_cors() %>%
+    #mean_coef_cors() %>% 
+    mutate(sample = i)
+}
+
+num_samples <- 100
+baseline_samples <- map_df(1:num_samples, baseline_sample)
+baseline_lang_summary <- baseline_samples %>%
+  filter(language1 != language2) %>%
+  group_by(interaction, measure, sample, language1) %>%
+  summarise(cor = mean(cor)) %>%
+  group_by(interaction, measure, language1) %>%
+  summarise_cors() %>%
+  mutate(dummy = "") %>%
+  rename(language = language1)
+
+baseline_summary <- baseline_samples %>%
+  filter(language1 != language2) %>%
+  group_by(interaction, measure, sample) %>%
+  summarise(cor = mean(cor)) %>%
+  group_by(interaction, measure) %>%
+  summarise_cors() %>%
+  mutate(dummy = "")
+
+empirical_cors <- lang_coefs %>%
+  coef_cors() %>%
+  filter(language1 != language2)
+
+empirical_lang_summary <- empirical_cors %>%
+  group_by(interaction, measure, language1) %>%
+  summarise(cor = mean(cor),
+            dummy = "") %>%
+  rename(language = language1)
+
+empirical_summary <- empirical_cors %>%
+  group_by(interaction, measure) %>%
+  summarise(cor = mean(cor),
+            dummy = "")
+
+feather::write_feather(baseline_summary,
+                       "saved_data/baseline_summary.feather")
+feather::write_feather(empirical_summary,
+                       "saved_data/empirical_summary.feather")
+feather::write_feather(empirical_lang_summary,
+                       "saved_data/empirical_lang_summary.feather")
+```
+
+```{r}
+ggplot(NULL, aes(x = dummy, y = mean_cor)) +
+  facet_grid(measure ~ interaction) +
+  coord_flip() +
+  geom_pointrange(aes(ymin = ci_lower_cor, ymax = ci_upper_cor),
+                  data = baseline_summary, colour = "darkgrey") +
+  geom_point(aes(y = cor, colour = language),
+             data = empirical_lang_summary, alpha = 0.5) +
+  geom_errorbarh(aes(xmin = 0.8, xmax = 1.2, x = 1, y = cor),
+                 size = 1, height = 0,
+                 data = empirical_summary) +
+  scale_y_continuous(name = "Average pairwise correlation of coefficients",
+                     limits = c(-0.1, 1)) +
+  xlab("") +
+  scale_colour_solarized(guide = FALSE) +
+  theme(axis.ticks.y = element_blank())
+```
