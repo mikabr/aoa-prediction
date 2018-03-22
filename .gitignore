@@ -4,7 +4,7 @@
 .idea/
 .Rhistory
 .Rproj.user
-*.RData
+.RData
 rsconnect/
 *.pyc
 raw_data.feather
@@ -13,3 +13,4 @@ raw_data.feather
 *.fff
 *.tex
 *.pdf
+raw_data.RData
