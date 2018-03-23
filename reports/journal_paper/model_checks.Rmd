@@ -53,26 +53,28 @@ cors <- uni_model_data %>%
       mutate(language = unique(lang_data$language),
              measure = unique(lang_data$measure))
 
-  })
+  }) %>%
+  as_tibble() %>%
+  mutate(predictors = map2_chr(predictor1, predictor2,
+                               ~paste(sort(c(.x, .y)), collapse = "|"))) %>%
+  distinct(language, predictors, cor)
 
 mean_cors <- cors %>%
-  group_by(predictor1, predictor2) %>%
+  group_by(predictors) %>%
   summarise(mean_cor = mean(cor)) %>%
   arrange(desc(abs(mean_cor)))
 
-pair_cor <- function(p1, p2) {
-  mean_cors %>%
-    filter(predictor1 == p1, predictor2 == p2) %>%
-    .$mean_cor
+pair_cor <- function(preds) {
+  mean_cors %>% filter(predictors == preds) %>% .$mean_cor
 }
 
-max_other_cor <- cors %>%
-  mutate(predictor_pair = paste(predictor1, predictor2)) %>%
-  filter(!(predictor_pair %in% c("solo_frequency MLU", "MLU solo_frequency"))) %>%
-  arrange(desc(abs(cor))) %>%
-  pull(cor) %>%
-  .[1] %>%
-  abs()
+# max_other_cor <- cors %>%
+#   mutate(predictor_pair = paste(predictor1, predictor2)) %>%
+#   filter(!(predictor_pair %in% c("solo_frequency MLU", "MLU solo_frequency"))) %>%
+#   arrange(desc(abs(cor))) %>%
+#   pull(cor) %>%
+#   .[1] %>%
+#   abs()
 ```
 
 ```{r collinearity}
@@ -81,16 +83,25 @@ max_other_cor <- cors %>%
 predictor_data <- uni_model_data %>%
   ungroup() %>%
   select(language, !!predictors) %>%
-  distinct()
+  distinct() %>%
+  nest(-language)
 
-predictor_vif <- function(predictor) {
+predictor_vif <- function(lang_data, predictor) {
   others <- paste(predictors[predictors != predictor], collapse = ' + ')
   predictor_model <- glue("{predictor} ~ {others}") %>%
     as.formula() %>%
-    lm(data = predictor_data)
+    lm(data = lang_data)
   1 / (1 - summary(predictor_model)$r.squared)
 }
 
-vifs <- map_dbl(predictors, predictor_vif)
-max_vif <- max(vifs)
+vifs <- predictor_data %>%
+  mutate(vifs = map(data, function(lang_data) {
+                    data_frame(predictor = predictors,
+                                vif = map_dbl(predictors,
+                                              ~predictor_vif(lang_data, .x)))
+         })) %>%
+  select(-data) %>%
+  unnest()
+
+max_vif <- max(vifs$vif)
 ```
