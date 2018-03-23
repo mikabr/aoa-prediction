@@ -55,6 +55,8 @@ num_langs <- 10
 #   set_names(predictors)
 ```
 
+TODO: more details on the adaptations used in our study
+
 Age distributions
 ```{r age_dist, fig.height=6}
 measure_admins <- admins %>%
