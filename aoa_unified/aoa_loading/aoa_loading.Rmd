@@ -26,7 +26,7 @@ languages <- c("Croatian", "Danish", "English (American)", "French (Quebec)",
                "Italian", "Norwegian", "Russian", "Spanish (Mexican)",
                "Swedish", "Turkish")
 
-forms <- c("WS", "WG", "Oxford CDI")
+forms <- c("WS", "WG")
 
 admins <- get_administration_data(original_ids = TRUE) %>%
   filter(language %in% languages, form %in% forms)
@@ -44,7 +44,10 @@ source_exclude <- c("Fernald (Outreach)")
 admins <- admins %>%
   filter(!longitudinal | data_id %in% first_longitudinals$data_id) %>%
   filter(!(paste(source_name, source_name, sep = "_") %in% source_exclude)) %>%
+  filter(!is.na(age)) %>%
   select(language, form, age, data_id)
+
+save(admins, file = "../saved_data/admins.RData")
 
 words <- get_item_data() %>%
   filter(language %in% languages, form %in% forms, type == "word") %>%
@@ -63,7 +66,6 @@ get_inst_data <- function(inst_items) {
                       items = inst_items$item_id,
                       administrations = inst_admins,
                       iteminfo = inst_items) %>%
-    filter(!is.na(age)) %>%
     mutate(produces = !is.na(value) & value == "produces",
            understands = !is.na(value) &
              (value == "understands" | value == "produces")) %>%
@@ -83,15 +85,6 @@ Save point -- raw Wordbank data.
 ```{r raw_data_save}
 save(raw_data, file = "raw_data.RData")
 #load("raw_data.RData")
-```
-
-```{r sample_sizes}
-sample_sizes <- raw_data %>%
-  map_df(~.x %>%
-           distinct(language, measure, age, data_id) %>%
-           count(language, measure, age))
-
-save(sample_sizes, file = "../saved_data/sample_sizes.RData")
 ```
 
 For each language and measure, collapse across age and uni_lemma.
@@ -204,7 +197,8 @@ special_case_files <- list.files("predictors/childes/special_cases/")
 special_case_map <-  map_df(special_case_files, function(case_file) {
   
   lang <- case_file %>% strsplit(".csv") %>% unlist()
-  special_cases <- read_csv(file.path("predictors/childes/special_cases/", case_file),
+  special_cases <- read_csv(file.path("predictors/childes/special_cases/",
+                                      case_file),
                             col_names = FALSE)
   
   map_df(1:nrow(special_cases), function(i) {
@@ -244,10 +238,12 @@ load_childes_data <- function(lang) {
   read_csv(sprintf("predictors/childes/data/childes_%s.csv",
                    norm_lang(lang))) %>%
     filter(!is.na(word)) %>%
-    mutate(stem = stem(word, norm_lang(lang)),
+    mutate(types = n(),
+           tokens = sum(word_count),
+           stem = stem(word, norm_lang(lang)),
            language = lang) %>%
     right_join(case_map %>% filter(language == lang)) %>%
-    group_by(uni_lemma) %>%
+    group_by(uni_lemma, types, tokens) %>%
     summarise(MLU = weighted.mean(mean_sent_length, word_count, na.rm = TRUE),
               word_count = sum(word_count, na.rm = TRUE),
               MLU = ifelse(word_count < 10, NA, MLU),
@@ -257,17 +253,15 @@ load_childes_data <- function(lang) {
 }
 
 childes_data <- map_df(languages, load_childes_data)
+childes_sizes <- childes_data %>%
+  filter(!is.na(types)) %>%
+  ungroup() %>%
+  distinct(language, types, tokens)
+save(childes_sizes, file = "../saved_data/childes_sizes.RData")
 
 uni_childes <- childes_data %>%
   filter(word_count != 0) %>%
   group_by(language) %>%
-  # mutate(word_count = word_count,
-  #        frequency = log(word_count / sum(word_count)),
-  #        final_count = final_count,
-  #        final_freq = log((final_count - solo_count) /
-  #                           sum(final_count - solo_count)),
-  #        solo_count = solo_count,
-  #        solo_freq = log(solo_count / sum(solo_count)))
   mutate(word_count = word_count + 1,
          frequency = log(word_count / sum(word_count)),
          final_count = final_count + 1,
@@ -282,38 +276,6 @@ uni_childes$final_frequency <- lm(final_freq ~ frequency,
 uni_childes$solo_frequency <- lm(solo_freq ~ frequency,
                                  data = uni_childes)$residuals
 ```
-
-```{r valence}
-# valence <- read_csv("predictors/valence/valence.csv") %>%
-#   select(Word, V.Mean.Sum, A.Mean.Sum) %>%
-#   rename(word = Word, valence = V.Mean.Sum, arousal = A.Mean.Sum)
-# 
-# replacements_valence <- read_csv("predictors/valence/valence_replace.csv")
-# 
-# uni_valence <- uni_lemmas %>%
-#   left_join(replacements_valence) %>%
-#   mutate(word = if_else(is.na(replacement), uni_lemma, replacement)) %>%
-#   select(-replacement) %>%
-#   mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
-#   left_join(valence) %>%
-#   select(-word) %>%
-#   group_by(language, uni_lemma, words) %>%
-#   summarise(valence = mean(valence, na.rm = TRUE),
-#             arousal = mean(arousal, na.rm = TRUE))
-# 
-# uni_valence <- uni_lemmas %>%
-#   left_join(replacements_valence) %>%
-#   rowwise() %>%
-#   mutate(word = if (!is.na(replacement) & replacement != "") replacement else uni_lemma) %>%
-#   select(-replacement) %>%
-#   mutate(word = gsub("(.*) \\(.*\\)", "\\1", word)) %>%
-#   left_join(valence) %>%
-#   select(-word) %>%
-#   group_by(language, uni_lemma, words) %>%
-#   summarise(valence = mean(valence, na.rm = TRUE),
-#             arousal = mean(arousal, na.rm = TRUE))
-```
-
 
 Get estimates of valence and arousal.
 ```{r valence}

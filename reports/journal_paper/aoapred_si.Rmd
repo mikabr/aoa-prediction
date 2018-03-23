@@ -1,0 +1,130 @@
+---
+title             : 'Supplemental information for "Consistency and variability in word learning across languages"'
+shorttitle        : "Word learning consistency and variability SI"
+
+author:
+  - name          : Anonymized
+
+affiliation:
+  - institution   : ""
+
+abstract          : ""
+
+keywords          : 
+bibliography      : [aoapred.bib]
+
+figsintext        : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : no
+
+lang              : "english"
+class             : "man"
+output            : papaja::apa6_pdf
+csl               : pnas.csl
+---
+
+```{r setup, include=FALSE, cache=FALSE} 
+library(tidyverse)
+library(ggridges)
+library(langcog)
+library(wordbankr)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE,
+                      cache = TRUE, dev = 'cairo_pdf')
+theme_set(papaja::theme_apa())
+
+data_path <- "../../aoa_unified/saved_data"
+data_files <- list.files(data_path, full.names = TRUE)
+for (file in data_files) load(file)
+
+predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
+                "num_phons", "concreteness", "valence", "arousal", "babiness")
+
+label_caps <- function(value) {
+  if_else(toupper(value) == value, value,
+          paste0(toupper(substr(value, 1, 1)),
+                 tolower(substr(value, 2, nchar(value)))))
+}
+
+num_langs <- 10
+#num_langs <- n_distinct(lang_coefs$language)
+#predictors <- levels(lang_coefs$term)
+# display_predictors <- predictors %>%
+#   map_chr(~gsub("_", " ", .x) %>% label_caps()) %>%
+#   set_names(predictors)
+```
+
+Age distributions
+```{r age_dist, fig.height=6}
+measure_admins <- admins %>%
+  mutate(produces = TRUE, understands = form == "WG") %>%
+  select(-form)
+
+sample_sizes <- bind_rows(
+  measure_admins %>% filter(produces) %>% mutate(measure = "Produces"),
+  measure_admins %>% filter(understands) %>% mutate(measure = "Understands")
+)
+
+totals <- sample_sizes %>%
+  group_by(measure) %>%
+  mutate(max_age = max(age)) %>%
+  group_by(language, measure, max_age) %>%
+  summarise(n = n())
+
+ggplot(sample_sizes, aes(x = age, y = language)) +
+  facet_wrap(~measure, scales = "free_x") +
+  geom_density_ridges() +
+  geom_label(aes(label = n, x = max_age), data = totals, vjust = 0, size = 3,
+             nudge_y = 0.05, label.size = 0.2,
+             label.padding = unit(0.1, "lines")) +
+  labs(x = "Age (months)", y = "")
+```
+
+```{r}
+overlap <- uni_model_data %>%
+  ungroup() %>%
+  distinct(language, uni_lemma) %>%
+  group_by(uni_lemma) %>%
+  summarise(n_langs = n()) %>%
+  group_by(n_langs) %>%
+  summarise(n = n()) %>%
+  mutate(prop = n / sum(n))
+
+in_range <- function(min_langs, max_langs) {
+  round(sum(
+    filter(overlap, n_langs >= min_langs, n_langs <= max_langs)$prop * 100
+  ))
+}
+```
+
+`r in_range(1, 1)`% of uni_lemmas are only in one language, `r in_range(2, num_langs)`% of uni_lemmas are in some but not all langugaes, `r in_range(num_langs, num_langs)`% are in all languages.
+
+
+Predictor distributions
+```{r predictor_dist}
+predictor_values <- uni_model_data %>%
+  ungroup() %>%
+  select(language, !!predictors) %>%
+  distinct() %>%
+  gather(predictor, value, !!predictors) %>%
+  mutate(predictor = factor(predictor, levels = predictors))
+
+ggplot(predictor_values, aes(x = value, y = predictor)) +
+  facet_wrap(~language) +
+  geom_density_ridges(rel_min_height = 0.01, scale = 0.95) +
+  labs(x = "Scaled value", y = "") +
+  scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
+  scale_y_discrete(expand = c(0.01, 0),
+                   limits = rev(levels(predictor_values$predictor)))
+```
+
+Predictor correlations
+```{r}
+# uni_joined %>%
+#   select(language, uni_lemma, !!predictors) %>%
+#   distinct() %>%
+#   filter(language == "English (American)") %>%
+#   select(!!predictors) %>%
+#   ggcorplot()
+```
