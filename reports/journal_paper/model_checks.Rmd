@@ -1,0 +1,96 @@
+```{r polysemy}
+# polysemously split uni_lemmas
+poly <- uni_model_data %>%
+  ungroup() %>%
+  distinct(language, uni_lemma, words) %>%
+  filter(str_detect(uni_lemma, "\\(.*\\)")) %>%
+  mutate(homonym = str_replace(uni_lemma, "(.*) \\(.*\\)", "\\1")) %>%
+  group_by(language, homonym) %>%
+  filter(n() > 1) %>%
+  distinct(language, homonym) %>%
+  ungroup() %>%
+  count(language)
+```
+
+```{r overlap}
+# how much do uni_lemmas overlap across languages
+
+overlap <- uni_model_data %>%
+  ungroup() %>%
+  distinct(language, uni_lemma) %>%
+  group_by(uni_lemma) %>%
+  summarise(n_langs = n()) %>%
+  group_by(n_langs) %>%
+  summarise(n = n()) %>%
+  mutate(prop = n / sum(n))
+
+in_range <- function(min_langs, max_langs) {
+  round(sum(
+    filter(overlap, n_langs >= min_langs, n_langs <= max_langs)$prop * 100
+  ))
+}
+```
+
+```{r correlations}
+# pairwise correlations among predictors
+
+cors <- uni_model_data %>%
+  split(paste(.$language, .$measure)) %>%
+  map_df(function(lang_data) {
+    pred_data <- lang_data %>%
+      select_(.dots = c("uni_lemma", predictors)) %>%
+      distinct() %>%
+      gather_("predictor", "value", predictors) %>%
+      split(.$predictor)
+    
+    map(pred_data, function(pd1) {
+      map_dbl(pred_data, function(pd2) cor(pd1$value, pd2$value))
+    }) %>%
+      as.data.frame() %>%
+      mutate(predictor1 = row.names(.)) %>%
+      gather_("predictor2", "cor", predictors) %>%
+      filter(predictor1 != predictor2) %>%
+      mutate(language = unique(lang_data$language),
+             measure = unique(lang_data$measure))
+
+  })
+
+mean_cors <- cors %>%
+  group_by(predictor1, predictor2) %>%
+  summarise(mean_cor = mean(cor)) %>%
+  arrange(desc(abs(mean_cor)))
+
+pair_cor <- function(p1, p2) {
+  mean_cors %>%
+    filter(predictor1 == p1, predictor2 == p2) %>%
+    .$mean_cor
+}
+
+max_other_cor <- cors %>%
+  mutate(predictor_pair = paste(predictor1, predictor2)) %>%
+  filter(!(predictor_pair %in% c("solo_frequency MLU", "MLU solo_frequency"))) %>%
+  arrange(desc(abs(cor))) %>%
+  pull(cor) %>%
+  .[1] %>%
+  abs()
+```
+
+```{r collinearity}
+# multicollinearity check
+
+predictor_data <- uni_model_data %>%
+  ungroup() %>%
+  select(language, !!predictors) %>%
+  distinct()
+
+predictor_vif <- function(predictor) {
+  others <- paste(predictors[predictors != predictor], collapse = ' + ')
+  predictor_model <- glue("{predictor} ~ {others}") %>%
+    as.formula() %>%
+    lm(data = predictor_data)
+  1 / (1 - summary(predictor_model)$r.squared)
+}
+
+vifs <- map_dbl(predictors, predictor_vif)
+max_vif <- max(vifs)
+```

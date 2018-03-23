@@ -33,6 +33,7 @@ library(tidyverse)
 library(langcog)
 library(knitr)
 library(kableExtra)
+library(glue)
 opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE,
                dev = 'cairo_pdf')
 theme_set(papaja::theme_apa())
@@ -48,12 +49,19 @@ label_caps <- function(value) {
 }
 
 num_langs <- 10
+predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
+                "num_phons", "concreteness", "valence", "arousal", "babiness")
 # num_langs <- n_distinct(lang_coefs$language)
 # predictors <- levels(lang_coefs$term)
-# display_predictors <- predictors %>%
-#   map_chr(~gsub("_", " ", .x) %>% label_caps()) %>%
-#   set_names(predictors)
+display_predictors <- predictors %>%
+  map_chr(~.x %>% str_replace("_", " ") %>% str_replace("num", "number") %>%
+            str_replace("phons", "phonemes") %>% label_caps()) %>%
+  set_names(predictors)
 ```
+
+```{r model_checks, child="model_checks.Rmd"}
+```
+
 
 # Introduction
 
@@ -141,13 +149,16 @@ relative contribution of different predictors across lexical categories can help
 test the predictions of influential theories of acquisition.
 
 
-# Approach {#approach .unnumbered}
+# Methods {#methods .unnumbered}
 
 ```{r lang_stats_table, child="lang_stats_table.Rmd"}
 ```
 
+## Acquisition trajectories
+
 To estimate the trajectory of words' acquisition, we used vocabulary data collected using CDI instruments adapted in many different languages, including both Words & Gestures (WG) forms for younger children and Words & Sentences (WS) forms for older children. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) each of around 400-700 words. Typically, both comprehension and production are queried for younger children and only production is queried for older children, but details vary from adaptation to adaptation. We use data from the items on the WG form for our comprehension measure, and data from the items in common between the WG and WS forms for our production measure. Table 1 gives an overview of our acquisition data [@kovacevic1996;@bleses2008;@boudreault2007;@trudeau2011;@caselli2012;@caselli1995;@simonsen2014;@vershinina2011;@yeliseyeva2009;@fenson2003;@eriksson2002;@acarlar2008].
 
+For each word, the CDI data yield a trajectory reflecting the number of children that are reported to produce or understand the word at each age covered by the instrument (see Figure 1 for some examples).
 
 ```{r, fig.width=7, fig.height=3.5, fig.env='figure*', fig.align='center', fig.cap='Example production trajectories for the words "dog" and "jump" across languages. Points show average proportion of children producing each word for each one-month age group. Lines show the best-fitting logistic curve. Labels show the forms of the word in each language.'}
 demo_lemmas <- c("dog", "jump")
@@ -175,12 +186,64 @@ ggplot(demo_data, aes(x = unscaled_age, y = prop, colour = uni_lemma)) +
   scale_x_continuous(name = "Age (months)", breaks = seq(10, 30, 10))
 ```
 
-For each word, CDI data yield a trajectory reflecting the number of children that are reported to produce or understand the word at each age covered by the instrument (see Figure 1 for some examples). We then use a mixed-effects logistic regression model to predict whether each child knows the word on the basis of the child's age, properties of the word, and interactions between age and each property of the word. We also fit such models separately to the words in each lexical category. The magnitude of the standardized coefficient on each feature gives an estimate of its importance in predicting whether words are learned earlier or later. Interactions between features and age give estimates of how this effect is modulated for earlier and later-learned words. For example, a positive effect of association with babies ("babiness") means that words associated with babies are learned earlier; a negative interaction with age means that high babiness primarily leads to higher rates of production and comprehension for younger children.
 
+## Word properties
 
 ```{r extremes_table, child="extremes_table.Rmd"}
 ```
 
+Each of our predictors is derived from independent sources. For each word that appears on the CDI forms in each of our `r num_langs` languages, we used corpora of child-directed speech in that language to obtain an estimate of its frequency, the mean length of utterances in which it appears, its frequency as the sole consituent of utterance, and its frequency in utterance final position (with frequency residualized out of solo and final frequencies). Additionally, we computed each word's length in phonemes.
+
+To capture conceptual factors in acquisition, we included ratings of each word's concreteness, valence, arousal, and relatedness to babies. All of these ratings were compiled based on previous studies using adult raters. In addition, since existing datasets for all of these conceptual ratings are primarily available for English, we mapped all words onto translation equivalents across CDI forms, verified by native speaker judgements, allowing us to use the ratings for English words across languages. Of the resulting translation equivalent meanings, 35% occur only in one language, 65% occur in some but not all langugaes, and 14% occur in all languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Example words for these predictors in English are shown in Table 2.
+
+A word about "babiness." Previous studies have shown robust consistency in the types of words that children learn very early [@tardif2008]. These words seem to describe concepts that are important or exciting in the lives of infants in a way that standard psycholinguistic features like concreteness do not. Capturing this intution quantitatively is difficult, but @perry2015 provides a proxy measure as a first step. This measure is simply the degree to which a particular word was "associated with babies." Intuitively, we expect this measure to capture the degree to which words like "bottle" feature heavily in the environment (and presumably, mental life) of many babies.
+
+Each numeric predictor was centered and scaled so that all predictors would have comparable units. For each predictor, missing values (CDI items that were not in the relevant corpus or norms) were imputed from the mean for their respective language and measure. Placeholder items, such as "child's own name", were excluded.
+
+### Frequency
+
+For each language, we estimated word frequency from unigram counts based on all corpora in CHILDES for that language. Each word's count includes the counts of words that share the same stem (so that "dogs" counts as "dog") or are synonymous (so that "father" counts as "daddy"). For polysemous word pairs (e.g., "orange" as in color or fruit), occurrences of the word in the corpus were split uniformly between the senses on the CDI (there were only between `r min(poly$n)` and `r max(poly$n)` such word pairs in the various languages). Counts were normalized to the length of each corpus, Laplace smoothed, and then log transformed.
+
+### Solo and Final Frequencies
+
+Using the same dataset as for frequency, we estimated the frequency with which each of word occurs as the sole word in an utterance, and the frequency with which it appears as the final word of an utterance (not counting single-word utterances). As with frequency, solo and final counts were normalized to the length of each corpus, Laplace smoothed, and log transformed. Since both of these estimates are by necessity highly correlated with frequency, we then residualized unigram frequency out of both of them, so that values reflect an estimate of the effect of solo/final frequency over and above frequency itself.
+
+### MLU
+
+For each language, we estimated each word's MLU by calculating the mean length in words of the utterances in which that word appeared, for all corpora in CHILDES for that language. For words that occurred fewer than 10 times, MLU estimates were not used (i.e. treated as missing).
+
+### Number of phonemes
+
+We computed the number of phonemes in each word in each language based on  phonemeic transcriptions of each word obstained using the eSpeak tool [@duddington2012].
+
+### Concreteness
+
+We used previously collected norms for concreteness [@brysbaert2014], which were gathered by asking adult participants to rate how concrete the meaning of each word is on a 5-point scale from abstract to concrete.
+
+### Valence and Arousal
+
+We also used previously collected norms for valence and arousal [@warriner2013], for which adult participants were asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal).
+
+### Babiness
+
+Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015] for which adult participants were asked to judge a word's association with babies on a 1-10 scale.
+
+
+### Lexical category
+
+Category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that the Nouns category contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
+
+A potential concern for comparing coefficient estimates is predictor collinearity. Fortunately, in every language, the highest correlations were between MLU and solo frequency (mean over languages _r = _ `r sprintf("%.2f", pair_cor("solo_frequency", "MLU"))`), as expected given the similarity of these factors, with the rest of the pairwise correlations being no greater than _r =_ `r sprintf("%.2f", max_other_cor)`. More importantly, the variance inflation factor for all the predictors is no greater than `r max_vif`, indicating that multicollinearity among the predictors is low.
+
+<!--; and frequency and number of phonemes (mean over languages _r = _ `r sprintf("%.2f", pair_cor("frequency", "num_phons"))`), a reflection of Zipf's Law [@zipf1935].-->
+
+
+## Analysis
+
+We used a mixed-effects logistic regression model (fit with `lme4` in `R`) to predict whether each child understands/produces the word from the child's age, properties of the word, and interactions between age and each property of the word. Each model was fit to all data from a particular language community and included a random intercept for each word and a random slope of age for each word. We also fit such models separately to the words in each lexical category. The magnitude of the standardized coefficient on each feature gives an estimate of its importance in predicting whether words are learned earlier or later. Interactions between features and age give estimates of how this effect is modulated for earlier and later-learned words. For example, a positive effect of association with babies ("babiness") means that words associated with babies are learned earlier; a negative interaction with age means that high babiness primarily leads to higher rates of production and comprehension for younger children.
+
+
+# Results {#results .unnumbered}
 
 ```{r, fig.width=7, fig.height=4.5, fig.env='figure*', fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories. Each point represents a predictor's coefficient in one language, with the large point showing the mean across languages. Larger coefficient values indicate a greater effect of the predictor on acquisition: positive main effects indicate that words with higher values of the predictor tend to be understood/produced by more children, while negative main effects indicate that words with lower values of the predictor tend to be understood/produced by more children; positive age interactions indicate that the predictor's effect increases with age, while negative age interactions indicate the predictor's effect decreases with age."}
 
@@ -206,98 +269,6 @@ ggplot(lang_coefs, aes(x = estimate, y = term)) +
   ylab("") +
   scale_x_continuous(name = "Coefficient estimate")
 ```
-
-Each of our predictors is derived from independent sources. For each word that appears on the CDI forms in each of our `r num_langs` languages, we used corpora of child-directed speech in that language to obtain an estimate of its frequency, the mean length of utterances in which it appears, its frequency as the sole consituent of utterance, and its frequency in utterance final position (with frequency residualized out of solo and final frequencies). Additionally, we computed each word's length in characters.
-
-To capture conceptual factors in acquisition, we included ratings of each word's concreteness, valence, arousal, and relatedness to babies. All of these ratings were compiled based on previous studies using adult raters. In addition, since existing datasets for all of these conceptual ratings are primarily available for English, we mapped all words onto translation equivalents across CDI forms, verified by native speaker judgements, allowing us to use the ratings for English words across languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Example words for these predictors in English are shown in Table 2.
-
-A word about "babiness." Previous studies have shown robust consistency in the types of words that children learn very early [@tardif2008]. These words seem to describe concepts that are important or exciting in the lives of infants in a way that standard psycholinguistic features like concreteness do not. Capturing this intution quantitatively is difficult, but @perry2015 provides a proxy measure as a first step. This measure is simply the degree to which a particular word was "associated with babies." Intuitively, we expect this measure to capture the degree to which words like "bottle" feature heavily in the environment (and presumably, mental life) of many babies. 
-
-```{r collinearity}
-cors <- uni_model_data %>%
-  split(paste(.$language, .$measure)) %>%
-  map_df(function(lang_data) {
-    pred_data <- lang_data %>%
-      select_(.dots = c("uni_lemma", predictors)) %>%
-      distinct() %>%
-      gather_("predictor", "value", predictors) %>%
-      split(.$predictor)
-    
-    map(pred_data, function(pd1) {
-      map_dbl(pred_data, function(pd2) cor(pd1$value, pd2$value))
-    }) %>%
-      as.data.frame() %>%
-      mutate(predictor1 = row.names(.)) %>%
-      gather_("predictor2", "cor", predictors) %>%
-      filter(predictor1 != predictor2) %>%
-      mutate(language = unique(lang_data$language),
-             measure = unique(lang_data$measure))
-
-  })
-
-mean_cors <- cors %>%
-  group_by(predictor1, predictor2) %>%
-  summarise(mean_cor = mean(cor))
-pair_cor <- function(p1, p2) {
-  mean_cors %>%
-    filter(predictor1 == p1, predictor2 == p2) %>%
-    .$mean_cor
-}
-```
-
-A potential concern for comparing coefficient estimates is predictor collinearity. Fortunately, in every language, the highest correlations were between MLU and solo frequency (mean over languages and measures _r = _ `r sprintf("%.2f", pair_cor("solo_frequency", "MLU"))`), as expected given the similarity of these factors; and frequency and number of characters (mean over languages and measures _r = _ `r sprintf("%.2f", pair_cor("frequency", "length"))`), a reflection of Zipf's Law [@zipf1935].
-
-
-# Materials and Methods
-
-All code and data to reproduce our analyses are available at `https://github.com/mikabr/aoa-prediction`.
-
-## Predictor variables
-
-Each numeric predictor was centered and scaled so that all predictors would have comparable units. For each predictor, missing values (CDI items that were not in the relevant corpus or norms) were imputed from the mean for their respective language and measure. Placeholder items, such as "child's own name", were excluded.
-
-Translation equivalents are available in the Wordbank database using the `wordbankr` package in `R` [@frank2016]. Translation equivalents were constructed by the authors and independently hand-checked by native speakers.
-
-### Frequency
-
-For each language, we estimated word frequency from unigram counts based on all corpora in CHILDES for that language. Each word's count includes the counts of words that share the same stem (so that "dogs" counts as "dog") or are synonymous (so that "father" counts as "daddy"). For polysemous word pairs (e.g., "orange" as in color or fruit), occurrences of the word in the corpus were split uniformly between the senses on the CDI. Counts were normalized to the length of each corpus, Laplace smoothed, and then log transformed.
-
-### Solo and Final Frequencies
-
-Using the same dataset as for frequency, we estimated the frequency with which each of word occurs as the sole word in an utterance, and the frequency with which it appears as the final word of an utterance (not counting single-word utterances). As with frequency, solo and final counts were normalized to the length of each corpus, Laplace smoothed, and log transformed. Since both of these estimates are by necessity highly correlated with frequency, we then residualized unigram frequency out of both of them, so that values reflect an estimate of the effect of solo/final frequency over and above frequency itself.
-
-### MLU
-
-For each language, we estimated each word's MLU by calculating the mean length in words of the utterances in which that word appeared, for all corpora in CHILDES for that language. For words that occurred fewer than 10 times, MLU estimates were not used (i.e. treated as missing).
-
-### Length
-
-We computed the number of characters in each word in each language. While imperfect, this metric of length is highly correlated with number of phonemes and syllables [@lewis2016].
-
-### Concreteness
-
-We used previously collected norms for concreteness [@brysbaert2014], which were gathered by asking adult participants to rate how concrete the meaning of each word is on a 5-point scale from abstract to concrete.
-
-### Valence and Arousal
-
-We also used previously collected norms for valence and arousal [@warriner2013], for which adult participants were asked to rate words on a 1-9 happy-unhappy scale (valence) and 1-9 excited-calm scale (arousal).
-
-### Babiness
-
-Lastly, we used previously collected norms of "babiness", a measure of association with infancy [@perry2015] for which adult participants were asked to judge a word's association with babies on a 1-10 scale.
-
-
-## Lexical category
-
-Category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals"), such that the Nouns category contains common nouns, Predicates contains verbs and adjectives, Function Words contains closed-class words, and Other contains the remaining items [following @bates1994].
-
-
-## Analysis
-
-For all analyses, we used logistic mixed-effects regression models (fit with `lme4 1.1-12` in `R`) to predict whether each child understands/produces each word from age, the above predictors, and the interactions of age with the predictors. Each model was fit to all data from a particular language community and included a random intercept for each word and a random slope of age for each word.
-
-
-# Results {#results .unnumbered}
 
 Figure 2 shows the coefficient estimate for each predictor in each language. We find that babiness, frequency, MLU, and concreteness are relatively stronger predictors of age of acquisition across languages. Given the emphasis on frequency effects in the language acquisition literature [@ambridge2015], one might have expected frequency to dominate, but several other predictors are just as strong in this analysis. Some factors previously argued to be important for word learning, namely valence and arousal [@moors2013], appear to have limited relevance when compared to other factors.
 

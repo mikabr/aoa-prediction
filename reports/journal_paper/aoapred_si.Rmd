@@ -81,26 +81,6 @@ ggplot(sample_sizes, aes(x = age, y = language)) +
   labs(x = "Age (months)", y = "")
 ```
 
-```{r}
-overlap <- uni_model_data %>%
-  ungroup() %>%
-  distinct(language, uni_lemma) %>%
-  group_by(uni_lemma) %>%
-  summarise(n_langs = n()) %>%
-  group_by(n_langs) %>%
-  summarise(n = n()) %>%
-  mutate(prop = n / sum(n))
-
-in_range <- function(min_langs, max_langs) {
-  round(sum(
-    filter(overlap, n_langs >= min_langs, n_langs <= max_langs)$prop * 100
-  ))
-}
-```
-
-`r in_range(1, 1)`% of uni_lemmas are only in one language, `r in_range(2, num_langs)`% of uni_lemmas are in some but not all langugaes, `r in_range(num_langs, num_langs)`% are in all languages.
-
-
 Predictor distributions
 ```{r predictor_dist}
 predictor_values <- uni_model_data %>%

@@ -1,4 +1,8 @@
-```{r lang_stats, results="asis"}
+\begingroup
+\singlespacing
+\setlength\parindent{0pt}
+
+```{r langstats, results="asis"}
 uni_lemma_info <- uni_model_data %>%
   group_by(language) %>%
   summarise(num_included = n_distinct(uni_lemma))
@@ -28,15 +32,19 @@ lang_stats <- instrument_info %>%
   left_join(uni_lemma_info) %>%
   left_join(childes_sizes) %>%
   mutate(language = str_replace(language, " \\(.*\\)", "")) %>%
-  select(language, num_included, produces_num_admins, produces_age_range,
-         understands_num_admins, understands_age_range, types, tokens)
+  select(language, ni = num_included, pna = produces_num_admins,
+         par = produces_age_range,
+         una = understands_num_admins, uar = understands_age_range, types, tokens)
 
 kable(lang_stats, format = "latex", escape = FALSE, booktabs = TRUE,
       linesep = "", format.args = list(big.mark = ","),
-      #caption = "Dataset statistics for acquisition data from Wordbank.",
+      caption = "Statistics for data from Wordbank and CHILDES.",
       col.names = c("Language", "CDI items", "N", "Ages", "N", "Ages", "Types",
                     "Tokens")) %>%
   add_header_above(c("", "", "Production" = 2, "Comprehension" = 2,
                      "CHILDES" = 2)) %>%
-  column_spec(1, bold = TRUE)
+  column_spec(1, bold = TRUE) %>%
+  kable_styling(position = "center")
 ```
+
+\endgroup

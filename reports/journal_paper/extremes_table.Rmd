@@ -1,4 +1,8 @@
-```{r results="asis"}
+\begingroup
+\singlespacing
+\setlength\parindent{0pt}
+
+```{r extremes, results="asis"}
 num_extremes <- 3
 extremes <- uni_model_data %>%
   filter(measure == "understands") %>%
@@ -25,7 +29,7 @@ extremes <- uni_model_data %>%
       return(data.frame("language" = unique(lang_data$language),
                         "Predictor" = predictor,
                         "highest" = paste(highest, collapse = ", "),
-                        "lowest" = paste(lowest, collapse = ", ")))
+                        "lowest" = paste(rev(lowest), collapse = ", ")))
     })
   })
 
@@ -33,17 +37,17 @@ extremes_display <- extremes %>%
   filter(language == "English (American)") %>%
   select(-language) %>%
   rename(Lowest = lowest, Highest = highest) %>%
-  mutate(Predictor = gsub("_", " ", Predictor),
-         Predictor = map_chr(Predictor, label_caps)) %>%
-  arrange(desc(row_number()))
+  mutate(Predictor = display_predictors[Predictor]) %>%
+  # mutate(Predictor = gsub("_", " ", Predictor),
+  #        Predictor = map_chr(Predictor, label_caps)) %>%
+  arrange(Predictor)
+  #arrange(desc(row_number()))
 
-extremes_table <- extremes_display %>%
-  xtable::xtable(
-    label = "table:extremes",
-    caption = "Items with the highest and lowest values for each predictor in English."
-  )
-
-print(extremes_table, type = "latex", comment = FALSE,
-      table.placement = "t",
-      include.rownames = FALSE)
+kable(extremes_display, format = "latex", escape = FALSE, booktabs = TRUE,
+      linesep = "",
+      caption = "Items with the highest and lowest values for each predictor in English."
+) %>%
+  kable_styling(position = "center", latex_options = "scale_down")
 ```
+
+\endgroup
