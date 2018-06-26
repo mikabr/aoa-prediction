@@ -8,9 +8,9 @@ j <- julia_setup()
 j$library("MixedModels")
 
 # get data
-src <- "https://github.com/mikabr/aoa-prediction/raw/master/aoa_unified/saved_data/comp_data.feather"
-download.file(src, "comp_data.feather")
-comp_data <- read_feather("comp_data.feather")
+src <- "https://github.com/mikabr/aoa-prediction/raw/master/aoa_unified/saved_data/comp_data.RData"
+load(url(src))
+
 j$assign("comp_data", comp_data)
 j$assign("trials", comp_data$total)
 

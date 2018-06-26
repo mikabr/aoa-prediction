@@ -186,7 +186,8 @@ comp_data <- uni_model_data %>%
   mutate(item = paste(language, uni_lemma, sep = ":")) %>%
   select(language, item, prop, total, age, !!predictors)
 #write_csv(comp_data, "../saved_data/comp_data.csv")
-feather::write_feather(comp_data, "../saved_data/comp_data.feather")
+#feather::write_feather(comp_data, "../saved_data/comp_data.feather")
+save(comp_data, file = "../saved_data/comp_data.RData")
 ```
 
 ```{r lang_results}
