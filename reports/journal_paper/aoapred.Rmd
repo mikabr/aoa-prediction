@@ -29,39 +29,7 @@ header-includes:
    - \usepackage[font=small,labelfont=bf]{caption}
 ---
 
-```{r setup, include=FALSE, cache=FALSE} 
-library(tidyverse)
-library(langcog)
-library(knitr)
-library(kableExtra)
-library(glue)
-library(pander)
-opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE,
-               dev = "cairo_pdf")
-panderOptions("round", 2)
-theme_set(papaja::theme_apa())
-
-data_path <- "../../aoa_unified/saved_data"
-data_files <- list.files(data_path, full.names = TRUE)
-for (file in data_files) load(file)
-
-label_caps <- function(value) {
-  if_else(toupper(value) == value, value,
-          paste0(toupper(substr(value, 1, 1)),
-                 tolower(substr(value, 2, nchar(value)))))
-}
-
-num_langs <- "ten"
-num_predictors <- "ten"
-predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
-                "num_phons", "concreteness", "valence", "arousal", "babiness")
-#num_coefs <- length(predictors)
-# num_langs <- n_distinct(lang_coefs$language)
-# predictors <- levels(lang_coefs$term)
-display_predictors <- predictors %>%
-  map_chr(~.x %>% str_replace("_", " ") %>% str_replace("num", "number") %>%
-            str_replace("phons", "phonemes") %>% label_caps()) %>%
-  set_names(predictors)
+```{r setup, child="setup.Rmd"}
 ```
 
 ```{r model_checks, child="model_checks.Rmd"}
@@ -129,7 +97,7 @@ ggplot(demo_data, aes(x = unscaled_age, y = prop, colour = uni_lemma)) +
   geom_label(aes(x = x, y = y, label = words), data = word_data, size = 3,
              label.padding = unit(0.15, "lines"),
              vjust = "inward", hjust = "inward") +
-  scale_colour_solarized(guide = FALSE) +
+  scale_colour_ptol(guide = FALSE) +
   scale_y_continuous(name = "Proportion of children producing") +
   scale_x_continuous(name = "Age (months)", breaks = seq(10, 30, 10))
 ```
@@ -190,29 +158,59 @@ We used a mixed-effects logistic regression model (fit with `lme4` in `R`) to pr
 
 # Results
 
-```{r langcoefs, fig.width=7, fig.height=4.5, fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories. Each point represents a predictor's coefficient in one language, with the large point showing the mean across languages. Larger coefficient values indicate a greater effect of the predictor on acquisition: positive main effects indicate that words with higher values of the predictor tend to be understood/produced by more children, while negative main effects indicate that words with lower values of the predictor tend to be understood/produced by more children; positive age interactions indicate that the predictor's effect increases with age, while negative age interactions indicate the predictor's effect decreases with age."}
+```{r coefs}
+num_coefs <- n_distinct(lang_coefs$term)
 
-# num_coefs <- length(unique(lang_coefs$term))
-# 
-# lang_coefs <- lang_coefs %>%
-#   mutate(term = `levels<-`(term, display_predictors))
-# 
-# mean_coefs <- lang_coefs %>%
-#   group_by(term, measure, interaction) %>%
-#   summarise(mean = mean(estimate),
-#             ci_lower = ci_lower(estimate),
-#             ci_upper = ci_upper(estimate))
-# 
-# ggplot(lang_coefs, aes(x = estimate, y = term)) +
-#   facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
-#   geom_point(aes(colour = term), size = 1, alpha = 0.4) +
-#   geom_point(aes(x = mean, colour = term), size = 3, data = mean_coefs) +
-#   geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
-#   scale_fill_solarized(guide = FALSE) +
-#   scale_colour_manual(guide = FALSE,
-#                       values = rev(solarized_palette(num_coefs))) +
-#   ylab("") +
-#   scale_x_continuous(name = "Coefficient estimate")
+plt_lang_coefs <- lang_coefs %>%
+  mutate(term = term %>%
+           factor(labels = display_predictors[levels(lang_coefs$term)]),
+         signif = if_else(signif, "significant", "non-significant"),
+         language = gsub("(.*) \\(.*\\)", "\\1", language))
+
+mean_lang_coefs <- plt_lang_coefs %>%
+  group_by(term, measure, interaction) %>%
+  summarise(mean_estimate = mean(estimate))
+
+plt_lexcat_coefs <- lexcat_coefs %>%
+  mutate(term = term %>%
+           factor(labels = display_predictors[levels(lexcat_coefs$term)]),
+         signif = if_else(signif, "significant", "non-significant"),
+         lexical_category = lexical_category %>%
+           fct_relevel("Nouns", "Predicates", "Function words"),
+         language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
+  filter(interaction == "main effect",
+         !(term %in% c("Valence", "Arousal")))
+
+mean_lexcat_coefs <- plt_lexcat_coefs %>%
+  group_by(lexical_category, term, measure, interaction) %>%
+  summarise(mean_estimate = mean(estimate))
+
+ref_coefs <- plt_lang_coefs %>%
+  filter(language == "English", measure == "understands")
+```
+
+```{r refcoefs, fig.width=7, fig.height=3, fig.cap="Estimates of coefficients in predicting words' developmental trajectories for English comprehension data. Larger coefficient values indicate a greater effect of the predictor on acquisition: positive main effects indicate that words with higher values of the predictor tend to be understood by more children, while negative main effects indicate that words with lower values of the predictor tend to be understood by more children; positive age interactions indicate that the predictor's effect increases with age, while negative age interactions indicate the predictor's effect decreases with age. Error bars indicates 95/% confidence intervals."}
+ggplot(ref_coefs, aes(x = estimate, y = term)) +
+  facet_grid(language + measure ~ interaction, scales = "free",
+             labeller = as_labeller(label_caps)) +
+  geom_pointrangeh(aes(colour = term, shape = fct_rev(signif),
+                      xmin = estimate - 1.96 * std_error,
+                      xmax = estimate + 1.96 * std_error)) +
+  geom_vline(xintercept = 0, color = "lightgrey", linetype = "dashed") +
+  scale_colour_ptol(guide = FALSE) +
+  scale_shape_manual(values = c(19, 21), guide = FALSE) +
+  labs(y = "", x = "Coefficient estimate")
+```
+
+```{r langcoefs, fig.width=7, fig.height=4.5, fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories for all languages and measures. Each point represents a predictor's coefficient in one language, with the large point showing the mean across languages."}
+ggplot(plt_lang_coefs, aes(x = estimate, y = term, colour = term)) +
+  facet_grid(measure ~ interaction, scales = "free",
+             labeller = as_labeller(label_caps)) +
+  geom_point(size = 1, alpha = 0.4) +
+  geom_point(aes(x = mean_estimate), size = 3, data = mean_lang_coefs) +
+  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
+  scale_colour_ptol(guide = FALSE) +
+  labs(x = "Coefficient estimate", y = "")
 ```
 
 Figure \ref{fig:langcoefs} shows the coefficient estimate for each predictor in each language. We find that babiness, frequency, MLU, and concreteness are relatively stronger predictors of age of acquisition across languages. Given the emphasis on frequency effects in the language acquisition literature [@ambridge2015], one might have expected frequency to dominate, but several other predictors are just as strong in this analysis. Some factors previously argued to be important for word learning, namely valence and arousal [@moors2013], appear to have limited relevance when compared to other factors.
@@ -242,30 +240,15 @@ Figure \ref{fig:langcoefs} shows the coefficient estimate for each predictor in 
 ```
 
 
-```{r lexcatcoefs, fig.width=7, fig.height=3.5, fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories (as described in Figure \ref{fig:langcoefs}), with separate models for each lexical category."}
-# plt_lexcat_coefs <- lexcat_coefs %>%
-#   filter(interaction == "main effect",
-#          !(term %in% c("valence", "arousal"))) %>%
-#   mutate(term = `levels<-`(term, display_predictors))
-# 
-# mean_lexcat_coefs <- plt_lexcat_coefs %>%
-#   group_by(lexical_category, term, measure, interaction) %>%
-#   summarise(mean = mean(estimate),
-#             ci_lower = ci_lower(estimate),
-#             ci_upper = ci_upper(estimate))
-# 
-# ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
-#   facet_grid(measure ~ lexical_category, labeller = as_labeller(label_caps)) +
-#   geom_point(aes(colour = term), size = 1, alpha = 0.4) +
-#   geom_point(aes(y = mean, colour = term), size = 3,
-#              data = mean_lexcat_coefs) +
-#   geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-#   coord_flip() +
-#   scale_fill_solarized(guide = FALSE) +
-#   scale_colour_manual(guide = FALSE,
-#                       values = rev(solarized_palette(num_coefs)),
-#                       drop = FALSE) +
-#   labs(x = "", y = "Coefficient estimate")
+```{r lexcatcoefs, fig.width=7, fig.height=3.5, fig.align='center', fig.cap="Estimates of coefficients in predicting words' developmental trajectories for each language, measure, and lexical category."}
+ggplot(plt_lexcat_coefs, aes(x = estimate, y = term, colour = term)) +
+  facet_grid(measure ~ lexical_category, scales = "free",
+             labeller = as_labeller(label_caps)) +
+  geom_point(size = 1, alpha = 0.4) +
+  geom_point(aes(x = mean_estimate), size = 3, data = mean_lexcat_coefs) +
+  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
+  scale_colour_ptol(guide = FALSE) +
+  labs(x = "Coefficient estimate", y = "")
 ```
 
 

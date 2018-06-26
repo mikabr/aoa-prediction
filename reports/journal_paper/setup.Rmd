@@ -1,0 +1,40 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE, cache=FALSE} 
+library(tidyverse)
+library(ggthemes)
+library(langcog)
+library(knitr)
+library(kableExtra)
+library(glue)
+library(pander)
+library(ggstance)
+opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE,
+               dev = "cairo_pdf")
+panderOptions("round", 2)
+theme_set(papaja::theme_apa())
+
+data_path <- "../../aoa_unified/saved_data"
+data_files <- list.files(data_path, full.names = TRUE)
+for (file in data_files) load(file)
+
+label_caps <- function(value) {
+  if_else(toupper(value) == value, value,
+          paste0(toupper(substr(value, 1, 1)),
+                 tolower(substr(value, 2, nchar(value)))))
+}
+
+num_langs <- "ten"
+num_predictors <- "ten"
+predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
+                "num_phons", "concreteness", "valence", "arousal", "babiness")
+# num_coefs <- length(predictors)
+# num_langs <- n_distinct(lang_coefs$language)
+# predictors <- levels(lang_coefs$term)
+display_predictors <- predictors %>%
+  map_chr(~.x %>% str_replace("_", " ") %>% str_replace("num", "number") %>%
+            str_replace("phons", "phonemes") %>% label_caps()) %>%
+  set_names(predictors)
+```
