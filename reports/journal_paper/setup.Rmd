@@ -1,40 +1,99 @@
----
-output: html_document
----
-
 ```{r setup, include=FALSE, cache=FALSE} 
 library(tidyverse)
+library(widyr)
+
 library(ggthemes)
-library(langcog)
+library(ggstance)
+library(ggdendro)
+library(ggridges)
+
 library(knitr)
 library(kableExtra)
-library(glue)
 library(pander)
-library(ggstance)
+
+library(glue)
+library(papaja)
+library(langcog)
+
 opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE,
                dev = "cairo_pdf")
 panderOptions("round", 2)
-theme_set(papaja::theme_apa())
+theme_set(theme_apa() %+replace%
+            theme(strip.text = element_text(face = "bold")))
 
 data_path <- "../../aoa_unified/saved_data"
 data_files <- list.files(data_path, full.names = TRUE)
 for (file in data_files) load(file)
+
+num_langs <- n_distinct(lang_coefs$language)
+predictors <- levels(lang_coefs$term)
+num_coefs <- length(predictors)
 
 label_caps <- function(value) {
   if_else(toupper(value) == value, value,
           paste0(toupper(substr(value, 1, 1)),
                  tolower(substr(value, 2, nchar(value)))))
 }
+```
 
-num_langs <- "ten"
-num_predictors <- "ten"
-predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
-                "num_phons", "concreteness", "valence", "arousal", "babiness")
-# num_coefs <- length(predictors)
-# num_langs <- n_distinct(lang_coefs$language)
-# predictors <- levels(lang_coefs$term)
+```{r coefs}
 display_predictors <- predictors %>%
   map_chr(~.x %>% str_replace("_", " ") %>% str_replace("num", "number") %>%
             str_replace("phons", "phonemes") %>% label_caps()) %>%
   set_names(predictors)
+
+plt_lang_coefs <- lang_coefs %>%
+  mutate(term = term %>%
+           factor(labels = display_predictors[levels(lang_coefs$term)]),
+         signif = if_else(signif, "significant", "non-significant"),
+         language = gsub("(.*) \\(.*\\)", "\\1", language))
+
+mean_lang_coefs <- plt_lang_coefs %>%
+  group_by(term, measure, interaction) %>%
+  summarise(mean_estimate = mean(estimate),
+            n_sig = sum(signif == "significant"))
+
+mean_term_coefs <- lang_coefs %>%
+  filter(interaction == "main effect") %>%
+  group_by(term) %>%
+  summarise(mean_estimate = mean(estimate),
+            n_sig = sum(signif),
+            n_pos = sum(estimate > 0),
+            n_neg = sum(estimate < 0)) %>%
+  arrange(desc(abs(mean_estimate)))
+
+mean_interaction_coefs <- lang_coefs %>%
+  filter(interaction == "interaction with age") %>% #, signif) %>%
+  group_by(term, measure) %>%
+  summarise(mean_estimate = mean(estimate),
+            #n_sig = sum(signif),
+            n_pos = mean(estimate > 0),
+            n_neg = mean(estimate < 0)) %>%
+  #arrange(desc(abs(mean_estimate)))
+  arrange(desc(n_neg)) %>%
+  filter(n_neg >= 0.9)
+
+mean_term_coef <- function(t) {
+ mean_term_coefs %>%
+    filter(term == t) %>%
+    pull(mean_estimate) %>%
+    round(2)
+}
+
+plt_lexcat_coefs <- lexcat_coefs %>%
+  mutate(term = term %>%
+           factor(labels = display_predictors[levels(lexcat_coefs$term)]),
+         signif = if_else(signif, "significant", "non-significant"),
+         lexical_category = lexical_category %>%
+           fct_relevel("Nouns", "Predicates", "Function words"),
+         language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
+  filter(interaction == "main effect",
+         !(term %in% c("Valence", "Arousal")))
+
+mean_lexcat_coefs <- plt_lexcat_coefs %>%
+  group_by(lexical_category, term, measure, interaction) %>%
+  summarise(mean_estimate = mean(estimate))
+
+ref_coefs <- plt_lang_coefs %>%
+  filter(language == "English", measure == "understands")
 ```

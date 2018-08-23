@@ -1,0 +1,96 @@
+---
+title: AoA consistency/variability analyses
+output:
+  html_notebook:
+    highlight: tango
+    theme: spacelab
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(widyr)
+library(ggthemes)
+library(langcog)
+library(ggdendro)
+theme_set(papaja::theme_apa())
+```
+
+```{r}
+load("../saved_data/lang_coefs.RData")
+```
+
+```{r}
+lang_coefs <- lang_coefs %>%
+  mutate(language = str_replace(language, " \\(.*\\)", ""))
+
+coef_cors <- function(coefs) {
+  suppressWarnings(
+    coefs %>%
+      group_by(measure, interaction) %>%
+      nest() %>%
+      mutate(cors = map(data, ~pairwise_cor(.x, language, term, estimate))) %>%
+      select(-data) %>%
+      unnest() %>%
+      rename(language1 = item1, language2 = item2)
+  )
+}
+
+cor_clust <- function(d) {
+  d %>%
+    spread(language2, correlation) %>%
+    as.data.frame() %>%
+    `rownames<-`(.$language1) %>%
+    select(-language1) %>%
+    dist() %>%
+    hclust() %>%
+    dendro_data(type = "triangle")
+}
+
+coef_clust <- lang_coefs %>%
+  coef_cors() %>%
+  group_by(measure, interaction) %>%
+  nest() %>%
+  mutate(clust = map(data, cor_clust))
+
+save(coef_clust, file = "../saved_data/coef_clust.RData")
+```
+
+```{r}
+baseline_sample <- function(i) {
+  lang_coefs %>%
+    group_by(interaction, measure, language) %>%
+    mutate(estimate = sample(estimate)) %>%
+    coef_cors() %>%
+    mutate(sample = i)
+}
+
+num_samples <- 100
+baseline_samples <- map_df(1:num_samples, baseline_sample)
+
+baseline_coef_summary <- baseline_samples %>%
+  group_by(interaction, measure, sample, language1) %>%
+  summarise(correlation = mean(correlation)) %>%
+  group_by(interaction, measure, language1) %>%
+  summarise(mean_cor = mean(correlation),
+            ci_lower_cor = ci_lower(correlation),
+            ci_upper_cor = ci_upper(correlation)) %>%
+  rename(language = language1) %>%
+  mutate(language = fct_rev(language)) %>%
+  filter(interaction == "main effect")
+
+save(baseline_coef_summary, file = "../saved_data/baseline_coef_summary.RData")
+```
+
+```{r}
+coef_summary <- lang_coefs %>%
+  coef_cors() %>%
+  group_by(measure, interaction, language1) %>%
+  summarise(mean_cor = mean(correlation)) %>%
+  rename(language = language1) %>%
+  mutate(language = fct_rev(language)) %>%
+  filter(interaction == "main effect")
+
+save(coef_summary, file = "../saved_data/coef_summary.RData")
+```

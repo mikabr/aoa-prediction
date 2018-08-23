@@ -4,7 +4,7 @@
 .idea/
 .Rhistory
 .Rproj.user
-.RData
+.Rprofile
 rsconnect/
 *.pyc
 raw_data.feather

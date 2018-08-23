@@ -34,39 +34,39 @@ in_range <- function(min_langs, max_langs) {
 ```{r correlations}
 # pairwise correlations among predictors
 
-cors <- uni_model_data %>%
-  split(paste(.$language, .$measure)) %>%
-  map_df(function(lang_data) {
-    pred_data <- lang_data %>%
-      select_(.dots = c("uni_lemma", predictors)) %>%
-      distinct() %>%
-      gather_("predictor", "value", predictors) %>%
-      split(.$predictor)
-    
-    map(pred_data, function(pd1) {
-      map_dbl(pred_data, function(pd2) cor(pd1$value, pd2$value))
-    }) %>%
-      as.data.frame() %>%
-      mutate(predictor1 = row.names(.)) %>%
-      gather_("predictor2", "cor", predictors) %>%
-      filter(predictor1 != predictor2) %>%
-      mutate(language = unique(lang_data$language),
-             measure = unique(lang_data$measure))
-
-  }) %>%
-  as_tibble() %>%
-  mutate(predictors = map2_chr(predictor1, predictor2,
-                               ~paste(sort(c(.x, .y)), collapse = "|"))) %>%
-  distinct(language, predictors, cor)
-
-mean_cors <- cors %>%
-  group_by(predictors) %>%
-  summarise(mean_cor = mean(cor)) %>%
-  arrange(desc(abs(mean_cor)))
-
-pair_cor <- function(preds) {
-  mean_cors %>% filter(predictors == preds) %>% .$mean_cor
-}
+# cors <- uni_model_data %>%
+#   split(paste(.$language, .$measure)) %>%
+#   map_df(function(lang_data) {
+#     pred_data <- lang_data %>%
+#       select_(.dots = c("uni_lemma", predictors)) %>%
+#       distinct() %>%
+#       gather_("predictor", "value", predictors) %>%
+#       split(.$predictor)
+#     
+#     map(pred_data, function(pd1) {
+#       map_dbl(pred_data, function(pd2) cor(pd1$value, pd2$value))
+#     }) %>%
+#       as.data.frame() %>%
+#       mutate(predictor1 = row.names(.)) %>%
+#       gather_("predictor2", "cor", predictors) %>%
+#       filter(predictor1 != predictor2) %>%
+#       mutate(language = unique(lang_data$language),
+#              measure = unique(lang_data$measure))
+# 
+#   }) %>%
+#   as_tibble() %>%
+#   mutate(predictors = map2_chr(predictor1, predictor2,
+#                                ~paste(sort(c(.x, .y)), collapse = "|"))) %>%
+#   distinct(language, predictors, cor)
+# 
+# mean_cors <- cors %>%
+#   group_by(predictors) %>%
+#   summarise(mean_cor = mean(cor)) %>%
+#   arrange(desc(abs(mean_cor)))
+# 
+# pair_cor <- function(preds) {
+#   mean_cors %>% filter(predictors == preds) %>% .$mean_cor
+# }
 
 # max_other_cor <- cors %>%
 #   mutate(predictor_pair = paste(predictor1, predictor2)) %>%
@@ -75,6 +75,38 @@ pair_cor <- function(preds) {
 #   pull(cor) %>%
 #   .[1] %>%
 #   abs()
+```
+
+```{r}
+# pairwise correlations among predictors
+
+predictor_cors <- uni_model_data %>%
+  ungroup() %>%
+  select(language, uni_lemma, !!predictors) %>%
+  distinct() %>%
+  gather(predictor, value, !!predictors) %>%
+  group_by(language) %>%
+  nest() %>%
+  mutate(cors = map(data, ~.x %>%
+                    pairwise_cor(predictor, uni_lemma, value,
+                                 upper = FALSE))) %>%
+  select(-data) %>%
+  unnest() %>%
+  arrange(desc(abs(correlation))) %>%
+  rename(predictor1 = item1, predictor2 = item2)
+
+mean_predictor_cors <- predictor_cors %>%
+  group_by(predictor1, predictor2) %>%
+  summarise(mean_cor = mean(correlation)) %>%
+  arrange(desc(abs(mean_cor)))
+
+mean_pair_cor <- function(p1, p2) {
+  mean_predictor_cors %>%
+    filter(predictor1 == p1 & predictor2 == p2 |
+             predictor1 == p2 & predictor2 == p1) %>%
+    pull(mean_cor) %>%
+    round(2)
+}
 ```
 
 ```{r collinearity}
@@ -102,6 +134,4 @@ vifs <- predictor_data %>%
          })) %>%
   select(-data) %>%
   unnest()
-
-max_vif <- max(vifs$vif)
 ```
