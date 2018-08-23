@@ -114,16 +114,6 @@ ggplot(freq_values, aes(x = frequency, y = lexical_classes)) +
 ggsave("freq_dist.png", width = 7, height = 5)
 ```
 
-Predictor correlations
-```{r cors}
-uni_joined %>%
-  select(language, uni_lemma, !!predictors) %>%
-  distinct() %>%
-  filter(language == "English (American)") %>%
-  select(!!predictors) %>%
-  ggcorplot()
-```
-
 Paired prod/comp coefs
 ```{r prod_comp}
 ggplot(filter(plt_lang_coefs, interaction == "main effect"),
@@ -178,6 +168,7 @@ ggplot(filter(plt_lang_coefs, measure == "understands",
   labs(y = "", x = "Coefficient estimate")
 ```
 
+Predictor correlations
 ```{r}
 predictor_cors %>%
   mutate(predictor1 = predictor1 %>%
@@ -198,11 +189,9 @@ ggplot(aes(x = predictor1, y = predictor2)) +
   theme(legend.position = "top",
         legend.title = element_text(vjust = 0.8),
         axis.text.x = element_text(angle = 30, hjust = 1))
-
-# ggsave("predictor_cors.png", width = 15, height = 9)
 ```
 
-```{r}
+```{r vifs}
 vifs %>%
   mutate(predictor = predictor %>%
            factor(levels = predictors,
@@ -221,3 +210,30 @@ ggplot(aes(x = language, y = predictor)) +
         axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 
+```{r lexcat_consistency}
+lexcat_coef_summary_means <- lexcat_coef_summary %>%
+  group_by(lexical_category, measure) %>%
+  summarise(mean_cor = mean(mean_cor))
+
+ggplot(lexcat_coef_summary, aes(x = mean_cor, y = language)) +
+  facet_grid(lexical_category ~ measure, labeller = as_labeller(label_caps)) +
+  geom_vline(aes(xintercept = mean_cor), colour = "grey70", size = 0.4,
+             data = lexcat_coef_summary_means) +
+  geom_point(aes(colour = language), size = 2) +
+  geom_rect(aes(xmin = ci_lower_cor, xmax = ci_upper_cor,
+                ymin = as.numeric(language) + 0.4,
+                ymax = as.numeric(language) - 0.4,
+                fill = language),
+            data = lexcat_baseline_coef_summary,
+            alpha = .2, linetype = 0) +
+  geom_segment(aes(x = mean_cor, xend = mean_cor,
+                   y = as.numeric(language) + 0.4,
+                   yend = as.numeric(language) - 0.4),
+               data = lexcat_baseline_coef_summary,
+               colour = "grey70") +
+  scale_x_continuous(breaks = seq(0, 1, 0.2)) +
+  labs(x = "Mean correlation with other languages' coefficients",
+       y = "") +
+  scale_colour_ptol(guide = FALSE) +
+  scale_fill_ptol(guide = FALSE)
+```

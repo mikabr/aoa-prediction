@@ -25,6 +25,11 @@ load("../saved_data/lang_coefs.RData")
 lang_coefs <- lang_coefs %>%
   mutate(language = str_replace(language, " \\(.*\\)", ""))
 
+lexcat_coefs <- lexcat_coefs %>%
+  mutate(lexical_category = lexical_category %>%
+           fct_relevel("Nouns", "Predicates", "Function words"),
+         language = str_replace(language, " \\(.*\\)", ""))
+
 coef_cors <- function(coefs) {
   suppressWarnings(
     coefs %>%
@@ -58,6 +63,31 @@ save(coef_clust, file = "../saved_data/coef_clust.RData")
 ```
 
 ```{r}
+coef_summary <- lang_coefs %>%
+  coef_cors() %>%
+  group_by(measure, interaction, language1) %>%
+  summarise(mean_cor = mean(correlation)) %>%
+  rename(language = language1) %>%
+  mutate(language = fct_rev(language)) %>%
+  filter(interaction == "main effect")
+
+lexcat_coef_summary <- lexcat_coefs %>%
+  group_by(lexical_category) %>%
+  nest() %>%
+  mutate(coef_cors = map(data, coef_cors)) %>%
+  select(-data) %>%
+  unnest() %>%
+  group_by(lexical_category, measure, interaction, language1) %>%
+  summarise(mean_cor = mean(correlation)) %>%
+  rename(language = language1) %>%
+  mutate(language = fct_rev(language)) %>%
+  filter(interaction == "main effect")
+
+save(coef_summary, file = "../saved_data/coef_summary.RData")
+save(lexcat_coef_summary, file = "../saved_data/lexcat_coef_summary.RData")
+```
+
+```{r}
 baseline_sample <- function(i) {
   lang_coefs %>%
     group_by(interaction, measure, language) %>%
@@ -84,13 +114,32 @@ save(baseline_coef_summary, file = "../saved_data/baseline_coef_summary.RData")
 ```
 
 ```{r}
-coef_summary <- lang_coefs %>%
-  coef_cors() %>%
-  group_by(measure, interaction, language1) %>%
-  summarise(mean_cor = mean(correlation)) %>%
+lexcat_baseline_sample <- function(i) {
+  lexcat_coefs %>%
+    group_by(interaction, measure, language, lexical_category) %>%
+    mutate(estimate = sample(estimate)) %>%
+    group_by(lexical_category) %>%
+    nest() %>%
+    mutate(coef_cors = map(data, coef_cors)) %>%
+    select(-data) %>%
+    unnest() %>%
+    mutate(sample = i)
+}
+
+num_samples <- 100
+lexcat_baseline_samples <- map_df(1:num_samples, lexcat_baseline_sample)
+
+lexcat_baseline_coef_summary <- lexcat_baseline_samples %>%
+  group_by(interaction, measure, lexical_category, sample, language1) %>%
+  summarise(correlation = mean(correlation)) %>%
+  group_by(interaction, measure, lexical_category, language1) %>%
+  summarise(mean_cor = mean(correlation),
+            ci_lower_cor = ci_lower(correlation),
+            ci_upper_cor = ci_upper(correlation)) %>%
   rename(language = language1) %>%
   mutate(language = fct_rev(language)) %>%
   filter(interaction == "main effect")
 
-save(coef_summary, file = "../saved_data/coef_summary.RData")
+save(lexcat_baseline_coef_summary,
+     file = "../saved_data/lexcat_baseline_coef_summary.RData")
 ```

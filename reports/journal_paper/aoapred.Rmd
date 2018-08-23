@@ -271,6 +271,8 @@ We also wanted to examine how the relative contributions of the predictors chang
 ### Lexical categories
 Previous work gives reason to believe that predictors' relationship with age of acquisition differs among various lexical categories [@goodman2008]. To investigate these effects, we separated our data by lexical category and fit separate models for each category. Figure \ref{fig:lexcatcoefs} shows the resulting coefficient estimates. Across languages, frequency had the highest magnitude for nouns and a lower magnitude for function words. In contrast, MLU was almost irrelevant for both nouns and predicates, but highly predictive for function words. These patterns are supportive of the hypothesis that different word classes are learned in different ways, or at least that the bottleneck on learning tends to be different, leading to different information sources being more or less important across categories.
 
+Additionally, the mean pairwise correlation of coefficients between languages is much larger for nouns (`r lexcat_mean_cor("Nouns")`) and predicates (`r lexcat_mean_cor("Predicates")`) than for function words (`r lexcat_mean_cor("Function words")`). The higher between-language variability for function words suggests the learning processes for function words differ more across languages than for content words.
+
 
 # Discussion
 
