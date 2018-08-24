@@ -15,8 +15,7 @@ library(glue)
 library(papaja)
 library(langcog)
 
-opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE,
-               dev = "cairo_pdf")
+opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE)
 panderOptions("round", 2)
 theme_set(theme_apa() %+replace%
             theme(strip.text = element_text(face = "bold")))
