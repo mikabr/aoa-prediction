@@ -3,24 +3,42 @@ title             : 'Supplemental information for "Consistency and variability i
 shorttitle        : 'SI for "Word learning consistency and variability"'
 
 author:
-  - name          : Anonymized
+  - name          : Mika Braginsky
+    affiliation   : 1
+    corresponding : yes
+    email         : mikabr@mit.edu
+    address       : 43 Vassar St, Cambridge, MA 02139
+  - name          : Daniel Yurovsky
+    affiliation   : 2
+  - name          : Virginia A. Marchman
+    affiliation   : 3
+  - name          : Michael C. Frank
+    affiliation   : 3
 
 affiliation:
-  - institution   : ""
+  - id            : 1
+    institution   : Department of Brain and Cognitive Sciences, Massachusetts Institute of Technology
+  - id            : 2
+    institution   : Department of Psychology, University of Chicago
+  - id            : 3
+    institution   : Department of Psychology, Stanford University
 
 abstract          : ""
 
 keywords          : 
 bibliography      : [aoapred.bib]
 
-figsintext        : yes
+floatsintext      : yes
 figurelist        : no
 tablelist         : no
 footnotelist      : no
-lineno            : no
+linenumbers       : no
+linkcolor         : "blue"
+mask              : yes
+draft             : no
 
-lang              : "english"
-class             : "man"
+documentclass     : "apa6"
+classoption       : "man"
 output            : papaja::apa6_pdf
 header-includes:
    - \usepackage{setspace}
@@ -110,8 +128,6 @@ ggplot(freq_values, aes(x = frequency, y = lexical_classes)) +
   scale_y_discrete(expand = c(0.01, 0)) +
   scale_fill_ptol(guide = FALSE) +
   labs(x = "Scaled frequency", y = "")
-
-ggsave("freq_dist.png", width = 7, height = 5)
 ```
 
 Paired prod/comp coefs
@@ -169,7 +185,7 @@ ggplot(filter(plt_lang_coefs, measure == "understands",
 ```
 
 Predictor correlations
-```{r}
+```{r predictor_cors}
 predictor_cors %>%
   mutate(predictor1 = predictor1 %>%
            factor(levels = predictors, labels = display_predictors[predictors]),
