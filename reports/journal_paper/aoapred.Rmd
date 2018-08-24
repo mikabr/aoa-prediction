@@ -42,7 +42,10 @@ draft             : no
 
 documentclass     : "apa6"
 classoption       : "man"
-output            : papaja::apa6_pdf
+output:
+  papaja::apa6_pdf:
+    includes:
+      after_body: "aoapred_si.tex"
 header-includes:
    - \usepackage{setspace}
    - \usepackage[font=small,labelfont=bf]{caption}
@@ -88,12 +91,12 @@ Second, we ask which lexical categories are most influenced by linguistic enviro
 
 ## Acquisition trajectories
 
-To estimate the trajectory of words' acquisition, we used vocabulary data collected using CDI instruments adapted in many different languages, including both Words & Gestures (WG) forms for younger children and Words & Sentences (WS) forms for older children. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) each of around 400-700 words. Both comprehension and production are queried for younger children and only production is queried for older children. We use data from the items on the WG form for our comprehension measure, and data from the items in common between the WG and WS forms for our production measure. Table \ref{tab:langstats} gives an overview of our acquisition data [@kovacevic1996;@bleses2008;@boudreault2007;@trudeau2011;@caselli2012;@caselli1995;@simonsen2014;@vershinina2011;@yeliseyeva2009;@fenson2003;@eriksson2002;@acarlar2008]. Each of the datasets were conducted in contexts in which the particular language was the language of the community, e.g., the Mexican Spanish CDI data were collected in several areas of Mexico; longitudinal administrations were excluded.
+To estimate the trajectory of words' acquisition, we used vocabulary data collected using CDI instruments adapted in many different languages, including both Words & Gestures (WG) forms for younger children and Words & Sentences (WS) forms for older children. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) each of around 400-700 words. Both comprehension and production are queried for younger children and only production is queried for older children. We use data from the items on the WG form for our comprehension measure, and data from the items in common between the WG and WS forms for our production measure. Table\ \@ref(tab:langstats) gives an overview of our acquisition data [@kovacevic1996;@bleses2008;@boudreault2007;@trudeau2011;@caselli2012;@caselli1995;@simonsen2014;@vershinina2011;@yeliseyeva2009;@fenson2003;@eriksson2002;@acarlar2008] (also see SI Figure\ \@ref(fig:age-dist) for the age distributions in the data). Each of the datasets were conducted in contexts in which the particular language was the language of the community, e.g., the Mexican Spanish CDI data were collected in several areas of Mexico; longitudinal administrations were excluded.
 
 ```{r lang_stats_table, child="lang_stats_table.Rmd"}
 ```
 
-For each word, the CDI data yield a trajectory reflecting the number of children that are reported to understand or produce the word at each age covered by the instrument (see Figure \ref{fig:demotraj} for some examples).
+For each word, the CDI data yield a trajectory reflecting the number of children that are reported to understand or produce the word at each age covered by the instrument (see Figure\ \@ref(fig:demotraj) for some examples).
 
 ```{r demotraj, fig.width=7, fig.height=3.5, out.width = "\\textwidth", fig.align='center', fig.cap='Example production trajectories for the words "dog" and "jump" across languages. Points show the proportion of children producing each word for each one-month age group. Lines show the best-fitting logistic curve. Labels show the forms of the words in each language.'}
 demo_lemmas <- c("dog", "jump")
@@ -127,7 +130,7 @@ ggplot(demo_data, aes(x = unscaled_age, y = prop, colour = uni_lemma)) +
 
 Each of our predictors is derived from independent sources. For each word that appears on the CDI forms in each of our `r num_langs` languages, we used corpora of child-directed speech in that language from CHILDES to obtain an estimate of its frequency, the mean length of utterances in which it appears, its frequency as the sole constituent of utterance, and its frequency in utterance final position (with frequency residualized out of solo and final frequencies). Additionally, we computed each word's length in phonemes.
 
-To capture meaning-based factors in acquisition, we included ratings of each word's concreteness, valence, arousal, and relatedness to babies. All of these ratings were compiled based on previous studies using adult raters. In addition, since existing datasets for all of these ratings are primarily available for English, we mapped all the words in our datasets onto translation equivalents across CDI forms, verified by native speaker judgement, allowing us to use the ratings for English words across languages. Of the resulting translation equivalent meanings, `r in_range(1, 1)`% occur only in one language, `r in_range(2, 9)`% occur in more than one but not all languages, and `r in_range(10, 10)`% occur in all languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Example words for these predictors in English are shown in Table \ref{tab:extremes}.
+To capture meaning-based factors in acquisition, we included ratings of each word's concreteness, valence, arousal, and relatedness to babies. All of these ratings were compiled based on previous studies using adult raters. In addition, since existing datasets for all of these ratings are primarily available for English, we mapped all the words in our datasets onto translation equivalents across CDI forms, verified by native speaker judgement, allowing us to use the ratings for English words across languages. Of the resulting translation equivalent meanings, `r in_range(1, 1)`% occur only in one language, `r in_range(2, 9)`% occur in more than one but not all languages, and `r in_range(10, 10)`% occur in all languages. While necessarily imperfect, this method allows us to examine languages for which limited resources exist. Example words for these predictors in English are shown in Table\ \@ref(tab:extremes) (also see SI Figure\ \@ref(fig:predictor-dist) for the distributions of values of each predictor).
 
 ```{r extremes_table, child="extremes_table.Rmd"}
 ```
@@ -138,7 +141,7 @@ Each numeric predictor was centered and scaled so that all predictors would have
 
 ### Frequency
 
-For each language, we estimated word frequency from unigram counts based on all corpora in CHILDES for that language. Frequencies varied widely both within and across lexical categories (see SI Figure TODO). Each word's count includes the counts of words that share the same stem (so that "dogs" counts as "dog") or are synonymous (so that "father" counts as "daddy"). For polysemous word pairs (e.g., "orange" as in color or fruit), occurrences of the word in the corpus were split uniformly between the senses on the CDI (there were only between `r min(poly$n)` and `r max(poly$n)` such word pairs in the various languages; in the absence of cross-linguistic corpus resources for polysemy sense disambiguation, this is a necessary simplification). Counts were normalized to the length of each corpus, Laplace smoothed (i.e., count of 0 were replaced with counts of 1), and then log transformed.
+For each language, we estimated word frequency from unigram counts based on all corpora in CHILDES for that language. Frequencies varied widely both within and across lexical categories (see SI Figure\ \@ref(fig:freq-dist)). Each word's count includes the counts of words that share the same stem (so that "dogs" counts as "dog") or are synonymous (so that "father" counts as "daddy"). For polysemous word pairs (e.g., "orange" as in color or fruit), occurrences of the word in the corpus were split uniformly between the senses on the CDI (there were only between `r min(poly$n)` and `r max(poly$n)` such word pairs in the various languages; in the absence of cross-linguistic corpus resources for polysemy sense disambiguation, this is a necessary simplification). Counts were normalized to the length of each corpus, Laplace smoothed (i.e., count of 0 were replaced with counts of 1), and then log transformed.
 
 ### Solo and Final Frequencies
 
@@ -169,7 +172,7 @@ Lastly, we used previously collected norms of "babiness", a measure of associati
 
 Category was determined on the basis of the conceptual categories presented on the CDI form (e.g., "Animals", "Action Words"), such that the Nouns category contains common nouns, Predicates contains verbs and adjectives, and Function Words contains closed-class words [following @bates1994].
 
-A potential concern for comparing coefficient estimates is predictor collinearity. Fortunately, in every language, the only relatively correlations were between MLU and solo frequency (mean over languages $r =$ `r mean_pair_cor("MLU", "solo_frequency")`), as expected given the similarity of these factors, along with modest correlations between frequency and concreteness (mean over languages $r =$ `r mean_pair_cor("concreteness", "frequency")`) and between frequency and number of phonemes (mean over languages $r =$ `r mean_pair_cor("frequency", "num_phons")`), a reflection of Zipf's Law [@zipf1935]. More importantly, the variance inflation factor for each of the predictors in each language is no greater than `r max(vifs$vif)`, indicating that multicollinearity among the predictors is low (see SI for the full set of pairwise correlations and variance inflation factors).
+A potential concern for comparing coefficient estimates is predictor collinearity. Fortunately, in every language, the only relatively correlations were between MLU and solo frequency (mean over languages $r =$ `r mean_pair_cor("MLU", "solo_frequency")`), as expected given the similarity of these factors, along with modest correlations between frequency and concreteness (mean over languages $r =$ `r mean_pair_cor("concreteness", "frequency")`) and between frequency and number of phonemes (mean over languages $r =$ `r mean_pair_cor("frequency", "num_phons")`), a reflection of Zipf's Law [@zipf1935]. More importantly, the variance inflation factor for each of the predictors in each language is no greater than `r max(vifs$vif)`, indicating that multicollinearity among the predictors is low (see SI Figure\ \@ref(fig:predictor-cors) for the full set of pairwise correlations and SI Figure\ \@ref(fig:vifs) for variance inflation factors).
 
 
 ## Analysis
@@ -179,14 +182,14 @@ We used mixed-effects logistic regression models [fit with the MixedModels packa
 
 # Results
 
-```{r refcoefs, fig.width=7, fig.height=3, fig.cap="Estimates of coefficients in predicting words' developmental trajectories for English comprehension data. Larger coefficient values indicate a greater effect of the predictor on acquisition: positive main effects indicate that words with higher values of the predictor tend to be understood by more children, while negative main effects indicate that words with lower values of the predictor tend to be understood by more children; positive age interactions indicate that the predictor's effect increases with age, while negative age interactions indicate the predictor's effect decreases with age. Error bars indicates 95\\% confidence intervals; filled in points indicate coefficients with p < 0.05."}
+```{r refcoefs, fig.width=7, fig.height=3, fig.cap="Estimates of coefficients in predicting words' developmental trajectories for English comprehension data. Larger coefficient values indicate a greater effect of the predictor on acquisition: positive main effects indicate that words with higher values of the predictor tend to be understood by more children, while negative main effects indicate that words with lower values of the predictor tend to be understood by more children; positive age interactions indicate that the predictor's effect increases with age, while negative age interactions indicate the predictor's effect decreases with age. Error bars indicates 95\\% confidence intervals; filled in points indicate coefficients with _p_ < 0.05."}
 ggplot(ref_coefs, aes(x = estimate, y = term)) +
   facet_grid(language + measure ~ interaction, scales = "free",
              labeller = as_labeller(label_caps)) +
   geom_pointrangeh(aes(colour = term, shape = fct_rev(signif),
                       xmin = estimate - 1.96 * std_error,
                       xmax = estimate + 1.96 * std_error)) +
-  geom_vline(xintercept = 0, color = "lightgrey", linetype = "dotted") +
+  geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
   scale_colour_ptol(guide = FALSE) +
   scale_shape_manual(values = c(19, 21), guide = FALSE) +
   labs(y = "", x = "Coefficient estimate")
@@ -198,14 +201,14 @@ ggplot(plt_lang_coefs, aes(x = estimate, y = term, colour = term)) +
              labeller = as_labeller(label_caps)) +
   geom_point(size = 1, alpha = 0.4) +
   geom_point(aes(x = mean_estimate), size = 3, data = mean_lang_coefs) +
-  geom_vline(xintercept = 0, color = "grey", linetype = "dotted") +
+  geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
   scale_colour_ptol(guide = FALSE) +
   labs(x = "Coefficient estimate", y = "")
 ```
 
 ### Predictor effects
 
-Figure \ref{fig:refcoefs} shows the coefficient estimates for English comprehension data, while Figure \ref{fig:langcoefs} shows the coefficient estimate for each predictor in each language. We find that frequency (mean over languages and measures $\bar{\beta} =$ `r mean_term_coef("frequency")`), babiness ($\bar{\beta} =$ `r mean_term_coef("babiness")`), concreteness ($\bar{\beta} =$ `r mean_term_coef("concreteness")`), and solo frequency ($\bar{\beta} =$ `r mean_term_coef("solo_frequency")`) are relatively stronger predictors of acquisition across languages (as well as all having significant effects at $\alpha = 0.05$ in at least `r min(filter(mean_term_coefs, term %in% c("frequency", "babiness", "concreteness", "solo_frequency"))$n_sig)` of the `r num_langs * 2` languages and measure). These effects, along with final frequency and valence, are positive in all or almost languages (so words with higher babiness tend to be known by more children); while the effects of number of phonemes and MLU are negative in all or almost all languages (so longer words tend to be known by fewer children). 
+Figure\ \@ref(fig:refcoefs) shows the coefficient estimates for English comprehension data, while Figure\ \@ref(fig:langcoefs) shows the coefficient estimate for each predictor in each language (for additional visualizations of the coefficients estimates, see SI Figures\ \@ref(fig:by-lang-coefs) and \@ref(fig:prod-comp-coefs)). We find that frequency (mean over languages and measures $\bar{\beta} =$ `r mean_term_coef("frequency")`), babiness ($\bar{\beta} =$ `r mean_term_coef("babiness")`), concreteness ($\bar{\beta} =$ `r mean_term_coef("concreteness")`), and solo frequency ($\bar{\beta} =$ `r mean_term_coef("solo_frequency")`) are relatively stronger predictors of acquisition across languages (as well as all having significant effects at $\alpha = 0.05$ in at least `r min(filter(mean_term_coefs, term %in% c("frequency", "babiness", "concreteness", "solo_frequency"))$n_sig)` of the `r num_langs * 2` languages and measure). These effects, along with final frequency and valence, are positive in all or almost languages (so words with higher babiness tend to be known by more children); while the effects of number of phonemes and MLU are negative in all or almost all languages (so longer words tend to be known by fewer children). 
 
 Given the emphasis on frequency effects in the language acquisition literature [@ambridge2015], one might have expected frequency to dominate, but several other predictors are just as strong in this analysis. In addition, some factors previously argued to be important for word learning, namely valence and arousal [@moors2013], appear to have limited relevance when compared to other factors (both have $\bar{\beta} <$ `r round(max(abs(filter(mean_term_coefs, term %in% c("valence", "arousal"))$mean_estimate)), 2)` and are only significant in `r max(filter(mean_term_coefs, term %in% c("valence", "arousal"))$n_sig)` languages and measures). These results provide a strong argument for our approach of including multiple predictors and languages in our analysis. 
 
@@ -213,7 +216,7 @@ Given the emphasis on frequency effects in the language acquisition literature [
 ggplot(coef_summary, aes(x = mean_cor, y = language)) +
   facet_grid(. ~ measure, labeller = as_labeller(label_caps)) +
   geom_vline(xintercept = mean(coef_summary$mean_cor),
-             colour = "grey70", size = 0.4) +
+             colour = .grey, size = 0.4) +
   geom_point(aes(colour = language), size = 2) +
   geom_rect(aes(xmin = ci_lower_cor, xmax = ci_upper_cor,
                 ymin = as.numeric(language) + 0.4,
@@ -225,7 +228,7 @@ ggplot(coef_summary, aes(x = mean_cor, y = language)) +
                 y = as.numeric(language) + 0.4,
                 yend = as.numeric(language) - 0.4),
             data = baseline_coef_summary,
-            colour = "grey70") +
+            colour = .grey) +
   scale_x_continuous(breaks = seq(0, 1, 0.2)) +
   labs(x = "Mean correlation with other languages' coefficients",
        y = "") +
@@ -233,7 +236,7 @@ ggplot(coef_summary, aes(x = mean_cor, y = language)) +
   scale_fill_ptol(guide = FALSE)
 ```
 
-```{r clustering, fig.width=5, fig.height=3, fig.align='center', fig.cap="Dendrograms of the similarity structure among languages coefficients."}
+```{r clustering, fig.width=5, fig.height=3, out.width="70%", fig.align="center", fig.cap="Dendrograms of the similarity structure among languages' coefficients."}
 coef_clust_segments <- coef_clust %>%
   mutate(segment = map(clust, ~.x %>% segment())) %>%
   select(-data, -clust) %>%
@@ -273,20 +276,20 @@ ggplot(plt_lexcat_coefs, aes(x = estimate, y = term, colour = term)) +
              labeller = as_labeller(label_caps)) +
   geom_point(size = 1, alpha = 0.4) +
   geom_point(aes(x = mean_estimate), size = 3, data = mean_lexcat_coefs) +
-  geom_vline(xintercept = 0, color = "grey", linetype = "dotted") +
+  geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
   scale_colour_ptol(guide = FALSE) +
   labs(x = "Coefficient estimate", y = "")
 ```
 
 ### Consistency
 
-Overall, there is considerable consistency in the magnitudes of predictors across languages. In almost all, babiness and frequency were highest, while valence and arousal were smaller. A priori it could have been the case that different languages have wildly different effects of various factors (e.g., due to lingusitic or cultural differences in acquisition process), but this pattern is not what we observe. Instead, Figure \ref{fig:consistency} shows the mean pairwise correlation of predictor coefficients across languages (i.e., the correlation of coefficients for English with coefficients for Russian, for Spanish, and so on). These means are far outside of bootstrapped estimates for the average pairwise correlation in a randomized baseline created by shuffling predictor coefficients within language, meaning that coefficient estimates are far more consistent across languages than would be expected by chance.
+Overall, there is considerable consistency in the magnitudes of predictors across languages. In almost all, babiness and frequency were highest, while valence and arousal were smaller. A priori it could have been the case that different languages have wildly different effects of various factors (e.g., due to lingusitic or cultural differences in acquisition process), but this pattern is not what we observe. Instead, Figure\ \@ref(fig:consistency) shows the mean pairwise correlation of predictor coefficients across languages (i.e., the correlation of coefficients for English with coefficients for Russian, for Spanish, and so on). These means are far outside of bootstrapped estimates for the average pairwise correlation in a randomized baseline created by shuffling predictor coefficients within language, meaning that coefficient estimates are far more consistent across languages than would be expected by chance.
 
 ### Variability
 
 While some particular coefficients differ substantially from the trend across languages (e.g., the effect of frequency for Spanish is near 0), these individual datapoints are difficult to interpret. Many unmeasurable factors could potentially account for these differences. For example, Spanish frequency estimates could be less accurate due to corpus sparsity or idiosyncrasy, the samples of children in the Spanish CDI data and CHILDES data could differ more demographically, or Spanish-speaking children could in fact rely less on frequency in acquisition. Rather than attempting to interpret individual coefficients, we instead ask how the patterns of difference among languages reflect systematic substructure in the variability of the effects. 
 
-To examine the substructure of predictor variability, we used hierarchical clustering analysis to find the similarity structure among the pairwise correlations between languages' predictors. The resulting dendrograms are shown in Figure \ref{fig:clustering}, which broadly reflect language typology (especially for production data). This result suggests that some language-to-language similarity data is captured by the profile of coefficient magnitudes our analysis returns. 
+To examine the substructure of predictor variability, we used hierarchical clustering analysis to find the similarity structure among the pairwise correlations between languages' predictors. The resulting dendrograms are shown in Figure\ \@ref(fig:clustering), which broadly reflect language typology (especially for production data). This result suggests that some language-to-language similarity data is captured by the profile of coefficient magnitudes our analysis returns. 
 
 ### Comprehension vs. production
 
@@ -298,9 +301,9 @@ We also wanted to examine how the relative contributions of the predictors chang
 
 ### Lexical categories
 
-Previous work gives reason to believe that predictors' relationship with age of acquisition differs among various lexical categories [@goodman2008]. To investigate these effects, we separated our data by lexical category and fit separate models for each category. Figure \ref{fig:lexcatcoefs} shows the resulting coefficient estimates. Across languages, frequency had the highest magnitude for nouns and a lower magnitude for function words. In contrast, MLU was almost irrelevant for both nouns and predicates, but highly predictive for function words. These patterns are supportive of the hypothesis that different word classes are learned in different ways, or at least that the bottleneck on learning tends to be different, leading to different information sources being more or less important across categories.
+Previous work gives reason to believe that predictors' relationship with age of acquisition differs among various lexical categories [@goodman2008]. To investigate these effects, we separated our data by lexical category and fit separate models for each category. Figure\ \@ref(fig:lexcatcoefs) shows the resulting coefficient estimates. Across languages, frequency had the highest magnitude for nouns and a lower magnitude for function words. In contrast, MLU was almost irrelevant for both nouns and predicates, but highly predictive for function words. These patterns are supportive of the hypothesis that different word classes are learned in different ways, or at least that the bottleneck on learning tends to be different, leading to different information sources being more or less important across categories.
 
-Additionally, the mean pairwise correlation of coefficients between languages is much larger for nouns (`r lexcat_mean_cor("Nouns")`) and predicates (`r lexcat_mean_cor("Predicates")`) than for function words (`r lexcat_mean_cor("Function words")`). The higher between-language variability for function words suggests the learning processes differ substantially more across languages for function words than they do for content words (see SI Figure TODO).
+Additionally, the mean pairwise correlation of coefficients between languages is much larger for nouns (`r lexcat_mean_cor("Nouns")`) and predicates (`r lexcat_mean_cor("Predicates")`) than for function words (`r lexcat_mean_cor("Function words")`). The higher between-language variability for function words suggests the learning processes differ substantially more across languages for function words than they do for content words (see SI Figure\ \@ref(fig:lexcat-consistency)).
 
 # Discussion
 
@@ -324,9 +327,13 @@ In sum, by examining predictors of early word learning across languages, we iden
 Thank you to the labs and individuals who contributed data to Wordbank and to NSF BCS \#1528526 for support.
 
 
-\newpage
+```{r si, results="asis", cache=FALSE}
+render_appendix("aoapred_si.Rmd")
+```
+
 
 # References
 
+\singlespacing
 \setlength{\parindent}{-0.5in}
 \setlength{\leftskip}{0.5in}

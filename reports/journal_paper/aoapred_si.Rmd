@@ -1,58 +1,19 @@
----
-title             : 'Supplemental information for "Consistency and variability in word learning across languages"'
-shorttitle        : 'SI for "Word learning consistency and variability"'
-
-author:
-  - name          : Mika Braginsky
-    affiliation   : 1
-    corresponding : yes
-    email         : mikabr@mit.edu
-    address       : 43 Vassar St, Cambridge, MA 02139
-  - name          : Daniel Yurovsky
-    affiliation   : 2
-  - name          : Virginia A. Marchman
-    affiliation   : 3
-  - name          : Michael C. Frank
-    affiliation   : 3
-
-affiliation:
-  - id            : 1
-    institution   : Department of Brain and Cognitive Sciences, Massachusetts Institute of Technology
-  - id            : 2
-    institution   : Department of Psychology, University of Chicago
-  - id            : 3
-    institution   : Department of Psychology, Stanford University
-
-abstract          : ""
-
-keywords          : 
-bibliography      : [aoapred.bib]
-
-floatsintext      : yes
-figurelist        : no
-tablelist         : no
-footnotelist      : no
-linenumbers       : no
-linkcolor         : "blue"
-mask              : yes
-draft             : no
-
-documentclass     : "apa6"
-classoption       : "man"
-output            : papaja::apa6_pdf
-header-includes:
-   - \usepackage{setspace}
-   - \usepackage[font=small,labelfont=bf]{caption}
----
-
-```{r setup, child="setup.Rmd"}
+```{r}
+knitr::opts_chunk$set(cache = FALSE)
 ```
 
-```{r model_checks, child="model_checks.Rmd"}
-```
+# Supplemental Information
 
-Age distributions
-```{r age_dist, fig.height=6}
+In this supplemental information document, we provide a variety of visualizations and analyses that provide additional information about our datasets and models.
+
+
+## Data
+
+### Age distributions
+
+One concern about the datasets used in our analyses is that they compare the effects of 
+
+```{r age-dist, fig.height=6, fig.cap="Densities of children's ages for each language and measure, along with a label for the total numbers of children."}
 measure_admins <- admins %>%
   mutate(produces = TRUE, understands = form == "WG") %>%
   select(-form) %>%
@@ -63,13 +24,16 @@ measure_admins <- admins %>%
 sample_sizes <- bind_rows(
   measure_admins %>% filter(produces) %>% mutate(measure = "Produces"),
   measure_admins %>% filter(understands) %>% mutate(measure = "Understands")
-)
+) %>%
+  mutate(measure = fct_relevel(measure, "Understands", "Produces"))
 
 totals <- sample_sizes %>%
   group_by(measure) %>%
   mutate(max_age = max(age)) %>%
   group_by(language, measure, max_age) %>%
-  summarise(n = n())
+  summarise(n = n()) %>%
+  ungroup() %>%
+  mutate(measure = fct_relevel(measure, "Understands", "Produces"))
 
 ggplot(sample_sizes, aes(x = age, y = language)) +
   facet_wrap(~measure, scales = "free_x") +
@@ -77,36 +41,40 @@ ggplot(sample_sizes, aes(x = age, y = language)) +
   geom_label(aes(label = n, x = max_age), data = totals, vjust = 0, size = 3,
              nudge_y = 0.05, label.size = 0.2,
              label.padding = unit(0.1, "lines")) +
+  scale_y_discrete(expand = c(0, 0)) +
   labs(x = "Age (months)", y = "") +
   scale_fill_ptol(guide = FALSE)
 ```
 
-Predictor distributions
-```{r predictor_dist}
+
+### Predictor distributions
+
+```{r predictor-dist, fig.width=8, fig.height=8, fig.cap="Densities of the values of each predictor for each language."}
 predictor_values <- uni_model_data %>%
   ungroup() %>%
   select(language, !!predictors) %>%
   distinct() %>%
   gather(predictor, value, !!predictors) %>%
-  mutate(predictor = factor(predictor, levels = names(display_predictors),
-                            labels = unname(display_predictors)),
+  mutate(predictor = factor(predictor, levels = rev(names(display_predictors)),
+                            labels = rev(unname(display_predictors))),
          language = str_replace(language, " \\(.*\\)", ""),
          language = fct_inorder(language))
 
-
 ggplot(predictor_values, aes(x = value, y = predictor, fill = predictor)) +
   facet_wrap(~language, nrow = 2) +
-  geom_vline(xintercept = 0, colour = "darkgrey", linetype = "dashed") +
+  geom_vline(xintercept = 0, colour = .grey, linetype = "dotted") +
   geom_density_ridges(rel_min_height = 0.01, scale = 0.95, alpha = 0.7) +
   scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
-  scale_y_discrete(expand = c(0.01, 0),
+  scale_y_discrete(expand = c(0, 0),
                    limits = rev(levels(predictor_values$predictor))) +
   scale_fill_ptol(guide = FALSE) +
     labs(x = "Scaled value", y = "")
 ```
 
-Frequency distributions for open/closed class words
-```{r freq_dist}
+
+### Frequency distributions for lexical categories
+
+```{r freq-dist, fig.width=8, fig.height=5, fig.cap="Densities of the frequency estimates for open and closed class words in each language."}
 freq_values <- uni_model_data %>%
   ungroup() %>%
   select(language, lexical_classes, frequency) %>%
@@ -121,80 +89,29 @@ freq_values <- uni_model_data %>%
 
 ggplot(freq_values, aes(x = frequency, y = lexical_classes)) +
   facet_wrap(~language, nrow = 2) +
-  geom_vline(xintercept = 0, colour = "darkgrey", linetype = "dashed") +
+  geom_vline(xintercept = 0, colour = "darkgrey", linetype = "dotted") +
   geom_density_ridges(aes(fill = lexical_classes), rel_min_height = 0.01,
                       scale = 0.95, alpha = 0.7) +
   scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
-  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0, 0)) +
   scale_fill_ptol(guide = FALSE) +
   labs(x = "Scaled frequency", y = "")
 ```
 
-Paired prod/comp coefs
-```{r prod_comp}
-ggplot(filter(plt_lang_coefs, interaction == "main effect"),
-       aes(x = term, y = estimate, colour = measure, shape = measure)) +
-  facet_wrap(~language, nrow = 2) +
-  coord_flip() +
-  geom_pointrange(aes(ymin = estimate - 1.96 * std_error,
-                      ymax = estimate + 1.96 * std_error),
-                  position = position_jitter(width = 0.3, height = 0)) +
-  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-  scale_colour_ptol() +
-  labs(x = "", y = "Coefficient estimate", colour = "", shape = "") +
-  theme(legend.position = "top")
 
-ggplot(filter(plt_lang_coefs, interaction == "main effect"),
-       aes(x = estimate, y = term, colour = measure, shape = measure)) +
-  facet_wrap(~language, nrow = 2) +
-  geom_point() +
-  # geom_pointrangeh(aes(xmin = estimate - 1.96 * std_error,
-  #                     xmax = estimate + 1.96 * std_error),
-  #                 position = position_jitter(width = 0, height = 0.3)) +
-  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
-  scale_colour_ptol() +
-  labs(y = "", x = "Coefficient estimate", colour = "", shape = "") +
-  theme(legend.position = "top")
-```
+### Predictor correlations
 
-Coefs for each language with CIs
-```{r by_lang_coefs}
-ggplot(filter(plt_lang_coefs, measure == "produces",
-              interaction == "main effect"),
-       aes(x = estimate, y = term)) +
-  facet_wrap(~language, nrow = 2) +
-  geom_pointrangeh(aes(colour = term, shape = fct_rev(signif),
-                       xmin = estimate - 1.96 * std_error,
-                       xmax = estimate + 1.96 * std_error)) +
-  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
-  scale_colour_ptol(guide = FALSE) +
-  scale_shape_manual(values = c(19, 21), guide = FALSE) +
-  labs(y = "", x = "Coefficient estimate")
-
-ggplot(filter(plt_lang_coefs, measure == "understands",
-              interaction == "main effect"),
-       aes(x = estimate, y = term)) +
-  facet_wrap(~language, nrow = 2) +
-  geom_pointrangeh(aes(colour = term, shape = fct_rev(signif),
-                       xmin = estimate - 1.96 * std_error,
-                       xmax = estimate + 1.96 * std_error)) +
-  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
-  scale_colour_ptol(guide = FALSE) +
-  scale_shape_manual(values = c(19, 21), guide = FALSE) +
-  labs(y = "", x = "Coefficient estimate")
-```
-
-Predictor correlations
-```{r predictor_cors}
+```{r predictor-cors, fig.height=14, fig.width=12, fig.cap="Pairwise correlations between predictors."}
 predictor_cors %>%
   mutate(predictor1 = predictor1 %>%
-           factor(levels = predictors, labels = display_predictors[predictors]),
+           factor(levels = predictors,
+                  labels = display_predictors[predictors]),
          predictor2 = predictor2 %>%
            factor(levels = rev(predictors),
                   labels = rev(display_predictors[predictors])),
          language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
-ggplot(aes(x = predictor1, y = predictor2)) +
-  facet_wrap(~language, nrow = 2) +
+ggplot(aes(x = predictor2, y = predictor1)) +
+  facet_wrap(~language, ncol = 3) +
   coord_equal() +
   geom_tile(aes(fill = abs(correlation))) +
   geom_text(aes(label = round(correlation, 2)), size = 2.5) +
@@ -207,7 +124,10 @@ ggplot(aes(x = predictor1, y = predictor2)) +
         axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 
-```{r vifs}
+
+### Collinearity
+
+```{r vifs, fig.height=5.5, fig.cap="Variance inflation factors of the predictors."}
 vifs %>%
   mutate(predictor = predictor %>%
            factor(levels = predictors,
@@ -226,7 +146,49 @@ ggplot(aes(x = language, y = predictor)) +
         axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 
-```{r lexcat_consistency}
+
+## Models
+
+### Coefficients by language
+
+```{r by-lang-coefs, fig.height=12, fig.width=10, fig.cap="Coeffiecients for each language with 95\\% confidence intervals."}
+by_lang_plot <- function(meas) {
+  ggplot(filter(plt_lang_coefs, measure == meas,
+                interaction == "main effect"),
+         aes(x = estimate, y = term)) +
+    facet_wrap(~language, nrow = 2) +
+    geom_pointrangeh(aes(colour = term, shape = fct_rev(signif),
+                         xmin = estimate - 1.96 * std_error,
+                         xmax = estimate + 1.96 * std_error)) +
+    geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
+    scale_colour_ptol(guide = FALSE) +
+    scale_shape_manual(values = c(19, 21), guide = FALSE) +
+    labs(y = "", x = "Coefficient estimate") +
+    theme(plot.margin = margin(t = 32, unit = "pt"))
+}
+
+plot_grid(by_lang_plot("understands"), by_lang_plot("produces"), ncol = 1,
+          labels = c("Understands", "Produces"), label_size = 18)
+```
+
+
+### Coefficients by measure
+
+```{r prod-comp-coefs, fig.width=10, fig.height=7, fig.cap="Paired coefficients for comprehension and production."}
+ggplot(filter(plt_lang_coefs, interaction == "main effect"),
+       aes(x = estimate, y = term, colour = measure, shape = measure)) +
+  facet_wrap(~language, ncol = 5) +
+  geom_point() +
+  geom_vline(xintercept = 0, color = "grey", linetype = "dotted") +
+  scale_colour_ptol() +
+  labs(y = "", x = "Coefficient estimate", colour = "", shape = "") +
+  theme(legend.position = "top")
+```
+
+
+### Consistency by lexical category
+
+```{r lexcat-consistency, fig.width=7, fig.asp=1, fig.cap="Consistency of coefficients within each lexical category."}
 lexcat_coef_summary_means <- lexcat_coef_summary %>%
   group_by(lexical_category, measure) %>%
   summarise(mean_cor = mean(mean_cor))
@@ -247,7 +209,7 @@ ggplot(lexcat_coef_summary, aes(x = mean_cor, y = language)) +
                    yend = as.numeric(language) - 0.4),
                data = lexcat_baseline_coef_summary,
                colour = "grey70") +
-  scale_x_continuous(breaks = seq(0, 1, 0.2)) +
+  scale_x_continuous(breaks = seq(-0.2, 1, 0.2)) +
   labs(x = "Mean correlation with other languages' coefficients",
        y = "") +
   scale_colour_ptol(guide = FALSE) +
