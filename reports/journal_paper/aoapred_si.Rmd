@@ -2,16 +2,14 @@
 knitr::opts_chunk$set(cache = FALSE)
 ```
 
+\doublespacing
+\setlength{\parindent}{0.5in}
+\setlength{\leftskip}{0in}
+
 # Supplemental Information
 
-In this supplemental information document, we provide a variety of visualizations and analyses that provide additional information about our datasets and models.
+In this supplemental information document, we include a variety of visualizations that provide additional information about our datasets and models.
 
-
-## Data
-
-### Age distributions
-
-One concern about the datasets used in our analyses is that they compare the effects of 
 
 ```{r age-dist, fig.height=6, fig.cap="Densities of children's ages for each language and measure, along with a label for the total numbers of children."}
 measure_admins <- admins %>%
@@ -42,12 +40,10 @@ ggplot(sample_sizes, aes(x = age, y = language)) +
              nudge_y = 0.05, label.size = 0.2,
              label.padding = unit(0.1, "lines")) +
   scale_y_discrete(expand = c(0, 0)) +
-  labs(x = "Age (months)", y = "") +
-  scale_fill_ptol(guide = FALSE)
+  labs(x = "Age (months)", y = "", title = "Age distributions") +
+  scale_fill_ptol(guide = FALSE) +
+  theme(plot.title = element_text(size = rel(1.2)))
 ```
-
-
-### Predictor distributions
 
 ```{r predictor-dist, fig.width=8, fig.height=8, fig.cap="Densities of the values of each predictor for each language."}
 predictor_values <- uni_model_data %>%
@@ -68,11 +64,9 @@ ggplot(predictor_values, aes(x = value, y = predictor, fill = predictor)) +
   scale_y_discrete(expand = c(0, 0),
                    limits = rev(levels(predictor_values$predictor))) +
   scale_fill_ptol(guide = FALSE) +
-    labs(x = "Scaled value", y = "")
+  labs(x = "Scaled value", y = "", title = "Predictor distributions") +
+  theme(plot.title = element_text(size = rel(1.5)))
 ```
-
-
-### Frequency distributions for lexical categories
 
 ```{r freq-dist, fig.width=8, fig.height=5, fig.cap="Densities of the frequency estimates for open and closed class words in each language."}
 freq_values <- uni_model_data %>%
@@ -95,11 +89,11 @@ ggplot(freq_values, aes(x = frequency, y = lexical_classes)) +
   scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
   scale_y_discrete(expand = c(0, 0)) +
   scale_fill_ptol(guide = FALSE) +
-  labs(x = "Scaled frequency", y = "")
+  labs(x = "Scaled frequency", y = "",
+       title = "Frequency distributions by lexical category") +
+  theme(plot.title = element_text(size = rel(1.5)))
 ```
 
-
-### Predictor correlations
 
 ```{r predictor-cors, fig.height=14, fig.width=12, fig.cap="Pairwise correlations between predictors."}
 predictor_cors %>%
@@ -118,14 +112,13 @@ ggplot(aes(x = predictor2, y = predictor1)) +
   scale_fill_gradient(low = ptol_pal()(2)[[1]], high = ptol_pal()(2)[[2]]) +
   scale_x_discrete(expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0)) +
-  labs(x = "", y = "", fill = "Correlation") +
+  labs(x = "", y = "", fill = "Correlation",
+       title = "Pairwise predictor correlations") +
   theme(legend.position = "top",
         legend.title = element_text(vjust = 0.8),
-        axis.text.x = element_text(angle = 30, hjust = 1))
+        axis.text.x = element_text(angle = 30, hjust = 1),
+        plot.title = element_text(size = rel(1.8)))
 ```
-
-
-### Collinearity
 
 ```{r vifs, fig.height=5.5, fig.cap="Variance inflation factors of the predictors."}
 vifs %>%
@@ -140,16 +133,14 @@ ggplot(aes(x = language, y = predictor)) +
   scale_fill_gradient(low = ptol_pal()(2)[[1]], high = ptol_pal()(2)[[2]]) +
   scale_x_discrete(expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0)) +
-  labs(x = "", y = "", fill = "VIF") +
+  labs(x = "", y = "", fill = "VIF",
+       title = "Predictor variance inflation factors") +
   theme(legend.position = "top",
         legend.title = element_text(vjust = 0.8),
-        axis.text.x = element_text(angle = 30, hjust = 1))
+        axis.text.x = element_text(angle = 30, hjust = 1),
+        plot.title = element_text(size = rel(1.2)))
 ```
 
-
-## Models
-
-### Coefficients by language
 
 ```{r by-lang-coefs, fig.height=12, fig.width=10, fig.cap="Coeffiecients for each language with 95\\% confidence intervals."}
 by_lang_plot <- function(meas) {
@@ -163,16 +154,15 @@ by_lang_plot <- function(meas) {
     geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
     scale_colour_ptol(guide = FALSE) +
     scale_shape_manual(values = c(19, 21), guide = FALSE) +
-    labs(y = "", x = "Coefficient estimate") +
-    theme(plot.margin = margin(t = 32, unit = "pt"))
+    labs(y = "", x = "Coefficient estimate",
+         title = glue("Coefficients by language ({meas})")) +
+    theme(plot.title = element_text(size = rel(1.5)))
+    # theme(plot.margin = margin(t = 32, unit = "pt"))
 }
 
-plot_grid(by_lang_plot("understands"), by_lang_plot("produces"), ncol = 1,
-          labels = c("Understands", "Produces"), label_size = 18)
+plot_grid(by_lang_plot("understands"), by_lang_plot("produces"), ncol = 1)
+          # labels = c("Understands", "Produces"), label_size = 18)
 ```
-
-
-### Coefficients by measure
 
 ```{r prod-comp-coefs, fig.width=10, fig.height=7, fig.cap="Paired coefficients for comprehension and production."}
 ggplot(filter(plt_lang_coefs, interaction == "main effect"),
@@ -181,12 +171,11 @@ ggplot(filter(plt_lang_coefs, interaction == "main effect"),
   geom_point() +
   geom_vline(xintercept = 0, color = "grey", linetype = "dotted") +
   scale_colour_ptol() +
-  labs(y = "", x = "Coefficient estimate", colour = "", shape = "") +
-  theme(legend.position = "top")
+  labs(y = "", x = "Coefficient estimate", colour = "", shape = "",
+       title = "Coefficients by measure") +
+  theme(legend.position = "top",
+        plot.title = element_text(size = rel(1.8)))
 ```
-
-
-### Consistency by lexical category
 
 ```{r lexcat-consistency, fig.width=7, fig.asp=1, fig.cap="Consistency of coefficients within each lexical category."}
 lexcat_coef_summary_means <- lexcat_coef_summary %>%
@@ -211,7 +200,7 @@ ggplot(lexcat_coef_summary, aes(x = mean_cor, y = language)) +
                colour = "grey70") +
   scale_x_continuous(breaks = seq(-0.2, 1, 0.2)) +
   labs(x = "Mean correlation with other languages' coefficients",
-       y = "") +
+       y = "", title = "Consistency by lexical category") +
   scale_colour_ptol(guide = FALSE) +
   scale_fill_ptol(guide = FALSE)
 ```
