@@ -38,7 +38,7 @@ lang_stats <- instrument_info %>%
 
 kable(lang_stats, format = "latex", escape = FALSE, booktabs = TRUE,
       linesep = "", format.args = list(big.mark = ","),
-      caption = "Statistics for data from Wordbank and CHILDES.",
+      caption = "Statistics for data from Wordbank and CHILDES. N indicates number of children.",
       col.names = c("Language", "CDI items", "N", "Ages", "N", "Ages", "Types",
                     "Tokens")) %>%
   add_header_above(c("", "", "Production" = 2, "Comprehension" = 2,
