@@ -1,17 +1,25 @@
-```{r}
-knitr::opts_chunk$set(cache = FALSE)
+---
+output:
+  latex_fragment:
+    md_extensions: -citations-autolink_bare_uris-auto_identifiers-implicit_header_references
+---
+
+\appendix
+\pagenumbering{gobble}
+\renewcommand\thefigure{SI.\arabic{figure}}
+\setcounter{figure}{0}
+
+```{r si_setup, child="setup.Rmd", cache=FALSE}
 ```
 
-\doublespacing
-\setlength{\parindent}{0.5in}
-\setlength{\leftskip}{0in}
+```{r si_model_checks, child="model_checks.Rmd"}
+```
 
-# Supplemental Information
+# Supplemental Information {-}
 
 In this supplemental information document, we include a variety of visualizations that provide additional information about our datasets and models.
 
-
-```{r age-dist, fig.height=6, fig.cap="Densities of children's ages for each language and measure, along with a label for the total numbers of children."}
+```{r age-dist, fig.pos='b', fig.height=6, fig.cap="Densities of children's ages for each language and measure, along with a label for the total numbers of children."}
 measure_admins <- admins %>%
   mutate(produces = TRUE, understands = form == "WG") %>%
   select(-form) %>%
@@ -36,9 +44,10 @@ totals <- sample_sizes %>%
 ggplot(sample_sizes, aes(x = age, y = language)) +
   facet_wrap(~measure, scales = "free_x") +
   geom_density_ridges(aes(fill = language)) +
-  geom_label(aes(label = n, x = max_age), data = totals, vjust = 0, size = 3,
-             nudge_y = 0.05, label.size = 0.2,
-             label.padding = unit(0.1, "lines")) +
+  geom_label(aes(label = n, x = max_age), data = totals, vjust = 0,
+             hjust = "inward",
+             size = 3, nudge_y = 0.05, label.size = 0.2,
+             label.padding = unit(0.1, "lines"), family = .family) +
   scale_y_discrete(expand = c(0, 0)) +
   labs(x = "Age (months)", y = "", title = "Age distributions") +
   scale_fill_ptol(guide = FALSE) +
@@ -94,7 +103,6 @@ ggplot(freq_values, aes(x = frequency, y = lexical_classes)) +
   theme(plot.title = element_text(size = rel(1.5)))
 ```
 
-
 ```{r predictor-cors, fig.height=14, fig.width=12, fig.cap="Pairwise correlations between predictors."}
 predictor_cors %>%
   mutate(predictor1 = predictor1 %>%
@@ -108,7 +116,8 @@ ggplot(aes(x = predictor2, y = predictor1)) +
   facet_wrap(~language, ncol = 3) +
   coord_equal() +
   geom_tile(aes(fill = abs(correlation))) +
-  geom_text(aes(label = round(correlation, 2)), size = 2.5) +
+  geom_text(aes(label = round(correlation, 2)), size = 2.5,
+            family = .family) +
   scale_fill_gradient(low = ptol_pal()(2)[[1]], high = ptol_pal()(2)[[2]]) +
   scale_x_discrete(expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0)) +
@@ -129,7 +138,7 @@ vifs %>%
 ggplot(aes(x = language, y = predictor)) +
   coord_equal() +
   geom_tile(aes(fill = vif)) +
-  geom_text(aes(label = round(vif, 2)), size = 3) +
+  geom_text(aes(label = round(vif, 2)), size = 3, family = .family) +
   scale_fill_gradient(low = ptol_pal()(2)[[1]], high = ptol_pal()(2)[[2]]) +
   scale_x_discrete(expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0)) +
@@ -140,7 +149,6 @@ ggplot(aes(x = language, y = predictor)) +
         axis.text.x = element_text(angle = 30, hjust = 1),
         plot.title = element_text(size = rel(1.2)))
 ```
-
 
 ```{r by-lang-coefs, fig.height=12, fig.width=10, fig.cap="Coeffiecients for each language with 95\\% confidence intervals."}
 by_lang_plot <- function(meas) {

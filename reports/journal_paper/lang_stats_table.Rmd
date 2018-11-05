@@ -1,6 +1,6 @@
-\begingroup
-\singlespacing
-\setlength\parindent{0pt}
+<!-- \begingroup -->
+<!-- \singlespacing -->
+<!-- \setlength\parindent{0pt} -->
 
 ```{r langstats, results="asis"}
 uni_lemma_info <- uni_model_data %>%
@@ -47,4 +47,4 @@ kable(lang_stats, format = "latex", escape = FALSE, booktabs = TRUE,
   kable_styling(position = "center")
 ```
 
-\endgroup
+<!-- \endgroup -->

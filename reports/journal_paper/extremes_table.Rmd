@@ -1,6 +1,6 @@
-\begingroup
-\singlespacing
-\setlength\parindent{0pt}
+<!-- \begingroup -->
+<!-- \singlespacing -->
+<!-- \setlength\parindent{0pt} -->
 
 ```{r extremes, results="asis"}
 num_extremes <- 3
@@ -50,4 +50,4 @@ kable(extremes_display, format = "latex", escape = FALSE, booktabs = TRUE,
   kable_styling(position = "center", latex_options = "scale_down")
 ```
 
-\endgroup
+<!-- \endgroup -->

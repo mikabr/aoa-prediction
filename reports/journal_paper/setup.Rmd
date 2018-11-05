@@ -8,19 +8,26 @@ library(ggdendro)
 library(ggridges)
 library(cowplot)
 
-library(knitr)
-library(kableExtra)
-library(pander)
-
 library(glue)
-library(papaja)
 library(langcog)
 
-opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE)
-panderOptions("round", 2)
-theme_set(theme_apa() %+replace%
-            theme(strip.text = element_text(face = "bold")))
+library(knitr)
+library(kableExtra)
+opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE,
+               out.width = "\\textwidth", dev = "png", fig.align = "center",
+               dpi = 300)
+is_integer <- function(x) all(all.equal(x, as.integer(x)) == TRUE)
+inline_hook <- function(x) {
+  if (!is_integer(x) && is.numeric(x)) x <- sprintf("%.2f", round(x, 2))
+  paste(as.character(x), collapse = ", ")
+}
+knit_hooks$set(inline = inline_hook)
+
+theme_set(papaja::theme_apa(base_family = "Source Sans Pro"))
+theme_update(strip.text.x = element_text(margin = margin(b = 8), face = "bold"),
+             strip.text.y = element_text(margin = margin(l = 8), face = "bold"))
 .grey <- "grey70"
+.family <- theme_get()$text$family
 
 data_path <- "../../aoa_unified/saved_data"
 data_files <- list.files(data_path, full.names = TRUE)
