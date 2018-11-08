@@ -244,37 +244,58 @@ ggplot(coef_summary, aes(x = mean_cor, y = language)) +
   scale_fill_ptol(guide = FALSE)
 ```
 
-```{r clustering, fig.width=5, fig.height=3, out.width="70%", fig.cap="Dendrograms of the similarity structure among languages' coefficients."}
+```{r clustering, fig.width=5, fig.height=3.5, out.width="70%", fig.cap="Dendrograms of the similarity structure among languages' coefficients."}
 coef_clust_segments <- coef_clust %>%
   mutate(segment = map(clust, ~.x %>% segment())) %>%
   select(-data, -clust) %>%
   unnest() %>%
   filter(interaction == "main effect")
 
+typology <- yaml::read_yaml("typology.yaml") %>%
+  data_frame(label = names(.), family = unlist(.)) %>%
+  select(label, family)
+
 coef_clust_labels <- coef_clust %>%
   mutate(segment = map(clust, ~.x %>% label())) %>%
   select(-data, -clust) %>%
   unnest() %>%
   filter(interaction == "main effect") %>%
-  mutate(label = factor(label, levels = levels(coef_summary$language)))
+  mutate(label = factor(label, levels = levels(coef_summary$language))) %>%
+  left_join(typology)
 
-ggplot(coef_clust_segments) +
+plt <- ggplot(coef_clust_segments) +
   facet_grid(. ~ measure, scales = "free",
              labeller = as_labeller(label_caps)) +
   geom_segment(aes(x = x, y = y, xend = xend, yend = yend)) +
-  geom_text(aes(x = x, y = y - 0.02, label = label, colour = label),
+  geom_text(aes(x = x, y = y - 0.02, label = label, colour = family),
             data = coef_clust_labels, hjust = 0, family = .family) +
   coord_flip() +
   scale_x_reverse() +
   scale_y_reverse() +
-  scale_colour_manual(values = ptol_pal()(10), guide = FALSE) +
+  scale_colour_ptol(name = "Language family",
+                    guide = guide_legend(title.position = "top",
+                                         title.hjust = 0.5,
+                                         override.aes = list(size = 0),
+                                         keyheight = unit(0, "lines"))) +
   expand_limits(y = -0.4) +
   theme_get() +
   theme(axis.line = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank(),
-        axis.title = element_blank())
-        # strip.text = element_text(vjust = 0, margin = 0))
+        axis.title = element_blank(),
+        legend.position = "bottom",
+        legend.text = element_blank(),
+        legend.title = element_text(size = rel(0.8), margin = margin(b = -8)),
+        legend.margin = margin(t = 0))
+
+lgnd <- typology %>% distinct(family) %>% mutate(x = scale(1:n())) %>%
+  ggplot(aes(x = x, y = 0)) +
+  geom_text(aes(label = family, colour = family), family = .family, size = 3) +
+  scale_colour_ptol(guide = FALSE) +
+  lims(x = c(-3, 3)) +
+  theme_void()
+
+plot_grid(plt, lgnd, ncol = 1, rel_heights = c(20, 1))
 ```
 
 ```{r lexcatcoefs, fig.width=7, fig.height=4, fig.cap="Estimates of coefficients in predicting words' developmental trajectories for each language, measure, and lexical category."}
