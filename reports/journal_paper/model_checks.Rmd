@@ -89,3 +89,12 @@ vifs <- predictor_data %>%
   select(-data) %>%
   unnest()
 ```
+
+```{r lengths}
+lengths <- uni_joined %>%
+  select(language, uni_lemma, num_phons) %>%
+  distinct() %>%
+  group_by(language) %>%
+  summarise(mean = mean(num_phons),
+            median = median(num_phons))
+```

@@ -56,6 +56,9 @@ output:
 
 header-includes:
   - \usepackage{booktabs}
+  - \usepackage{listings}
+  - \lstset{literate={~} {$\sim$}{1}}
+  - \lstset{basicstyle=\ttfamily}
 ---
 
 
@@ -100,7 +103,7 @@ All of the code and data for these analyses are available at \href{https://githu
 
 ## Acquisition trajectories
 
-To estimate the trajectory of words' acquisition, we used vocabulary data collected using CDI instruments adapted in many different languages, including both Words & Gestures (WG) and Words & Sentences (WS) forms. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) each of around 400-700 words. Both comprehension and production are queried for younger children and only production is queried for older children. We use data from the items on the WG form for comprehension, and data from the items in common between the WG and WS forms for production. Table\ \ref{tab:langstats} gives an overview of our acquisition data \citep{kovacevic1996,bleses2008,boudreault2007,trudeau2011,caselli2012,caselli1995,simonsen2014,vershinina2011,yeliseyeva2009,fenson2003,eriksson2002,acarlar2008} (also see SI Figure\ \ref{fig:age-dist} for the age distributions). Each of the datasets were collected in the language of the community, e.g., the Mexican Spanish CDI data were collected in several areas of Mexico; longitudinal administrations were excluded.
+To estimate the trajectory of words' acquisition, we used vocabulary data collected using CDI instruments adapted in many different languages, including both Words & Gestures (WG) and Words & Sentences (WS) forms. When filling out a CDI form, parents are either asked to indicate whether their child "understands" (comprehension) or "understands and says" (production) each of around 400-700 words. Both comprehension and production are queried for younger children and only production is queried for older children. We use data from the items on the WG form for comprehension, and data from the items in common between the WG and WS forms for production. Table\ \ref{tab:langstats} gives an overview of our acquisition data (\citealp{kovacevic1996,bleses2008,boudreault2007,trudeau2011,caselli2012,caselli1995,simonsen2014,vershinina2011,yeliseyeva2009,fenson2003,eriksson2002,acarlar2008}; also see SI Figure\ \ref{fig:age-dist} for the age distributions). Each of the datasets were collected in the language of the community, e.g., the Mexican Spanish CDI data were collected in several areas of Mexico; longitudinal administrations were excluded.
 
 ```{r lang_stats_table, child="lang_stats_table.Rmd"}
 ```
@@ -220,7 +223,7 @@ Figure\ \ref{fig:refcoefs} shows the coefficient estimates for English comprehen
 
 Given the emphasis on frequency effects in the literature \citep{ambridge2015}, one might have expected frequency to dominate, but several other predictors are just as strong. In addition, some factors previously argued to be important for word learning, namely valence and arousal \citep{moors2013}, appear to have limited relevance when compared to other factors (both have $\bar{\beta} <$ `r max(abs(filter(mean_term_coefs, term %in% c("valence", "arousal"))$mean_estimate))` and are only significant in `r max(filter(mean_term_coefs, term %in% c("valence", "arousal"))$n_sig)` languages and measures). These results provide a strong argument for our approach of including multiple predictors and languages in our analysis. 
 
-```{r consistency, fig.width=6, fig.height=3, fig.cap="Correlations of coefficients estimates between languages. Each point represents the mean of one language's coefficients' correlation with each other language's coefficients, with the vertical line indicating the overall mean across languages. The shaded region and line show a bootstrapped 95\\% confidence interval of a randomized baseline where predictor coefficients are shuffled within language."}
+```{r consistency, fig.width=6, fig.height=3, fig.cap="Correlations of coefficient estimates between languages. Each point represents the mean of one language's coefficients' correlation with each other language's coefficients, with the vertical line indicating the overall mean across languages. The shaded region and line show a bootstrapped 95\\% confidence interval of a randomized baseline where predictor coefficients are shuffled within language."}
 ggplot(coef_summary, aes(x = mean_cor, y = language)) +
   facet_grid(. ~ measure, labeller = as_labeller(label_caps)) +
   geom_vline(xintercept = mean(coef_summary$mean_cor),
@@ -321,7 +324,7 @@ To examine the substructure of predictor variability, we used hierarchical clust
 
 ### Comprehension vs. production
 
-Word length is the one predictor of acquisition that varied substantially between measures: it is far more predictive for production than comprehension. Thus, as measured here, length seems to reflect effects of production constraints (i.e., how difficult a word is to say) rather than comprehension constraints (i.e., how difficult it is to store or access). This result may explain why the hierarchical clustering analysis above appears more similar to linguistic typology in production than comprehension, that is, the role of production difficulty may be more similar for more typologically-related languages. 
+Word length is the one predictor of acquisition that varied substantially between measures: it is far more predictive for production than comprehension. This difference is likely not attributable to differences in word length among languages -- languages' average word lengths for these items don't differ that much, ranging `r min(lengths$mean)`–`r max(lengths$mean)` in mean and `r min(lengths$median)`–`r max(lengths$median)` in median. Thus, as measured here, length seems to reflect effects of production constraints (i.e., how difficult a word is to say) rather than comprehension constraints (i.e., how difficult it is to store or access). This result may explain why the hierarchical clustering analysis above appears more similar to linguistic typology in production than comprehension, that is, the role of production difficulty may be more similar for more typologically-related languages. 
 
 ### Developmental change
 

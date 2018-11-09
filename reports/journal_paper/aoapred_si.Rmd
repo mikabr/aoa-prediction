@@ -17,9 +17,29 @@ output:
 
 # Supplemental Information {-}
 
-In this supplemental information document, we include a variety of visualizations that provide additional information about our datasets and models.
+In this supplemental information document, we include a variety of visualizations that provide additional information about our datasets and models. As noted in the manuscript, all of the code and data for our analyses are available at \href{https://github.com/mikabr/aoa-prediction}{github.com/mikabr/aoa-prediction}. In addition to the code for wrangling and analyzing all the data, this includes cached versions of the all the intermediate results, such as all of the coefficient estimates. We welcome extensions of our work or alternate analyses of our data -- feel free to contact the corresponding author at \href{mailto:mikabr@mit.edu}{mikabr@mit.edu} with any questions.
 
-```{r age-dist, fig.pos='b', fig.height=6, fig.cap="Densities of children's ages for each language and measure, along with a label for the total numbers of children."}
+## Model specification
+
+All models were fit in Julia using the MixedModels package. For a given subset of the data (e.g. data for a English production), for each CDI item (`item`), we computed the proportion of children reported to understand/produce it (`prop`) and the total number of children (`total`). We then fit a generalized linear mixed model to the data subset, with a binomial response distribution, the values in `total` as the trial weights, and the following formula:
+
+\begin{lstlisting}
+prop ~ (age | item) + age * valence + age * arousal
+                    + age * num_phons + age * final_frequency
+                    + age * MLU + age * solo_frequency
+                    + age * concreteness + age * frequency
+                    + age * babiness
+\end{lstlisting}
+
+So the regression predicts the proportion of successes (proportion of children who understand/produce each item) out of the total number of trials (number of children) from the children's age, each item-level predictor, and the interactions between age and each item-level predictor, with a random slope for age by item.
+
+\clearpage
+
+## Age distributions
+
+We report the distribution of children's ages for each language and measure. This addresses the potential concern that large differences in age between samples could unbalance the design. The age distributions largely overlap, which makes sense given that many of the datasets are from normative studies that attempted to sample evenly across ages.
+
+```{r age-dist, fig.pos='bh', fig.height=5.5, out.width="90%", fig.cap="Densities of children's ages for each language and measure, along with a label for the total numbers of children."}
 measure_admins <- admins %>%
   mutate(produces = TRUE, understands = form == "WG") %>%
   select(-form) %>%
@@ -49,12 +69,18 @@ ggplot(sample_sizes, aes(x = age, y = language)) +
              size = 3, nudge_y = 0.05, label.size = 0.2,
              label.padding = unit(0.1, "lines"), family = .family) +
   scale_y_discrete(expand = c(0, 0)) +
-  labs(x = "Age (months)", y = "", title = "Age distributions") +
+  labs(x = "Age (months)", y = "") +
   scale_fill_ptol(guide = FALSE) +
   theme(plot.title = element_text(size = rel(1.2)))
 ```
 
-```{r predictor-dist, fig.width=8, fig.height=8, fig.cap="Densities of the values of each predictor for each language."}
+\clearpage
+
+## Predictor values
+
+As another illustration of the structure of our dataset, we show the centered and scaled distribution of the values of each predictor in each language.
+
+```{r predictor-dist, fig.pos='bh', fig.width=8, fig.height=8, out.width="85%", fig.cap="Densities of the values of each predictor for each language."}
 predictor_values <- uni_model_data %>%
   ungroup() %>%
   select(language, !!predictors) %>%
@@ -73,11 +99,17 @@ ggplot(predictor_values, aes(x = value, y = predictor, fill = predictor)) +
   scale_y_discrete(expand = c(0, 0),
                    limits = rev(levels(predictor_values$predictor))) +
   scale_fill_ptol(guide = FALSE) +
-  labs(x = "Scaled value", y = "", title = "Predictor distributions") +
+  labs(x = "Scaled value", y = "") +
   theme(plot.title = element_text(size = rel(1.5)))
 ```
 
-```{r freq-dist, fig.width=8, fig.height=5, fig.cap="Densities of the frequency estimates for open and closed class words in each language."}
+\clearpage
+
+## Frequency and lexical category
+
+A potential concern about our lexical category analysis is that lexical category might not be dissociable from frequency, in the sense that closed-class words are more frequent that open-class words and span a more narrower range of frequencies. The distribution of frequencies by lexical category in our dataset, shown below, demonstrates that there is substantial overlap in frequency between the closed-class and open-class words.
+
+```{r freq-dist, fig.pos='bh', fig.width=8, fig.height=5, out.width="80%", fig.cap="Densities of the frequency estimates for open and closed class words in each language."}
 freq_values <- uni_model_data %>%
   ungroup() %>%
   select(language, lexical_classes, frequency) %>%
@@ -98,12 +130,17 @@ ggplot(freq_values, aes(x = frequency, y = lexical_classes)) +
   scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
   scale_y_discrete(expand = c(0, 0)) +
   scale_fill_ptol(guide = FALSE) +
-  labs(x = "Scaled frequency", y = "",
-       title = "Frequency distributions by lexical category") +
+  labs(x = "Scaled frequency", y = "") +
   theme(plot.title = element_text(size = rel(1.5)))
 ```
 
-```{r predictor-cors, fig.height=14, fig.width=12, fig.cap="Pairwise correlations between predictors."}
+\clearpage
+
+## Pairwise predictor correlations
+
+In addition to the univariate distribution of each predictor shown above, we show the correlation between each pair of predictors. Too many large correlations between predictors could limit the interpretability of our coefficient estimates.
+
+```{r predictor-cors, fig.pos='bh', fig.height=8, fig.width=10, fig.cap="Pairwise correlations between predictors."}
 predictor_cors %>%
   mutate(predictor1 = predictor1 %>%
            factor(levels = predictors,
@@ -113,23 +150,34 @@ predictor_cors %>%
                   labels = rev(display_predictors[predictors])),
          language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
 ggplot(aes(x = predictor2, y = predictor1)) +
-  facet_wrap(~language, ncol = 3) +
+  facet_wrap(~language, ncol = 4) +
   coord_equal() +
   geom_tile(aes(fill = abs(correlation))) +
-  geom_text(aes(label = round(correlation, 2)), size = 2.5,
+  geom_text(aes(label = map_chr(correlation, inline_hook)), size = 2.5,
             family = .family) +
-  scale_fill_gradient(low = ptol_pal()(2)[[1]], high = ptol_pal()(2)[[2]]) +
+  scale_fill_gradient(low = ptol_pal()(2)[[1]], high = ptol_pal()(2)[[2]],
+                      breaks = c(0, 0.2, 0.4, 0.6), labels = c(0, 0.2, 0.4, 0.6),
+                      limits = c(0, max(abs(predictor_cors$correlation))),
+                      guide = guide_colourbar(title.position = "top",
+                                              title.hjust = 0.5,
+                                              barwidth = 10,
+                                              frame.colour = .grey)) +
   scale_x_discrete(expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0)) +
-  labs(x = "", y = "", fill = "Correlation",
-       title = "Pairwise predictor correlations") +
-  theme(legend.position = "top",
-        legend.title = element_text(vjust = 0.8),
+  labs(x = "", y = "", fill = "Correlation magnitude") +
+  theme(legend.position = c(0.8, 0),
+        legend.direction = "horizontal",
         axis.text.x = element_text(angle = 30, hjust = 1),
         plot.title = element_text(size = rel(1.8)))
 ```
 
-```{r vifs, fig.height=5.5, fig.cap="Variance inflation factors of the predictors."}
+\clearpage
+
+## Variance inflation factors
+
+To address the potential issue of multicollinearity in our models, we show the variance inflation factor (VIF) for each predictor in each language. VIF is computed for a predictor by fitting an ordinary least squares regression with that predictor as the dependent variable and all other predictors as the independent variables, getting its $R^2$, and then computing $\text{VIF} = \frac{1}{1 - R^2}$.
+
+```{r vifs, fig.pos='bh', fig.height=5.5, out.width="70%", fig.cap="Variance inflation factors of the predictors."}
 vifs %>%
   mutate(predictor = predictor %>%
            factor(levels = predictors,
@@ -139,18 +187,24 @@ ggplot(aes(x = language, y = predictor)) +
   coord_equal() +
   geom_tile(aes(fill = vif)) +
   geom_text(aes(label = round(vif, 2)), size = 3, family = .family) +
-  scale_fill_gradient(low = ptol_pal()(2)[[1]], high = ptol_pal()(2)[[2]]) +
+  scale_fill_gradient(low = ptol_pal()(2)[[1]], high = ptol_pal()(2)[[2]],
+                      breaks = c(1, 1.5, 2, 2.5), limits = c(1, 2.5)) +
   scale_x_discrete(expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0)) +
-  labs(x = "", y = "", fill = "VIF",
-       title = "Predictor variance inflation factors") +
+  labs(x = "", y = "", fill = "VIF") +
   theme(legend.position = "top",
         legend.title = element_text(vjust = 0.8),
         axis.text.x = element_text(angle = 30, hjust = 1),
         plot.title = element_text(size = rel(1.2)))
 ```
 
-```{r by-lang-coefs, fig.height=12, fig.width=10, fig.cap="Coeffiecients for each language with 95\\% confidence intervals."}
+\clearpage
+
+## Coefficients by language
+
+As a supplement to Figure \ref{fig:langcoefs}, we show the coefficient estimates separately for each language.
+
+```{r by-lang-coefs, fig.pos='bh!', fig.height=10, fig.width=10, fig.cap="Coeffiecients for each language with 95\\% confidence intervals."}
 by_lang_plot <- function(meas) {
   ggplot(filter(plt_lang_coefs, measure == meas,
                 interaction == "main effect"),
@@ -162,30 +216,39 @@ by_lang_plot <- function(meas) {
     geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
     scale_colour_ptol(guide = FALSE) +
     scale_shape_manual(values = c(19, 21), guide = FALSE) +
-    labs(y = "", x = "Coefficient estimate",
-         title = glue("Coefficients by language ({meas})")) +
-    theme(plot.title = element_text(size = rel(1.5)))
-    # theme(plot.margin = margin(t = 32, unit = "pt"))
+    labs(y = "", x = "Coefficient estimate") #+
+    #theme(plot.margin = margin(t = 16, unit = "pt"))
 }
 
-plot_grid(by_lang_plot("understands"), by_lang_plot("produces"), ncol = 1)
-          # labels = c("Understands", "Produces"), label_size = 18)
+plot_grid(by_lang_plot("understands"), by_lang_plot("produces"), ncol = 1,
+          labels = c("Understands", "Produces"), label_size = 16, hjust = 0)
 ```
 
-```{r prod-comp-coefs, fig.width=10, fig.height=7, fig.cap="Paired coefficients for comprehension and production."}
+\clearpage
+
+## Coefficients by measure
+
+Also as a supplement to Figure \ref{fig:langcoefs}, we show the coefficient estimates separately for each language, this time paired by comprehension and production.
+
+```{r prod-comp-coefs, fig.pos='bh', fig.width=10, fig.height=6.5, fig.cap="Paired coefficients for comprehension and production."}
 ggplot(filter(plt_lang_coefs, interaction == "main effect"),
        aes(x = estimate, y = term, colour = measure, shape = measure)) +
   facet_wrap(~language, ncol = 5) +
   geom_point() +
   geom_vline(xintercept = 0, color = "grey", linetype = "dotted") +
   scale_colour_ptol() +
-  labs(y = "", x = "Coefficient estimate", colour = "", shape = "",
-       title = "Coefficients by measure") +
+  labs(y = "", x = "Coefficient estimate", colour = "", shape = "") +
   theme(legend.position = "top",
         plot.title = element_text(size = rel(1.8)))
 ```
 
-```{r lexcat-consistency, fig.width=7, fig.asp=1, fig.cap="Consistency of coefficients within each lexical category."}
+\clearpage
+
+## Consistency by lexical category
+
+As a supplement to Figure \ref{fig:consistency}, we show the correlations of coefficient estimates between languages separately for each lexical category.
+
+```{r lexcat-consistency, fig.pos='bh', fig.width=7, fig.asp=1, out.width="80%", fig.cap="Consistency of coefficients within each lexical category."}
 lexcat_coef_summary_means <- lexcat_coef_summary %>%
   group_by(lexical_category, measure) %>%
   summarise(mean_cor = mean(mean_cor))
@@ -207,8 +270,7 @@ ggplot(lexcat_coef_summary, aes(x = mean_cor, y = language)) +
                data = lexcat_baseline_coef_summary,
                colour = "grey70") +
   scale_x_continuous(breaks = seq(-0.2, 1, 0.2)) +
-  labs(x = "Mean correlation with other languages' coefficients",
-       y = "", title = "Consistency by lexical category") +
+  labs(x = "Mean correlation with other languages' coefficients", y = "") +
   scale_colour_ptol(guide = FALSE) +
   scale_fill_ptol(guide = FALSE)
 ```
