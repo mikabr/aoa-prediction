@@ -78,9 +78,9 @@ ggplot(sample_sizes, aes(x = age, y = language)) +
 
 ## Predictor values
 
-As another illustration of the structure of our dataset, we show the centered and scaled distribution of the values of each predictor in each language.
+As another illustration of the structure of our dataset, we show the centered and scaled distribution of the values of each predictor in each language, as well as the mean and 95% confidence interval of their raw values.
 
-```{r predictor-dist, fig.pos='bh', fig.width=8, fig.height=8, out.width="85%", fig.cap="Densities of the values of each predictor for each language."}
+```{r predictor-dist, fig.pos='bh', fig.width=8, fig.height=8, out.width="85%", fig.cap="Densities of the scaled and centered values of each predictor for each language."}
 predictor_values <- uni_model_data %>%
   ungroup() %>%
   select(language, !!predictors) %>%
@@ -101,6 +101,40 @@ ggplot(predictor_values, aes(x = value, y = predictor, fill = predictor)) +
   scale_fill_ptol(guide = FALSE) +
   labs(x = "Scaled value", y = "") +
   theme(plot.title = element_text(size = rel(1.5)))
+```
+
+```{r predictor-mean, fig.pos='bh', fig.width=9, fig.height=7, fig.cap="Means and 95\\% confidence intervals of the values of each predictor for each language."}
+predictor_values <- uni_joined %>%
+  select(language, uni_lemma, !!predictors) %>%
+  distinct() %>%
+  group_by(language) %>%
+  mutate_at(vars(!!predictors), funs(as.numeric(Hmisc::impute(.)))) %>%
+  ungroup() %>%
+  gather(predictor, value, !!predictors) %>%
+  mutate(predictor = factor(predictor, levels = rev(names(display_predictors)),
+                            labels = rev(unname(display_predictors))),
+         language = str_replace(language, " \\(.*\\)", ""),
+         language = fct_inorder(language))
+
+predictor_summary <- predictor_values %>%
+  group_by(language, predictor) %>%
+  summarise(mean = mean(value),
+            se = sem(value)) %>%
+  ungroup() %>%
+  arrange(predictor, mean) %>%
+  mutate(order = row_number())
+
+ggplot(predictor_summary, aes(x = order, y = mean, colour = language)) +
+  facet_wrap(~predictor, scales = "free") +
+  coord_flip() +
+  geom_crossbar(aes(ymin = mean - 1.96 * se, ymax = mean + 1.96 * se),
+                width = 0.5, fatten = 0, colour = .grey) +
+  geom_crossbar(aes(ymin = mean, ymax = mean),
+                width = 0.75) +
+  scale_x_continuous(breaks = predictor_summary$order,
+                     labels = predictor_summary$language) +
+  scale_colour_ptol(guide = FALSE) +
+  labs(y = "Predictor value", x = "")
 ```
 
 \clearpage
@@ -273,4 +307,23 @@ ggplot(lexcat_coef_summary, aes(x = mean_cor, y = language)) +
   labs(x = "Mean correlation with other languages' coefficients", y = "") +
   scale_colour_ptol(guide = FALSE) +
   scale_fill_ptol(guide = FALSE)
+```
+
+```{r transcripts, include=FALSE}
+library(childesr)
+
+languages <- unique(lang_coefs$language) %>% str_remove(" (.*)")
+iso_codes <- as_tibble(ISOcodes::ISO_639_3) %>%
+  select(language = Name, code = Id)
+
+transcripts <- get_transcripts()
+transcripts %>%
+  rename(code = language) %>%
+  left_join(iso_codes) %>%
+  select(language, corpus_id, transcript_id) %>%
+  filter(language %in% languages) %>%
+  group_by(language) %>%
+  summarise(num_corpora = n_distinct(corpus_id),
+            num_transcripts = n_distinct(transcript_id)) %>%
+  arrange(desc(num_transcripts))
 ```

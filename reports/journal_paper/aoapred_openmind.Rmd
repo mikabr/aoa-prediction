@@ -148,7 +148,7 @@ In addition, each word's concreteness, valence, arousal, and relatedness to babi
 ```{r extremes_table, child="extremes_table.Rmd"}
 ```
 
-Each numeric predictor was centered and scaled so that all predictors would have comparable units. For each predictor, missing values (CDI items that were not in the relevant corpus or norms) were imputed from the mean for their respective language and measure. Placeholder items, such as "child's own name," were excluded.
+Each numeric predictor was centered and scaled (within language and measure) so that all predictors would have comparable units. For each predictor, missing values (CDI items that were not in the relevant corpus or norms) were imputed from the mean for their respective language and measure. Placeholder items, such as "child's own name," were excluded.
 
 ### Frequency
 
@@ -211,7 +211,10 @@ ggplot(plt_lang_coefs, aes(x = estimate, y = term, colour = term)) +
   facet_grid(measure ~ interaction, scales = "free",
              labeller = as_labeller(label_caps)) +
   geom_point(size = 1, alpha = 0.4) +
-  geom_point(aes(x = mean_estimate), size = 3, data = mean_lang_coefs) +
+  geom_crossbarh(aes(x = mean_estimate, xmax = mean_estimate,
+                     xmin = mean_estimate),
+                 data = mean_lang_coefs, fatten = 3) +
+  # geom_point(aes(x = mean_estimate), size = 3, data = mean_lang_coefs) +
   geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
   scale_colour_ptol(guide = FALSE) +
   labs(x = "Coefficient estimate", y = "")
@@ -303,10 +306,13 @@ plot_grid(plt, lgnd, ncol = 1, rel_heights = c(20, 1))
 
 ```{r lexcatcoefs, fig.width=7, fig.height=4, fig.cap="Estimates of coefficients in predicting words' developmental trajectories for each language, measure, and lexical category."}
 ggplot(plt_lexcat_coefs, aes(x = estimate, y = term, colour = term)) +
-  facet_grid(measure ~ lexical_category, scales = "free",
+  facet_grid(measure ~ lexical_category,
              labeller = as_labeller(label_caps)) +
   geom_point(size = 1, alpha = 0.4) +
-  geom_point(aes(x = mean_estimate), size = 3, data = mean_lexcat_coefs) +
+  geom_crossbarh(aes(x = mean_estimate, xmax = mean_estimate,
+                     xmin = mean_estimate),
+                 data = mean_lexcat_coefs, fatten = 3) +
+  # geom_point(aes(x = mean_estimate), size = 3, data = mean_lexcat_coefs) +
   geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
   scale_colour_ptol(guide = FALSE) +
   labs(x = "Coefficient estimate", y = "")
@@ -324,7 +330,7 @@ To examine the substructure of predictor variability, we used hierarchical clust
 
 ### Comprehension vs. production
 
-Word length is the one predictor of acquisition that varied substantially between measures: it is far more predictive for production than comprehension. This difference is likely not attributable to differences in word length among languages -- languages' average word lengths for these items don't differ that much, ranging `r min(lengths$mean)`–`r max(lengths$mean)` in mean and `r min(lengths$median)`–`r max(lengths$median)` in median. Thus, as measured here, length seems to reflect effects of production constraints (i.e., how difficult a word is to say) rather than comprehension constraints (i.e., how difficult it is to store or access). This result may explain why the hierarchical clustering analysis above appears more similar to linguistic typology in production than comprehension, that is, the role of production difficulty may be more similar for more typologically-related languages. 
+Word length is the one predictor of acquisition that varied substantially between measures: it is far more predictive for production than comprehension. Thus, as measured here, length seems to reflect effects of production constraints (i.e., how difficult a word is to say) rather than comprehension constraints (i.e., how difficult it is to store or access). This result may explain why the hierarchical clustering analysis above appears more similar to linguistic typology in production than comprehension, that is, the role of production difficulty may be more similar for more typologically-related languages. 
 
 ### Developmental change
 
