@@ -103,7 +103,7 @@ mean_lexcat_coefs <- plt_lexcat_coefs %>%
   summarise(mean_estimate = mean(estimate))
 
 ref_coefs <- plt_lang_coefs %>%
-  filter(language == "English", measure == "understands")
+  filter(language == "English")
 
 lexcat_mean_cor <- function(lc) {
   lexcat_coef_summary %>%

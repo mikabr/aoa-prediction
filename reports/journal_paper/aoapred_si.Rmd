@@ -236,12 +236,11 @@ ggplot(aes(x = language, y = predictor)) +
 
 ## Coefficients by language
 
-As a supplement to Figure \ref{fig:langcoefs}, we show the coefficient estimates separately for each language.
+As a supplement to Figure \ref{fig:langcoefs}, we show the coefficient estimates separately for each language, first for the main effects and then for the age interactions.
 
-```{r by-lang-coefs, fig.pos='bh!', fig.height=10, fig.width=10, fig.cap="Coeffiecients for each language with 95\\% confidence intervals."}
-by_lang_plot <- function(meas) {
-  ggplot(filter(plt_lang_coefs, measure == meas,
-                interaction == "main effect"),
+```{r by-lang-main, fig.pos='bh!', fig.height=10, fig.width=10, fig.cap="Main effects for each language and measure with 95\\% confidence intervals."}
+by_lang_plot <- function(meas, int) {
+  ggplot(filter(plt_lang_coefs, measure == meas, interaction == int),
          aes(x = estimate, y = term)) +
     facet_wrap(~language, nrow = 2) +
     geom_pointrangeh(aes(colour = term, shape = fct_rev(signif),
@@ -250,12 +249,21 @@ by_lang_plot <- function(meas) {
     geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
     scale_colour_ptol(guide = FALSE) +
     scale_shape_manual(values = c(19, 21), guide = FALSE) +
-    labs(y = "", x = "Coefficient estimate") #+
-    #theme(plot.margin = margin(t = 16, unit = "pt"))
+    labs(y = "", x = "Coefficient estimate") +
+    theme(plot.margin = margin(t = 18, unit = "pt"))
 }
 
-plot_grid(by_lang_plot("understands"), by_lang_plot("produces"), ncol = 1,
-          labels = c("Understands", "Produces"), label_size = 16, hjust = 0)
+plot_grid(by_lang_plot("understands", "main effect"),
+          by_lang_plot("produces", "main effect"),
+          ncol = 1, label_size = 14, hjust = 0,
+          labels = c("Main effects – Understands", "Main effects – Produces"))
+```
+
+```{r by-lang-age, fig.pos='bh!', fig.height=10, fig.width=10, fig.cap="Age interactions for each language and measure with 95\\% confidence intervals."}
+plot_grid(by_lang_plot("understands", "interaction with age"),
+          by_lang_plot("produces", "interaction with age"),
+          ncol = 1, label_size = 14, hjust = 0,
+          labels = c("Age interactions – Understands", "Age interactions – Produces"))
 ```
 
 \clearpage
