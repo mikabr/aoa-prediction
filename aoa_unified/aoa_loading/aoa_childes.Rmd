@@ -1,0 +1,43 @@
+---
+title: "Untitled"
+author: "Mika Braginsky"
+date: "12/17/2018"
+output: html_document
+---
+ 
+```{r setup}
+library(tidyverse)
+library(childesr)
+library(wordbankr)
+theme_set(theme_mikabr())
+font <- theme_mikabr()$text$family
+```
+
+```{r uni_lemmas}
+load("../saved_data/uni_lemmas.RData")
+
+iso_codes <- as_tibble(ISOcodes::ISO_639_3) %>%
+  select(language = Name, code = Id)
+
+# transcripts <- get_transcripts()
+# 
+# langs <- transcripts %>%
+#   distinct(language) %>%
+#   rename(code = language) %>%
+#   mutate(childes = TRUE)
+
+# dog <- get_types(language = "eng", role_exclude = "CHI", type = "dog")
+# dog2 <- get_tokens(language = "eng", role_exclude = "CHI", stem = "dog", token = "*")
+
+langs <- uni_lemmas %>%
+  group_by(language) %>%
+  nest(.key = uni_lemmas) %>%
+  mutate(language = language %>% str_remove(" \\(.*\\)")) %>%
+  left_join(iso_codes)
+
+cro <- langs$uni_lemmas[[1]]
+cro_tokens <- get_tokens(language = "hrv", role_exclude = "CHI",
+                         stem = cro$words, token = "*")
+
+av <- get_tokens(language = "hrv", role_exclude = "CHI", token = "avion")
+```

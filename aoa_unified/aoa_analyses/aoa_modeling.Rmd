@@ -11,366 +11,216 @@ editor_options:
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(glue)
-library(langcog)
-library(lme4)
-library(lmerTest)
 library(broom)
-library(JuliaCall)
-theme_set(papaja::theme_apa())
+library(langcog)
+library(jglmm)
 ```
 
-```{r}
+```{r load_data}
 load("../saved_data/uni_joined.RData")
-```
 
-```{r model_setup}
 predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
                 "num_phons", "concreteness", "valence", "arousal", "babiness")
+.alpha <- 0.05
 ```
 
 Impute and scale data for input into models.
 ```{r uni_model_data}
-cols <- c("language", "measure", "uni_lemma", "lexical_classes", "words", "age",
-          "num_true", "num_false", "prop", predictors)
+model_data <- uni_joined %>%
+  select(language, uni_lemma, lexical_classes, !!predictors) %>%
+  distinct() %>%
+  mutate(lexical_category = if_else(
+           str_detect(lexical_classes, ","), "other", lexical_classes
+         ) %>%
+           as_factor() %>%
+           fct_collapse("predicates" = c("verbs", "adjectives", "adverbs"))) %>%
+  select(-lexical_classes) %>%
+  group_by(language) %>%
+  mutate_at(vars(!!predictors), funs(as.numeric(scale(.)))) %>%
+  nest()
 
-uni_model_data <- uni_joined %>%
-  select(!!cols) %>%
+pred_sources <- list(
+  c("frequency", "MLU", "final_frequency", "solo_frequency"),
+  c("valence", "arousal"),
+  "concreteness", "babiness", "num_phons"
+)
+
+fit_predictor <- function(pred, d) {
+  xs <- pred_sources %>% discard(~pred %in% .x) %>% unlist()
+  x_str <- xs %>% paste(collapse = " + ")
+  lm(as.formula(glue("{pred} ~ {x_str}")), data = d) %>%
+    augment(newdata = d) %>%
+    select(uni_lemma, lexical_category, .fitted)
+}
+
+max_steps <- 20
+iterate_predictors <- function(lang_data) {
+  missing <- lang_data %>%
+    gather(predictor, value, !!predictors) %>%
+    mutate(missing = is.na(value)) %>%
+    select(-value) %>%
+    spread(predictor, missing)
+  predictor_order <- lang_data %>%
+    gather(predictor, value, !!predictors) %>%
+    group_by(predictor) %>%
+    summarise(num_na = sum(is.na(value))) %>%
+    filter(num_na != 0) %>%
+    arrange(num_na) %>%
+    pull(predictor)
+  imputation_data <- lang_data %>%
+    mutate_at(vars(!!predictors),
+              funs(as.numeric(Hmisc::impute(., fun = "random"))))
+  for (i in 0:max_steps) {
+    pred <- predictor_order[(i %% length(predictor_order)) + 1]
+    imputation_fits <- fit_predictor(pred, imputation_data)
+    imputation_data <- missing %>%
+      select(uni_lemma, lexical_category, !!pred) %>%
+      rename(missing = !!pred) %>%
+      right_join(imputation_data) %>%
+      left_join(imputation_fits) %>%
+      mutate_at(vars(pred), funs(if_else(is.na(missing), .fitted, .))) %>%
+      select(-.fitted, -missing)
+  }
+  return(imputation_data)
+}
+
+model_data_imputed <- model_data %>%
+  mutate(imputed = map(data, iterate_predictors))
+
+uni_model_data <- model_data_imputed %>%
+  select(-data) %>%
+  unnest() %>%
+  group_by(language) %>%
+  mutate_at(vars(predictors), funs(as.numeric(scale(.)))) %>%
+  right_join(uni_joined %>% select(language, measure, uni_lemma, age, num_true,
+                                   num_false)) %>%
   group_by(language, measure) %>%
-  mutate_at(vars(!!predictors), funs(as.numeric(Hmisc::impute(.)))) %>%
-  mutate(unscaled_age = age) %>%
-  mutate_at(vars(c(!!predictors, "age")), funs(as.numeric(scale(.)))) %>%
-  mutate(total = as.double(num_true + num_false),
-         prop = num_true / total)
+  mutate(unscaled_age = age, age = scale(age),
+         total = as.double(num_true + num_false), prop = num_true / total)
 ```
 
 Save point -- model input data.
 ```{r uni_model_data_save}
-# save(uni_model_data, file = "../saved_data/uni_model_data.RData")
+save(uni_model_data, file = "../saved_data/uni_model_data.RData")
 # load("../saved_data/uni_model_data.RData")
 ```
 
 Fit models for each language and measure.
-```{r lang_models}
-# lang_model_fun <- function(lang, lang_measure_data) {
-#   print(sprintf("Fitting lmer for %s...", lang))
-#   interaction_formula <- as.formula(
-#     sprintf("cbind(num_true, num_false) ~ (age | uni_lemma) + %s",
-#             paste(sprintf("age * %s", predictors), collapse = " + "))
-#   )
-#   glmer(interaction_formula, family = "binomial", data = lang_measure_data)
-#               #control = lme4::glmerControl(optCtrl = list(maxfun = 1e7)))
-# }
-# 
-# lang_models <- uni_model_data %>%
-#   #filter(language %in% c("Turkish")) %>%
-#   group_by(language, measure) %>%
-#   nest() %>%
-#   mutate(model = map2(language, data, lang_model_fun))
-# 
-# lexcat_models <- uni_model_data %>%
-#   filter(!grepl(",", lexical_classes),
-#          lexical_classes != "other") %>%
-#   mutate(lexical_category = `levels<-`(
-#     factor(lexical_classes),
-#     list(
-#       "Nouns" = "nouns",
-#       "Predicates" = c("verbs", "adjectives", "adverbs"),
-#       "Function Words" = "function_words"
-#     ))) %>%
-#   select(-lexical_classes) %>%
-#   group_by(language, measure, lexical_category) %>%
-#   nest() %>%
-#   mutate(model = map2(language, data, lang_model_fun))
-```
-
-```{r}
-# converged <- function(m) {
-#   return(!any(grepl("failed to converge", m@optinfo$conv$lme4$messages)))
-# }
-# 
-# crossling_model_fun <- function(measure, measure_data) {
-#   print(sprintf("Fitting lmer for %s...", measure))
-#   effects <- paste(c("age", predictors), collapse = " + ")
-#   effects_formula <- as.formula(
-#     glue("cbind(num_true, num_false) ~
-#          ({effects} | language) + ({effects} | language:uni_lemma) + {effects}")
-#   )
-#   #   glue("cbind(num_true, num_false) ~
-#   #           ({effects} | language) + (age | language:uni_lemma) + {effects}")
-#   # )
-#   # sprintf("cbind(num_true, num_false) ~
-#     #         (age | language) + (age | language:uni_lemma) + %s",
-#     #         paste(c("age", predictors), collapse = " + "))
-#             #paste(sprintf("age * %s", predictors), collapse = " + "))
-#   # )
-#   message(Sys.time())
-#   measure_model <- glmer(effects_formula, family = "binomial",
-#                          data = measure_data, verbose = TRUE)
-#   # measure_model <- brm(interaction_formula, family = "binomial",
-#   #                        data = measure_data)
-#   message(Sys.time())
-#   return(measure_model)
-#   # if (converged(measure_model)) return(measure_model)
-#   # 
-#   # # if model doesn't converge, run again starting from current estimates
-#   # current <- getME(measure_model, c("theta", "fixef"))
-#   # measure_model_updated <- update(measure_model, start = current)
-#   # print(Sys.time())
-#   # return(measure_model_updated)
-# }
-# 
-# # relgrad <- with(measure_model@optinfo$derivs,solve(Hessian,gradient))
-# # max(abs(relgrad))
-# 
-# # uni_model_data %>%
-# #   group_by(measure) %>%
-# #   nest() %>%
-# #   mutate(model = map2(measure, data, crossling_model_fun))
-# 
-# # language as random effect -> need slopes for each predictor
-# # language as fixed effect -> each predictor's main effect and language interaction
-# 
-# comp_data <- uni_model_data %>%
-#   filter(measure == "understands") #%>%
-#   # group_by(language, uni_lemma) %>%
-#   # nest() %>%
-#   # group_by(language) %>%
-#   # sample_n(20) %>%
-#   # unnest()
-# 
-# comp_model <- crossling_model_fun("understands", comp)
-# summary(comp_model)
-# save(comp_model, file = "comp_model.RData")
-# 
-# comp_coefs <- tidy(comp_model) %>%
-#   filter(group == "fixed", !(term %in% c("(Intercept)", "age"))) %>%
-#   arrange(abs(estimate)) %>%
-#   mutate(term = fct_inorder(term),
-#          ci_upper = estimate + 1.96 * std.error,
-#          ci_lower = estimate - 1.96 * std.error,
-#          sig = p.value < 0.01)
-# 
-# ggplot(comp_coefs, aes(x = term, y = estimate)) +
-#   #facet_grid(measure ~ interaction, labeller = as_labeller(label_caps)) +
-#   coord_flip() +
-#   geom_pointrange(aes(colour = term, ymin = ci_lower, ymax = ci_upper)) +
-#   #geom_point(aes(x = mean, colour = term), size = 3, data = mean_coefs) +
-#   geom_hline(yintercept = 0, color = "grey", linetype = "dotted") +
-#   #scale_fill_solarized(guide = FALSE) +
-#   scale_colour_manual(guide = FALSE,
-#                       values = rev(solarized_palette(nrow(comp_coefs)))) +
-#   xlab("") +
-#   scale_y_continuous(name = "Coefficient estimate")
-# 
-# comp_aug <- augment(comp_model)
-# fits <- as_data_frame(comp_aug[,1]) %>%
-#   mutate(fitted = comp_aug$.fitted,
-#          prop = num_true / (num_true + num_false))
-# comp_rsq <- cor(fits$prop, fits$fitted) ^ 2
-# 
-# comp_effects <- as.data.frame(ranef(comp_model))
-# lang_effects <- comp_effects %>% filter(grpvar == "language")
-# 
-# ggplot(lang_effects, aes(x = condval, y = grp)) +
-#   facet_wrap(~term) +
-#   geom_point() +
-#   geom_vline(xintercept = 0, linetype = "dotted", colour = "darkgrey")
-# 
-# item_effects <- comp_effects %>% filter(grpvar == "language:uni_lemma")
-```
-
-```{r}
-comp_data <- uni_model_data %>%
-  ungroup() %>%
-  filter(measure == "understands") %>%
-  mutate(item = paste(language, uni_lemma, sep = ":")) %>%
-  select(language, item, prop, total, age, !!predictors)
-#write_csv(comp_data, "../saved_data/comp_data.csv")
-#feather::write_feather(comp_data, "../saved_data/comp_data.feather")
-save(comp_data, file = "../saved_data/comp_data.RData")
-```
-
-```{r lang_results}
-# set up julia and julia packages
-j_dir <- '/Applications/Julia-0.6.app/Contents/Resources/julia/bin/'
-j <- julia_setup(JULIA_HOME = j_dir, verbose = TRUE)
-j$library("MixedModels")
-
-# construct model formula
+```{r fit_models}
 effects <- paste("age", predictors, sep = " * ")
 effects_formula <- as.formula(
   glue("prop ~ (age | item) + {paste(effects, collapse = ' + ')}")
 )
-j$assign("form", effects_formula)
+lex_effects <- paste("lexical_category", predictors, sep = " * ")
+lex_effects_formula <- as.formula(
+  glue("prop ~ (age | item) + {paste(c(effects, lex_effects), collapse = ' + ')}")
+)
 
-fit_group_model <- function(group_data) {
-  message(glue("Fitting model for {unique(group_data$group)}..."))
-
-  # pass formula and data
-  j$assign("group_data", group_data)
-  j$assign("trials", group_data$total)
-
-  # set up and fit model
-  j$eval("@elapsed group_model = GeneralizedLinearMixedModel(form, group_data, Binomial(), wt = trials)")
-  j$eval("@elapsed fit!(group_model, fast=true)")
-
-  # extract coefficients
-  j$eval("coef = coeftable(group_model)")
-  j$eval("coef_df = DataFrame(coef.cols)")
-  j$eval("coef_df[4] = [ coef_df[4][i].v for i in 1:length(coef_df[4]) ]")
-  j$eval("names!(coef_df, [ Symbol(nm) for nm in coef.colnms ])")
-  j$eval("coef_df[:term] = coef.rownms")
-  j$eval("coef_df")
-
+fit_group_model <- function(group_data, group_formula, contrasts = NULL) {
+  group <- unique(group_data$group)
+  message(glue("Fitting model for {group}..."))
+    jglmm(formula = group_formula, data = group_data, family = "binomial",
+          weights = group_data$total, contrasts = contrasts)
 }
 
-lang_results <- uni_model_data %>%
-  mutate(group = paste(language, measure)) %>%
-  select(language, measure, group, item = uni_lemma, prop, total, age,
-         !!predictors) %>%
-  group_by(language, measure) %>%
-  nest() %>%
-  mutate(results = map(data, fit_group_model))
-
-lexcat_results <- uni_model_data %>%
-  filter(!grepl(",", lexical_classes), lexical_classes != "other") %>%
-  mutate(lexical_category = lexical_classes %>%
-           as_factor() %>%
-           fct_collapse("Nouns" = "nouns",
-                        "Predicates" = c("verbs", "adjectives", "adverbs"),
-                        "Function words" = "function_words"),
-         group = paste(language, measure, lexical_category)) %>%
-  select(language, measure, lexical_category, group, item = uni_lemma, prop,
+by_lang_data <- uni_model_data %>%
+  mutate(group = paste(language, measure),
+         lexical_category = lexical_category %>% fct_relevel("other")) %>%
+  select(language, measure, group, lexical_category, item = uni_lemma, prop,
          total, age, !!predictors) %>%
-  group_by(language, measure, lexical_category) %>%
-  nest() %>%
-  mutate(results = map(data, fit_group_model))
+  group_by(language, measure) %>%
+  nest()
+
+lang_lexcat_models <- by_lang_data %>%
+  mutate(model = data %>%
+           map(~fit_group_model(.x, lex_effects_formula,
+                                contrasts = list(lexical_category = "effects"))))
+
+lang_lexcat_fits <- lang_lexcat_models %>%
+  mutate(results = map(model, tidy))
+save(lang_lexcat_fits, file = "../saved_data/_lang_lexcat_fits.RData")
 ```
 
-```{r lang_coefs}
+Spot check Julia results against lme4 results.
+```{r model_comp}
+eng_data <- by_lang_data %>%
+  filter(language == "English (American)", measure == "understands") %>%
+  pull(data) %>%
+  .[[1]]
+
+eng_model_int <- fit_group_model(eng_data, lex_effects_formula,
+                                 contrasts = list(lexical_category = "effects"))
+eng_effects_int <- tidy(eng_model_int)
+
+eng_model_int_r <- glmer(
+  lex_effects_formula,
+  mutate(eng_data, lexical_category = lexical_category %>%
+           fct_relevel("nouns", "function_words", "predicates")),
+  family = "binomial", weights = eng_data$total,
+  contrasts = list(lexical_category = contr.sum)
+)
+current <- getME(eng_model_int_r, c("theta", "fixef"))
+eng_model_int_r_update <- update(eng_model_int_r, start = current)
+eng_effects_int_r <- tidy(eng_model_int_r_update) %>% filter(group == "fixed")
+
+eng_effects_int_r %>% filter(group == "fixed") %>% select(term, estimate) %>%
+  bind_cols(eng_effects_int %>% select(term, estimate)) %>%
+  mutate(diff = abs(estimate - estimate1)) %>% arrange(desc(diff))
+```
+
+Tidy up coefficients from models.
+```{r lang_lexcat_coefs}
 measure_levels <- c("understands", "produces")
-effect_levels <- c("main effect", "interaction with age")
 
-munge_results <- function(results) {
-  results %>%
-    select(-data) %>%
-    unnest() %>%
-    rename(estimate = Estimate,
-           std_error = Std.Error,
-           z_value = `z value`,
-           p_value = `P(>|z|)`) %>%
-    filter(!term %in% c("(Intercept)", "age")) %>%
-    mutate(interaction = ifelse(grepl("&", term), "interaction with age",
-                                "main effect"),
-           interaction = factor(interaction, levels = effect_levels),
-           term = gsub("age & ", "", term),
-           measure = factor(measure, levels = measure_levels),
-           signif = p_value < 0.05)
-}
+lang_lexcat_coefs <- lang_lexcat_fits %>%
+  select(language, measure, results) %>%
+  unnest() %>%
+  rename(std_error = std.error,
+         z_value = z.value,
+         p_value = p.value) %>%
+  separate(term, c("term", "effect"), sep = " & ", fill = "right") %>%
+  mutate(effect = if_else(is.na(effect), "main effect", effect),
+         term = if_else(term == "age" & effect != "main effect",
+                        effect, term),
+         effect = if_else(term == effect, "age", effect),
+         effect = if_else(effect == "main effect", effect,
+                          paste("interaction with", effect)),
+         effect = effect %>%
+           fct_relevel("main effect",
+                       "interaction with age",
+                       "interaction with lexical_category: nouns",
+                       "interaction with lexical_category: predicates"),
+         measure = factor(measure, levels = measure_levels),
+         signif = p_value < .alpha) %>%
+  group_by(language, measure, term, effect) %>%
+  nest()
 
-lang_coefs <- munge_results(lang_results)
-lexcat_coefs <- munge_results(lexcat_results)
+predictor_effects <- lang_lexcat_coefs %>%
+  filter(effect == "main effect", term %in% predictors) %>%
+  rename(predictor_effect = data) %>%
+  select(-effect)
 
-coef_order <- lang_coefs %>%
-  group_by(term, measure, interaction) %>%
-  summarise(mean_estimate = mean(estimate)) %>%
-  filter(measure == "understands", interaction == "main effect") %>%
-  arrange(abs(mean_estimate)) %>%
-  pull(term)
+lexcat_effects <- lang_lexcat_coefs %>%
+  filter(effect == "main effect",
+         str_detect(term, "lexical_category")) %>%
+  mutate(lexical_category = str_match(term, ": (.*)$")[,2]) %>%
+  rename(lexcat_effect = data) %>%
+  select(-term, -effect)
 
-lang_coefs <- lang_coefs %>%
-  mutate(term = factor(term, levels = coef_order))
-
-lexcat_coefs <- lexcat_coefs %>%
-  mutate(term = factor(term, levels = coef_order))
-
-save(lang_coefs, file = "../saved_data/lang_coefs.RData")
+lexcat_coefs <- lang_lexcat_coefs %>%
+  filter(str_detect(effect, "lexical_category")) %>%
+  mutate(lexical_category = str_match(effect, ": (.*)$")[,2]) %>%
+  rename(interaction = data) %>%
+  select(-effect) %>%
+  left_join(predictor_effects) %>%
+  left_join(lexcat_effects) %>%
+  unnest(.sep = "_") %>%
+  mutate(estimate = predictor_effect_estimate +
+           lexcat_effect_estimate + interaction_estimate)
 save(lexcat_coefs, file = "../saved_data/lexcat_coefs.RData")
-```
 
-```{r lang_coefs}
-# lang_coef_fun <- function(lang_model) {
-#   broom::tidy(lang_model) %>%
-#     filter(term != "(Intercept)", term != "age", group == "fixed") %>%
-#     select(term, estimate, std.error) %>%
-#     mutate(interaction = ifelse(grepl(":", term), "interaction with age",
-#                                 "main effect"),
-#            term = gsub("age:", "", term))
-# }
-# 
-# lang_coefs <- lang_models %>%
-#   mutate(coefs = map(model, lang_coef_fun)) %>%
-#   select(language, measure, coefs) %>%
-#   unnest()
-# 
-# lexcat_coefs <- lexcat_models %>%
-#   mutate(coefs = map(model, lang_coef_fun)) %>%
-#   select(language, measure, lexical_category, coefs) %>%
-#   unnest()
-```
-
-Combine by-language coefficients with across-language coefficients.
-```{r}
-# measure_levels <- c("understands", "produces")
-# effect_levels <- c("main effect", "interaction with age")
-# 
-# lang_coefs <- lang_coefs %>%
-#   mutate(term = factor(term, levels = predictors),
-#          measure = factor(measure, levels = measure_levels),
-#          interaction = factor(interaction, levels = effect_levels))
-# 
-# lexcat_coefs <- lexcat_coefs %>%
-#   mutate(term = factor(term, levels = predictors),
-#          measure = factor(measure, levels = measure_levels),
-#          interaction = factor(interaction, levels = effect_levels))
-
-# save(lang_coefs, file = "saved_data/lang_coefs.RData")
-```
-
-Examine cross-linguistic consistency in coefficient estimates.
-```{r consistency, fig.width=9, fig.height=5}
-# num_coefs <- n_distinct(lang_coefs$term)
-
-ggplot(lang_coefs, aes(x = estimate, y = term)) +
-  facet_grid(measure ~ interaction) +
-  geom_point(aes(colour = term), size = 1, alpha = 0.4) +
-  geom_point(aes(x = mean_estimate, colour = term), size = 3, data = mean_coefs) +
-  geom_vline(xintercept = 0, color = "grey", linetype = "dashed") +
-  scale_colour_ptol() +
-  ylab("") +
-  scale_x_continuous(name = "Coefficient Estimate")
-```
-
-```{r consistency, fig.width=9, fig.height=5}
-plt_lexcat_coefs <- lexcat_coefs %>%
-  # mutate(term = factor(term, levels = rev(term_order$term)),
-  #        measure = factor(measure, levels = c("understands", "produces")),
-  #        interaction = factor(interaction,
-  #                             levels = c("main effect", "interaction with age"))) %>%
-  filter(interaction == "main effect",
-         !(term %in% c("valence", "arousal")))
-
-mean_lexcat_coefs <- plt_lexcat_coefs %>%
-  group_by(lexical_category, term, measure, interaction) %>%
-  summarise(mean = mean(estimate),
-            ci_lower = ci_lower(estimate),
-            ci_upper = ci_upper(estimate))
-
-ggplot(plt_lexcat_coefs, aes(x = term, y = estimate)) +
-  facet_grid(measure ~ lexical_category) + #, scales = "free", space = "free") +
-  #facet_grid(. ~ interaction, scales = "free") +
-  geom_point(aes(colour = term), size = 1, alpha = 0.4) +
-  # data = joint_coefs_measures %>%
-  #   filter(language != "All Languages")) +
-  geom_point(aes(y = mean, colour = term), size = 3, data = mean_lexcat_coefs) +
-  # geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper, y = mean,
-  #                     colour = term),# size = 1,
-  #                     data = mean_coefs) +
-  geom_hline(yintercept = 0, color = "grey", linetype = "dashed") +
-  coord_flip() +
-  scale_fill_solarized(guide = FALSE) +
-  scale_colour_manual(guide = FALSE, values = rev(solarized_palette(num_coefs)),
-                      drop = FALSE) +
-  xlab("") +
-  scale_y_continuous(name = "Coefficient Estimate")
+lang_coefs <- lang_lexcat_coefs %>%
+  filter(str_detect(effect, "main|age"), term %in% predictors) %>%
+  unnest()
+save(lang_coefs, file = "../saved_data/lang_coefs.RData")
 ```

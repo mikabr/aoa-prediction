@@ -169,6 +169,8 @@ uni_prop_data <- uni_prop_data %>%
 uni_lemmas <- uni_prop_data %>%
   ungroup() %>%
   distinct(language, uni_lemma, words)
+
+save(uni_lemmas, file = "../saved_data/uni_lemmas.RData")
 ```
 
 
