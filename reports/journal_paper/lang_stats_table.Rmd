@@ -1,7 +1,3 @@
-<!-- \begingroup -->
-<!-- \singlespacing -->
-<!-- \setlength\parindent{0pt} -->
-
 ```{r langstats, results="asis"}
 uni_lemma_info <- uni_model_data %>%
   group_by(language) %>%
@@ -31,7 +27,7 @@ instrument_info <- sample_sizes %>%
 lang_stats <- instrument_info %>%
   left_join(uni_lemma_info) %>%
   left_join(childes_sizes) %>%
-  mutate(language = str_replace(language, " \\(.*\\)", "")) %>%
+  # mutate(language = str_replace(language, " \\(.*\\)", "")) %>%
   select(language, ni = num_included, pna = produces_num_admins,
          par = produces_age_range,
          una = understands_num_admins, uar = understands_age_range, types, tokens)
@@ -46,5 +42,3 @@ kable(lang_stats, format = "latex", escape = FALSE, booktabs = TRUE,
   column_spec(1, bold = TRUE) %>%
   kable_styling(position = "center")
 ```
-
-<!-- \endgroup -->

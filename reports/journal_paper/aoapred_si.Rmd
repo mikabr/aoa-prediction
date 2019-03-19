@@ -21,17 +21,28 @@ In this supplemental information document, we include a variety of visualization
 
 ## Model specification
 
-All models were fit in Julia using the MixedModels package. For a given subset of the data (e.g. data for a English production), for each CDI item (`item`), we computed the proportion of children reported to understand/produce it (`prop`) and the total number of children (`total`). We then fit a generalized linear mixed model to the data subset, with a binomial response distribution, the values in `total` as the trial weights, and the following formula:
+All models were fit in Julia using the MixedModels package. For a given subset of the data (e.g. data for English production), for each CDI item (`item`), we computed the proportion of children reported to understand/produce it (`prop`) and the total number of children (`total`). We then fit a generalized linear mixed model to the data subset, with a binomial response distribution, the values in `total` as the trial weights, and the following formula:
 
+```{r}
+effects <- paste("age", sort(predictors), sep = " * ")
+lex_effects <- paste("lexical_category", sort(predictors), sep = " * ")
+lex_effects_formula <- glue("prop ~ (age | item) + {paste(c(effects, lex_effects), collapse = ' + ')}")
+```
+
+\begin{small}
 \begin{lstlisting}
-prop ~ (age | item) + age * valence + age * arousal
-                    + age * num_phons + age * final_frequency
-                    + age * MLU + age * solo_frequency
-                    + age * concreteness + age * frequency
-                    + age * babiness
+prop ~ (age | item) + age * arousal + age * babiness + age * concreteness
+       + age * final_frequency + age * frequency + age * MLU
+       + age * num_phons + age * solo_frequency + age * valence
+       + lexical_category * arousal + lexical_category * babiness
+       + lexical_category * concreteness + lexical_category * final_frequency
+       + lexical_category * frequency + lexical_category * MLU
+       + lexical_category * num_phons + lexical_category * solo_frequency
+       + lexical_category * valence
 \end{lstlisting}
+\end{small}
 
-So the regression predicts the proportion of successes (proportion of children who understand/produce each item) out of the total number of trials (number of children) from the children's age, each item-level predictor, and the interactions between age and each item-level predictor, with a random slope for age by item.
+So the regression predicts the proportion of successes (proportion of children who understand/produce each item) out of the total number of trials (number of children) from the children's age, each item-level predictor, the interactions between age and each item-level predictor, and the interactions between lexical category and each item-level predictor, with a random slope for age by item.
 
 \clearpage
 
@@ -86,18 +97,17 @@ predictor_values <- uni_model_data %>%
   select(language, !!predictors) %>%
   distinct() %>%
   gather(predictor, value, !!predictors) %>%
-  mutate(predictor = factor(predictor, levels = rev(names(display_predictors)),
-                            labels = rev(unname(display_predictors))),
-         language = str_replace(language, " \\(.*\\)", ""),
-         language = fct_inorder(language))
+  mutate(predictor = predictor %>% factor(levels = rev(coef_order)) %>%
+           fct_relabel(display_predictors),
+         language = language %>% str_remove(" \\(.*\\)") %>% as_factor())
 
 ggplot(predictor_values, aes(x = value, y = predictor, fill = predictor)) +
   facet_wrap(~language, nrow = 2) +
   geom_vline(xintercept = 0, colour = .grey, linetype = "dotted") +
   geom_density_ridges(rel_min_height = 0.01, scale = 0.95, alpha = 0.7) +
   scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
-  scale_y_discrete(expand = c(0, 0),
-                   limits = rev(levels(predictor_values$predictor))) +
+  scale_y_discrete(expand = c(0, 0)) +
+                   # limits = rev(levels(predictor_values$predictor))) +
   scale_fill_ptol(guide = FALSE) +
   labs(x = "Scaled value", y = "") +
   theme(plot.title = element_text(size = rel(1.5)))
@@ -111,10 +121,9 @@ predictor_values <- uni_joined %>%
   mutate_at(vars(!!predictors), funs(as.numeric(Hmisc::impute(.)))) %>%
   ungroup() %>%
   gather(predictor, value, !!predictors) %>%
-  mutate(predictor = factor(predictor, levels = rev(names(display_predictors)),
-                            labels = rev(unname(display_predictors))),
-         language = str_replace(language, " \\(.*\\)", ""),
-         language = fct_inorder(language))
+  mutate(predictor = predictor %>% factor(levels = coef_order) %>%
+           fct_relabel(display_predictors),
+         language = language %>% str_remove(" \\(.*\\)") %>% as_factor())
 
 predictor_summary <- predictor_values %>%
   group_by(language, predictor) %>%
@@ -146,20 +155,19 @@ A potential concern about our lexical category analysis is that lexical category
 ```{r freq-dist, fig.pos='bh', fig.width=8, fig.height=5, out.width="80%", fig.cap="Densities of the frequency estimates for open and closed class words in each language."}
 freq_values <- uni_model_data %>%
   ungroup() %>%
-  select(language, lexical_classes, frequency) %>%
+  select(language, lexical_category, frequency) %>%
   distinct() %>%
-  filter(!str_detect(lexical_classes, ","))  %>%
-  mutate(language = str_replace(language, " \\(.*\\)", ""),
-         language = fct_inorder(language),
-         lexical_classes = fct_other(lexical_classes, keep = "function_words"),
-         lexical_classes = fct_recode(lexical_classes,
+  filter(!str_detect(lexical_category, ","))  %>%
+  mutate(language = language %>% str_remove(" \\(.*\\)") %>% as_factor(),
+         lexical_category = fct_other(lexical_category, keep = "function_words"),
+         lexical_category = fct_recode(lexical_category,
                                       "Open class" = "Other",
                                       "Closed class" = "function_words"))
 
-ggplot(freq_values, aes(x = frequency, y = lexical_classes)) +
+ggplot(freq_values, aes(x = frequency, y = lexical_category)) +
   facet_wrap(~language, nrow = 2) +
   geom_vline(xintercept = 0, colour = "darkgrey", linetype = "dotted") +
-  geom_density_ridges(aes(fill = lexical_classes), rel_min_height = 0.01,
+  geom_density_ridges(aes(fill = lexical_category), rel_min_height = 0.01,
                       scale = 0.95, alpha = 0.7) +
   scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
   scale_y_discrete(expand = c(0, 0)) +
@@ -176,14 +184,12 @@ In addition to the univariate distribution of each predictor shown above, we sho
 
 ```{r predictor-cors, fig.pos='bh', fig.height=8, fig.width=10, fig.cap="Pairwise correlations between predictors."}
 predictor_cors %>%
-  mutate(predictor1 = predictor1 %>%
-           factor(levels = predictors,
-                  labels = display_predictors[predictors]),
-         predictor2 = predictor2 %>%
-           factor(levels = rev(predictors),
-                  labels = rev(display_predictors[predictors])),
-         language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
-ggplot(aes(x = predictor2, y = predictor1)) +
+  mutate(predictor1 = predictor1 %>% factor(levels = coef_order) %>%
+           fct_relabel(display_predictors),
+        predictor2 = predictor2 %>% factor(levels = rev(coef_order)) %>%
+          fct_relabel(display_predictors),
+         language = language %>% str_remove(" \\(.*\\)") %>% as_factor()) %>%
+ggplot(aes(x = predictor1, y = predictor2)) +
   facet_wrap(~language, ncol = 4) +
   coord_equal() +
   geom_tile(aes(fill = abs(correlation))) +
@@ -213,10 +219,9 @@ To address the potential issue of multicollinearity in our models, we show the v
 
 ```{r vifs, fig.pos='bh', fig.height=5.5, out.width="70%", fig.cap="Variance inflation factors of the predictors."}
 vifs %>%
-  mutate(predictor = predictor %>%
-           factor(levels = predictors,
-                  labels = display_predictors[predictors]),
-         language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
+  mutate(predictor = predictor %>% factor(levels = rev(coef_order)) %>%
+           fct_relabel(display_predictors),
+         language = language %>% str_remove(" \\(.*\\)") %>% as_factor()) %>%
 ggplot(aes(x = language, y = predictor)) +
   coord_equal() +
   geom_tile(aes(fill = vif)) +
@@ -236,11 +241,11 @@ ggplot(aes(x = language, y = predictor)) +
 
 ## Coefficients by language
 
-As a supplement to Figure \ref{fig:langcoefs}, we show the coefficient estimates separately for each language, first for the main effects and then for the age interactions.
+As a supplement to Figure \ref{fig:langcoefs}, we show the coefficient estimates for each language, first for the main effects and then for the age interactions.
 
 ```{r by-lang-main, fig.pos='bh!', fig.height=10, fig.width=10, fig.cap="Main effects for each language and measure with 95\\% confidence intervals."}
 by_lang_plot <- function(meas, int) {
-  ggplot(filter(plt_lang_coefs, measure == meas, interaction == int),
+  ggplot(filter(plt_lang_coefs, measure == meas, effect == int),
          aes(x = estimate, y = term)) +
     facet_wrap(~language, nrow = 2) +
     geom_pointrangeh(aes(colour = term, shape = fct_rev(signif),
@@ -263,17 +268,18 @@ plot_grid(by_lang_plot("understands", "main effect"),
 plot_grid(by_lang_plot("understands", "interaction with age"),
           by_lang_plot("produces", "interaction with age"),
           ncol = 1, label_size = 14, hjust = 0,
-          labels = c("Age interactions – Understands", "Age interactions – Produces"))
+          labels = c("Age interactions – Understands",
+                     "Age interactions – Produces"))
 ```
 
 \clearpage
 
 ## Coefficients by measure
 
-Also as a supplement to Figure \ref{fig:langcoefs}, we show the coefficient estimates separately for each language, this time paired by comprehension and production.
+Also as a supplement to Figure \ref{fig:langcoefs}, we show the coefficient estimates for each language, this time paired by comprehension and production.
 
 ```{r prod-comp-coefs, fig.pos='bh', fig.width=10, fig.height=6.5, fig.cap="Paired coefficients for comprehension and production."}
-ggplot(filter(plt_lang_coefs, interaction == "main effect"),
+ggplot(filter(plt_lang_coefs, effect == "main effect"),
        aes(x = estimate, y = term, colour = measure, shape = measure)) +
   facet_wrap(~language, ncol = 5) +
   geom_point() +
@@ -286,52 +292,59 @@ ggplot(filter(plt_lang_coefs, interaction == "main effect"),
 
 \clearpage
 
+## Coefficients by lexical category
+
+As a supplement to Figure \ref{fig:lexcatcoefs}, we show the coefficient estimates for each language and lexical category.
+
+```{r by-lexcat, fig.pos='bh!', fig.height=13, fig.width=8, out.width="60%", fig.cap="Combined effects for each lexical category (main effect of predictor + main effect of lexical category + interaction between predictor and lexical category) by language and measure with 95\\% confidence intervals."}
+by_lexcat_plot <- function(meas) {
+  ggplot(filter(plt_lexcat_coefs, measure == meas),
+         aes(x = estimate, y = term)) +
+    facet_grid(language ~ lexical_category, labeller = as_labeller(label_caps)) +
+    geom_point(aes(colour = term)) +
+    geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
+    scale_colour_ptol(guide = FALSE) +
+    labs(y = "", x = "Coefficient estimate") +
+    theme(plot.margin = margin(t = 18, unit = "pt"))
+}
+
+plot_grid(by_lexcat_plot("understands"),
+          ncol = 1, label_size = 14, hjust = 0,
+          labels = c("Lexical category effects – Understands"))
+
+plot_grid(by_lexcat_plot("produces"),
+          ncol = 1, label_size = 14, hjust = 0,
+          labels = c("Lexical category effects – Produces"))
+```
+
+\clearpage
+
 ## Consistency by lexical category
 
 As a supplement to Figure \ref{fig:consistency}, we show the correlations of coefficient estimates between languages separately for each lexical category.
 
 ```{r lexcat-consistency, fig.pos='bh', fig.width=7, fig.asp=1, out.width="80%", fig.cap="Consistency of coefficients within each lexical category."}
-lexcat_coef_summary_means <- lexcat_coef_summary %>%
-  group_by(lexical_category, measure) %>%
-  summarise(mean_cor = mean(mean_cor))
-
-ggplot(lexcat_coef_summary, aes(x = mean_cor, y = language)) +
+ggplot(plt_lexcat_coef_summary, aes(x = mean_cor, y = language)) +
   facet_grid(lexical_category ~ measure, labeller = as_labeller(label_caps)) +
-  geom_vline(aes(xintercept = mean_cor), colour = "grey70", size = 0.4,
-             data = lexcat_coef_summary_means) +
+  geom_vline(aes(xintercept = mean_cor), colour = .grey, size = 0.4,
+             data = plt_lexcat_coef_summary %>%
+               group_by(measure, lexical_category) %>%
+               summarise(mean_cor = mean(mean_cor))) +
   geom_point(aes(colour = language), size = 2) +
   geom_rect(aes(xmin = ci_lower_cor, xmax = ci_upper_cor,
                 ymin = as.numeric(language) + 0.4,
                 ymax = as.numeric(language) - 0.4,
                 fill = language),
-            data = lexcat_baseline_coef_summary,
+            data = plt_lexcat_baseline_coef_summary,
             alpha = .2, linetype = 0) +
   geom_segment(aes(x = mean_cor, xend = mean_cor,
-                   y = as.numeric(language) + 0.4,
-                   yend = as.numeric(language) - 0.4),
-               data = lexcat_baseline_coef_summary,
-               colour = "grey70") +
-  scale_x_continuous(breaks = seq(-0.2, 1, 0.2)) +
-  labs(x = "Mean correlation with other languages' coefficients", y = "") +
+                y = as.numeric(language) + 0.4,
+                yend = as.numeric(language) - 0.4),
+            data = plt_lexcat_baseline_coef_summary,
+            colour = .grey) +
+  scale_x_continuous(breaks = seq(0, 1, 0.2)) +
+  labs(x = "Mean correlation with other languages' coefficients",
+       y = "") +
   scale_colour_ptol(guide = FALSE) +
   scale_fill_ptol(guide = FALSE)
-```
-
-```{r transcripts, include=FALSE}
-library(childesr)
-
-languages <- unique(lang_coefs$language) %>% str_remove(" (.*)")
-iso_codes <- as_tibble(ISOcodes::ISO_639_3) %>%
-  select(language = Name, code = Id)
-
-transcripts <- get_transcripts()
-transcripts %>%
-  rename(code = language) %>%
-  left_join(iso_codes) %>%
-  select(language, corpus_id, transcript_id) %>%
-  filter(language %in% languages) %>%
-  group_by(language) %>%
-  summarise(num_corpora = n_distinct(corpus_id),
-            num_transcripts = n_distinct(transcript_id)) %>%
-  arrange(desc(num_transcripts))
 ```

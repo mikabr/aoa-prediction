@@ -14,4 +14,5 @@ raw_data.feather
 *.tex
 *.pdf
 *.gz
+*.bbl
 raw_data.RData

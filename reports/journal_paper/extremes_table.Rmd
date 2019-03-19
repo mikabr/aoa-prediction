@@ -1,7 +1,3 @@
-<!-- \begingroup -->
-<!-- \singlespacing -->
-<!-- \setlength\parindent{0pt} -->
-
 ```{r extremes, results="asis"}
 num_extremes <- 3
 extremes <- uni_model_data %>%
@@ -37,11 +33,8 @@ extremes_display <- extremes %>%
   filter(language == "English (American)") %>%
   select(-language) %>%
   rename(Lowest = lowest, Highest = highest) %>%
-  mutate(Predictor = display_predictors[Predictor]) %>%
-  # mutate(Predictor = gsub("_", " ", Predictor),
-  #        Predictor = map_chr(Predictor, label_caps)) %>%
+  mutate(Predictor = display_predictors(Predictor)) %>%
   arrange(Predictor)
-  #arrange(desc(row_number()))
 
 kable(extremes_display, format = "latex", escape = FALSE, booktabs = TRUE,
       linesep = "",
@@ -49,5 +42,3 @@ kable(extremes_display, format = "latex", escape = FALSE, booktabs = TRUE,
 ) %>%
   kable_styling(position = "center", latex_options = "scale_down")
 ```
-
-<!-- \endgroup -->

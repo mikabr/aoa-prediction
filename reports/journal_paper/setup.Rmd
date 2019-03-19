@@ -29,40 +29,34 @@ theme_update(strip.text.x = element_text(margin = margin(b = 8), face = "bold"),
 .grey <- "grey70"
 .family <- theme_get()$text$family
 
-data_path <- "../../aoa_unified/saved_data"
-data_files <- list.files(data_path, full.names = TRUE)
-for (file in data_files) load(file)
-
-num_langs <- n_distinct(lang_coefs$language)
-predictors <- levels(lang_coefs$term)
-num_coefs <- length(predictors)
-
 label_caps <- function(value) {
   if_else(toupper(value) == value, value,
           paste0(toupper(substr(value, 1, 1)),
-                 tolower(substr(value, 2, nchar(value)))))
+                 tolower(substr(value, 2, nchar(value))))) %>%
+    str_replace_all("_", " ")
 }
 ```
 
-```{r coefs}
-display_predictors <- predictors %>%
-  map_chr(~.x %>% str_replace("_", " ") %>% str_replace("num", "number") %>%
-            str_replace("phons", "phonemes") %>% label_caps()) %>%
-  set_names(predictors)
+```{r load_data}
+data_path <- "../../aoa_unified/saved_data"
+data_files <- list.files(data_path, full.names = TRUE, recursive = TRUE) %>%
+  discard(~str_sub(basename(.), 1, 1) == "_")
+for (file in data_files) load(file)
 
-plt_lang_coefs <- lang_coefs %>%
-  mutate(term = term %>%
-           factor(labels = display_predictors[levels(lang_coefs$term)]),
-         signif = if_else(signif, "significant", "non-significant"),
-         language = gsub("(.*) \\(.*\\)", "\\1", language))
+num_langs <- n_distinct(lang_coefs$language)
+predictors <- unique(lang_coefs$term)
+num_coefs <- length(predictors)
 
-mean_lang_coefs <- plt_lang_coefs %>%
-  group_by(term, measure, interaction) %>%
-  summarise(mean_estimate = mean(estimate),
-            n_sig = sum(signif == "significant"))
+display_predictors <- function(predictors) {
+  predictors %>%
+    str_replace("num", "number") %>% str_replace("phons", "phonemes") %>%
+    map_chr(label_caps)
+}
+```
 
+```{r coef_means}
 mean_term_coefs <- lang_coefs %>%
-  filter(interaction == "main effect") %>%
+  filter(effect == "main effect") %>%
   group_by(term) %>%
   summarise(mean_estimate = mean(estimate),
             n_sig = sum(signif),
@@ -70,40 +64,102 @@ mean_term_coefs <- lang_coefs %>%
             n_neg = sum(estimate < 0)) %>%
   arrange(desc(abs(mean_estimate)))
 
-mean_interaction_coefs <- lang_coefs %>%
-  filter(interaction == "interaction with age") %>% #, signif) %>%
-  group_by(term, measure) %>%
+mean_term_measure_coefs <- lang_coefs %>%
+  filter(effect == "main effect") %>%
+  group_by(measure, term) %>%
   summarise(mean_estimate = mean(estimate),
-            #n_sig = sum(signif),
-            n_pos = mean(estimate > 0),
-            n_neg = mean(estimate < 0)) %>%
-  #arrange(desc(abs(mean_estimate)))
-  arrange(desc(n_neg)) %>%
-  filter(n_neg >= 0.9)
+            n_sig = sum(signif),
+            n_pos = sum(estimate > 0),
+            n_neg = sum(estimate < 0)) %>%
+  arrange(desc(abs(mean_estimate)))
 
-mean_term_coef <- function(t) {
- mean_term_coefs %>%
+mean_term_coef <- function(t, r = 2) {
+ coef <- mean_term_coefs %>%
     filter(term == t) %>%
     pull(mean_estimate) %>%
-    round(2)
+    round(r)
+ sprintf("$\\bar{\\beta} = %s$", coef)
 }
 
+mean_term_measure_coef <- function(meas, t) {
+ coef <- mean_term_measure_coefs %>%
+    filter(term == t, measure == meas) %>%
+    pull(mean_estimate) %>%
+    round(2)
+ sprintf("$\\bar{\\beta} = %s$", coef)
+}
+
+most_opposite <- function(ex_terms) {
+  terms <- mean_term_coefs %>%
+    filter(!(term %in% ex_terms)) %>%
+    mutate(larger = map2_dbl(n_pos, n_neg, max))
+  min(terms$larger)
+}
+
+consistent_age <- lang_coefs %>%
+  filter(effect == "interaction with age") %>%
+  group_by(measure, term) %>%
+  summarise(n_pos = sum(estimate > 0),
+            n_neg = sum(estimate < 0)) %>%
+  filter(n_pos >= 9 | n_neg >= 9)
+```
+
+```{r coefs}
+coef_order <- mean_term_coefs %>% pull(term)
+
+plt_lang_coefs <- lang_coefs %>%
+  mutate(term = term %>% factor(levels = rev(coef_order)) %>%
+           fct_relabel(display_predictors),
+         signif = if_else(signif, "significant", "non-significant") %>%
+           fct_rev(),
+         language = language %>% str_remove(" \\(.*\\)") %>% as_factor())
+
 plt_lexcat_coefs <- lexcat_coefs %>%
-  mutate(term = term %>%
-           factor(labels = display_predictors[levels(lexcat_coefs$term)]),
-         signif = if_else(signif, "significant", "non-significant"),
+  mutate(term = term %>% factor(levels = rev(coef_order)) %>%
+           fct_relabel(display_predictors),
+         # signif = if_else(signif, "significant", "non-significant"),
          lexical_category = lexical_category %>%
-           fct_relevel("Nouns", "Predicates", "Function words"),
-         language = gsub("(.*) \\(.*\\)", "\\1", language)) %>%
-  filter(interaction == "main effect",
-         !(term %in% c("Valence", "Arousal")))
+           fct_relevel("nouns", "predicates"),
+         language = language %>% str_remove(" \\(.*\\)") %>% as_factor()) %>%
+  mutate_at(vars(contains("signif")),
+            ~if_else(., "significant", "non-significant") %>% fct_rev())
 
-mean_lexcat_coefs <- plt_lexcat_coefs %>%
-  group_by(lexical_category, term, measure, interaction) %>%
-  summarise(mean_estimate = mean(estimate))
+ref_coefs <- plt_lang_coefs %>% filter(language == "English")
 
-ref_coefs <- plt_lang_coefs %>%
-  filter(language == "English")
+mean_lexcat <- lexcat_coefs %>%
+  group_by(lexical_category, term) %>%
+  summarise(mean_estimate = mean(estimate),
+            n_pos = sum(estimate > 0),
+            n_neg = sum(estimate < 0)) %>%
+  arrange(desc(abs(mean_estimate)))
+
+mean_lexcat_coef <- function(t, lc) {
+ coef <- mean_lexcat %>%
+    filter(term == t, lexical_category == lc) %>%
+    pull(mean_estimate) %>%
+    round(2)
+ sprintf("$\\bar{\\beta} = %s$", coef)
+}
+```
+
+```{r consistencies}
+plt_coef_summary <- coef_summary %>%
+  mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev())
+
+plt_baseline_coef_summary <- baseline_coef_summary %>%
+  mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev())
+
+plt_lexcat_coef_summary <- lexcat_coef_summary %>%
+  ungroup() %>%
+  mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev(),
+         lexical_category = lexical_category %>%
+           fct_relevel("nouns", "predicates"))
+
+plt_lexcat_baseline_coef_summary <- lexcat_baseline_coef_summary %>%
+  ungroup() %>%
+  mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev(),
+         lexical_category = lexical_category %>%
+           fct_relevel("nouns", "predicates"))
 
 lexcat_mean_cor <- function(lc) {
   lexcat_coef_summary %>%
