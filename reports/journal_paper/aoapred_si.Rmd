@@ -89,61 +89,45 @@ ggplot(sample_sizes, aes(x = age, y = language)) +
 
 ## Predictor values
 
-As another illustration of the structure of our dataset, we show the centered and scaled distribution of the values of each predictor in each language, as well as the mean and 95% confidence interval of their raw values.
+As another illustration of the structure of our dataset, we show the distributions of the values of each predictor in each language, first for the raw values and then for the imputed, centered, and scaled values.
 
-```{r predictor-dist, fig.pos='bh', fig.width=8, fig.height=8, out.width="85%", fig.cap="Densities of the scaled and centered values of each predictor for each language."}
+```{r pred-dist-raw, fig.pos='bh!', fig.width=9, fig.height=9, fig.cap="Densities of the raw values of each predictor for each language."}
+# raw_predictor_values <- model_data_imputed %>%
+raw_predictor_values <- uni_joined %>%
+  select(language, uni_lemma, !!predictors) %>%
+  distinct() %>%
+  gather(predictor, value, !!predictors) %>%
+  mutate(predictor = predictor %>% factor(levels = coef_order) %>%
+           fct_relabel(display_predictors),
+         language = language %>% str_remove(" \\(.*\\)") %>% fct_rev())
+
+ggplot(raw_predictor_values, aes(x = value, y = language, fill = predictor)) +
+  facet_wrap(~predictor, nrow = 2, scales = "free_x") +
+  geom_density_ridges(rel_min_height = 0.01, scale = 0.95, alpha = 0.7) +
+  scale_y_discrete(expand = c(0, 0)) +
+  scale_fill_manual(guide = FALSE, values = rev(ptol_pal()(num_coefs))) +
+  labs(x = "Predictor value", y = "") +
+  theme(plot.title = element_text(size = rel(1.5)))
+```
+
+```{r pred-dist-scaled, fig.pos='bh!', fig.width=9, fig.height=9, fig.cap="Densities of the imputed, centered, and scaled values of each predictor for each language."}
 predictor_values <- uni_model_data %>%
   ungroup() %>%
   select(language, !!predictors) %>%
   distinct() %>%
   gather(predictor, value, !!predictors) %>%
-  mutate(predictor = predictor %>% factor(levels = rev(coef_order)) %>%
+  mutate(predictor = predictor %>% factor(levels = coef_order) %>%
            fct_relabel(display_predictors),
-         language = language %>% str_remove(" \\(.*\\)") %>% as_factor())
+         language = language %>% str_remove(" \\(.*\\)") %>% fct_rev())
 
-ggplot(predictor_values, aes(x = value, y = predictor, fill = predictor)) +
-  facet_wrap(~language, nrow = 2) +
-  geom_vline(xintercept = 0, colour = .grey, linetype = "dotted") +
+ggplot(predictor_values, aes(x = value, y = language, fill = predictor)) +
+  facet_wrap(~predictor, nrow = 2) +
   geom_density_ridges(rel_min_height = 0.01, scale = 0.95, alpha = 0.7) +
   scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
   scale_y_discrete(expand = c(0, 0)) +
-                   # limits = rev(levels(predictor_values$predictor))) +
-  scale_fill_ptol(guide = FALSE) +
-  labs(x = "Scaled value", y = "") +
+  scale_fill_manual(guide = FALSE, values = rev(ptol_pal()(num_coefs))) +
+  labs(x = "Scaled predictor value", y = "") +
   theme(plot.title = element_text(size = rel(1.5)))
-```
-
-```{r predictor-mean, fig.pos='bh', fig.width=9, fig.height=7, fig.cap="Means and 95\\% confidence intervals of the values of each predictor for each language."}
-predictor_values <- uni_joined %>%
-  select(language, uni_lemma, !!predictors) %>%
-  distinct() %>%
-  group_by(language) %>%
-  mutate_at(vars(!!predictors), funs(as.numeric(Hmisc::impute(.)))) %>%
-  ungroup() %>%
-  gather(predictor, value, !!predictors) %>%
-  mutate(predictor = predictor %>% factor(levels = coef_order) %>%
-           fct_relabel(display_predictors),
-         language = language %>% str_remove(" \\(.*\\)") %>% as_factor())
-
-predictor_summary <- predictor_values %>%
-  group_by(language, predictor) %>%
-  summarise(mean = mean(value),
-            se = sem(value)) %>%
-  ungroup() %>%
-  arrange(predictor, mean) %>%
-  mutate(order = row_number())
-
-ggplot(predictor_summary, aes(x = order, y = mean, colour = language)) +
-  facet_wrap(~predictor, scales = "free") +
-  coord_flip() +
-  geom_crossbar(aes(ymin = mean - 1.96 * se, ymax = mean + 1.96 * se),
-                width = 0.5, fatten = 0, colour = .grey) +
-  geom_crossbar(aes(ymin = mean, ymax = mean),
-                width = 0.75) +
-  scale_x_continuous(breaks = predictor_summary$order,
-                     labels = predictor_summary$language) +
-  scale_colour_ptol(guide = FALSE) +
-  labs(y = "Predictor value", x = "")
 ```
 
 \clearpage
@@ -152,7 +136,7 @@ ggplot(predictor_summary, aes(x = order, y = mean, colour = language)) +
 
 A potential concern about our lexical category analysis is that lexical category might not be dissociable from frequency, in the sense that closed-class words are more frequent that open-class words and span a more narrower range of frequencies. The distribution of frequencies by lexical category in our dataset, shown below, demonstrates that there is substantial overlap in frequency between the closed-class and open-class words.
 
-```{r freq-dist, fig.pos='bh', fig.width=8, fig.height=5, out.width="80%", fig.cap="Densities of the frequency estimates for open and closed class words in each language."}
+```{r freq-dist, fig.pos='bh', fig.width=8, fig.height=5, out.width="90%", fig.cap="Densities of the frequency estimates for open and closed class words in each language."}
 freq_values <- uni_model_data %>%
   ungroup() %>%
   select(language, lexical_category, frequency) %>%
@@ -169,7 +153,7 @@ ggplot(freq_values, aes(x = frequency, y = lexical_category)) +
   geom_vline(xintercept = 0, colour = "darkgrey", linetype = "dotted") +
   geom_density_ridges(aes(fill = lexical_category), rel_min_height = 0.01,
                       scale = 0.95, alpha = 0.7) +
-  scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
+  # scale_x_continuous(expand = c(0.01, 0), limits = c(-3, 3)) +
   scale_y_discrete(expand = c(0, 0)) +
   scale_fill_ptol(guide = FALSE) +
   labs(x = "Scaled frequency", y = "") +

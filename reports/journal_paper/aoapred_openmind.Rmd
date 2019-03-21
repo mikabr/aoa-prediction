@@ -151,7 +151,7 @@ In addition, each word's concreteness, valence, arousal, and relatedness to babi
 ```{r extremes_table, child="extremes_table.Rmd"}
 ```
 
-Each numeric predictor was centered and scaled (within language and measure) so that all predictors would have comparable units. For each predictor, missing values (CDI items that were not in the relevant corpus or norms) were imputed from the median for their respective language and measure.
+Each numeric predictor was centered and scaled (within language) so that all predictors would have comparable units. For each predictor, missing values (CDI items that were not in the relevant corpus or norms) were imputed from the median for their respective language and measure.
 
 ### Frequency
 

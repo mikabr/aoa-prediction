@@ -22,6 +22,7 @@ load("../saved_data/uni_joined.RData")
 predictors <- c("frequency", "MLU", "final_frequency", "solo_frequency",
                 "num_phons", "concreteness", "valence", "arousal", "babiness")
 .alpha <- 0.05
+set.seed(42)
 ```
 
 Impute and scale data for input into models.
@@ -36,7 +37,7 @@ model_data <- uni_joined %>%
            fct_collapse("predicates" = c("verbs", "adjectives", "adverbs"))) %>%
   select(-lexical_classes) %>%
   group_by(language) %>%
-  mutate_at(vars(!!predictors), funs(as.numeric(scale(.)))) %>%
+  # mutate_at(vars(!!predictors), funs(as.numeric(scale(.)))) %>%
   nest()
 
 pred_sources <- list(
@@ -101,6 +102,7 @@ uni_model_data <- model_data_imputed %>%
 
 Save point -- model input data.
 ```{r uni_model_data_save}
+save(model_data_imputed, file = "../saved_data/model_data_imputed.RData")
 save(uni_model_data, file = "../saved_data/uni_model_data.RData")
 # load("../saved_data/uni_model_data.RData")
 ```
