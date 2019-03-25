@@ -3,12 +3,12 @@ Estimating and predicting words' age of acquisition
 
 ## Analysis pipeline
 
-1. aoa_unified/aoa_loading/predictors/childes/get_childes_data.py
-1. aoa_unified/aoa_loading/aoa_loading.Rmd
-1. aoa_unified/aoa_loading/aoa_analyses/aoa_modeling.Rmd
-1. aoa_unified/aoa_loading/aoa_analyses/aoa_consistency.Rmd
-1. reports/journal_paper/aoapred_si.Rmd
-1. reports/journal_paper/aoapred_openmind.Rmd
+1. `aoa_unified/aoa_loading/predictors/childes/get_childes_data.py`
+1. `aoa_unified/aoa_loading/aoa_loading.Rmd`
+1. `aoa_unified/aoa_loading/aoa_analyses/aoa_modeling.Rmd`
+1. `aoa_unified/aoa_loading/aoa_analyses/aoa_consistency.Rmd`
+1. `reports/journal_paper/aoapred_si.Rmd`
+1. `reports/journal_paper/aoapred_openmind.Rmd`
 
 ## Dependencies
 
@@ -40,7 +40,7 @@ From GitHub:
 
 ### Julia
 
-- RCall.jl,
-- DataFrames.jl,
-- MixedModels.jl,
+- RCall.jl
+- DataFrames.jl
+- MixedModels.jl
 - StatsModels.jl
