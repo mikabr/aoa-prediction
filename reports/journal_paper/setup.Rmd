@@ -8,11 +8,10 @@ library(ggdendro)
 library(ggridges)
 library(cowplot)
 
+library(knitr)
 library(glue)
 library(langcog)
 
-library(knitr)
-library(kableExtra)
 opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE,
                out.width = "\\textwidth", dev = "png", fig.align = "center",
                dpi = 300)
