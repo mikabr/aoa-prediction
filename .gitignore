@@ -1,5 +1,4 @@
 *_cache/
-*_files/
 .DS_Store
 .idea/
 .Rhistory
@@ -12,7 +11,6 @@ raw_data.feather
 *.xwm
 *.fff
 *.tex
-*.pdf
 *.gz
 *.bbl
 raw_data.RData
