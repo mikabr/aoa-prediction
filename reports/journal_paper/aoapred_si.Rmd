@@ -18,7 +18,7 @@ output:
 ```{r si_opts, cache=FALSE}
 source("components/hook-widefigure.R")
 knit_hooks$set(plot = hook_plot_widefigure)
-opts_chunk$set(fig.path = "figures_si/")
+opts_chunk$set(fig.path = "")
 ```
 
 # Supplemental Information {-}

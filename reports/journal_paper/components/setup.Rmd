@@ -15,7 +15,7 @@ library(langcog)
 
 opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE,
                out.width = "\\textwidth", dev = "png", fig.align = "center",
-               dpi = 300, fig.path = "figures/")
+               dpi = 300, fig.path = "")
 is_integer <- function(x) all(all.equal(x, as.integer(x)) == TRUE)
 inline_hook <- function(x) {
   if (!is_integer(x) && is.numeric(x)) x <- sprintf("%.2f", round(x, 2))

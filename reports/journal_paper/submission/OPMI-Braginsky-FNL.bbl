@@ -1,0 +1,1510 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Acarlar%
+\ \protect \BOthers {.}}{%
+Acarlar%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2008}}%
+}]{%
+acarlar2008}
+\APACinsertmetastar {%
+acarlar2008}%
+\begin{APACrefauthors}%
+Acarlar, F.%
+, Aksu-Ko{\c{c}}, A.%
+, K{\"u}ntay, A\BPBI C.%
+, Mavi{\c{s}}, {\.I}.%
+, Sofu, H.%
+, Topba{\c{s}}, S.%
+\BCBL {}\ \BBA {} Turan, F.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2008}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Adapting {MB-CDI} to {T}urkish: the first phase}
+  {Adapting {MB-CDI} to {T}urkish: the first phase}.{\BBCQ}
+\newblock
+\BIn{} S.~Ay, {\"O}.~Aydın, {\.I}.~Ergen{\c c}, S.~G{\"o}kmen, S.~{\.I}{\c
+  s}sever\BCBL {}\ \BBA {} D.~Pe{\c c}enek\ (\BEDS), \APACrefbtitle {Essays of
+  {T}urkish linguistics: Proceedings of the 14th {I}nternational {C}onference
+  on {T}urkish {L}inguistics; {A}nkara, {T}urkey, {A}ugust 6-8, 2008} {Essays
+  of {T}urkish linguistics: Proceedings of the 14th {I}nternational
+  {C}onference on {T}urkish {L}inguistics; {A}nkara, {T}urkey, {A}ugust 6-8,
+  2008}\ (\BPGS\ 313--320).
+\newblock
+\APACaddressPublisher{Wiesbaden, Germany}{Harrassowitz Verlag}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ambridge%
+, Kidd%
+, Rowland%
+\BCBL {}\ \BBA {} Theakston%
+}{%
+Ambridge%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+ambridge2015}
+\APACinsertmetastar {%
+ambridge2015}%
+\begin{APACrefauthors}%
+Ambridge, B.%
+, Kidd, E.%
+, Rowland, C\BPBI F.%
+\BCBL {}\ \BBA {} Theakston, A\BPBI L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The ubiquity of frequency effects in first language
+  acquisition} {The ubiquity of frequency effects in first language
+  acquisition}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Child Language}{42}{2}{239--273}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Baldwin%
+}{%
+Baldwin%
+}{%
+{\protect \APACyear {1993}}%
+}]{%
+baldwin1993}
+\APACinsertmetastar {%
+baldwin1993}%
+\begin{APACrefauthors}%
+Baldwin, D\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1993}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Infants' ability to consult the speaker for clues to
+  word reference} {Infants' ability to consult the speaker for clues to word
+  reference}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Child Language}{20}{2}{395--418}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Baldwin%
+}{%
+Baldwin%
+}{%
+{\protect \APACyear {1995}}%
+}]{%
+baldwin1995}
+\APACinsertmetastar {%
+baldwin1995}%
+\begin{APACrefauthors}%
+Baldwin, D\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1995}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Understanding the link between joint attention and
+  language} {Understanding the link between joint attention and
+  language}.{\BBCQ}
+\newblock
+\BIn{} C.~Moore\ \BBA {} P\BPBI J.~Dunham\ (\BEDS), \APACrefbtitle {Joint
+  attention: Its origins and role in development} {Joint attention: Its origins
+  and role in development}\ (\BPGS\ 131--158).
+\newblock
+\APACaddressPublisher{Hillsdale, NJ}{Lawrence Erlbaum Associates}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+D.~Bates%
+\ \protect \BOthers {.}}{%
+D.~Bates%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2018}}%
+}]{%
+bates2018}
+\APACinsertmetastar {%
+bates2018}%
+\begin{APACrefauthors}%
+Bates, D.%
+, Kelman, T.%
+, Kleinschmidt, D.%
+, AB, S.%
+, Mogensen, P\BPBI K.%
+, Bouchet-Valat, M.%
+\BDBL {}Noack, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+\APACrefbtitle {{dmbates/MixedModels.jl: Add adaptive {G}auss-{H}ermite
+  quadrature ({V}ersion v0.18.1)}.} {{dmbates/MixedModels.jl: Add adaptive
+  {G}auss-{H}ermite quadrature ({V}ersion v0.18.1)}.}
+\newblock
+\APAChowpublished {Zenodo.
+  \href{http://doi.org/10.5281/zenodo.1303403}{doi.org/10.5281/zenodo.1303403}}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+E.~Bates%
+\ \BBA {} MacWhinney%
+}{%
+E.~Bates%
+\ \BBA {} MacWhinney%
+}{%
+{\protect \APACyear {1987}}%
+}]{%
+bates1987}
+\APACinsertmetastar {%
+bates1987}%
+\begin{APACrefauthors}%
+Bates, E.%
+\BCBT {}\ \BBA {} MacWhinney, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1987}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Competition, variation, and language learning}
+  {Competition, variation, and language learning}.{\BBCQ}
+\newblock
+\BIn{} B.~MacWhinney\ (\BED), \APACrefbtitle {Mechanisms of language
+  acquisition: The 20th {A}nnual {C}arnegie {M}ellon {S}ymposium on
+  {C}ognition} {Mechanisms of language acquisition: The 20th {A}nnual
+  {C}arnegie {M}ellon {S}ymposium on {C}ognition}\ (\BPGS\ 157--193).
+\newblock
+\APACaddressPublisher{Hillsdale, NJ}{Lawrence Erlbaum Associates}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+E.~Bates%
+\ \protect \BOthers {.}}{%
+E.~Bates%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1994}}%
+}]{%
+bates1994}
+\APACinsertmetastar {%
+bates1994}%
+\begin{APACrefauthors}%
+Bates, E.%
+, Marchman, V.%
+, Thal, D.%
+, Fenson, L.%
+, Dale, P.%
+, Reznick, J\BPBI S.%
+\BDBL {}Hartung, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1994}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Developmental and stylistic variation in the composition
+  of early vocabulary} {Developmental and stylistic variation in the
+  composition of early vocabulary}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Child Language}{21}{1}{85--123}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Benedict%
+}{%
+Benedict%
+}{%
+{\protect \APACyear {1979}}%
+}]{%
+benedict1979}
+\APACinsertmetastar {%
+benedict1979}%
+\begin{APACrefauthors}%
+Benedict, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1979}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Early lexical development: Comprehension and production}
+  {Early lexical development: Comprehension and production}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Child Language}{6}{2}{183--200}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Bleses%
+\ \protect \BOthers {.}}{%
+Bleses%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2008}}%
+}]{%
+bleses2008}
+\APACinsertmetastar {%
+bleses2008}%
+\begin{APACrefauthors}%
+Bleses, D.%
+, Vach, W.%
+, Slott, M.%
+, Wehberg, S.%
+, Thomsen, P.%
+, Madsen, T\BPBI O.%
+\BCBL {}\ \BBA {} Basb{\o}ll, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2008}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The {D}anish {C}ommunicative {D}evelopmental
+  {I}nventories: {V}alidity and main developmental trends} {The {D}anish
+  {C}ommunicative {D}evelopmental {I}nventories: {V}alidity and main
+  developmental trends}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Child Language}{35}{3}{651--669}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Bloom%
+}{%
+Bloom%
+}{%
+{\protect \APACyear {2000}}%
+}]{%
+bloom2000}
+\APACinsertmetastar {%
+bloom2000}%
+\begin{APACrefauthors}%
+Bloom, P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2000}.
+\newblock
+\APACrefbtitle {How children learn the meanings of words} {How children learn
+  the meanings of words}.
+\newblock
+\APACaddressPublisher{}{MIT Press, Cambridge, MA}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Bornstein%
+\ \BBA {} Haynes%
+}{%
+Bornstein%
+\ \BBA {} Haynes%
+}{%
+{\protect \APACyear {1998}}%
+}]{%
+bornstein1998}
+\APACinsertmetastar {%
+bornstein1998}%
+\begin{APACrefauthors}%
+Bornstein, M\BPBI H.%
+\BCBT {}\ \BBA {} Haynes, O\BPBI M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1998}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Vocabulary competence in early childhood: Measurement,
+  latent construct, and predictive validity} {Vocabulary competence in early
+  childhood: Measurement, latent construct, and predictive validity}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Child Development}{69}{3}{654--671}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Boudreault%
+, Cabirol%
+, Poulin-Dubois%
+, Sutton%
+\BCBL {}\ \BBA {} Trudeau%
+}{%
+Boudreault%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2007}}%
+}]{%
+boudreault2007}
+\APACinsertmetastar {%
+boudreault2007}%
+\begin{APACrefauthors}%
+Boudreault, M.%
+, Cabirol, E.%
+, Poulin-Dubois, D.%
+, Sutton, A.%
+\BCBL {}\ \BBA {} Trudeau, N.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2007}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Mac{A}rthur {C}ommunicative {D}evelopment {I}nventories:
+  Validity and preliminary normative data} {Mac{A}rthur {C}ommunicative
+  {D}evelopment {I}nventories: Validity and preliminary normative data}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Revue canadienne d'orthophonie et
+  d'audiologie}{31}{1}{27--37}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Brysbaert%
+, Warriner%
+\BCBL {}\ \BBA {} Kuperman%
+}{%
+Brysbaert%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2014}}%
+}]{%
+brysbaert2014}
+\APACinsertmetastar {%
+brysbaert2014}%
+\begin{APACrefauthors}%
+Brysbaert, M.%
+, Warriner, A\BPBI B.%
+\BCBL {}\ \BBA {} Kuperman, V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Concreteness ratings for 40 thousand generally known
+  {E}nglish word lemmas} {Concreteness ratings for 40 thousand generally known
+  {E}nglish word lemmas}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Behavioral Research Methods}{46}{3}{904--911}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Caselli%
+\ \protect \BOthers {.}}{%
+Caselli%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1995}}%
+}]{%
+caselli1995}
+\APACinsertmetastar {%
+caselli1995}%
+\begin{APACrefauthors}%
+Caselli, M\BPBI C.%
+, Bates, E.%
+, Casadio, P.%
+, Fenson, J.%
+, Fenson, L.%
+, Sanderl, L.%
+\BCBL {}\ \BBA {} Weir, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1995}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A cross-linguistic study of early lexical development}
+  {A cross-linguistic study of early lexical development}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Cognitive Development}{10}{2}{159--199}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Caselli%
+, Rinaldi%
+, Stefanini%
+\BCBL {}\ \BBA {} Volterra%
+}{%
+Caselli%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2012}}%
+}]{%
+caselli2012}
+\APACinsertmetastar {%
+caselli2012}%
+\begin{APACrefauthors}%
+Caselli, M\BPBI C.%
+, Rinaldi, P.%
+, Stefanini, S.%
+\BCBL {}\ \BBA {} Volterra, V.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2012}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Early action and gesture ``vocabulary'' and its relation
+  with word comprehension and production} {Early action and gesture
+  ``vocabulary'' and its relation with word comprehension and
+  production}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Child Development}{83}{2}{526--542}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Duddington%
+}{%
+Duddington%
+}{%
+{\protect \APACyear {2012}}%
+}]{%
+duddington2012}
+\APACinsertmetastar {%
+duddington2012}%
+\begin{APACrefauthors}%
+Duddington, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2012}{}{}.
+\newblock
+\APACrefbtitle {{e}{S}peak text to speech.} {{e}{S}peak text to speech.}
+\newblock
+\APAChowpublished
+  {\href{http://espeak.sourceforge.net}{espeak.sourceforge.net}}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Eliseeva%
+\ \BBA {} Vershinina%
+}{%
+Eliseeva%
+\ \BBA {} Vershinina%
+}{%
+{\protect \APACyear {2009}}%
+}]{%
+yeliseyeva2009}
+\APACinsertmetastar {%
+yeliseyeva2009}%
+\begin{APACrefauthors}%
+Eliseeva, M\BPBI B.%
+\BCBT {}\ \BBA {} Vershinina, E\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2009}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Некоторые нормативы речевого
+  развития детей от 18 до 36 месяцев (по
+  материалам МакАртуровского опросника)
+  [{S}ome norms of language development of children from 18 to 36 months (based
+  on the materials of the {M}ac{A}rthur questionnaire)]} {Некоторые
+  нормативы речевого развития детей от 18 до
+  36 месяцев (по материалам МакАртуровского
+  опросника) [{S}ome norms of language development of children from 18
+  to 36 months (based on the materials of the {M}ac{A}rthur
+  questionnaire)]}.{\BBCQ}
+\newblock
+\BIn{} T\BPBI A.~Kruglakova, M\BPBI B.~Eliseeva, M\BPBI A.~Elivanova\BCBL {}\
+  \BBA {} I\BPBI N.~Levina\ (\BEDS), \APACrefbtitle {Проблемы
+  онтолингвистики - 2009: материалы
+  международной конференции (17-19 июня 2009 г.
+  Санкт-Петербург)[Problems in {D}evelopmental {L}inguistics -
+  2009: Materials of the {I}nternational {C}onference ({J}une 17-19, 2009,
+  {S}aint {P}etersburg, {R}ussia)]} {Проблемы
+  онтолингвистики - 2009: материалы
+  международной конференции (17-19 июня 2009 г.
+  Санкт-Петербург)[problems in {D}evelopmental {L}inguistics -
+  2009: Materials of the {I}nternational {C}onference ({J}une 17-19, 2009,
+  {S}aint {P}etersburg, {R}ussia)]}\ (\BPG~22-29).
+\newblock
+\APACaddressPublisher{Saint Petersburg, Russia}{Zlatoust}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Eriksson%
+\ \BBA {} Berglund%
+}{%
+Eriksson%
+\ \BBA {} Berglund%
+}{%
+{\protect \APACyear {2002}}%
+}]{%
+eriksson2002}
+\APACinsertmetastar {%
+eriksson2002}%
+\begin{APACrefauthors}%
+Eriksson, M.%
+\BCBT {}\ \BBA {} Berglund, E.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2002}.
+\newblock
+\APACrefbtitle {Instruments, scoring manual and percentile levels of the
+  {S}wedish {E}arly {C}ommunicative {D}evelopment {I}nventory, {SECDI}
+  ({V}olume 17 of {FoU}-rapport)} {Instruments, scoring manual and percentile
+  levels of the {S}wedish {E}arly {C}ommunicative {D}evelopment {I}nventory,
+  {SECDI} ({V}olume 17 of {FoU}-rapport)}.
+\newblock
+\APACaddressPublisher{G{\"a}vle, Sweden}{H{\"o}gskolan i G{\"a}vle}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Feldman%
+\ \protect \BOthers {.}}{%
+Feldman%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2000}}%
+}]{%
+feldman2000}
+\APACinsertmetastar {%
+feldman2000}%
+\begin{APACrefauthors}%
+Feldman, H\BPBI M.%
+, Dollaghan, C\BPBI A.%
+, Campbell, T\BPBI F.%
+, Kurs-Lasky, M.%
+, Janosky, J\BPBI E.%
+\BCBL {}\ \BBA {} Paradise, J\BPBI L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2000}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Measurement properties of the {M}ac{A}rthur
+  {C}ommunicative {D}evelopment {I}nventories at ages one and two years}
+  {Measurement properties of the {M}ac{A}rthur {C}ommunicative {D}evelopment
+  {I}nventories at ages one and two years}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Child Development}{71}{2}{310--322}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Fenson%
+\ \protect \BOthers {.}}{%
+Fenson%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2000}}%
+}]{%
+fenson2000}
+\APACinsertmetastar {%
+fenson2000}%
+\begin{APACrefauthors}%
+Fenson, L.%
+, Bates, E.%
+, Dale, P.%
+, Goodman, J\BPBI C.%
+, Reznick, J\BPBI S.%
+\BCBL {}\ \BBA {} Thal, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2000}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Reply: Measuring variability in early child language:
+  Don't shoot the messenger} {Reply: Measuring variability in early child
+  language: Don't shoot the messenger}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Child Development}{71}{2}{323--328}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Fenson%
+\ \protect \BOthers {.}}{%
+Fenson%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1994}}%
+}]{%
+fenson1994}
+\APACinsertmetastar {%
+fenson1994}%
+\begin{APACrefauthors}%
+Fenson, L.%
+, Dale, P.%
+, Reznick, J.%
+, Bates, E.%
+, Thal, D.%
+, Pethick, S.%
+\BDBL {}Stiles, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1994}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Variability in early communicative development}
+  {Variability in early communicative development}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Monographs of the {S}ociety for {R}esearch in {C}hild
+  {D}evelopment}{59}{5, Serial No. 242}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Fenson%
+\ \protect \BOthers {.}}{%
+Fenson%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2007}}%
+}]{%
+fenson2007}
+\APACinsertmetastar {%
+fenson2007}%
+\begin{APACrefauthors}%
+Fenson, L.%
+, Marchman, V\BPBI A.%
+, Thal, D.%
+, Dale, P\BPBI S.%
+, Reznick, J\BPBI S.%
+\BCBL {}\ \BBA {} Bates, E.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2007}.
+\newblock
+\APACrefbtitle {Mac{A}rthur-{B}ates {C}ommunicative {D}evelopment
+  {I}nventories: User's guide and technical manual} {Mac{A}rthur-{B}ates
+  {C}ommunicative {D}evelopment {I}nventories: User's guide and technical
+  manual}\ (\PrintOrdinal{2nd}\ \BEd).
+\newblock
+\APACaddressPublisher{Baltimore, MD}{Brookes Publishing Company}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Fernald%
+, Perfors%
+\BCBL {}\ \BBA {} Marchman%
+}{%
+Fernald%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2006}}%
+}]{%
+fernald2006}
+\APACinsertmetastar {%
+fernald2006}%
+\begin{APACrefauthors}%
+Fernald, A.%
+, Perfors, A.%
+\BCBL {}\ \BBA {} Marchman, V\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2006}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Picking up speed in understanding: Speech processing
+  efficiency and vocabulary growth across the 2nd year.} {Picking up speed in
+  understanding: Speech processing efficiency and vocabulary growth across the
+  2nd year.}{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Developmental Psychology}{42}{1}{98}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Frank%
+, Braginsky%
+, Yurovsky%
+\BCBL {}\ \BBA {} Marchman%
+}{%
+Frank%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2016}}%
+}]{%
+frank2016}
+\APACinsertmetastar {%
+frank2016}%
+\begin{APACrefauthors}%
+Frank, M\BPBI C.%
+, Braginsky, M.%
+, Yurovsky, D.%
+\BCBL {}\ \BBA {} Marchman, V\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2016}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Wordbank: An open repository for developmental
+  vocabulary data} {Wordbank: An open repository for developmental vocabulary
+  data}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Child Language}{44}{3}{677--694}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Gentner%
+\ \BBA {} Boroditsky%
+}{%
+Gentner%
+\ \BBA {} Boroditsky%
+}{%
+{\protect \APACyear {2001}}%
+}]{%
+gentner2001}
+\APACinsertmetastar {%
+gentner2001}%
+\begin{APACrefauthors}%
+Gentner, D.%
+\BCBT {}\ \BBA {} Boroditsky, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2001}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Individuation, relativity, and early word learning}
+  {Individuation, relativity, and early word learning}.{\BBCQ}
+\newblock
+\BIn{} M.~Bowerman\ \BBA {} S.~Levinson\ (\BEDS), \APACrefbtitle {Language
+  Acquisition and Conceptual Development} {Language acquisition and conceptual
+  development}\ (\BVOL~3, \BPGS\ 215--256).
+\newblock
+\APACaddressPublisher{Cambridge, UK}{Cambridge University Press}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Gleitman%
+}{%
+Gleitman%
+}{%
+{\protect \APACyear {1990}}%
+}]{%
+gleitman1990}
+\APACinsertmetastar {%
+gleitman1990}%
+\begin{APACrefauthors}%
+Gleitman, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1990}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The structural sources of verb meanings} {The structural
+  sources of verb meanings}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Language Acquisition}{1}{1}{3--55}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Goodman%
+, Dale%
+\BCBL {}\ \BBA {} Li%
+}{%
+Goodman%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2008}}%
+}]{%
+goodman2008}
+\APACinsertmetastar {%
+goodman2008}%
+\begin{APACrefauthors}%
+Goodman, J\BPBI C.%
+, Dale, P\BPBI S.%
+\BCBL {}\ \BBA {} Li, P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2008}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Does frequency count? {P}arental input and the
+  acquisition of vocabulary} {Does frequency count? {P}arental input and the
+  acquisition of vocabulary}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Child Language}{35}{3}{515}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hills%
+, Maouene%
+, Maouene%
+, Sheya%
+\BCBL {}\ \BBA {} Smith%
+}{%
+Hills%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2009}}%
+}]{%
+hills2009}
+\APACinsertmetastar {%
+hills2009}%
+\begin{APACrefauthors}%
+Hills, T\BPBI T.%
+, Maouene, M.%
+, Maouene, J.%
+, Sheya, A.%
+\BCBL {}\ \BBA {} Smith, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2009}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Longitudinal Analysis of Early Semantic Networks:
+  Preferential Attachment or Preferential Acquisition?} {Longitudinal analysis
+  of early semantic networks: Preferential attachment or preferential
+  acquisition?}{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Psychological Science}{20}{6}{729--739}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hollich%
+\ \protect \BOthers {.}}{%
+Hollich%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2000}}%
+}]{%
+hollich2000}
+\APACinsertmetastar {%
+hollich2000}%
+\begin{APACrefauthors}%
+Hollich, G\BPBI J.%
+, Hirsh-Pasek, K.%
+, Golinkoff, R\BPBI M.%
+, Brand, R\BPBI J.%
+, Brown, E.%
+, Chung, H\BPBI L.%
+\BDBL {}Bloom, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2000}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Breaking the language barrier: An emergentist coalition
+  model for the origins of word learning} {Breaking the language barrier: An
+  emergentist coalition model for the origins of word learning}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Monographs of the {S}ociety for {R}esearch in {C}hild
+  {D}evelopment}{65}{3, Serial No. 262}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Jackson-Maldonado%
+\ \protect \BOthers {.}}{%
+Jackson-Maldonado%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2003}}%
+}]{%
+fenson2003}
+\APACinsertmetastar {%
+fenson2003}%
+\begin{APACrefauthors}%
+Jackson-Maldonado, D.%
+, Thal, D\BPBI J.%
+, Fenson, L.%
+, Marchman, V\BPBI A.%
+, Newton, T.%
+\BCBL {}\ \BBA {} Conboy, B\BPBI T.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2003}.
+\newblock
+\APACrefbtitle {Mac{A}rthur {I}nventarios del {D}esarrollo de {H}abilidades
+  {C}omunicativas: User's guide and technical manual} {Mac{A}rthur
+  {I}nventarios del {D}esarrollo de {H}abilidades {C}omunicativas: User's guide
+  and technical manual}.
+\newblock
+\APACaddressPublisher{Baltimore, MD}{Brookes Publishing Company}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Kovacevic%
+, Babic%
+\BCBL {}\ \BBA {} Brozovic%
+}{%
+Kovacevic%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1996}}%
+}]{%
+kovacevic1996}
+\APACinsertmetastar {%
+kovacevic1996}%
+\begin{APACrefauthors}%
+Kovacevic, M.%
+, Babic, Z.%
+\BCBL {}\ \BBA {} Brozovic, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1996}{}{}.
+\newblock
+\APACrefbtitle {A {C}roatian language parent report study: Lexical and
+  grammatical development.} {A {C}roatian language parent report study: Lexical
+  and grammatical development.}
+\newblock
+\APAChowpublished {Paper presented at the Seventh {I}nternational {C}ongress
+  for the {S}tudy of {C}hild {L}anguage, {J}uly 14-19, 1996, {I}stanbul,
+  {T}urkey}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+MacWhinney%
+}{%
+MacWhinney%
+}{%
+{\protect \APACyear {2000}}%
+}]{%
+macwhinney2000}
+\APACinsertmetastar {%
+macwhinney2000}%
+\begin{APACrefauthors}%
+MacWhinney, B.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2000}.
+\newblock
+\APACrefbtitle {The {CHILDES} Project: Tools for analyzing talk} {The {CHILDES}
+  project: Tools for analyzing talk}\ (\PrintOrdinal{3rd}\ \BEd).
+\newblock
+\APACaddressPublisher{Mahwah, NJ}{Lawrence Erlbaum Associates}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mayor%
+\ \BBA {} Plunkett%
+}{%
+Mayor%
+\ \BBA {} Plunkett%
+}{%
+{\protect \APACyear {2011}}%
+}]{%
+mayor2011}
+\APACinsertmetastar {%
+mayor2011}%
+\begin{APACrefauthors}%
+Mayor, J.%
+\BCBT {}\ \BBA {} Plunkett, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2011}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A statistical estimate of infant and toddler vocabulary
+  size from {CDI} analysis} {A statistical estimate of infant and toddler
+  vocabulary size from {CDI} analysis}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Developmental Science}{14}{4}{769--785}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mayor%
+\ \BBA {} Plunkett%
+}{%
+Mayor%
+\ \BBA {} Plunkett%
+}{%
+{\protect \APACyear {2014}}%
+}]{%
+mayor2014}
+\APACinsertmetastar {%
+mayor2014}%
+\begin{APACrefauthors}%
+Mayor, J.%
+\BCBT {}\ \BBA {} Plunkett, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Shared understanding and idiosyncratic expression in
+  early vocabularies} {Shared understanding and idiosyncratic expression in
+  early vocabularies}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Developmental Science}{17}{3}{412--423}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Mintz%
+}{%
+Mintz%
+}{%
+{\protect \APACyear {2003}}%
+}]{%
+mintz2003}
+\APACinsertmetastar {%
+mintz2003}%
+\begin{APACrefauthors}%
+Mintz, T\BPBI H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2003}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Frequent frames as a cue for grammatical categories in
+  child directed speech} {Frequent frames as a cue for grammatical categories
+  in child directed speech}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Cognition}{90}{1}{91--117}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Moors%
+\ \protect \BOthers {.}}{%
+Moors%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2013}}%
+}]{%
+moors2013}
+\APACinsertmetastar {%
+moors2013}%
+\begin{APACrefauthors}%
+Moors, A.%
+, De~Houwer, J.%
+, Hermans, D.%
+, Wanmaker, S.%
+, Van~Schie, K.%
+, Van~Harmelen, A\BHBI L.%
+\BDBL {}Brysbaert, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2013}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Norms of valence, arousal, dominance, and age of
+  acquisition for 4,300 {D}utch words} {Norms of valence, arousal, dominance,
+  and age of acquisition for 4,300 {D}utch words}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Behavioral Research Methods}{45}{1}{169--177}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Nelson%
+}{%
+Nelson%
+}{%
+{\protect \APACyear {1973}}%
+}]{%
+nelson1973}
+\APACinsertmetastar {%
+nelson1973}%
+\begin{APACrefauthors}%
+Nelson, K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1973}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Structure and strategy in learning to talk} {Structure
+  and strategy in learning to talk}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Monographs of the {S}ociety for {R}esearch in {C}hild
+  {D}evelopment}{38}{1-2, Serial No. 149}{1--135}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Perry%
+, Perlman%
+\BCBL {}\ \BBA {} Lupyan%
+}{%
+Perry%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+perry2015}
+\APACinsertmetastar {%
+perry2015}%
+\begin{APACrefauthors}%
+Perry, L\BPBI K.%
+, Perlman, M.%
+\BCBL {}\ \BBA {} Lupyan, G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Iconicity in {E}nglish and {S}panish and Its Relation to
+  Lexical Category and Age of Acquisition} {Iconicity in {E}nglish and
+  {S}panish and its relation to lexical category and age of
+  acquisition}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{{PloS ONE}}{10}{9}{e0137147}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Roy%
+, Frank%
+, DeCamp%
+, Miller%
+\BCBL {}\ \BBA {} Roy%
+}{%
+Roy%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+roy2015}
+\APACinsertmetastar {%
+roy2015}%
+\begin{APACrefauthors}%
+Roy, B\BPBI C.%
+, Frank, M\BPBI C.%
+, DeCamp, P.%
+, Miller, M.%
+\BCBL {}\ \BBA {} Roy, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Predicting the birth of a spoken word} {Predicting the
+  birth of a spoken word}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Proceedings of the National Academy of
+  Sciences}{112}{41}{12663--12668}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Schneider%
+, Yurovsky%
+\BCBL {}\ \BBA {} Frank%
+}{%
+Schneider%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2015}}%
+}]{%
+schneider2015}
+\APACinsertmetastar {%
+schneider2015}%
+\begin{APACrefauthors}%
+Schneider, R.%
+, Yurovsky, D.%
+\BCBL {}\ \BBA {} Frank, M\BPBI C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2015}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Large-scale investigations of variability in children's
+  first words} {Large-scale investigations of variability in children's first
+  words}.{\BBCQ}
+\newblock
+\BIn{} D\BPBI C.~Noelle\ \BOthers {.}\ (\BEDS), \APACrefbtitle {Proceedings of
+  the 37th {A}nnual {M}eeting of the {C}ognitive {S}cience {S}ociety;
+  {P}asadena, {C}alifornia, {J}uly 22-25, 2015} {Proceedings of the 37th
+  {A}nnual {M}eeting of the {C}ognitive {S}cience {S}ociety; {P}asadena,
+  {C}alifornia, {J}uly 22-25, 2015}\ (\BPG~2110-2115).
+\newblock
+\APACaddressPublisher{Austin, TX}{Cognitive Science Society}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Schwartz%
+\ \BBA {} Terrell%
+}{%
+Schwartz%
+\ \BBA {} Terrell%
+}{%
+{\protect \APACyear {1983}}%
+}]{%
+schwartz1983}
+\APACinsertmetastar {%
+schwartz1983}%
+\begin{APACrefauthors}%
+Schwartz, R\BPBI G.%
+\BCBT {}\ \BBA {} Terrell, B\BPBI Y.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1983}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The role of input frequency in lexical acquisition} {The
+  role of input frequency in lexical acquisition}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Child Language}{10}{1}{57--64}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Simonsen%
+, Kristoffersen%
+, Bleses%
+, Wehberg%
+\BCBL {}\ \BBA {} J{\o}rgensen%
+}{%
+Simonsen%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2014}}%
+}]{%
+simonsen2014}
+\APACinsertmetastar {%
+simonsen2014}%
+\begin{APACrefauthors}%
+Simonsen, H\BPBI G.%
+, Kristoffersen, K\BPBI E.%
+, Bleses, D.%
+, Wehberg, S.%
+\BCBL {}\ \BBA {} J{\o}rgensen, R\BPBI N.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The {N}orwegian {C}ommunicative {D}evelopment
+  {I}nventories: Reliability, main developmental trends and gender differences}
+  {The {N}orwegian {C}ommunicative {D}evelopment {I}nventories: Reliability,
+  main developmental trends and gender differences}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{First Language}{34}{1}{3--23}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Slobin%
+}{%
+Slobin%
+}{%
+{\protect \APACyear {1985}}%
+}]{%
+slobin1985}
+\APACinsertmetastar {%
+slobin1985}%
+\begin{APACrefauthors}%
+Slobin, D\BPBI I.%
+\end{APACrefauthors}%
+\ (\BED).
+\unskip\
+\newblock
+\APACrefYear{1985}.
+\newblock
+\APACrefbtitle {The crosslinguistic study of language acquisition, Volume 2:
+  Theoretical issues} {The crosslinguistic study of language acquisition,
+  volume 2: Theoretical issues}.
+\newblock
+\APACaddressPublisher{Hillsdale, NJ}{Lawrence Erlbaum Associates}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Snedeker%
+, Geren%
+\BCBL {}\ \BBA {} Shafto%
+}{%
+Snedeker%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2007}}%
+}]{%
+snedeker2007}
+\APACinsertmetastar {%
+snedeker2007}%
+\begin{APACrefauthors}%
+Snedeker, J.%
+, Geren, J.%
+\BCBL {}\ \BBA {} Shafto, C\BPBI L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2007}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Starting Over: International Adoption as a Natural
+  Experiment in Language Development} {Starting over: International adoption as
+  a natural experiment in language development}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Psychological Science}{18}{1}{79--87}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Stokes%
+}{%
+Stokes%
+}{%
+{\protect \APACyear {2010}}%
+}]{%
+stokes2010}
+\APACinsertmetastar {%
+stokes2010}%
+\begin{APACrefauthors}%
+Stokes, S\BPBI F.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Neighborhood density and word frequency predict
+  vocabulary size in toddlers} {Neighborhood density and word frequency predict
+  vocabulary size in toddlers}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of Speech, Language, and Hearing
+  Research}{53}{3}{670--683}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Swingley%
+\ \BBA {} Humphrey%
+}{%
+Swingley%
+\ \BBA {} Humphrey%
+}{%
+{\protect \APACyear {2018}}%
+}]{%
+swingley2017}
+\APACinsertmetastar {%
+swingley2017}%
+\begin{APACrefauthors}%
+Swingley, D.%
+\BCBT {}\ \BBA {} Humphrey, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Quantitative Linguistic Predictors of Infants' Learning
+  of Specific {E}nglish Words} {Quantitative linguistic predictors of infants'
+  learning of specific {E}nglish words}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Child Development}{89}{4}{1247--1267}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Tardif%
+\ \protect \BOthers {.}}{%
+Tardif%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2008}}%
+}]{%
+tardif2008}
+\APACinsertmetastar {%
+tardif2008}%
+\begin{APACrefauthors}%
+Tardif, T.%
+, Fletcher, P.%
+, Liang, W.%
+, Zhang, Z.%
+, Kaciroti, N.%
+\BCBL {}\ \BBA {} Marchman, V\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2008}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Baby's first 10 words} {Baby's first 10 words}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Developmental Psychology}{44}{4}{929}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Trudeau%
+\ \BBA {} Sutton%
+}{%
+Trudeau%
+\ \BBA {} Sutton%
+}{%
+{\protect \APACyear {2011}}%
+}]{%
+trudeau2011}
+\APACinsertmetastar {%
+trudeau2011}%
+\begin{APACrefauthors}%
+Trudeau, N.%
+\BCBT {}\ \BBA {} Sutton, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2011}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Expressive vocabulary and early grammar of 16- to
+  30-month-old children acquiring {Q}uebec {F}rench} {Expressive vocabulary and
+  early grammar of 16- to 30-month-old children acquiring {Q}uebec
+  {F}rench}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{First Language}{31}{4}{480--507}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Vershinina%
+, Eliseeva%
+, Lavrova%
+, Ryskina%
+\BCBL {}\ \BBA {} Zeitlin%
+}{%
+Vershinina%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2011}}%
+}]{%
+vershinina2011}
+\APACinsertmetastar {%
+vershinina2011}%
+\begin{APACrefauthors}%
+Vershinina, E\BPBI A.%
+, Eliseeva, M\BPBI B.%
+, Lavrova, T\BPBI S.%
+, Ryskina, V\BPBI L.%
+\BCBL {}\ \BBA {} Zeitlin, C\BPBI N.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2011}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Некоторые нормативы речевого
+  развития детей от 8 до 18 месяцев [{S}ome norms of
+  language development of children from 8 to 18 months]} {Некоторые
+  нормативы речевого развития детей от 8 до
+  18 месяцев [{S}ome norms of language development of children from 8 to
+  18 months]}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Специальное образование:
+  традиции и инновации [Special Education: Traditions and
+  Innovations].} {Специальное образование:
+  традиции и инновации [special education: Traditions and
+  innovations].}
+\newblock
+\APACaddressPublisher{Saint Petersburg, Russia}{Publication House of Herzen
+  State Pedagogical University of Russia}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Warriner%
+, Kuperman%
+\BCBL {}\ \BBA {} Brysbaert%
+}{%
+Warriner%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2013}}%
+}]{%
+warriner2013}
+\APACinsertmetastar {%
+warriner2013}%
+\begin{APACrefauthors}%
+Warriner, A\BPBI B.%
+, Kuperman, V.%
+\BCBL {}\ \BBA {} Brysbaert, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2013}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Norms of valence, arousal, and dominance for 13,915
+  {E}nglish lemmas} {Norms of valence, arousal, and dominance for 13,915
+  {E}nglish lemmas}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Behavioral Research Methods}{45}{4}{1191--1207}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Yu%
+\ \BBA {} Ballard%
+}{%
+Yu%
+\ \BBA {} Ballard%
+}{%
+{\protect \APACyear {2007}}%
+}]{%
+yu2007}
+\APACinsertmetastar {%
+yu2007}%
+\begin{APACrefauthors}%
+Yu, C.%
+\BCBT {}\ \BBA {} Ballard, D\BPBI H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2007}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A unified model of early word learning: Integrating
+  statistical and social cues} {A unified model of early word learning:
+  Integrating statistical and social cues}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Neurocomputing}{70}{13}{2149--2165}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Zipf%
+}{%
+Zipf%
+}{%
+{\protect \APACyear {1935}}%
+}]{%
+zipf1935}
+\APACinsertmetastar {%
+zipf1935}%
+\begin{APACrefauthors}%
+Zipf, G\BPBI K.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{1935}.
+\newblock
+\APACrefbtitle {The psycho-biology of language} {The psycho-biology of
+  language}.
+\newblock
+\APACaddressPublisher{Oxford, England}{Houghton, Mifflin}.
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

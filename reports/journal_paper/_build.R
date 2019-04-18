@@ -19,4 +19,4 @@ pkg <- c("colophon.pdf", "CrossMark.pdf", "openaccess3.pdf", "OPMI_logo.jpg",
          "stjour.cls")
 file.copy(pkg, "submission")
 file.copy(list.files(pattern = "OPMI-Braginsky"), "submission")
-file.copy("figures", "submission", recursive = TRUE)
+file.copy(list.files(pattern = "*.png"), "submission", recursive = TRUE)
