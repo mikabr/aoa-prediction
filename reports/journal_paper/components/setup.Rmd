@@ -50,7 +50,7 @@ num_coefs <- length(predictors)
 display_predictors <- function(predictors) {
   predictors %>%
     str_replace("num", "number") %>% str_replace("phons", "phonemes") %>%
-    map_chr(label_caps)
+    map_chr(label_caps) %>% str_replace("MLU", "MLU-w")
 }
 ```
 
@@ -112,7 +112,9 @@ plt_lang_coefs <- lang_coefs %>%
            fct_relabel(display_predictors),
          signif = if_else(signif, "significant", "non-significant") %>%
            fct_rev(),
-         language = language %>% str_remove(" \\(.*\\)") %>% as_factor())
+         language = language %>% str_remove(" \\(.*\\)") %>% as_factor(),
+         measure = fct_recode(measure, "comprehension" = "understands",
+                              "production" = "produces"))
 
 plt_lexcat_coefs <- lexcat_coefs %>%
   mutate(term = term %>% factor(levels = rev(coef_order)) %>%
@@ -120,7 +122,9 @@ plt_lexcat_coefs <- lexcat_coefs %>%
          # signif = if_else(signif, "significant", "non-significant"),
          lexical_category = lexical_category %>%
            fct_relevel("nouns", "predicates"),
-         language = language %>% str_remove(" \\(.*\\)") %>% as_factor()) %>%
+         language = language %>% str_remove(" \\(.*\\)") %>% as_factor(),
+         measure = fct_recode(measure, "comprehension" = "understands",
+                              "production" = "produces")) %>%
   mutate_at(vars(contains("signif")),
             ~if_else(., "significant", "non-significant") %>% fct_rev())
 
@@ -144,22 +148,32 @@ mean_lexcat_coef <- function(t, lc) {
 
 ```{r consistencies}
 plt_coef_summary <- coef_summary %>%
-  mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev())
+  ungroup() %>%
+  mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev(),
+         measure = fct_recode(measure, "comprehension" = "understands",
+                              "production" = "produces"))
 
 plt_baseline_coef_summary <- baseline_coef_summary %>%
-  mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev())
+  ungroup() %>%
+  mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev(),
+         measure = fct_recode(measure, "comprehension" = "understands",
+                              "production" = "produces"))
 
 plt_lexcat_coef_summary <- lexcat_coef_summary %>%
   ungroup() %>%
   mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev(),
          lexical_category = lexical_category %>%
-           fct_relevel("nouns", "predicates"))
+           fct_relevel("nouns", "predicates"),
+         measure = fct_recode(measure, "comprehension" = "understands",
+                              "production" = "produces"))
 
 plt_lexcat_baseline_coef_summary <- lexcat_baseline_coef_summary %>%
   ungroup() %>%
   mutate(language = language %>% str_remove(" \\(.*\\)") %>% fct_rev(),
          lexical_category = lexical_category %>%
-           fct_relevel("nouns", "predicates"))
+           fct_relevel("nouns", "predicates"),
+         measure = fct_recode(measure, "comprehension" = "understands",
+                              "production" = "produces"))
 
 lexcat_mean_cor <- function(lc) {
   lexcat_coef_summary %>%

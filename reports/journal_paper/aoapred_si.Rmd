@@ -65,10 +65,10 @@ measure_admins <- admins %>%
          language = fct_rev(fct_inorder(language)))
 
 sample_sizes <- bind_rows(
-  measure_admins %>% filter(produces) %>% mutate(measure = "Produces"),
-  measure_admins %>% filter(understands) %>% mutate(measure = "Understands")
-) %>%
-  mutate(measure = fct_relevel(measure, "Understands", "Produces"))
+  measure_admins %>% filter(produces) %>% mutate(measure = "Production"),
+  measure_admins %>% filter(understands) %>% mutate(measure = "Comprehension")
+) #%>%
+  # mutate(measure = fct_relevel(measure, "Understands", "Produces"))
 
 totals <- sample_sizes %>%
   group_by(measure) %>%
@@ -76,7 +76,7 @@ totals <- sample_sizes %>%
   group_by(language, measure, max_age) %>%
   summarise(n = n()) %>%
   ungroup() %>%
-  mutate(measure = fct_relevel(measure, "Understands", "Produces"))
+  mutate(measure = fct_relevel(measure, "Comprehension", "Production"))
 
 ggplot(sample_sizes, aes(x = age, y = language)) +
   facet_wrap(~measure, scales = "free_x") +
@@ -238,7 +238,7 @@ by_lang_plot <- function(meas, int) {
   ggplot(filter(plt_lang_coefs, measure == meas, effect == int),
          aes(x = estimate, y = term)) +
     facet_wrap(~language, nrow = 2) +
-    geom_pointrangeh(aes(colour = term, shape = fct_rev(signif),
+    geom_pointrangeh(aes(colour = term, shape = signif,
                          xmin = estimate - 1.96 * std_error,
                          xmax = estimate + 1.96 * std_error)) +
     geom_vline(xintercept = 0, color = .grey, linetype = "dotted") +
@@ -248,18 +248,18 @@ by_lang_plot <- function(meas, int) {
     theme(plot.margin = margin(t = 18, unit = "pt"))
 }
 
-plot_grid(by_lang_plot("understands", "main effect"),
-          by_lang_plot("produces", "main effect"),
+plot_grid(by_lang_plot("comprehension", "main effect"),
+          by_lang_plot("production", "main effect"),
           ncol = 1, label_size = 14, hjust = 0,
-          labels = c("Main effects – Understands", "Main effects – Produces"))
+          labels = c("Main effects – Comprehension", "Main effects – Production"))
 ```
 
-```{r by-lang-age, fig.pos='bh!', fig.height=10, fig.width=10, out.width="0.9\\fullpagewidth", fig.cap="Age interactions for each language and measure with 95\\% confidence intervals."}
-plot_grid(by_lang_plot("understands", "interaction with age"),
-          by_lang_plot("produces", "interaction with age"),
+```{r by-lang-age, dependson="by-lang-main", fig.pos='bh!', fig.height=10, fig.width=10, out.width="0.9\\fullpagewidth", fig.cap="Age interactions for each language and measure with 95\\% confidence intervals."}
+plot_grid(by_lang_plot("comprehension", "interaction with age"),
+          by_lang_plot("production", "interaction with age"),
           ncol = 1, label_size = 14, hjust = 0,
-          labels = c("Age interactions – Understands",
-                     "Age interactions – Produces"))
+          labels = c("Age interactions – Comprehension",
+                     "Age interactions – Production"))
 ```
 
 \clearpage
@@ -298,13 +298,13 @@ by_lexcat_plot <- function(meas) {
     theme(plot.margin = margin(t = 18, unit = "pt"))
 }
 
-plot_grid(by_lexcat_plot("understands"),
+plot_grid(by_lexcat_plot("comprehension"),
           ncol = 1, label_size = 14, hjust = 0,
-          labels = c("Lexical category effects – Understands"))
+          labels = c("Lexical category effects – Comprehension"))
 
-plot_grid(by_lexcat_plot("produces"),
+plot_grid(by_lexcat_plot("production"),
           ncol = 1, label_size = 14, hjust = 0,
-          labels = c("Lexical category effects – Produces"))
+          labels = c("Lexical category effects – Production"))
 ```
 
 \clearpage
